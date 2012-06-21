@@ -15,6 +15,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Commontator::VERSION
 
-  s.add_dependency 'activerecord', '~> 3.2.4'
-  s.add_dependency 'acts_as_votable', '~> 0.3.1'
+  gem.add_dependency 'activerecord', '~> 3.2.4'
+  gem.add_dependency 'acts_as_votable', '~> 0.3.1'
 end
