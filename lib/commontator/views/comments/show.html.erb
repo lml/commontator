@@ -1,0 +1,6 @@
+<%= pageHeading("Viewing comment #" + @comment.id.to_s) %>
+
+<%= render :partial => 'single_comment', :locals => {:comment => @comment,
+                                                     :destroy_not_remote => true} %>
+
+<%= link_to 'Back to Thread', polymorphic_path([@commentable, :comments]) %>

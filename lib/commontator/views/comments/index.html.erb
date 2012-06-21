@@ -1,0 +1,3 @@
+<%= pageHeading("Viewing comments for " + commentable_name(@comment_thread)) %>
+
+<%= render :partial => 'index', :locals => {:commentable => @commentable} %>

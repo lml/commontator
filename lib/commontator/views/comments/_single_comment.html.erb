@@ -1,0 +1,74 @@
+<% # This partial must be put inside a <table>
+   # Clients of this partial are expected to supply the following variable:
+   # comment
+
+   # Additionally, they can override the following variables:
+   
+   #even ||= false
+   show_link ||= false
+   destroy_not_remote ||= false
+   hide_votes ||= false
+%>
+
+<%# is_creator = present_user == comment.creator
+   can_update = present_user.can_update?(comment.comment_thread.commentable)
+   is_highly_voted = Vote.is_highly_voted?(comment)
+   comment_class = (is_creator ? "self_" :
+                   (can_update ? "author_" : 
+                   (is_highly_voted ? "high_" : ""))) +
+                   (even ? "even" : "odd") %>
+  
+<div class="comment" id="comment_<%= comment.id.to_s %>" style="clear:both">                 
+  <span class="comment_creator">
+    <% if comment.is_log %>
+      Activity Log
+    <% else %>
+      <%= full_name_link(comment.creator) %>
+    <% end %>
+    &nbsp;&nbsp;
+    <span class="comment_timestamp"><%= modified_string(comment) %></span>
+  </span>
+  
+  <span class="comment_actions">
+   
+    <% if show_link %>
+      <%= link_to 'Show', comment_path(comment), :class => "show_link" %>
+    <% end %>
+    
+    <% if present_user.can_update?(comment) %>
+      <%= link_to 'Edit', edit_comment_path(comment), :class => "edit_link",
+                                                         :remote => true %>
+    <% end %>&nbsp;
+    
+    <% if present_user.can_destroy?(comment) %>
+      <%= link_to('Remove', 
+                      comment, 
+                      :confirm => 'Are you sure you want to delete this comment?', 
+                      :method => :delete,
+                      :id => "delete_comment_#{comment.id.to_s}",
+                      :class => "delete_link",
+                      :remote => !destroy_not_remote) %>
+    <% end %>
+    
+  </span>
+  
+  <br clear="all"/>
+  
+  <span class="profile_picture" style="height:auto">
+    <%= gravatar_image comment.creator %>
+  </span>
+
+  <div class="comment_body_div">
+    <%= render :partial => 'comments/comment_body', :locals => {:comment => comment} %>
+  </div>
+
+  <% unless hide_votes %>
+  <div style="float:right">
+  <%= render :partial => 'shared/votes',
+             :locals => {:votable => comment} %>
+  </div>
+  <% end %>
+
+ &nbsp;
+</div>
+<br clear="all"/>

@@ -1,0 +1,6 @@
+<% # Clients of this partial must supply the following variable:
+   # commentable
+   # Additionally, they can override the following variable:
+   comment_name ||= 'Comment'
+%>
+<%= link_to 'New ' + comment_name, new_polymorphic_path([commentable, Comment]), :remote => true %>

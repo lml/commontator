@@ -1,0 +1,34 @@
+<% # Clients of this partial must supply the following variable:
+   # commentable
+   # Additionally, they can override the following variables:
+   comment_thread ||= commentable.comment_thread
+   comments ||= comment_thread.comments
+   hide_header ||= false
+   comment_name ||= 'Comment'
+   hide_link ||= false
+   hide_votes ||= false
+%>
+<% unless hide_header %>
+<span class="sectionHeadingNoUnder"><%= comment_name.pluralize %></span>
+<% end %>
+
+<div>
+  <div id="comment_list">
+    <% comments.each do |comment| %>
+      <%= render :partial => 'comments/single_comment',
+                 :locals => {:comment => comment,
+                             :show_link => !hide_link,
+                             :hide_votes => hide_votes} %>
+      <% #even = !even %>
+    <% end %>
+  </div>
+  <div id="new_comment_div" style="display:none"></div>
+  <p>
+  <div>
+    <span id="new_comment_link_span" style="float:left">
+      <%= render :partial => 'comments/new_comment_link',
+                 :locals => {:commentable => commentable,
+                             :comment_name => comment_name} %>
+    </span>
+  </div>
+</div>

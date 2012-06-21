@@ -1,0 +1,3 @@
+$("#comments").html("<%= escape_javascript(
+  render :partial => 'index',
+         :locals => {:commentable => @commentable}) %>");
