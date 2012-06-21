@@ -1,6 +1,7 @@
 # Common Tator
 
 A Rails engine for comments
+This is not ready for use yet. We recommend you do not use this gem until it is done.
 
 ## Installation
 
