@@ -1,4 +1,4 @@
-class CreateComments < ActiveRecord::Migration
+class CommontatorInstall < ActiveRecord::Migration
   def change
     create_table "comment_thread_subscriptions" do |t|
       t.integer  "commenter_id"
