@@ -1,2 +1,2 @@
-Rails.application.routes.draw do
+Commontator::Engine.routes.draw do
 end
