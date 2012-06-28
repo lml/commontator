@@ -1,6 +1,4 @@
-require "commontator/models/comment"
-require "commontator/version"
+require "commontator/engine"
 
 module Commontator
-  # Your code goes here...
 end

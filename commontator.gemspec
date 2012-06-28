@@ -1,20 +1,23 @@
-# -*- encoding: utf-8 -*-
-require File.expand_path('../lib/commontator/version', __FILE__)
+$:.push File.expand_path("../lib", __FILE__)
 
-Gem::Specification.new do |gem|
-  gem.authors       = ["Dante Soares"]
-  gem.email         = ["dms3@rice.edu"]
-  gem.description   = %q{Common Tator}
-  gem.summary       = %q{A Rails engine for comments}
-  gem.homepage      = ""
+# Maintain your gem's version:
+require "commontator/version"
 
-  gem.files         = `git ls-files`.split($\)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "commontator"
-  gem.require_paths = ["lib"]
-  gem.version       = Commontator::VERSION
+# Describe your gem and declare its dependencies:
+Gem::Specification.new do |s|
+  s.name        = "commontator"
+  s.version     = Commontator::VERSION
+  s.authors     = ["Dante Soares"]
+  s.email       = ["dms3@rice.edu"]
+  s.homepage    = "http://rubygems.org/gems/commontator"
+  s.summary     = "Common Tator"
+  s.description = "A Rails engine for comments."
 
-  gem.add_dependency 'activerecord', '~> 3.2.4'
-  gem.add_dependency 'acts_as_votable', '~> 0.3.1'
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.test_files = Dir["test/**/*"]
+
+  s.add_dependency "rails", "~> 3.2.6"
+  # s.add_dependency "jquery-rails"
+
+  s.add_development_dependency "sqlite3"
 end

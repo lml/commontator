@@ -28,3 +28,8 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## License
+
+This engine is distributed under the terms of the MIT license.
+See the MIT-LICENSE file for details.
