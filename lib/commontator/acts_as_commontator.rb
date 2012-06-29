@@ -1,5 +1,9 @@
 module Commontator
   module ActsAsCommontator
+    def self.included(base)
+      base.extend(ClassMethods)
+    end
+    
     module ClassMethods
       def acts_as_commontator(options = {})
         # your code will go here
