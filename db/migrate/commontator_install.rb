@@ -1,14 +1,14 @@
 class CommontatorInstall < ActiveRecord::Migration
   def change
-    create_table "comment_thread_subscriptions" do |t|
-      t.integer  "commenter_id"
-      t.string   "commenter_type"
-      t.integer  "comment_thread_id"
+    create_table "subscriptions" do |t|
+      t.integer  "subscriber_id"
+      t.string   "subscriber_type"
+      t.integer  "thread_id"
 
       t.timestamps
     end
 
-    create_table "comment_threads" do |t|
+    create_table "threads" do |t|
       t.integer  "commentable_id"
       t.string   "commentable_type"
 
@@ -16,7 +16,7 @@ class CommontatorInstall < ActiveRecord::Migration
     end
 
     create_table "comments" do |t|
-      t.integer  "comment_thread_id"
+      t.integer  "thread_id"
       t.integer  "commenter_id"
       t.string   "commenter_type"
       t.text     "body"

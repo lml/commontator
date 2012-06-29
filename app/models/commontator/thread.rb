@@ -40,7 +40,8 @@ module Commontator
     def subscribe!(subscriber)
       return false if subscription_for(subscriber)
       subscription = Subscription.create(
-        :subscriber => subscriber, :comment_thread => self)
+        :subscriber => subscriber, :thread => self)
+      commentable.respond_to?(:subscribe_callback) ? commentable.subscribe_callback(subscriber) : subscription
     end
 
     def unsubscribe!(subscriber)
@@ -69,11 +70,11 @@ module Commontator
     ##########################
 
     def can_be_read_by?(user)
-      commentable.user_can_read_comment_thread?(user)
+      commentable.user_can_read_thread?(user)
     end
 
     def can_be_updated_by?(user)
-      commentable.user_can_manage_comment_thread?(user)
+      commentable.user_can_manage_thread?(user)
     end
 
     def self.can_be_subscribed_to?

@@ -1,7 +1,6 @@
 module Commontator
   module ActsAsCommontator
-    def self.included(base)
-      base.extend(ClassMethods)
+    included do
     end
     
     module ClassMethods
@@ -10,6 +9,10 @@ module Commontator
       end
       
       def acts_as_commentator(options = {})
+        acts_as_commontator(options)
+      end
+      
+      def acts_as_commonter(options = {})
         acts_as_commontator(options)
       end
       
