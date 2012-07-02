@@ -1,7 +1,5 @@
-<%= display_flash(false) %>
+$("#comment_<%= @comment.id.to_s %>.comment_body_div").html("<%= escape_javascript(
+  render :partial => 'comments/body', :locals => {:comment => @comment}) %>");
 
-$("#comment_<%= @comment.id.to_s %> .comment_body_div").html("<%= escape_javascript(
-  render :partial => 'comments/comment_body', :locals => {:comment => @comment}) %>");
-
-$("#comment_<%= @comment.id.to_s %> .comment_timestamp").html("<%= escape_javascript(
+$("#comment_<%= @comment.id.to_s %>.comment_timestamp").html("<%= escape_javascript(
                                                            modified_string(@comment)) %>");

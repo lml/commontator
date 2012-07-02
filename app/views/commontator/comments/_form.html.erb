@@ -1,28 +1,21 @@
 <% # Clients of this partial must provide the following variables:
    # comment
-   # commentable if a new comment
+   # commentable
    #
    # Additionally, they can override the following variable:
    no_remote ||= false
-   comment_name ||= 'Comment'
-   create_verb ||= 'Post'
 %>
-<% new = comment.id.nil? %>
 
-<%= form_tag new ? polymorphic_path([commentable, :comments]) :
-                   comment_path(comment),
-               :method => (new ? "post" : "put"),
-               :id => "new_comment_form",
-               :remote => !no_remote do %>
-
+<%= form_for([commentable, comment],
+             :id => "new_comment_form",
+             :remote => !no_remote do |f| %>
+             
+  <p>
+    <%= f.text_area :body, :id => "new_comment_body", :class => "new_comment_body", :rows => "7" %>
+  </p>
   
-    <p><%= text_area_tag "comment[message]", comment.message, :style => "width: 100%", :rows => "7" %>
-    </p>
+  <p>
+    <%= f.submit %>
+  </p>
   
-
-  
-    <p><%= submit_tag (new ? create_verb : 'Update') + ' ' + comment_name %>
-    </p>
-  
-
 <% end %>

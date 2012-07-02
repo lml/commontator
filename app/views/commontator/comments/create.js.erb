@@ -1,17 +1,7 @@
-<%= display_flash(false) %>
+$("#thread_<%= @thread.id %>_comment_list").append("<%= escape_javascript(
+  render :partial => 'comment',
+         :locals => {:comment => @comment}) %>");
 
-<% if @comment_thread.commentable_type == 'Message' %>
-$(".edit_link").hide();
-$(".delete_link").hide();
-<% end %>
+$("#thread_<%= @thread.id %>_new_comment_div").hide();
 
-$("#comment_list").append("<%= escape_javascript(
-  render :partial => 'comments/single_comment',
-         :locals => {:comment => @comment,
-                     :even => @comment_thread.comments.count.even?,
-                     :show_link => @show_link,
-                     :hide_votes => @hide_votes}) %>");
-
-$("#new_comment_div").hide();
-
-$("#new_comment_link_span").show();
+$("#thread_<%= @thread.id %>_new_comment_link_span").show();

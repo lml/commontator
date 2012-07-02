@@ -12,6 +12,7 @@ class InstallCommontator < ActiveRecord::Migration
     create_table "threads" do |t|
       t.integer  "commentable_id"
       t.string   "commentable_type"
+      t.boolean  "is_closed"
 
       t.timestamps
     end

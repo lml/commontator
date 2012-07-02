@@ -37,14 +37,14 @@ module Commontator
         subscriber.id, subscriber.class_name, id)
     end
 
-    def subscribe!(subscriber)
+    def subscribe(subscriber)
       return false if subscription_for(subscriber)
       subscription = Subscription.create(
         :subscriber => subscriber, :thread => self)
       commentable.respond_to?(:subscribe_callback) ? commentable.subscribe_callback(subscriber) : subscription
     end
 
-    def unsubscribe!(subscriber)
+    def unsubscribe(subscriber)
       subscription = subscription_for(subscriber)
       return false if !subscription
       subscription.destroy
@@ -52,17 +52,17 @@ module Commontator
     end
 
     def add_unread_except_for(subscriber)
-      subscriptions.each { |cts| cts.add_unread! unless cts.subscriber == subscriber }
+      subscriptions.each { |cts| cts.add_unread unless cts.subscriber == subscriber }
     end
 
     def mark_as_read_for(subscriber)
       return if !subscription_for(subscriber)
-      subscription_for(subscriber).mark_all_as_read!
+      subscription_for(subscriber).mark_all_as_read
     end
 
     def mark_as_unread_for(subscriber)
       return if !subscription_for(subscriber)
-      subscription_for(subscriber).mark_all_as_unread!
+      subscription_for(subscriber).mark_all_as_unread
     end
 
     ##########################
@@ -70,38 +70,41 @@ module Commontator
     ##########################
 
     def can_be_read_by?(user)
-      commentable.user_can_read_thread?(user)
+      #commentable.user_can_read_thread?(user)
+      true
     end
 
-    def can_be_updated_by?(user)
-      commentable.user_can_manage_thread?(user)
+    def can_be_edited_by?(user)
+      #commentable.user_can_manage_thread?(user)
+      true
     end
 
     def self.can_be_subscribed_to?
+      true
     end
 
-    def self.comments_can_be_edited?
+    def self.admin_can_edit_comments?
+      true
     end
 
-    def self.manager_can_edit_comments?
+    def self.can_edit_own_comments?
+      true
     end
 
-    def self.creator_can_edit_comments?
+    def self.can_edit_old_comments?
+      true
     end
 
-    def self.old_comments_can_be_edited?
+    def self.admin_can_delete_comments?
+      true
     end
 
-    def self.comments_can_be_deleted?
+    def self.can_delete_own_comments?
+      true
     end
 
-    def self.manager_can_deleted_comments?
-    end
-
-    def self.creator_can_deleted_comments?
-    end
-
-    def self.old_comments_can_be_deleted?
+    def self.can_delete_old_comments?
+      true
     end
 
   end

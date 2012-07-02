@@ -1,9 +1,7 @@
-<%= pageHeading("New comment for " + commentable_name(@comment_thread)) %>
+<%= Commontable.heading("New comment for " + @thread.commentable_name) %>
 
-<%= render :partial => 'comments/form', :locals => {:comment => @comment,
-                                                    :commentable => @commentable,
-                                                    :comment_name => @comment_name,
-                                                    :create_verb => @create_verb,
-                                                    :no_remote => true} %>
+<%= render :partial => 'form', :locals => {:comment => @comment,
+                                           :thread => @thread,
+                                           :no_remote => true} %>
 
-<%= link_to 'Back to Thread', polymorphic_path([@commentable, :comments]) %>
+<%= link_to 'Back to Thread', @thread) %>

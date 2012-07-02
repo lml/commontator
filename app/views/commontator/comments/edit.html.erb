@@ -1,7 +1,5 @@
-<%= pageHeading("Editing comment #" + @comment.id.to_s) %>
+<%= Commontable.heading("Editing comment #" + @comment.id.to_s) %>
 
-<%= render :partial => 'comments/form', :locals => {:comment => @comment,
-                                                    :comment_name => @comment_name} %>
+<%= render :partial => 'form', :locals => {:comment => @comment} %>
 
-<%= link_to 'Show Individually', @comment %> |
 <%= link_to 'Back to Thread', polymorphic_path([@commentable, :comments]) %>

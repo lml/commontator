@@ -1,12 +1,7 @@
-<%= display_flash(false) %>
-
-<%= hide_none %>
-
-$("#new_comment_div").html("<%= escape_javascript(
+$("#thread_<%= @thread.id %>_new_comment_div").html("<%= escape_javascript(
   render :partial => "comments/form",
          :locals => {:comment => @comment,
-                     :commentable => @commentable,
-                     :comment_name => @comment_name,
-                     :create_verb => @create_verb}) %>").show();
+                     :thread => @thread
+                    }) %>").show();
 
-$("#new_comment_link_span").hide();
+$("#thread_<%= @thread.id %>_new_comment_link_span").hide();

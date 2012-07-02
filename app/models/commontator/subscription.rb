@@ -3,16 +3,11 @@ module Commontator
 
     belongs_to :thread
     belongs_to :subscriber, :polymorphic => true
-    has_one :commentable, :through => :thread
 
     attr_accessible :thread, :subscriber
 
     validates_presence_of :thread, :subscriber
     validates_uniqueness_of :subscriber_id, :scope => :thread_id
-
-    scope :subscriptions_for, lambda { |subscriber|
-      where{subscriber_id == subscriber.id}
-    }
 
     def mark_all_as_read
       self.update_attribute(:unread, 0)

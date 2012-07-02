@@ -1,0 +1,4 @@
+$("#thread_<%= @thread.id %>_div").replaceWith(
+  "<%= escape_javascript(
+    render :partial => 'show',
+           :locals => {:thread => @thread}) %>");
