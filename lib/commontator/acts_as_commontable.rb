@@ -1,6 +1,7 @@
 module Commontator
   module ActsAsCommontable
-    included do
+    def self.included(base)
+      base.extend(ClassMethods)
     end
     
     module ClassMethods
