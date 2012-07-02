@@ -15,15 +15,15 @@ module Commontator
     }
 
     def mark_all_as_read
-      self.update_attribute(:unread_count, 0)
+      self.update_attribute(:unread, 0)
     end
 
     def mark_all_as_unread
-      self.update_attribute(:unread_count, thread.comments.count)
+      self.update_attribute(:unread, thread.comments.count)
     end
 
     def add_unread
-      self.update_attribute(:unread_count, unread_count + 1)
+      self.update_attribute(:unread, unread + 1)
     end
 
     ##########################

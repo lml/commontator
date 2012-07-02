@@ -1,9 +1,10 @@
-class CommontatorInstall < ActiveRecord::Migration
+class InstallCommontator < ActiveRecord::Migration
   def change
     create_table "subscriptions" do |t|
       t.integer  "subscriber_id"
       t.string   "subscriber_type"
       t.integer  "thread_id"
+      t.integer  "unread"
 
       t.timestamps
     end
