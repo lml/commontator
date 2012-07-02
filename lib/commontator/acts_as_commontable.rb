@@ -6,8 +6,9 @@ module Commontator
     module ClassMethods
       def acts_as_commontable(options = {})
         class_eval do
-          has_many :threads, :as => :commontable
-          has_many :
+          has_one :thread, :as => :commentable
+          has_many :comments, :through => :thread
+          has_many :subscriptions, :through => :thread
         end
       end
       

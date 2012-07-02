@@ -5,7 +5,10 @@ module Commontator
     
     module ClassMethods
       def acts_as_commontator(options = {})
-        # your code will go here
+        class_eval do
+          has_many :comments, :as => :commenter
+          has_many :subscriptions, :as => :subscriber
+        end
       end
       
       def acts_as_commentator(options = {})
