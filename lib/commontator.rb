@@ -3,7 +3,7 @@ require 'commontator/routes'
 require 'commontator/acts_as_commentable'
 require 'commontator/acts_as_commenter'
 
-DEFAULTS = {:current_user_method => 'current_user',
+DEFAULTS = {:current_user_method_name => 'current_user',
             :comment_name => 'comment',
             :comment_create_verb_present => 'post',
             :comment_created_verb_past => 'posted',

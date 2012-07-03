@@ -8,8 +8,8 @@ module Commontator
     protected
     
     def get_user
-      @user = send Commontator.current_user_method
-      raise SecurityTransgression unless @user.respond_to?(:is_thread_admin)
+      @user = send Commontator.current_user_method_name
+      raise SecurityTransgression unless @user.is_commontator
     end
     
   end

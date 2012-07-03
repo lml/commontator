@@ -29,7 +29,7 @@ module Commontator
     end
     
     module ClassMethods
-      def acts_as_commentable(options = {})
+      def acts_as_commontable(options = {})
         class_eval do
           has_one :thread, :as => :commentable
           has_many :comments, :through => :thread
@@ -43,8 +43,8 @@ module Commontator
         end
       end
       
-      def acts_as_commontable(options = {})
-        acts_as_commentable(options)
+      def acts_as_commentable(options = {})
+        acts_as_commontable(options)
       end
     end
   end
