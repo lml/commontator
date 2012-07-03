@@ -1,0 +1,12 @@
+<% # Clients of this partial must supply the following variable:
+   # thread
+%>
+
+<% subscription = thread.is_subscribed?(@user)
+<% sub_string = subscription ? "Unsubscribe" : "Subscribe" %>
+<%= link_to sub_string,
+            polymorphic_path([sub_string.downcase, commentable, :comments]),
+            :confirm => (subscription ? \
+                           "Are you sure you want to unsubscribe from ' + commentable_name(thread) + '?\n" : \
+                           nil),
+            :remote => true %>

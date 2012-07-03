@@ -16,7 +16,7 @@ module Commontator
       raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
       if !@thread.subscribe(@user)
-        flash[:alert] = "You are already subscribed to this thread."
+        flash[:alert] = "You are already subscribed to this " + commontable_name(@thread)
       end
 
       respond_to do |format|
@@ -31,7 +31,7 @@ module Commontator
       raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
       if !@thread.unsubscribe(@user)
-        flash[:alert] = "You are not subscribed to this thread."
+        flash[:alert] = "You are not subscribed to this " + commontable_name(@thread)
       end
 
       respond_to do |format|

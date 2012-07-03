@@ -9,12 +9,6 @@ module Commontator
     validates_presence_of :subscriber, :thread
     validates_uniqueness_of :thread_id, :scope => [:subscriber_id, :subscriber_type]
     
-    scope :subscription_for, lambda { |subscriber, thread|
-      where(:subscriber_id => subscriber.id,
-            :subscriber_type => subscriber.class.name,
-            :thread_id => thread.id)
-    }
-
     def mark_all_as_read
       self.update_attribute(:unread, 0)
     end

@@ -14,7 +14,7 @@
   <% else %>
 
     <span id="thread_<%= thread.id %>_header_span" class="thread_header">
-      <%= thread.comment_name.pluralize %>
+      <%= thread.config.comment_name.capitalize.pluralize %>
     </span>
 
     <div id="thread_<%= thread.id %>_comment_list_div" class="thread_comment_list">
@@ -27,7 +27,7 @@
     <div id="thread_<%= thread.id %>_new_comment_div" class="thread_new_comment"></div>
 
     <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
-      <%= link_to thread.new_comment_action_name + ' ' + thread.comment_name,
+      <%= link_to thread.config.comment_create_verb_present.capitalize + ' ' + thread.config.comment_name,
           new_thread_comment(thread), :remote => true %>
     </span>
   

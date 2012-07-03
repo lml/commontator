@@ -1,0 +1,16 @@
+<%= heading("Listing your subscriptions") %>
+
+<table>
+  <tr>
+    <th width="100%"></th>
+    <th></th>
+  </tr>
+
+<% @threads.each do |thread| %>
+  <tr>
+    <td><%= commentable_name(thread) %></td>
+    <td><%= link_to 'Unsubscribe', polymorphic_path([:unsubscribe, thread.commentable, :comments]),
+              :confirm => 'Are you sure you want to unsubscribe from ' + commentable_name(thread) + '?' %></td>
+  </tr>
+<% end %>
+</table>

@@ -32,7 +32,7 @@ module Commontator
       respond_to do |format|
         if @comment.save
           @thread.comment_posted_callback(@user, @comment)
-          flash[:notice] = @thread.comment_name + ' ' + @thread.comment_verb
+          flash[:notice] = @thread.config.comment_name + ' ' + @thread.config.comment_create_verb_past
           format.html { redirect_to @thread }
           format.js
         else
@@ -59,7 +59,7 @@ module Commontator
 
       respond_to do |format|
         if @comment.update_attributes(params[:comment])
-          flash[:notice] = @thread.comment_name + ' updated'
+          flash[:notice] = @thread.config.comment_name + ' ' + @thread.config.comment_update_verb_past
           @thread.comment_edited_callback(@user, @comment)
           format.html { redirect_to @thread }
           format.js

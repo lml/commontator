@@ -1,0 +1,3 @@
+$("#subscription_link_span").html("<%= escape_javascript(
+  render :partial => 'subscriptions/subscription_link',
+         :locals => {:thread => @thread}) %>");

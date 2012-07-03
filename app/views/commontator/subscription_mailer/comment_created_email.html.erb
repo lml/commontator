@@ -1,0 +1,17 @@
+<h4><%= commontator_name(@commontator) %>'s <%= @thread.config.comment_name %> on <%= commentable_name(@thread) %> #<%= @commentable.id %></h4>
+
+<pre style="white-space: pre-wrap;
+            white-space: -moz-pre-wrap !important;
+            white-space: -pre-wrap;
+            white-space: -o-pre-wrap;
+            word-wrap: break-word;"><%= @comment.body %></pre>
+
+<p>Please use the links below to reply to this message:</p>
+
+<p><%= link_to "Visit " + commentable_name(@thread), @commentable %></p>
+<p><%= link_to "View " + @thread.config.comment_name.pluralize + " on " + commentable_name(@thread),
+                 polymorphic_url([@commentable, :comments]) %></p>
+<p><%= link_to "Post a new " + @thread.config.comment_name, new_polymorphic_url([@commentable, Comment.new]) %></p>
+<p><%= link_to "Unsubscribe from this thread",
+                  polymorphic_url([:unsubscribe, @commentable, :comments]),
+                  :method => :post %></p>

@@ -12,17 +12,25 @@ module Commontator
     def config
       commontable.commontable_config
     end
+    
+    def subscription_for(user)
+      Subscription.find_by_thread_id_and_subscriber_id_and_subscriber_type(self.id, user.id, user.class.name)
+    end
+    
+    def is_subscribed?(user)
+      !subscription_for(subscriber).blank?
+    end
 
     def subscribe(subscriber)
-      return false if Subscription.subscription_for(subscriber, self).first
+      return false if is_subscribed?(user)
       subscription = Subscription.create(
         :subscriber => subscriber, :thread => self)
       subscribe_callback(subscriber)
     end
 
     def unsubscribe(subscriber)
-      subscription = Subscription.subscription_for(subscriber, self).first
-      return false if !subscription
+      subscription = subscription_for(subscriber)
+      return false if subscription.blank?
       subscription.destroy
       unsubscribe_callback(subscriber)
     end

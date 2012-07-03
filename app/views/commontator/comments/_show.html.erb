@@ -10,7 +10,7 @@
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
   <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
-    <%= link_to commontator_name(comment.commontator), comment.commontator %>
+    <%= link_to commontator_name(comment.thread), comment.commontator %>
     &nbsp;&nbsp;
     <span id="comment_<%= comment.id.to_s %>_timestamp_span" class="comment_timestamp">
       <%= comment_timestamp(comment) %>
@@ -28,7 +28,7 @@
     
     <% if can_remove %>
       <%= link_to('Remove', comment, 
-                  :confirm => 'Are you sure you want to remove this comment?', 
+                  :confirm => 'Are you sure you want to remove this ' + @thread.config.comment_name + '?', 
                   :method => :delete,
                   :id => "remove_comment_#{comment.id.to_s}_link",
                   :class => "remove_comment_link",

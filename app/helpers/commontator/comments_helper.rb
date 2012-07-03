@@ -1,9 +1,10 @@
 module Commontator
   module CommentsHelper
-    def commontator_name(commontator)
+    def commontator_name(comment)
+      commontator = comment.commontator
       config = commontator.commontator_config
-      config.name_method.blank? ? 'Anonymous' :\
-      commontator.send config.name_method
+      config.commontator_name_method.blank? ? 'Anonymous' :\
+      commontator.send config.commontator_name_method
     end
     
     def comment_timestamp(comment)

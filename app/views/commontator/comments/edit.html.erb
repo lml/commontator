@@ -1,4 +1,4 @@
-<%= heading("Editing " + comment_name(@thread) + " #" + @comment.id.to_s) %>
+<%= heading("Editing " + @thread.config.comment_name + " #" + @comment.id.to_s) %>
 
 <%= render :partial => 'form', :locals => {:comment => @comment} %>
 

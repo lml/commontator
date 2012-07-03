@@ -1,4 +1,4 @@
-<%= heading("New " + comment_name(@thread) + " for " + commontable_name(@thread)) %>
+<%= heading("New " + @thread.config.comment_name + " for " + commontable_name(@thread)) %>
 
 <%= render :partial => 'form', :locals => {:thread => @thread,
                                            :comment => @comment,

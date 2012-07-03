@@ -8,39 +8,40 @@ module Commontator
 
   # Can be overriden in initializer and acts_as_commontator
   COMMONTATOR_CONFIG = {
-    :name_method => 'name',
-    :email_method => 'email',
+    :commontator_email_method => 'email',
+    :commontator_name_method => 'name',
     :is_admin_method => ''
   }
   
   # Can be overriden in initializer and acts_as_commontable
   COMMONTABLE_CONFIG = {
-    :commontable_name => '',
     :comment_name => 'comment',
     :comment_create_verb_present => 'post',
     :comment_create_verb_past => 'posted',
     :comment_update_verb_present => 'edit',
     :comment_update_verb_past => 'edited',
+    :commontable_name => '',
+    :subscription_email_subject =>\
+      'commontator_name(@comment) + @config.comment_create_verb_past' +\
+      ' + " a " + @config.comment_name + " on " + commontable_name(@thread)' +\
+      ' + " #" + commontable_id(@thread)',
+    :subscription_email_body => '',
     :timestamp_format => '%b %d %Y, %I:%M %p',
-    :subscription_email_subject => '#{@commontator.send name_method_name} posted on Thread ##{@thread.id}',
-    :subscription_email_body => \
-      '#{@commontator.send name_method_name} posted on Thread ##{@thread.id}<br/><br/>
-      Click <a href="#{thread_path(@thread)}">here</a> to visit the thread.<br/><br/>
-      If you wish to unsubscribe from this thread, click <a href="#{unsubscribe_thread_path(@thread)}">here</a>.',
-    :comments_can_be_voted_on => true,
-    :can_subscribe_to_thread => true,
-    :auto_subscribe_on_comment => false,
-    :can_edit_own_comments => true,
-    :can_edit_old_comments => false,
-    :can_delete_own_comments => false,
-    :can_delete_old_comments => false,
-    :delete_replaces_content => false,
     :admin_can_edit_comments => false,
-    :can_read_thread_method => '',
+    :auto_subscribe_on_comment => false,
+    :can_edit_old_comments => false,
+    :can_edit_own_comments => true,
+    :can_delete_old_comments => false,
+    :can_delete_own_comments => false,
+    :can_subscribe_to_thread => true,
+    :comments_can_be_voted_on => true,
+    :delete_replaces_content => false,
+    :commontable_id_method => 'id',
     :can_edit_thread_method => '',
-    :comment_posted_callback => '',
+    :can_read_thread_method => '',
     :comment_edited_callback => '',
     :comment_deleted_callback => '',
+    :comment_posted_callback => '',
     :subscribe_callback => '',
     :unsubscribe_callback => ''
   }
