@@ -4,6 +4,9 @@ class InstallCommontator < ActiveRecord::Migration
       t.text     "body"
       t.integer  "commontator_id"
       t.string   "commontator_type"
+      t.datetime "deleted_at"
+      t.integer  "deleter_id"
+      t.string   "deleter_type"
       t.integer  "thread_id"
 
       t.timestamps
@@ -13,7 +16,7 @@ class InstallCommontator < ActiveRecord::Migration
       t.integer  "subscriber_id"
       t.string   "subscriber_type"
       t.integer  "thread_id"
-      t.integer  "unread"
+      t.boolean  "is_unread"
 
       t.timestamps
     end
@@ -21,7 +24,9 @@ class InstallCommontator < ActiveRecord::Migration
     create_table "threads" do |t|
       t.integer  "commontable_id"
       t.string   "commontable_type"
-      t.boolean  "is_closed"
+      t.datetime "closed_at"
+      t.integer  "closer_id"
+      t.string   "closer_type"
 
       t.timestamps
     end

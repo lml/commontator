@@ -6,10 +6,10 @@ module ActionDispatch::Routing
           resources :comments, :except => [:index], :shallow => true
           put 'close', :on => :member
           put 'reopen', :on => :member
-          post 'subscribe', :to => 'subscriptions#create',
+          get 'subscribe', :to => 'subscriptions#create',
                             :as => 'subscribe',
                             :on => :member
-          post 'unsubscribe', :to => 'subscriptions#destroy',
+          get 'unsubscribe', :to => 'subscriptions#destroy',
                               :as => 'unsubscribe',
                               :on => :member
         end

@@ -18,8 +18,8 @@ module Commontator
     :comment_name => 'comment',
     :comment_create_verb_present => 'post',
     :comment_create_verb_past => 'posted',
-    :comment_update_verb_present => 'edit',
-    :comment_update_verb_past => 'edited',
+    :comment_edit_verb_present => 'edit',
+    :comment_edit_verb_past => 'edited',
     :commontable_name => '',
     :subscription_email_subject =>\
       'commontator_name(@comment) + @config.comment_create_verb_past' +\
@@ -35,13 +35,15 @@ module Commontator
     :can_delete_own_comments => false,
     :can_subscribe_to_thread => true,
     :comments_can_be_voted_on => true,
-    :delete_replaces_content => false,
+    :closed_threads_are_visible => true,
+    :deleted_comments_are_visible => true,
     :commontable_id_method => 'id',
     :can_edit_thread_method => '',
     :can_read_thread_method => '',
+    :comment_created_callback => '',
     :comment_edited_callback => '',
     :comment_deleted_callback => '',
-    :comment_posted_callback => '',
+    :thread_closed_callback => '',
     :subscribe_callback => '',
     :unsubscribe_callback => ''
   }

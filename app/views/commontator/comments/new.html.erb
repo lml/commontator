@@ -1,7 +1,8 @@
-<%= heading("New " + @thread.config.comment_name + " for " + commontable_name(@thread)) %>
+<%= heading(@thread.config.comment_create_verb_present.capitalize + " " +\
+            @thread.config.comment_name + " for " + commontable_name(@thread)) %>
 
 <%= render :partial => 'form', :locals => {:thread => @thread,
                                            :comment => @comment,
                                            :no_remote => true} %>
 
-<%= link_to 'Back to Thread', @thread %>
+<%= link_to 'Back to thread', @thread %>

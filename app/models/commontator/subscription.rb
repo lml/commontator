@@ -9,16 +9,12 @@ module Commontator
     validates_presence_of :subscriber, :thread
     validates_uniqueness_of :thread_id, :scope => [:subscriber_id, :subscriber_type]
     
-    def mark_all_as_read
-      self.update_attribute(:unread, 0)
+    def mark_as_read
+      self.update_attribute(:is_unread, false)
     end
 
-    def mark_all_as_unread
-      self.update_attribute(:unread, thread.comments.count)
-    end
-
-    def add_unread
-      self.update_attribute(:unread, unread + 1)
+    def mark_as_unread
+      self.update_attribute(:is_unread, true)
     end
 
   end

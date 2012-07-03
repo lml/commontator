@@ -1,6 +1,7 @@
 module Commontator
   class Thread < ActiveRecord::Base
 
+    belongs_to :closer, :polymorphic => true
     belongs_to :commontable, :polymorphic => true
 
     has_many :comments, :dependent => :destroy
@@ -8,6 +9,10 @@ module Commontator
     has_many :subscribers, :through => :subscriptions
 
     validates_presence_of :commontable, :allow_nil => true
+    
+    def is_closed?
+      !closed_at.blank?
+    end
     
     def config
       commontable.commontable_config
@@ -35,37 +40,44 @@ module Commontator
       unsubscribe_callback(subscriber)
     end
 
-    def add_unread_except_for(subscriber)
-      subscriptions.each { |cts| cts.add_unread unless cts.subscriber == subscriber }
-    end
-
     def mark_as_read_for(subscriber)
       return if !subscription_for(subscriber)
-      subscription_for(subscriber).mark_all_as_read
+      subscription_for(subscriber).mark_as_read
     end
-
-    def mark_as_unread_for(subscriber)
-      return if !subscription_for(subscriber)
-      subscription_for(subscriber).mark_all_as_unread
+    
+    def mark_as_unread_except_for(subscriber)
+      Subscription.transaction do
+        subscriptions.each { |s| s.mark_as_unread unless s.subscriber == subscriber }
+      end
+    end
+    
+    def close(user = nil)
+      self.closed_at = Time.now
+      self.closer = user
+      self.save!
+    end
+    
+    def reopen
+      self.closed_at = nil
+      self.save!
     end
     
     # Creates a new empty thread and assigns it to the commontable
     # The old thread is kept in the database for archival purposes
-    def clear
+    def clear(user = nil)
       new_thread = Thread.new
       new_thread.commontable = commontable
-      Thread.transaction do
+      self.with_lock do
         new_thread.save!
-        commontable.comment_thread = new_thread
+        commontable.thread = new_thread
         commontable.save!
         subscriptions.each do |s|
           s.thread = new_thread
           s.save!
-          s.mark_all_as_read!
+          s.mark_as_read
         end
         self.commontable = nil
-        self.is_closed = true
-        self.save!
+        self.close(user)
       end
     end
     
@@ -73,11 +85,11 @@ module Commontator
     # Callback methods #
     ####################
     
-    def comment_posted_callback(user, comment)
+    def comment_created_callback(user, comment)
       self.subscribe(user) if config.auto_subscribe_on_comment
-      self.add_unread_except_for(user)
+      self.mark_as_unread_except_for(user)
       SubscriptionNotifier.comment_created_email(comment)
-      commontable.send config.comment_posted_callback, user, comment unless config.comment_posted_callback.blank?
+      commontable.send config.comment_created_callback, user, comment unless config.comment_created_callback.blank?
     end
     
     def comment_edited_callback(user, comment)
@@ -86,6 +98,10 @@ module Commontator
     
     def comment_deleted_callback(user, comment)
       commontable.send config.comment_deleted_callback, user, comment unless config.comment_deleted_callback.blank?
+    end
+    
+    def thread_closed_callback(user)
+      commontable.send config.thread_closed_callback, user unless config.thread_closed_callback.blank?
     end
     
     def subscribe_callback(user)

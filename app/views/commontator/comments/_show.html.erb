@@ -10,7 +10,7 @@
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
   <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
-    <%= link_to commontator_name(comment.thread), comment.commontator %>
+    <%= link_to commontator_name(comment), comment.commontator %>
     &nbsp;&nbsp;
     <span id="comment_<%= comment.id.to_s %>_timestamp_span" class="comment_timestamp">
       <%= comment_timestamp(comment) %>

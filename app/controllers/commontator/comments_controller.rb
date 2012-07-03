@@ -31,7 +31,7 @@ module Commontator
 
       respond_to do |format|
         if @comment.save
-          @thread.comment_posted_callback(@user, @comment)
+          @thread.comment_created_callback(@user, @comment)
           flash[:notice] = @thread.config.comment_name + ' ' + @thread.config.comment_create_verb_past
           format.html { redirect_to @thread }
           format.js
@@ -59,7 +59,7 @@ module Commontator
 
       respond_to do |format|
         if @comment.update_attributes(params[:comment])
-          flash[:notice] = @thread.config.comment_name + ' ' + @thread.config.comment_update_verb_past
+          flash[:notice] = @thread.config.comment_name + ' ' + @thread.config.comment_edit_verb_past
           @thread.comment_edited_callback(@user, @comment)
           format.html { redirect_to @thread }
           format.js
@@ -70,12 +70,24 @@ module Commontator
       end
     end
 
-    # DELETE /comments/1
-    def destroy
+    # PUT /comments/1/delete
+    def delete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
-      @comment.destroy
+      @comment.delete(@user)
       @thread.comment_deleted_callback(@user, @comment)
+
+      respond_to do |format|
+        format.html { redirect_to @thread }
+        format.js
+      end
+    end
+    
+    # PUT /comments/1/undelete
+    def undelete
+      raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
+
+      @comment.undelete
 
       respond_to do |format|
         format.html { redirect_to @thread }

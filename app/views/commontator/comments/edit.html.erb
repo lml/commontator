@@ -1,5 +1,6 @@
-<%= heading("Editing " + @thread.config.comment_name + " #" + @comment.id.to_s) %>
+<%= heading(@thread.config.comment_update_verb_present.capitalize + " " +\
+            @thread.config.comment_name + " #" + @comment.id.to_s) %>
 
 <%= render :partial => 'form', :locals => {:comment => @comment} %>
 
-<%= link_to 'Back to Thread', @thread %>
+<%= link_to 'Back to thread', @thread %>

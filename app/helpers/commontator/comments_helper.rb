@@ -10,7 +10,7 @@ module Commontator
     def comment_timestamp(comment)
       config = comment.thread.config
       (comment.is_modified? ? 'Last ' +\
-        config.comment_update_verb_past + ' on ' :\
+        config.comment_edit_verb_past + ' on ' :\
         config.comment_create_verb_past.capitalize +\
         ' on ') + comment.updated_at.strftime(config.timestamp_format)
     end

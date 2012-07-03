@@ -15,12 +15,12 @@ module Commontator
       end
     end
     
-    # GET /threads/1
+    # PUT /threads/1/close
     def close
       raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
 
-      @thread.is_closed = true
-      @thread.save!
+      @thread.close(@user)
+      @thread.thread_closed_callback(@user)
 
       respond_to do |format|
         format.html { redirect_to @thread }
@@ -28,12 +28,11 @@ module Commontator
       end
     end
     
-    # GET /threads/1
+    # PUT /threads/1/reopen
     def reopen
       raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
 
-      @thread.is_closed = false
-      @thread.save!
+      @thread.reopen
 
       respond_to do |format|
         format.html { redirect_to @thread }
