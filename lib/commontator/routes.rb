@@ -1,6 +1,6 @@
 module ActionDispatch::Routing
   class Mapper
-    def commentable
+    def commontable
       namespace :commontator do
         resources :threads, :only => [:show], :shallow => true do
           resources :comments, :except => [:index], :shallow => true
@@ -16,8 +16,8 @@ module ActionDispatch::Routing
       end
     end
 
-    def commontable
-      commentable
+    def commentable
+      commontable
     end
   end
 end

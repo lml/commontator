@@ -22,9 +22,9 @@ module Commontator
     :comment_update_verb_present => 'edit',
     :comment_update_verb_past => 'edited',
     :timestamp_format => '%b %d %Y, %I:%M %p',
-    :subscription_email_subject => '#{@commenter.send name_method_name} posted on Thread ##{@thread.id}',
+    :subscription_email_subject => '#{@commontator.send name_method_name} posted on Thread ##{@thread.id}',
     :subscription_email_body => \
-      '#{@commenter.send name_method_name} posted on Thread ##{@thread.id}<br/><br/>
+      '#{@commontator.send name_method_name} posted on Thread ##{@thread.id}<br/><br/>
       Click <a href="#{thread_path(@thread)}">here</a> to visit the thread.<br/><br/>
       If you wish to unsubscribe from this thread, click <a href="#{unsubscribe_thread_path(@thread)}">here</a>.',
     :comments_can_be_voted_on => true,

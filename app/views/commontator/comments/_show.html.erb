@@ -9,11 +9,11 @@
    can_vote = comment.can_be_voted_on_by?(user) %>
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
-  <span id="comment_<%= comment.id.to_s %>_commenter_span" class="comment_commenter">
-    <%= commenter_name_link(comment.commenter) %>
+  <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
+    <%= link_to commontator_name(comment.commontator), comment.commontator %>
     &nbsp;&nbsp;
     <span id="comment_<%= comment.id.to_s %>_timestamp_span" class="comment_timestamp">
-      <%= modified_string(comment) %>
+      <%= comment_timestamp(comment) %>
     </span>
   </span>
   

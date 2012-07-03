@@ -6,9 +6,9 @@ module Commontator
     belongs_to :thread
     belongs_to :commontator, :polymorphic => true
 
-    has_one :commentable, :through => :thread
+    has_one :commontable, :through => :thread
     #has_one :subthread, :class_name => "Thread",
-    #                    :as => :commentable,
+    #                    :as => :commontable,
     #                    :dependent => :destroy
 
     #before_validation :build_subthread, :on => :create

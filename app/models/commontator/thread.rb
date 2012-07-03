@@ -42,7 +42,7 @@ module Commontator
       subscription_for(subscriber).mark_all_as_unread
     end
     
-    # Creates a new empty thread and assigns it to the commentable
+    # Creates a new empty thread and assigns it to the commontable
     # The old thread is kept in the database for archival purposes
     def clear
       new_thread = Thread.new

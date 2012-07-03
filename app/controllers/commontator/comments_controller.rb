@@ -10,7 +10,7 @@ module Commontator
     def new
       @comment = Comment.new
       @comment.thread = @thread
-      @comment.commenter = @user
+      @comment.commontator = @user
 
       raise SecurityTransgression unless @comment.can_be_created_by?(@user)
 

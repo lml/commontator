@@ -1,5 +1,9 @@
 module Commontator
   module ThreadsHelper
+    def comment_name(thread)
+      thread.config.comment_name
+    end
+    
     def commontable_name(thread)
       config = thread.config
       config.commontable_name.blank? ? \

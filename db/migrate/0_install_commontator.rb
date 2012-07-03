@@ -10,8 +10,8 @@ class InstallCommontator < ActiveRecord::Migration
     end
 
     create_table "threads" do |t|
-      t.integer  "commentable_id"
-      t.string   "commentable_type"
+      t.integer  "commontable_id"
+      t.string   "commontable_type"
       t.boolean  "is_closed"
 
       t.timestamps
@@ -19,8 +19,8 @@ class InstallCommontator < ActiveRecord::Migration
 
     create_table "comments" do |t|
       t.integer  "thread_id"
-      t.integer  "commenter_id"
-      t.string   "commenter_type"
+      t.integer  "commontator_id"
+      t.string   "commontator_type"
       t.text     "body"
 
       t.timestamps
