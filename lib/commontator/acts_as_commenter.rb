@@ -1,5 +1,6 @@
 COMMENTER_ATTRIBUTES = [:commenter_is_admin_method_name,
-                        :commenter_name_method_name]
+                        :commenter_name_method_name,
+                        :subscriber_email_method_name]
 
 module Commontator
   module ActsAsCommenter

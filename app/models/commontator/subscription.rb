@@ -14,6 +14,10 @@ module Commontator
         (subscriber_type == subscriber.class) &\
         (thread_id == thread.id)}
     }
+    
+    def email
+      subscriber.subscriber_email_method_name.blank? ? '' : subscriber.send subscriber_email_method_name
+    end
 
     def mark_all_as_read
       self.update_attribute(:unread, 0)

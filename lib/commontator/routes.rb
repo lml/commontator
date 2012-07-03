@@ -2,16 +2,17 @@ module ActionDispatch::Routing
   class Mapper
     def commentable
       namespace :commontator do
-        get 'comments', :to => 'threads#show',
-                        :as => 'comments'
-        resources :threads, :only => [], :shallow => true do
-          resources :comments, :only => [:new, :create], :shallow => true
+        resources :threads, :only => [:show], :shallow => true do
+          resources :comments, :except => [:index], :shallow => true
+          put 'close', :on => :member
+          put 'reopen', :on => :member
+          post 'subscribe', :to => 'subscriptions#create',
+                            :as => 'subscribe',
+                            :on => :member
+          post 'unsubscribe', :to => 'subscriptions#destroy',
+                              :as => 'unsubscribe',
+                              :on => :member
         end
-        
-        post 'subscribe', :to => 'subscriptions#create',
-                          :as => 'subscribe'
-        post 'unsubscribe', :to => 'subscriptions#destroy',
-                            :as => 'unsubscribe'
       end
     end
 
