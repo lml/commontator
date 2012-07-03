@@ -7,10 +7,24 @@ module Commontator
       commontator.send config.commontator_name_method
     end
     
+    def deleter_name(comment)
+      deleter = comment.deleter
+      config = commontator.commontator_config
+      config.commontator_name_method.blank? ? 'Anonymous' :\
+      deleter.send config.commontator_name_method
+    end
+    
+    def comment_body(comment)
+      config = commontator.commontator_config
+      comment.is_deleted? ? \
+      'Deleted by ' + \
+      deleter_name(comment) : \
+      comment.body
+    end
+    
     def comment_timestamp(comment)
       config = comment.thread.config
-      (comment.is_modified? ? 'Last ' +\
-        config.comment_edit_verb_past + ' on ' :\
+      (comment.is_modified? ? 'Last modified on ' :\
         config.comment_create_verb_past.capitalize +\
         ' on ') + comment.updated_at.strftime(config.timestamp_format)
     end

@@ -18,14 +18,13 @@ module Commontator
     :comment_name => 'comment',
     :comment_create_verb_present => 'post',
     :comment_create_verb_past => 'posted',
-    :comment_edit_verb_present => 'edit',
-    :comment_edit_verb_past => 'edited',
     :commontable_name => '',
     :subscription_email_subject =>\
       'commontator_name(@comment) + @config.comment_create_verb_past' +\
       ' + " a " + @config.comment_name + " on " + commontable_name(@thread)' +\
       ' + " #" + commontable_id(@thread)',
     :subscription_email_body => '',
+    :thread_close_verb_
     :timestamp_format => '%b %d %Y, %I:%M %p',
     :admin_can_edit_comments => false,
     :auto_subscribe_on_comment => false,

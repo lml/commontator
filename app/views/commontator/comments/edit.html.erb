@@ -1,4 +1,4 @@
-<%= heading(@thread.config.comment_update_verb_present.capitalize + " " +\
+<%= heading("Editing " +\
             @thread.config.comment_name + " #" + @comment.id.to_s) %>
 
 <%= render :partial => 'form', :locals => {:comment => @comment} %>

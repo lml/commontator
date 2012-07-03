@@ -59,7 +59,7 @@ module Commontator
 
       respond_to do |format|
         if @comment.update_attributes(params[:comment])
-          flash[:notice] = @thread.config.comment_name + ' ' + @thread.config.comment_edit_verb_past
+          flash[:notice] = @thread.config.comment_name + ' updated'
           @thread.comment_edited_callback(@user, @comment)
           format.html { redirect_to @thread }
           format.js
