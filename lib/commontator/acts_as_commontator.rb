@@ -1,9 +1,5 @@
-COMMENTER_ATTRIBUTES = [:commenter_is_admin_method_name,
-                        :commenter_name_method_name,
-                        :subscriber_email_method_name]
-
 module Commontator
-  module ActsAsCommenter
+  module ActsAsCommontator
     def self.included(base)
       base.class_attribute :is_commontator
       base.is_commontator = false
@@ -16,11 +12,8 @@ module Commontator
           has_many :comments, :as => :commenter
           has_many :subscriptions, :as => :subscriber
           
-          COMMENTER_ATTRIBUTES.each do |attribute|
-            cattr_accessor attribute
-            self.send attribute.to_s + '=', options[attribute] || Commontator.send(attribute)
-          end
-          
+          cattr_accessor :commontator_config
+          self.commontator_config = Commontator::CommontatorConfig.new(options)
           self.is_commontator = true
         end
       end
@@ -40,4 +33,4 @@ module Commontator
   end
 end
 
-ActiveRecord::Base.send :include, Commontator::ActsAsCommenter
+ActiveRecord::Base.send :include, Commontator::ActsAsCommontator

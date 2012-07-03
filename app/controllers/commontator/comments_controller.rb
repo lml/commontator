@@ -1,5 +1,7 @@
 module Commontator
   class CommentsController < ApplicationController
+    
+    include ThreadsHelper
 
     before_filter :get_thread, :only => [:new, :create]
     before_filter :get_comment_and_thread, :except => [:new, :create]
