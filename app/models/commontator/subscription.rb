@@ -10,14 +10,10 @@ module Commontator
     validates_uniqueness_of :subscriber_id, :scope => :thread_id
     
     scope :subscription_for, lambda { |subscriber, thread|
-      where{(subscriber_id == subscriber.id) &\
-        (subscriber_type == subscriber.class) &\
-        (thread_id == thread.id)}
+      where(:subscriber_id => subscriber.id,
+            :subscriber_type => subscriber.class.name,
+            :thread_id => thread.id)
     }
-    
-    def email
-      subscriber.subscriber_email_method_name.blank? ? '' : subscriber.send subscriber_email_method_name
-    end
 
     def mark_all_as_read
       self.update_attribute(:unread, 0)

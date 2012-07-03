@@ -1,14 +1,18 @@
 module Commontator
   class Thread < ActiveRecord::Base
 
-    belongs_to :commentable, :polymorphic => true
+    belongs_to :commontable, :polymorphic => true
 
     has_many :comments, :dependent => :destroy
     has_many :subscriptions, :dependent => :destroy
     has_many :subscribers, :through => :subscriptions
 
-    validates_presence_of :commentable, :allow_nil => true
-    validates_uniqueness_of :commentable
+    validates_presence_of :commontable, :allow_nil => true
+    validates_uniqueness_of :commontable
+    
+    def config
+      commontable.commontable_config
+    end
 
     def subscribe(subscriber)
       return false if Subscription.subscription_for(subscriber, self).first
@@ -42,17 +46,17 @@ module Commontator
     # The old thread is kept in the database for archival purposes
     def clear
       new_thread = Thread.new
-      new_thread.commentable = commentable
+      new_thread.commontable = commontable
       Thread.transaction do
         new_thread.save!
-        commentable.comment_thread = new_thread
-        commentable.save!
+        commontable.comment_thread = new_thread
+        commontable.save!
         subscriptions.each do |s|
-          s.comment_thread = new_thread
+          s.thread = new_thread
           s.save!
           s.mark_all_as_read!
         end
-        self.commentable = nil
+        self.commontable = nil
         self.is_closed = true
         self.save!
       end
@@ -63,49 +67,45 @@ module Commontator
     ####################
     
     def comment_posted_callback(user, comment)
-      self.subscribe(user) if commentable.auto_subscribe_on_comment
+      self.subscribe(user) if config.auto_subscribe_on_comment
       self.add_unread_except_for(user)
       SubscriptionNotifier.comment_created_email(comment)
-      commentable.send comment_posted_callback_name, user, comment unless commentable.comment_posted_callback_name.nil?
+      commontable.send config.comment_posted_callback, user, comment unless config.comment_posted_callback.blank?
     end
     
     def comment_edited_callback(user, comment)
-      commentable.send comment_edited_callback_name, user, comment unless commentable.comment_edited_callback_name.nil?
+      commontable.send config.comment_edited_callback, user, comment unless config.comment_edited_callback.blank?
     end
     
     def comment_deleted_callback(user, comment)
-      commentable.send comment_deleted_callback_name, user, comment unless commentable.comment_deleted_callback_name.nil?
+      commontable.send config.comment_deleted_callback, user, comment unless config.comment_deleted_callback.blank?
     end
     
     def subscribe_callback(user)
-      commentable.send subscribe_callback_name, user unless commentable.subscribe_callback_name.nil?
+      commontable.send config.subscribe_callback, user unless config.subscribe_callback.blank?
     end
           
     def unsubscribe_callback(user)
-      commentable.send unsubscribe_callback_name, user unless commentable.unsubscribe_callback_name.nil?
+      commontable.send config.unsubscribe_callback, user unless config.unsubscribe_callback.blank?
     end
 
     ##########################
     # Access control methods #
     ##########################
-    
-    def is_thread_admin?(user)
-      commentable.commentable_is_admin_method_name.blank? ?
-        (user.commenter_is_admin_method_name.blank? ? false : user.send commenter_is_admin_method_name) :
-        commentable.send commentable_is_admin_method_name, user
-    end
 
     def can_be_read_by?(user)
-      commentable.can_read_thread_method_name.blank? ? true : commentable.send can_read_thread_method_name, user ||\
-        is_thread_admin?(user)
+      config.can_read_thread_method.blank? ? true : commentable.send config.can_read_thread_method, user ||\
+        can_be_edited_by?(user)
     end
 
     def can_be_edited_by?(user)
-      is_thread_admin?(user)
+      config.can_edit_thread_method.blank? ?
+        (user.commontator_config.is_admin_method.blank? ? false : user.send user.commontator_config.is_admin_method) :
+        commontable.send config.can_edit_thread_method, user
     end
 
     def can_subscribe?(user)
-      commentable.can_subscribe_to_thread && can_be_read_by?(user)
+      config.can_subscribe_to_thread && can_be_read_by?(user)
     end
 
   end

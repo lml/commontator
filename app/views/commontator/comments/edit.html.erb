@@ -1,4 +1,4 @@
-<%= heading("Editing comment #" + @comment.id.to_s) %>
+<%= heading("Editing " + comment_name(@comment) + " #" + @comment.id.to_s) %>
 
 <%= render :partial => 'form', :locals => {:comment => @comment} %>
 

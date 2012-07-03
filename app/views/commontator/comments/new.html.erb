@@ -1,4 +1,4 @@
-<%= heading("New comment for " + @thread.commentable_name) %>
+<%= heading("New " + comment_name(comment) + " for " + commentable_name(@thread)) %>
 
 <%= render :partial => 'form', :locals => {:thread => @thread,
                                            :comment => @comment,
