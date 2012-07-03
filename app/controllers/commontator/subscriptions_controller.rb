@@ -1,50 +1,39 @@
 module Commontator
   class SubscriptionsController < ApplicationController
 
-    include ThreadsHelper
-
-    before_filter :get_comment_thread, :except => :index
+    before_filter :get_thread, :except => :index
 
     # GET /subscriptions
     def index
-      comment_threads = CommentThreadSubscription.find_all_by_user_id(present_user.id) \
-                          .collect { |cts| cts.comment_thread }
-      respond_with(@commentables = comment_threads.collect { |ct|
-                                     ct.commentable.becomes(
-                                       Kernel.const_get(ct.commentable_type)) })
+      @threads = CommentThreadSubscription.find_all_by_subscriber_id(@user.id)\
+                                          .collect { |cts| cts.thread }
     end
 
-    # GET /1/comments/subscribe
+    # POST /1/subscribe
     def create
-      raise SecurityTransgression unless present_user.can_read?(@comment_thread)
+      raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
-      if !@comment_thread.subscribe!(present_user)
-        flash[:alert] = "You cannot subscribe to this thread."
+      if !@thread.subscribe(@user)
+        flash[:alert] = "You are already subscribed to this thread."
       end
 
       respond_to do |format|
-        format.html { redirect_to(polymorphic_path([@commentable, :comments])) }
+        format.html { redirect_to @thread }
         format.js
       end
 
     end
 
-    # GET /1/comments/unsubscribe
+    # POST /1/unsubscribe
     def destroy
-      raise SecurityTransgression unless present_user.can_read?(@comment_thread)
+      raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
-      if !@comment_thread.unsubscribe!(present_user)
+      if !@thread.unsubscribe(@user)
         flash[:alert] = "You are not subscribed to this thread."
       end
 
       respond_to do |format|
-        format.html do
-          if @comment_thread.commentable_type == 'Message'
-            redirect_to inbox_path
-          else
-            redirect_to(polymorphic_path([@commentable, :comments]))
-          end
-        end
+        format.html { redirect_to @thread }
         format.js
       end
 

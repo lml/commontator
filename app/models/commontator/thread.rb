@@ -10,8 +10,34 @@ module Commontator
     validates_presence_of :commentable, :allow_nil => true
     validates_uniqueness_of :commentable
 
-    attr_accessible :is_closed
+    def subscribe(subscriber)
+      return false if Subscription.subscription_for(subscriber, self).first
+      subscription = Subscription.create(
+        :subscriber => subscriber, :thread => self)
+      subscribe_callback(subscriber)
+    end
 
+    def unsubscribe(subscriber)
+      subscription = Subscription.subscription_for(subscriber, self).first
+      return false if !subscription
+      subscription.destroy
+      unsubscribe_callback(subscriber)
+    end
+
+    def add_unread_except_for(subscriber)
+      subscriptions.each { |cts| cts.add_unread unless cts.subscriber == subscriber }
+    end
+
+    def mark_as_read_for(subscriber)
+      return if !subscription_for(subscriber)
+      subscription_for(subscriber).mark_all_as_read
+    end
+
+    def mark_as_unread_for(subscriber)
+      return if !subscription_for(subscriber)
+      subscription_for(subscriber).mark_all_as_unread
+    end
+    
     # Creates a new empty thread and assigns it to the commentable
     # The old thread is kept in the database for archival purposes
     def clear
@@ -31,80 +57,55 @@ module Commontator
         self.save!
       end
     end
-
-    def subscription_for(subscriber)
-      Subscription.find_by_subscriber_id_and_subscriber_type_and_comment_thread_id(\
-        subscriber.id, subscriber.class_name, id)
+    
+    ####################
+    # Callback methods #
+    ####################
+    
+    def comment_posted_callback(user, comment)
+      self.subscribe(user) if commentable.auto_subscribe_on_comment
+      self.add_unread_except_for(user)
+      SubscriptionNotifier.comment_created_email(comment)
+      commentable.send comment_posted_callback_name, user, comment unless commentable.comment_posted_callback_name.nil?
     end
-
-    def subscribe(subscriber)
-      return false if subscription_for(subscriber)
-      subscription = Subscription.create(
-        :subscriber => subscriber, :thread => self)
-      commentable.respond_to?(:subscribe_callback) ? commentable.subscribe_callback(subscriber) : subscription
+    
+    def comment_edited_callback(user, comment)
+      commentable.send comment_edited_callback_name, user, comment unless commentable.comment_edited_callback_name.nil?
     end
-
-    def unsubscribe(subscriber)
-      subscription = subscription_for(subscriber)
-      return false if !subscription
-      subscription.destroy
-      commentable.respond_to?(:unsubscribe_callback) ? commentable.unsubscribe_callback(subscriber) : true
+    
+    def comment_deleted_callback(user, comment)
+      commentable.send comment_deleted_callback_name, user, comment unless commentable.comment_deleted_callback_name.nil?
     end
-
-    def add_unread_except_for(subscriber)
-      subscriptions.each { |cts| cts.add_unread unless cts.subscriber == subscriber }
+    
+    def subscribe_callback(user)
+      commentable.send subscribe_callback_name, user unless commentable.subscribe_callback_name.nil?
     end
-
-    def mark_as_read_for(subscriber)
-      return if !subscription_for(subscriber)
-      subscription_for(subscriber).mark_all_as_read
-    end
-
-    def mark_as_unread_for(subscriber)
-      return if !subscription_for(subscriber)
-      subscription_for(subscriber).mark_all_as_unread
+          
+    def unsubscribe_callback(user)
+      commentable.send unsubscribe_callback_name, user unless commentable.unsubscribe_callback_name.nil?
     end
 
     ##########################
     # Access control methods #
     ##########################
+    
+    def is_thread_admin?(user)
+      commentable.commentable_is_admin_method_name.blank? ?
+        (user.commenter_is_admin_method_name.blank? ? false : user.send commenter_is_admin_method_name) :
+        commentable.send commentable_is_admin_method_name, user
+    end
 
     def can_be_read_by?(user)
-      #commentable.user_can_read_thread?(user)
-      true
+      commentable.can_read_thread_method_name.blank? ? true : commentable.send can_read_thread_method_name, user ||\
+        is_thread_admin?(user)
     end
 
     def can_be_edited_by?(user)
-      #commentable.user_can_manage_thread?(user)
-      true
+      is_thread_admin?(user)
     end
 
-    def self.can_be_subscribed_to?
-      true
-    end
-
-    def self.admin_can_edit_comments?
-      true
-    end
-
-    def self.can_edit_own_comments?
-      true
-    end
-
-    def self.can_edit_old_comments?
-      true
-    end
-
-    def self.admin_can_delete_comments?
-      true
-    end
-
-    def self.can_delete_own_comments?
-      true
-    end
-
-    def self.can_delete_old_comments?
-      true
+    def can_subscribe?(user)
+      commentable.can_subscribe_to_thread && can_be_read_by?(user)
     end
 
   end

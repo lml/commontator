@@ -8,6 +8,12 @@ module Commontator
 
     validates_presence_of :thread, :subscriber
     validates_uniqueness_of :subscriber_id, :scope => :thread_id
+    
+    scope :subscription_for, lambda { |subscriber, thread|
+      where{(subscriber_id == subscriber.id) &\
+        (subscriber_type == subscriber.class) &\
+        (thread_id == thread.id)}
+    }
 
     def mark_all_as_read
       self.update_attribute(:unread, 0)
@@ -19,18 +25,6 @@ module Commontator
 
     def add_unread
       self.update_attribute(:unread, unread + 1)
-    end
-
-    ##########################
-    # Access control methods #
-    ##########################
-
-    def can_be_created_by?(user)
-      Thread.can_be_subscribed_to? && user == subscriber
-    end
-
-    def can_be_destroyed_by?(user)
-      Thread.can_be_subscribed_to? && user == subscriber
     end
 
   end

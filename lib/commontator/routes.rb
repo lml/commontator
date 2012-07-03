@@ -1,8 +1,13 @@
 module ActionDispatch::Routing
   class Mapper
-    def commontable
+    def commentable
       namespace :commontator do
-        resources :comments, :only => [:index, :new, :create]
+        get 'comments', :to => 'threads#show',
+                        :as => 'comments'
+        resources :threads, :only => [], :shallow => true do
+          resources :comments, :only => [:new, :create], :shallow => true
+        end
+        
         post 'subscribe', :to => 'subscriptions#create',
                           :as => 'subscribe'
         post 'unsubscribe', :to => 'subscriptions#destroy',
@@ -10,8 +15,8 @@ module ActionDispatch::Routing
       end
     end
 
-    def commentable
-      commontable
+    def commontable
+      commentable
     end
   end
 end

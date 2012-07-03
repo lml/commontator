@@ -19,6 +19,12 @@ module Commontator
     def is_modified?
       updated_at != created_at
     end
+    
+    def commenter_name
+      commenter.commenter_name_method_name.blank? ?\
+        'Anonymous' :\
+        commenter.send commenter_name_method_name
+    end
 
     ##########################
     # Access control methods #

@@ -1,3 +1,6 @@
+COMMENTER_ATTRIBUTES = [:commenter_is_admin_method_name,
+                        :commenter_name_method_name]
+
 module Commontator
   module ActsAsCommenter
     def self.included(base)
@@ -9,6 +12,11 @@ module Commontator
         class_eval do
           has_many :comments, :as => :commenter
           has_many :subscriptions, :as => :subscriber
+          
+          COMMENTER_ATTRIBUTES.each do |attribute|
+            cattr_accessor attribute
+            self.send attribute.to_s + '=', options[attribute] || Commontator.send(attribute)
+          end
         end
       end
       
