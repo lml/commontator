@@ -8,7 +8,6 @@ module Commontator
     has_many :subscribers, :through => :subscriptions
 
     validates_presence_of :commontable, :allow_nil => true
-    validates_uniqueness_of :commontable
     
     def config
       commontable.commontable_config

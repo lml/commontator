@@ -3,16 +3,16 @@ module Commontator
 
     acts_as_votable
 
-    belongs_to :thread
     belongs_to :commontator, :polymorphic => true
-
+    belongs_to :thread
+    
     has_one :commontable, :through => :thread
     #has_one :subthread, :class_name => "Thread",
     #                    :as => :commontable,
     #                    :dependent => :destroy
 
-    #before_validation :build_subthread, :on => :create
-    validates_presence_of :thread, :commontator#, :subthread
+    before_validation :build_subthread, :on => :create
+    validates_presence_of :commontator, :thread#, :subthread
     #validates_uniqueness_of :subthread
 
     attr_accessible :body

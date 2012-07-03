@@ -1,13 +1,13 @@
 module Commontator
   class Subscription < ActiveRecord::Base
 
-    belongs_to :thread
     belongs_to :subscriber, :polymorphic => true
+    belongs_to :thread
 
-    attr_accessible :thread, :subscriber
+    attr_accessible :subscriber, :thread
 
-    validates_presence_of :thread, :subscriber
-    validates_uniqueness_of :subscriber_id, :scope => :thread_id
+    validates_presence_of :subscriber, :thread
+    validates_uniqueness_of :thread_id, :scope => [:subscriber_id, :subscriber_type]
     
     scope :subscription_for, lambda { |subscriber, thread|
       where(:subscriber_id => subscriber.id,
