@@ -1,9 +1,8 @@
 module Commontator
   module CommontableHelper
     def thread_link(commontable, commontator)
-      thread = commontable.thread
-      render(:partial => 'threads/link',
-             :locals => {:thread => thread,
+      render(:partial => 'commontables/thread',
+             :locals => {:commontable => commontable,
                          :commontator => commontator}).html_safe
     end
   end

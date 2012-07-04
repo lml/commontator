@@ -13,8 +13,8 @@ module Commontator
     
     def closer_name(thread)
       closer = thread.closer
-      config = thread.config
-      config.commontator_name_method.blank? ? 'Anonymous' :\
+      config = closer.commontator_config
+      config.commontator_name_method.blank? ? config.anonymous_name :\
       closer.send config.commontator_name_method
     end
   

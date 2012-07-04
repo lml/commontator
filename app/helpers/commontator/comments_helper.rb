@@ -3,23 +3,15 @@ module Commontator
     def commontator_name(comment)
       commontator = comment.commontator
       config = commontator.commontator_config
-      config.commontator_name_method.blank? ? 'Anonymous' :\
+      config.commontator_name_method.blank? ? config.anonymous_name :\
       commontator.send config.commontator_name_method
     end
     
     def deleter_name(comment)
       deleter = comment.deleter
-      config = commontator.commontator_config
-      config.commontator_name_method.blank? ? 'Anonymous' :\
+      config = deleter.commontator_config
+      config.commontator_name_method.blank? ? config.anonymous_name :\
       deleter.send config.commontator_name_method
-    end
-    
-    def comment_body(comment)
-      config = commontator.commontator_config
-      comment.is_deleted? ? \
-      'Deleted by ' + \
-      deleter_name(comment) : \
-      comment.body
     end
     
     def comment_timestamp(comment)

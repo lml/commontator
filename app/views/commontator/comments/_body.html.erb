@@ -1,1 +1,9 @@
-<%= simple_format comment.body, {:id => "comment_#{comment.id}_body", :class => 'comment_body'} %>
+<% # Clients of this partial must provide the following variable:
+   # comment
+%>
+
+<% if comment.is_deleted? %>
+  <%= comment_name(comment.thread).capitalize %> has been deleted by <%= deleter_name(comment) %>
+<% else %>
+  <%= simple_format comment.body, {:id => "comment_#{comment.id}_body", :class => 'comment_body'} %>
+<% end %>
