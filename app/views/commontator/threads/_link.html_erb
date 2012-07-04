@@ -1,0 +1,10 @@
+<% # Clients of this partial must supply the following variables:
+   # thread
+   # commontator
+%>
+
+<% if thread.can_be_read_by?(commontator) %>
+  <div id="thread_<%= thread.id %>_div" class="thread">
+    <% link_to 'View ' + comment_name(thread).pluralize, thread, :remote => true %>
+  </div>
+<% end %>
