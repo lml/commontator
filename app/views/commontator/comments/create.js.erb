@@ -5,3 +5,5 @@ $("#thread_<%= @thread.id %>_comment_list_div").append("<%= escape_javascript(
 $("#thread_<%= @thread.id %>_new_comment_div").hide();
 
 $("#thread_<%= @thread.id %>_new_comment_link_span").show();
+
+<%= javascript_callback %>

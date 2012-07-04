@@ -1,12 +1,11 @@
-<% # Clients of this partial are expected to supply the following variables:
+<% # Clients of this partial must supply the following variables:
    # comment
-   # user
 %>
 
-<% can_edit = comment.can_be_edited_by?(user)
-   can_remove = comment.can_be_removed_by?(user)
+<% can_edit = comment.can_be_edited_by?(@commontator)
+   can_remove = comment.can_be_removed_by?(@commontator)
    enable_votes = comment.can_be_voted_on?
-   can_vote = comment.can_be_voted_on_by?(user) %>
+   can_vote = comment.can_be_voted_on_by?(@commontator) %>
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
   <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">

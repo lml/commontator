@@ -60,11 +60,11 @@ module Commontator
     end
     
     def can_be_voted_on?
-      thread.config.comments_can_be_voted_on
+      !is_deleted? && thread.config.comments_can_be_voted_on
     end
 
     def can_be_voted_on_by?(user)
-      can_be_voted_on? && !thread.is_closed? && !is_deleted? &&\
+      can_be_voted_on? && !thread.is_closed? &&\
         thread.can_be_read_by?(user) && user != commontator
     end
     

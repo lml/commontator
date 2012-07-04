@@ -1,13 +1,13 @@
 module Commontator
   class ApplicationController < ActionController::Base
   
-    before_filter :get_user
+    before_filter :get_commontator
     
     protected
     
     def get_user
-      @user = send Commontator.current_user_method
-      raise SecurityTransgression unless @user.is_commontator
+      @commontator = send Commontator.current_user_method
+      raise SecurityTransgression unless (@commontator.nil? || @commontator.is_commontator)
     end
     
   end

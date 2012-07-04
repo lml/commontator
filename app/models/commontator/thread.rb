@@ -117,7 +117,8 @@ module Commontator
     ##########################
 
     def can_be_read_by?(user)
-      config.can_read_thread_method.blank? ? true : commentable.send config.can_read_thread_method, user ||\
+      ((!is_closed? || config.closed_threads_are_readable) &&\
+        config.can_read_thread_method.blank? ? true : commentable.send config.can_read_thread_method, user) ||\
         can_be_edited_by?(user)
     end
 

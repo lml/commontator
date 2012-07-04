@@ -3,7 +3,9 @@ module Commontator
 
   # Can be overriden in initializer only
   ENGINE_CONFIG = {
-    :current_user_method => 'current_user'
+    :current_user_method => 'current_user',
+    :heading_function => '',
+    :javascript_callback => ''
   }
 
   # Can be overriden in initializer and acts_as_commontator
@@ -24,7 +26,6 @@ module Commontator
       ' + " a " + @config.comment_name + " on " + commontable_name(@thread)' +\
       ' + " #" + commontable_id(@thread)',
     :subscription_email_body => '',
-    :thread_close_verb_
     :timestamp_format => '%b %d %Y, %I:%M %p',
     :admin_can_edit_comments => false,
     :auto_subscribe_on_comment => false,
@@ -34,7 +35,7 @@ module Commontator
     :can_delete_own_comments => false,
     :can_subscribe_to_thread => true,
     :comments_can_be_voted_on => true,
-    :closed_threads_are_visible => true,
+    :closed_threads_are_readable => true,
     :deleted_comments_are_visible => true,
     :commontable_id_method => 'id',
     :can_edit_thread_method => '',

@@ -5,9 +5,9 @@ module Commontator
 
     # GET /threads/1
     def show
-      raise SecurityTransgression unless @thread.can_be_read_by?(@user)
+      raise SecurityTransgression unless @thread.can_be_read_by?(@commontator)
 
-      @thread.mark_as_read_for(@user)
+      @thread.mark_as_read_for(@commontator)
 
       respond_to do |format|
         format.html
@@ -17,10 +17,10 @@ module Commontator
     
     # PUT /threads/1/close
     def close
-      raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
+      raise SecurityTransgression unless @thread.can_be_edited_by?(@commontator)
 
-      @thread.close(@user)
-      @thread.thread_closed_callback(@user)
+      @thread.close(@commontator)
+      @thread.thread_closed_callback(@commontator)
 
       respond_to do |format|
         format.html { redirect_to @thread }
@@ -30,7 +30,7 @@ module Commontator
     
     # PUT /threads/1/reopen
     def reopen
-      raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
+      raise SecurityTransgression unless @thread.can_be_edited_by?(@commontator)
 
       @thread.reopen
 
