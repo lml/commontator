@@ -14,6 +14,9 @@ module Commontator
           has_many :subscriptions, :through => :thread
           has_many :subscribers, :through => :thread
           
+          after_initialize :build_thread, :unless => :thread
+          validates_presence_of :thread
+          
           cattr_accessor :commontable_config
           self.commontable_config = Commontator::CommontableConfig.new(options)
           self.is_commontable = true
