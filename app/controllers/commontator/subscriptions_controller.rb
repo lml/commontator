@@ -7,8 +7,8 @@ module Commontator
 
     # GET /subscriptions
     def index
-      @threads = CommentThreadSubscription.find_all_by_subscriber_id(@commontator.id)\
-                                          .collect { |cts| cts.thread }
+      @threads = Subscription.find_all_by_subscriber_id(@commontator.id)\
+                             .collect { |cts| cts.thread }
     end
 
     # POST /1/subscribe

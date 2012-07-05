@@ -9,8 +9,8 @@ module Commontator
     module ClassMethods
       def acts_as_commontator(options = {})
         class_eval do
-          has_many :comments, :as => :commontator, :dependent => :destroy
-          has_many :subscriptions, :as => :subscriber, :dependent => :destroy
+          has_many :comments, :as => :commontator, :class_name => 'Commontator::Comment', :dependent => :destroy
+          has_many :subscriptions, :as => :subscriber, :class_name => 'Commontator::Subscription', :dependent => :destroy
           
           cattr_accessor :commontator_config
           self.commontator_config = Commontator::CommontatorConfig.new(options)
