@@ -1,6 +1,6 @@
 class InstallCommontator < ActiveRecord::Migration
   def change
-    create_table "comments" do |t|
+    create_table "commontator_comments" do |t|
       t.text     "body"
       t.integer  "commontator_id"
       t.string   "commontator_type"
@@ -12,7 +12,7 @@ class InstallCommontator < ActiveRecord::Migration
       t.timestamps
     end
     
-    create_table "subscriptions" do |t|
+    create_table "commontator_subscriptions" do |t|
       t.integer  "subscriber_id"
       t.string   "subscriber_type"
       t.integer  "thread_id"
@@ -21,7 +21,7 @@ class InstallCommontator < ActiveRecord::Migration
       t.timestamps
     end
 
-    create_table "threads" do |t|
+    create_table "commontator_threads" do |t|
       t.integer  "commontable_id"
       t.string   "commontable_type"
       t.datetime "closed_at"
@@ -31,10 +31,10 @@ class InstallCommontator < ActiveRecord::Migration
       t.timestamps
     end
     
-    add_index :comments, [:commontator_id, :commontator_type, :thread_id]
-    add_index :comments, :thread_id
-    add_index :subscriptions, [:subscriber_id, :subscriber_type, :thread_id], :unique => true
-    add_index :subscriptions, :thread_id
-    add_index :threads, [:commontable_id, :commontable_type]
+    add_index :commontator_comments, [:commontator_id, :commontator_type, :thread_id]
+    add_index :commontator_comments, :thread_id
+    add_index :commontator_subscriptions, [:subscriber_id, :subscriber_type, :thread_id], :unique => true
+    add_index :commontator_subscriptions, :thread_id
+    add_index :commontator_threads, [:commontable_id, :commontable_type]
   end
 end
