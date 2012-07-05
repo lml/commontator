@@ -89,27 +89,27 @@ module Commontator
       self.subscribe(user) if config.auto_subscribe_on_comment
       self.mark_as_unread_except_for(user)
       SubscriptionNotifier.comment_created_email(comment)
-      commontable.send config.comment_created_callback, user, comment unless config.comment_created_callback.blank?
+      commontable.send(config.comment_created_callback, user, comment) unless config.comment_created_callback.blank?
     end
     
     def comment_edited_callback(user, comment)
-      commontable.send config.comment_edited_callback, user, comment unless config.comment_edited_callback.blank?
+      commontable.send(config.comment_edited_callback, user, comment) unless config.comment_edited_callback.blank?
     end
     
     def comment_deleted_callback(user, comment)
-      commontable.send config.comment_deleted_callback, user, comment unless config.comment_deleted_callback.blank?
+      commontable.send(config.comment_deleted_callback, user, comment) unless config.comment_deleted_callback.blank?
     end
     
     def thread_closed_callback(user)
-      commontable.send config.thread_closed_callback, user unless config.thread_closed_callback.blank?
+      commontable.send(config.thread_closed_callback, user) unless config.thread_closed_callback.blank?
     end
     
     def subscribe_callback(user)
-      commontable.send config.subscribe_callback, user unless config.subscribe_callback.blank?
+      commontable.send(config.subscribe_callback, user) unless config.subscribe_callback.blank?
     end
           
     def unsubscribe_callback(user)
-      commontable.send config.unsubscribe_callback, user unless config.unsubscribe_callback.blank?
+      commontable.send(config.unsubscribe_callback, user) unless config.unsubscribe_callback.blank?
     end
 
     ##########################
@@ -118,14 +118,14 @@ module Commontator
 
     def can_be_read_by?(user)
       ((!is_closed? || config.closed_threads_are_readable) &&\
-        config.can_read_thread_method.blank? ? true : commentable.send config.can_read_thread_method, user) ||\
+        config.can_read_thread_method.blank? ? true : commentable.send(config.can_read_thread_method, user)) ||\
         can_be_edited_by?(user)
     end
 
     def can_be_edited_by?(user)
       config.can_edit_thread_method.blank? ?
-        (user.commontator_config.is_admin_method.blank? ? false : user.send user.commontator_config.is_admin_method) :
-        commontable.send config.can_edit_thread_method, user
+        (user.commontator_config.is_admin_method.blank? ? false : user.send(user.commontator_config.is_admin_method)) :
+        commontable.send(config.can_edit_thread_method, user)
     end
 
     def can_subscribe?(user)
