@@ -8,7 +8,7 @@
 
 <% @threads.each do |thread| %>
   <tr>
-    <td><%= commentable_name(thread) %></td>
+    <td><%= commontable_name(thread) %></td>
     <td><%= link_to 'Unsubscribe', polymorphic_path([:unsubscribe, thread.commontable, :comments]),
               :confirm => 'Are you sure you want to unsubscribe from ' + commontable_name(thread) + '?' %></td>
   </tr>
