@@ -60,7 +60,6 @@ module Commontator
 end
 
 require 'commontator/engine'
-require 'commontator/routing'
 require 'commontator/commontator_config'
 require 'commontator/commontable_config'
 require 'commontator/acts_as_commontator'
