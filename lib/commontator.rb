@@ -11,7 +11,7 @@ module Commontator
   # Can be overriden in initializer and acts_as_commontator
   COMMONTATOR_CONFIG = {
     :commontator_email_method => 'email',
-    :commontator_name_method => 'name',
+    :commontator_name_method => '',
     :is_admin_method => ''
   }
   
@@ -20,7 +20,7 @@ module Commontator
     :comment_name => 'comment',
     :comment_create_verb_present => 'post',
     :comment_create_verb_past => 'posted',
-    :commontable_name => '',
+    :commontable_name => 'commontable',
     :subscription_email_subject =>\
       'commontator_name(@comment) + @config.comment_create_verb_past' +\
       ' + " a " + @config.comment_name + " on " + commontable_name(@thread)' +\
@@ -60,7 +60,7 @@ module Commontator
 end
 
 require 'commontator/engine'
-require 'commontator/routes'
+require 'commontator/routing'
 require 'commontator/commontator_config'
 require 'commontator/commontable_config'
 require 'commontator/acts_as_commontator'
