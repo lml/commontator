@@ -23,7 +23,7 @@ protected
       @bcc = @thread.subscribers.reject{|s| s == @commontator}\
                                 .collect{|s| email(s)}
                                 
-      @commontator_name = commontator_name(@commontator)
+      @commontator_name = commontator_name(@comment)
       @comment_timestamp = comment_timestamp(@comment)
       
       @commontable_name = commontable_name(@thread)

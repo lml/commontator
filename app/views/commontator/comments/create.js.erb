@@ -1,5 +1,5 @@
 $("#thread_<%= @thread.id %>_comment_list_div").append("<%= escape_javascript(
-  render :partial => 'comments/show',
+  render :partial => 'show',
          :locals => {:comment => @comment}) %>");
 
 $("#thread_<%= @thread.id %>_new_comment_div").hide();

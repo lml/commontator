@@ -3,7 +3,7 @@
 %>
 
 <% can_edit = comment.can_be_edited_by?(@commontator)
-   can_remove = comment.can_be_deleted_by?(@commontator)
+   can_delete = comment.can_be_deleted_by?(@commontator)
    enable_votes = comment.can_be_voted_on? %>
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
@@ -28,12 +28,12 @@
                           :remote => true %>
     <% end %>&nbsp;
     
-    <% if can_remove %>
-      <%= link_to('Remove', comment, 
-                  :confirm => 'Are you sure you want to remove this ' + @thread.config.comment_name + '?', 
-                  :method => :delete,
-                  :id => "remove_comment_#{comment.id.to_s}_link",
-                  :class => "remove_comment_link",
+    <% if can_delete %>
+      <%= link_to('Delete', delete_comment_path(comment), 
+                  :confirm => 'Are you sure you want to delete this ' + @thread.config.comment_name + '?', 
+                  :method => :put,
+                  :id => "delete_comment_#{comment.id.to_s}_link",
+                  :class => "delete_comment_link",
                   :remote => true) %>
     <% end %>
     
