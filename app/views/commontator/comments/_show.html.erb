@@ -45,13 +45,13 @@
     <%= gravatar_image comment %>
   </span>
 
-  <div id="comment_<%= comment.id.to_s %>_body_div" class="comment_body">
+  <div id="comment_<%= comment.id.to_s %>_body_div" class="comment_body_container">
     <%= render :partial => 'commontator/comments/body',
                :locals => {:comment => comment} %>
   </div>
 
   <% if enable_votes %>
-    <div id="comment_<%= comment.id.to_s %>_votes_div" class="comment_votes">
+    <div id="comment_<%= comment.id.to_s %>_votes_div" class="comment_votes_container">
       <%= render :partial => 'commontator/comments/votes',
                  :locals => {:comment => comment} %>
     </div>

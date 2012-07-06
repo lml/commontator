@@ -1,0 +1,59 @@
+.comment {
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border-left: 1px solid;
+  border-top: 1px solid;
+  padding: 8px;
+  padding-left: 15px;
+  border-color: #ddd;
+  color: #000;
+  background-color: #fff;
+  clear: both;
+}
+
+.comment_actions {
+  float: right;
+}
+
+.comment_actions a {
+  display: inline;
+}
+
+.comment_body_container {
+   float: left;
+}
+
+.comment_body {
+	clear: both; 
+	margin: 3px; 
+	padding-left: 8px;
+	padding-bottom: 6px;
+	padding-top: 8px;
+	float: left;
+}
+
+.comment_profile_picture {
+  float: left;
+  padding-top: 8px;
+  height: auto;
+}
+
+.comment_timestamp {
+	color: #777;
+}
+
+.comment_votes {
+  float: right;
+}
+
+.comment_votes input {
+  border: none;
+  background-color: transparent;
+}
+
+.new_comment_div textarea {
+	width: 100%;
+}

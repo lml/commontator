@@ -11,15 +11,3 @@
  *= require_self
  *= require_tree .
  */
-
-.thread_new_comment {display:none;}
-
-.thread_new_comment_link {float:left;}
-
-.thread_new_comment_body {width: 100%;}
-
-.comment {clear:both;}
-
-.comment_profile_picture {height:auto;}
-
-.comment_votes {float:right;}
