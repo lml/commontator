@@ -24,7 +24,7 @@ module Commontator
     def create
       @comment = Comment.new(params[:comment])
       @comment.thread = @thread
-      @comment.creator = @commontator
+      @comment.commontator = @commontator
       
       raise SecurityTransgression unless @comment.can_be_created_by?(@commontator)
 

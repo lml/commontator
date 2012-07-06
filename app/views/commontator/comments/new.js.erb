@@ -1,6 +1,8 @@
 $("#thread_<%= @thread.id %>_new_comment_div").html("<%= escape_javascript(
-  render :partial => "comments/form",
-         :locals => {:thread => @thread
+  render :partial => 'form',
+         :locals => {
+                       :comment => @comment,
+                       :thread => @thread
                     }) %>").show();
 
 $("#thread_<%= @thread.id %>_new_comment_link_span").hide();

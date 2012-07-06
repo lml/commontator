@@ -1,17 +1,20 @@
 <% # Clients of this partial must provide the following variables:
    # comment
-   # thread (if new comment)
    #
    # Additionally, they can override the following variable:
+   thread ||= nil
    no_remote ||= false
 %>
 
 <%= form_for([thread, comment],
-             :id => "new_comment_form",
-             :remote => !no_remote do |f| %>
+             :id => 'new_comment_form',
+             :remote => !no_remote) do |f| %>
              
   <p>
-    <%= f.text_area :body, :id => "new_comment_body", :class => "new_comment_body", :rows => "7" %>
+    <%= f.text_area :body,
+                    :id => 'new_comment_body',
+                    :class => 'new_comment_body',
+                    :rows => '7' %>
   </p>
   
   <p>
