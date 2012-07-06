@@ -3,13 +3,17 @@
 %>
 
 <% can_edit = comment.can_be_edited_by?(@commontator)
-   can_remove = comment.can_be_removed_by?(@commontator)
+   can_remove = comment.can_be_deleted_by?(@commontator)
    enable_votes = comment.can_be_voted_on?
    can_vote = comment.can_be_voted_on_by?(@commontator) %>
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
   <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
-    <%= link_to commontator_name(comment), comment.commontator %>
+    <% if commontator.commontator_config.commontator_name_clickable %>
+      <%= link_to commontator_name(comment), main_app.polymorphic_url(comment.commontator) %>
+    <% else %>
+      <%= commontator_name(comment) %>
+    <% end %>
     &nbsp;&nbsp;
     <span id="comment_<%= comment.id.to_s %>_timestamp_span" class="comment_timestamp">
       <%= comment_timestamp(comment) %>
@@ -39,7 +43,7 @@
   <br clear="all"/>
   
   <span id="comment_<%= comment.id.to_s %>_profile_picture_span" class="comment_profile_picture">
-    <%= gravatar_image comment.creator %>
+    <%= gravatar_image comment %>
   </span>
 
   <div id="comment_<%= comment.id.to_s %>_body_div" class="comment_body">

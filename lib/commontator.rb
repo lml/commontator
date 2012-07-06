@@ -10,6 +10,7 @@ module Commontator
 
   # Can be overriden in initializer and acts_as_commontator
   COMMONTATOR_CONFIG = {
+    :commontator_name_clickable = false,
     :commontator_email_method => 'email',
     :commontator_name_method => '',
     :is_admin_method => ''
