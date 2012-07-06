@@ -1,11 +1,11 @@
-<% # Clients of this partial must supply the following variables:
+<% # Clients of this partial must supply the following variable:
    # commontable
-   # commontator
 %>
 
+<% user = send(Commontator.current_user_method) %>
 <% thread = commontable.thread %>
 
-<% if thread.can_be_read_by?(commontator) %>
+<% if thread.can_be_read_by?(user) %>
   <div id="thread_<%= thread.id %>_div" class="thread">
     <% link_to 'View ' + thread.config.comment_name.pluralize, commontator.thread_path(thread), :remote => true %>
   </div>
