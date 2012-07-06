@@ -7,6 +7,6 @@
 
 <% if thread.can_be_read_by?(commontator) %>
   <div id="thread_<%= thread.id %>_div" class="thread">
-    <% link_to 'View ' + thread.config.comment_name.pluralize, [:commontator, thread], :remote => true %>
+    <% link_to 'View ' + thread.config.comment_name.pluralize, commontator.thread_path(thread), :remote => true %>
   </div>
 <% end %>

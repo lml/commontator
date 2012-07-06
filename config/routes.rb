@@ -1,5 +1,5 @@
 Commontator::Engine.routes.draw do
-  resources :threads, :only => [:show], :shallow => true do
+  resources :threads, :only => [:show] do
     resources :comments, :except => [:index], :shallow => true
     put 'close', :on => :member
     put 'reopen', :on => :member

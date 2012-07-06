@@ -10,6 +10,8 @@ module Commontator
 
     validates_presence_of :commontable, :allow_nil => true
     
+    attr_accessible :is_closed
+    
     def is_closed?
       !closed_at.blank?
     end
