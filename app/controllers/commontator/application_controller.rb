@@ -1,6 +1,5 @@
 module Commontator
   class ApplicationController < ActionController::Base
-  
     before_filter :get_commontator
     
     protected
@@ -10,5 +9,8 @@ module Commontator
       raise SecurityTransgression unless (@commontator.nil? || @commontator.is_commontator)
     end
     
+    def get_thread
+      @thread = Thread.find(params[:id])
+    end
   end
 end

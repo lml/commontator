@@ -1,6 +1,5 @@
 module Commontator
   class ThreadsController < ApplicationController
-  
     before_filter :get_thread
 
     # GET /threads/1
@@ -39,7 +38,5 @@ module Commontator
         format.js
       end
     end
-    
   end
-  
 end

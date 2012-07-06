@@ -1,6 +1,5 @@
 module Commontator
   class CommentsController < ApplicationController
-    
     include ThreadsHelper
 
     before_filter :get_thread, :only => [:new, :create]
@@ -94,6 +93,12 @@ module Commontator
         format.js
       end
     end
-
+    
+    protected
+    
+    def get_comment_and_thread
+      @comment = Comment.find(params[:id])
+      @thread = @comment.thread
+    end
   end
 end

@@ -1,8 +1,7 @@
 module Commontator
   class SubscriptionsController < ApplicationController
-  
     include ThreadsHelper
-
+    
     before_filter :get_thread, :except => :index
 
     # GET /subscriptions
@@ -38,8 +37,6 @@ module Commontator
         format.html { redirect_to @thread }
         format.js
       end
-
     end
-
   end
 end

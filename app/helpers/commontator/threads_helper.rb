@@ -17,9 +17,5 @@ module Commontator
       config.commontator_name_method.blank? ? config.anonymous_name : \
       closer.send(config.commontator_name_method)
     end
-  
-    def get_thread
-      @thread = Thread.find(params[:id])
-    end
   end
 end

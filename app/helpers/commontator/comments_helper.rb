@@ -20,10 +20,5 @@ module Commontator
         config.comment_create_verb_past.capitalize + \
         ' on ') + comment.updated_at.strftime(config.timestamp_format)
     end
-    
-    def get_comment_and_thread
-      @comment = Comment.find(params[:id])
-      @thread = @comment.thread
-    end
   end
 end
