@@ -20,7 +20,7 @@
 
   <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
     <%= link_to thread.config.comment_create_verb_present.capitalize + ' ' + thread.config.comment_name,
-        new_thread_comment(thread), :remote => true %>
+        new_thread_comment_path(thread), :remote => true %>
   </span>
   
 <% end %>
