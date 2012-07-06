@@ -1,0 +1,7 @@
+$("#comment_<%= @comment.id %>_votes_div").html("<%= escape_javascript(
+  render :partial => 'votes',
+         :locals => {
+                       :comment => @comment
+                    }) %>");
+
+<%= javascript_callback %>

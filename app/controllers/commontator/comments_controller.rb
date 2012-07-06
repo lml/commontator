@@ -78,7 +78,7 @@ module Commontator
 
       respond_to do |format|
         format.html { redirect_to @thread }
-        format.js
+        format.js { render :update }
       end
     end
     
@@ -90,7 +90,43 @@ module Commontator
 
       respond_to do |format|
         format.html { redirect_to @thread }
-        format.js
+        format.js { render :update }
+      end
+    end
+    
+    # PUT /comments/1/upvote
+    def upvote
+      raise SecurityTransgression unless @comment.can_be_voted_on_by?(@commontator)
+      
+      @comment.upvote_from @commontator
+
+      respond_to do |format|
+        format.html { redirect_to @thread }
+        format.js { render :vote }
+      end
+    end
+    
+    # PUT /comments/1/downvote
+    def downvote
+      raise SecurityTransgression unless @comment.can_be_voted_on_by?(@commontator)
+      
+      @comment.downvote_from @commontator
+
+      respond_to do |format|
+        format.html { redirect_to @thread }
+        format.js { render :vote }
+      end
+    end
+    
+    # PUT /comments/1/unvote
+    def unvote
+      raise SecurityTransgression unless @comment.can_be_voted_on_by?(@commontator)
+      
+      @comment.unvote :voter => @commontator
+
+      respond_to do |format|
+        format.html { redirect_to @thread }
+        format.js { render :vote }
       end
     end
     

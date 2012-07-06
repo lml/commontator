@@ -46,6 +46,12 @@ module Commontator
     ##########################
     # Access control methods #
     ##########################
+    
+    def can_be_read_by?(user)
+      (thread.can_be_read_by?(user) && (!is_deleted? ||\
+        thread.config.deleted_comments_are_visible)) ||\
+        thread.can_be_edited_by?(user)
+    end
 
     def can_be_created_by?(user)
       !thread.is_closed? && thread.can_be_read_by?(user) && user == commontator
@@ -53,16 +59,16 @@ module Commontator
 
     def can_be_edited_by?(user)
       !thread.is_closed? && !is_deleted? &&\
-      ((user == commontator && thread.config.can_edit_own_comments) ||\
-      (thread.can_be_edited_by?(user) && thread.config.admin_can_edit_comments)) &&\
-      (thread.comments.last == self || thread.config.can_edit_old_comments)
+        ((user == commontator && thread.config.can_edit_own_comments) ||\
+        (thread.can_be_edited_by?(user) && thread.config.admin_can_edit_comments)) &&\
+        (thread.comments.last == self || thread.config.can_edit_old_comments)
     end
 
     def can_be_deleted_by?(user)
       !thread.is_closed? && !is_deleted? &&\
-      ((user == commontator && thread.config.can_delete_own_comments) &&\
-      (thread.comments.last == self || thread.config.can_delete_old_comments)) ||\
-      thread.can_be_edited_by?(user)
+        ((user == commontator && thread.config.can_delete_own_comments) &&\
+        (thread.comments.last == self || thread.config.can_delete_old_comments)) ||\
+        thread.can_be_edited_by?(user)
     end
     
     def can_be_voted_on?

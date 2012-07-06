@@ -18,17 +18,9 @@ module Commontator
         end
       end
       
-      def acts_as_commonter(options = {})
-        acts_as_commontator(options)
-      end
-      
-      def acts_as_commentator(options = {})
-        acts_as_commontator(options)
-      end
-      
-      def acts_as_commenter(options = {})
-        acts_as_commontator(options)
-      end
+      alias_method :acts_as_commonter, :acts_as_commontator
+      alias_method :acts_as_commentator, :acts_as_commontator
+      alias_method :acts_as_commenter, :acts_as_commontator
     end
   end
 end

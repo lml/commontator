@@ -121,13 +121,13 @@ module Commontator
     # Access control methods #
     ##########################
 
-    def can_be_read_by?(user)
+    def can_be_read_by?(user) # Reader and poster capabilities
       ((!is_closed? || config.closed_threads_are_readable) &&\
         config.can_read_thread_method.blank? ? true : commontable.send(config.can_read_thread_method, user)) ||\
         can_be_edited_by?(user)
     end
 
-    def can_be_edited_by?(user)
+    def can_be_edited_by?(user) # Thread admin capabilities
       config.can_edit_thread_method.blank? ?
         (user.commontator_config.is_admin_method.blank? ? false : user.send(user.commontator_config.is_admin_method)) :
         commontable.send(config.can_edit_thread_method, user)

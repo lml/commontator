@@ -31,9 +31,7 @@ module Commontator
         end
       end
       
-      def acts_as_commentable(options = {})
-        acts_as_commontable(options)
-      end
+      alias_method :acts_as_commentable, :acts_as_commontable
     end
   end
 end

@@ -1,0 +1,52 @@
+<% # Clients of this partial must provide the following variable:
+   # comment
+%>
+
+<% can_vote = comment.can_be_voted_on_by?(@commontator) %>
+<% vote = comment.votes.find_by_voter_id_and_voter_type(@commontator.id, @commontator.class.name) %>
+
+<div id="comment_<%= comment.id %>_votes_div" class="comment_votes">
+  <%= form_tag upvote_comment_path(@comment),
+               :method => :put,
+               :remote => true do %>
+    <table>
+      <tr>
+        <td>
+          <% if !can_vote || (!vote.blank? && vote.vote_flag) %>
+            <%= image_tag("thumbs_up_hover.png") %>
+          <% else %>
+            <%= image_submit_tag "thumbs_up.png",
+                  :onmouseover => "this.src='/images/thumbs_up_hover.png'",
+                  :onmouseout => "this.src='/images/thumbs_up.png'" %><br />
+          <% end %>
+        </td>
+        
+        <td>
+          <%= label_tag comment.upvotes.size %>
+        </td>
+      </tr>
+    </table>
+  <% end %>
+
+  <%= form_tag downvote_comment_path(@comment),
+               :method => :put,
+               :remote => true do %>
+    <table>
+      <tr>
+        <td>
+          <% if !can_vote || (!vote.blank? && !vote.vote_flag) %>
+            <%= image_tag "thumbs_down_hover.png" %>
+          <% else %>
+            <%= image_submit_tag "thumbs_down.png",
+                  :onmouseover => "this.src='/images/thumbs_down_hover.png'",
+                  :onmouseout => "this.src='/images/thumbs_down.png'" %><br />
+          <% end %>
+        </td>
+        
+        <td>
+          <%= label_tag comment.downvotes.size %>
+        </td>
+      </tr>
+    </table>
+  <% end %>
+</div>

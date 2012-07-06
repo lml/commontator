@@ -8,7 +8,7 @@
 
 <div id="thread_<%= thread.id %>_comment_list_div" class="thread_comment_list">
   <% thread.comments.each do |comment| %>
-    <% next if comment.is_deleted? && !thread.config.deleted_comments_are_visible %>
+    <% next unless comment.can_be_read_by?(@commontator) %>
     <%= render :partial => 'commontator/comments/show',
                :locals => {:comment => comment} %>
   <% end %>
