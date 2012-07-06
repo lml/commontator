@@ -8,14 +8,14 @@ module Commontator
     end
     
     def commontable_id(thread)
-      thread.commontable.send thread.config.commontable_id_method
+      thread.commontable.send(thread.config.commontable_id_method)
     end
     
     def closer_name(thread)
       closer = thread.closer
       config = closer.commontator_config
-      config.commontator_name_method.blank? ? config.anonymous_name :\
-      closer.send config.commontator_name_method
+      config.commontator_name_method.blank? ? config.anonymous_name : \
+      closer.send(config.commontator_name_method)
     end
   
     def get_thread
