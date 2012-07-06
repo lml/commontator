@@ -6,11 +6,18 @@ module Commontator
 
     has_many :comments, :dependent => :destroy
     has_many :subscriptions, :dependent => :destroy
-    has_many :subscribers, :through => :subscriptions
 
     validates_presence_of :commontable, :allow_nil => true
     
     attr_accessible :is_closed
+    
+    def subscribers
+      subscriptions.collect{|s| s.subscriber}
+    end
+    
+    def subscription_for(user)
+      Subscription.find_by_thread_id_and_subscriber_id_and_subscriber_type(self.id, user.id, user.class.name)
+    end
     
     def is_closed?
       !closed_at.blank?
@@ -18,10 +25,6 @@ module Commontator
     
     def config
       commontable.commontable_config
-    end
-    
-    def subscription_for(user)
-      Subscription.find_by_thread_id_and_subscriber_id_and_subscriber_type(self.id, user.id, user.class.name)
     end
     
     def is_subscribed?(user)
@@ -49,7 +52,7 @@ module Commontator
     
     def mark_as_unread_except_for(subscriber)
       Subscription.transaction do
-        subscriptions.each { |s| s.mark_as_unread unless s.subscriber == subscriber }
+        subscriptions.each{|s| s.mark_as_unread unless s.subscriber == subscriber}
       end
     end
     
@@ -90,7 +93,7 @@ module Commontator
     def comment_created_callback(user, comment)
       self.subscribe(user) if config.auto_subscribe_on_comment
       self.mark_as_unread_except_for(user)
-      SubscriptionNotifier.comment_created_email(comment)
+      SubscriptionMailer.comment_created_email(comment)
       commontable.send(config.comment_created_callback, user, comment) unless config.comment_created_callback.blank?
     end
     

@@ -17,10 +17,11 @@ protected
       @commontator = @comment.commontator
       @commontable = @thread.commontable
       @config = @thread.config
-      @bcc = @thread.subscribers.reject{ |s| s == @commontator }\
-                                .collect { |s| s.send @config.commontator_email_method }
+      @bcc = @thread.subscribers.reject{|s| s == @commontator}\
+                                .collect{|s| s.send @config.commontator_email_method}
       @subject = eval(@config.subscription_email_subject)
-      @body = @config.subscription_email_body.nil? ? nil : eval(@config.subscription_email_body)
+      @body = @config.subscription_email_body.nil? ? nil : \
+                eval(@config.subscription_email_body)
     end
 
   end

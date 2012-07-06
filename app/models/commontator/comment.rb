@@ -10,7 +10,7 @@ module Commontator
     #                    :as => :commontable,
     #                    :dependent => :destroy
 
-    before_validation :build_subthread, :on => :create
+    #before_validation :build_subthread, :on => :create
     validates_presence_of :commontator, :thread#, :subthread
     #validates_uniqueness_of :subthread
 

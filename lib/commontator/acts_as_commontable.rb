@@ -10,9 +10,8 @@ module Commontator
       def acts_as_commontable(options = {})
         class_eval do
           has_one :thread, :as => :commontable, :class_name => 'Commontator::Thread', :dependent => :destroy
-          has_many :comments, :through => :thread
-          has_many :subscriptions, :through => :thread
-          has_many :subscribers, :through => :thread
+          has_many :comments, :class_name => 'Commontator::Comment', :through => :thread
+          has_many :subscriptions, :class_name => 'Commontator::Subscription', :through => :thread
           
           after_initialize :create_thread, :unless => :thread, :if => :id
           before_validation :build_thread, :unless => :thread
