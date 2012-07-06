@@ -3,7 +3,7 @@
 %>
 
 <% if comment.is_deleted? %>
-  <%= comment_name(comment.thread).capitalize %> has been deleted by <%= deleter_name(comment) %>
+  <%= comment.thread.config.comment_name.capitalize %> has been deleted by <%= deleter_name(comment) %>
 <% else %>
   <%= simple_format comment.body, {:id => "comment_#{comment.id}_body", :class => 'comment_body'} %>
 <% end %>

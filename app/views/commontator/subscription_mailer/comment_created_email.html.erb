@@ -8,7 +8,7 @@
 
 <p>Please use the links below to reply to this message:</p>
 
-<p><%= link_to "Visit " + @commontable_name, @commontable %></p>
+<p><%= link_to "Visit " + @commontable_name, main_app.polymorphic_path(@commontable) %></p>
 <p><%= link_to "View " + @thread.config.comment_name.pluralize + " on " + @commontable_name, @thread %></p>
-<p><%= link_to "Post a new " + @thread.config.comment_name, new_thread_comment(@thread) %></p>
-<p><%= link_to "Unsubscribe from this thread", unsubscribe_thread(@thread) %></p>
+<p><%= link_to "Post a new " + @thread.config.comment_name, new_thread_comment_path(@thread) %></p>
+<p><%= link_to "Unsubscribe from this thread", unsubscribe_thread_path(@thread) %></p>

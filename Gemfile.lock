@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    commontator (0.1.25)
+    commontator (0.1.28)
       rails (>= 3.1)
 
 GEM
