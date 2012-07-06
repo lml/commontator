@@ -5,7 +5,7 @@ module Commontator
     
     protected
     
-    def get_user
+    def get_commontator
       @commontator = send Commontator.current_user_method
       raise SecurityTransgression unless (@commontator.nil? || @commontator.is_commontator)
     end
