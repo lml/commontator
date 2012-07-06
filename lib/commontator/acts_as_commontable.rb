@@ -14,7 +14,7 @@ module Commontator
           has_many :subscriptions, :through => :thread
           has_many :subscribers, :through => :thread
           
-          after_initialize :create_thread, :unless => :thread, :if => :id
+          after_initialize :commontator_create_thread, :unless => :thread, :if => :id
           before_validation :build_thread, :unless => :thread
           
           validates_presence_of :thread
@@ -23,7 +23,7 @@ module Commontator
           self.commontable_config = Commontator::CommontableConfig.new(options)
           self.is_commontable = true
           
-          def create_thread
+          def commontator_create_thread
             self.thread = Commontator::Thread.new
             self.thread.commontable = self
             self.save!
