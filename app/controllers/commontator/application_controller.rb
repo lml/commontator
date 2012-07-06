@@ -10,7 +10,7 @@ module Commontator
     end
     
     def get_thread
-      @thread = Thread.find(params[:id])
+      @thread = Commontator::Thread.find(params[:id])
     end
   end
 end

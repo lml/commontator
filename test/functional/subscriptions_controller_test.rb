@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CommentThreadSubscriptionsControllerTest < ActionController::TestCase
+class SubscriptionsControllerTest < ActionController::TestCase
 
   setup do
     @question = FactoryGirl.create(:simple_question)
@@ -21,46 +21,46 @@ class CommentThreadSubscriptionsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should not create comment_thread_subscription not logged in" do
-    assert_difference('CommentThreadSubscription.count', 0) do
+  test "should not create subscription not logged in" do
+    assert_difference('Subscription.count', 0) do
       get :create, :question_id => @question.to_param
     end
 
     assert_redirected_to login_path
   end
 
-  test "should not create comment_thread_subscription not authorized" do
+  test "should not create subscription not authorized" do
     user_login
-    assert_difference('CommentThreadSubscription.count', 0) do
+    assert_difference('Subscription.count', 0) do
       get :create, :question_id => @question.to_param
     end
 
     assert_response(403)
   end
 
-  test "should not create comment_thread_subscription already subscribed" do
+  test "should not create subscription already subscribed" do
     sign_in @user
-    FactoryGirl.create(:comment_thread_subscription,
-                   :user => @user, :comment_thread => @question.comment_thread)
-    assert_difference('CommentThreadSubscription.count', 0) do
+    FactoryGirl.create(:subscription,
+                   :user => @user, :thread => @question.thread)
+    assert_difference('Subscription.count', 0) do
       get :create, :question_id => @question.to_param
     end
 
     assert_redirected_to question_comments_path(@question.to_param)
   end
 
-  test "should create comment_thread_subscription" do
+  test "should create subscription" do
     sign_in @user
-    assert_difference('CommentThreadSubscription.count') do
+    assert_difference('Subscription.count') do
       get :create, :question_id => @question.to_param
     end
 
     assert_redirected_to question_comments_path(@question.to_param)
   end
 
-  test "should create comment_thread_subscription published question" do
+  test "should create subscription published question" do
     user_login
-    assert_difference('CommentThreadSubscription.count') do
+    assert_difference('Subscription.count') do
       get :create, :question_id => @published_question.to_param
     end
 

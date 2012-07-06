@@ -1,14 +1,12 @@
 module Commontator
   class Comment < ActiveRecord::Base
 
-    acts_as_votable
-
     belongs_to :commontator, :polymorphic => true
     belongs_to :deleter, :polymorphic => true
     belongs_to :thread
     
     has_one :commontable, :through => :thread
-    #has_one :subthread, :class_name => "Thread",
+    #has_one :subthread, :class_name => "Commontator::Thread",
     #                    :as => :commontable,
     #                    :dependent => :destroy
 
@@ -17,6 +15,22 @@ module Commontator
     #validates_uniqueness_of :subthread
 
     attr_accessible :body
+    
+    cattr_accessor :is_votable
+    if respond_to?(:acts_as_votable)
+      acts_as_votable if respond_to?(:acts_as_votable)
+      self.is_votable = true
+    else
+      self.is_votable = false
+    end
+    
+    def is_modified?
+      updated_at != created_at
+    end
+    
+    def is_deleted?
+      !deleted_at.blank?
+    end
     
     def delete(user = nil)
       self.deleted_at = Time.now
@@ -27,14 +41,6 @@ module Commontator
     def undelete
       self.deleted_at = nil
       self.save!
-    end
-
-    def is_modified?
-      updated_at != created_at
-    end
-    
-    def is_deleted?
-      !deleted_at.blank?
     end
 
     ##########################
@@ -60,7 +66,7 @@ module Commontator
     end
     
     def can_be_voted_on?
-      !is_deleted? && thread.config.comments_can_be_voted_on
+      is_votable && !is_deleted? && thread.config.comments_can_be_voted_on
     end
 
     def can_be_voted_on_by?(user)
