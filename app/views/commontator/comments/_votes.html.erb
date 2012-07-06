@@ -13,11 +13,11 @@
       <tr>
         <td>
           <% if !can_vote || (!vote.blank? && vote.vote_flag) %>
-            <%= image_tag("thumbs_up_hover.png") %>
+            <%= image_tag("commontator/thumbs_up_hover.png") %>
           <% else %>
-            <%= image_submit_tag "thumbs_up.png",
-                  :onmouseover => "this.src='/images/thumbs_up_hover.png'",
-                  :onmouseout => "this.src='/images/thumbs_up.png'" %><br />
+            <%= image_submit_tag "commontator/thumbs_up.png",
+                  :onmouseover => "this.src='/images/commontator/thumbs_up_hover.png'",
+                  :onmouseout => "this.src='/images/commontator/thumbs_up.png'" %><br />
           <% end %>
         </td>
         
@@ -35,11 +35,11 @@
       <tr>
         <td>
           <% if !can_vote || (!vote.blank? && !vote.vote_flag) %>
-            <%= image_tag "thumbs_down_hover.png" %>
+            <%= image_tag "commontator/thumbs_down_hover.png" %>
           <% else %>
-            <%= image_submit_tag "thumbs_down.png",
-                  :onmouseover => "this.src='/images/thumbs_down_hover.png'",
-                  :onmouseout => "this.src='/images/thumbs_down.png'" %><br />
+            <%= image_submit_tag "commontator/thumbs_down.png",
+                  :onmouseover => "this.src='/images/commontator/thumbs_down_hover.png'",
+                  :onmouseout => "this.src='/images/commontator/thumbs_down.png'" %><br />
           <% end %>
         </td>
         

@@ -1,6 +1,9 @@
 module Commontator
   class SubscriptionMailer < ActionMailer::Base
   
+    include CommentsHelper
+    include ThreadsHelper
+  
     def comment_created_email(comment) 
       setup_variables(comment)
 
@@ -18,9 +21,16 @@ protected
       @commontable = @thread.commontable
       @config = @thread.config
       @bcc = @thread.subscribers.reject{|s| s == @commontator}\
-                                .collect{|s| s.send @config.commontator_email_method}
+                                .collect{|s| email(s)}
+                                
+      @commontator_name = commontator_name(@commontator)
+      @comment_timestamp = comment_timestamp(@comment)
+      
+      @commontable_name = commontable_name(@thread)
+      @commontable_id = commontable_id(@thread).to_s
+      
       @subject = eval(@config.subscription_email_subject)
-      @body = @config.subscription_email_body.nil? ? nil : \
+      @body = @config.subscription_email_body.blank? ? nil : \
                 eval(@config.subscription_email_body)
     end
 

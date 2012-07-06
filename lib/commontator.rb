@@ -23,9 +23,9 @@ module Commontator
     :comment_create_verb_past => 'posted',
     :commontable_name => 'commontable',
     :subscription_email_subject =>\
-      'commontator_name(@comment) + @config.comment_create_verb_past' +\
-      ' + " a " + @config.comment_name + " on " + commontable_name(@thread)' +\
-      ' + " #" + commontable_id(@thread)',
+      '@commontator_name + @config.comment_create_verb_past' +\
+      ' + " a " + @config.comment_name + " on " + @commontable_name' +\
+      ' + " #" + @commontable_id',
     :subscription_email_body => '',
     :timestamp_format => '%b %d %Y, %I:%M %p',
     :admin_can_edit_comments => false,
@@ -35,7 +35,7 @@ module Commontator
     :can_delete_old_comments => false,
     :can_delete_own_comments => false,
     :can_subscribe_to_thread => true,
-    :comments_can_be_voted_on => true,
+    :comments_can_be_voted_on => false,
     :closed_threads_are_readable => true,
     :deleted_comments_are_visible => true,
     :commontable_id_method => 'id',
