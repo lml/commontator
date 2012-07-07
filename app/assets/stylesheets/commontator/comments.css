@@ -21,11 +21,11 @@
   float: right;
 }
 
-.comment_body {
+.comment_body p {
 	margin: 0px;
 }
 
-.comment_body_container {
+.comment_body\ {
    margin-left: 50px;
    margin-top: -55px;
    margin-right: 45px;
