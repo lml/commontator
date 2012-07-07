@@ -21,18 +21,16 @@
   float: right;
 }
 
-.comment_body_container {
-   float: left;
-   
-   margin-left: 80px;
-   margin-top: -80px;
-   margin-right: 50px;
-   
-   padding: 8px;
-}
-
 .comment_body {
 	margin: 0px;
+}
+
+.comment_body_container {
+   margin-left: 50px;
+   margin-top: -55px;
+   margin-right: 45px;
+   
+   padding: 8px;
 }
 
 .comment_timestamp {
@@ -49,6 +47,12 @@
   background-color: transparent;
 }
 
-.new_comment_div textarea {
+.comment_votes label {
+  float: right;
+  
+  margin-top: 15px;
+}
+
+#new_comment_form textarea {
 	width: 100%;
 }

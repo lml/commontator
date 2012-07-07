@@ -5,7 +5,7 @@
 <% can_vote = comment.can_be_voted_on_by?(@commontator) %>
 <% vote = comment.votes.find_by_voter_id_and_voter_type(@commontator.id, @commontator.class.name) %>
 
-<div id="comment_<%= comment.id %>_votes_div" class="comment_votes">
+<span id="comment_<%= comment.id %>_votes_span" class="comment_votes">
   <span id="comment_<%= comment.id %>_upvote_span" class="comment_upvote">
     <% if !can_vote || (!vote.blank? && vote.vote_flag) %>
       <%= form_tag unvote_comment_path(comment),
@@ -49,4 +49,4 @@
       <% end %>
     <% end %>
   </span>
-</div>
+</span>
