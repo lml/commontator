@@ -7,32 +7,46 @@
 
 <div id="comment_<%= comment.id %>_votes_div" class="comment_votes">
   <span id="comment_<%= comment.id %>_upvote_span" class="comment_upvote">
-    <%= form_tag upvote_comment_path(@comment),
-               :method => :put,
-               :remote => true do %>
-      <% if !can_vote || (!vote.blank? && vote.vote_flag) %>
-        <%= image_tag("commontator/thumbs_up_hover.png") %>
-      <% else %>
+    <% if !can_vote || (!vote.blank? && vote.vote_flag) %>
+      <%= form_tag unvote_comment_path(comment),
+            :method => :put,
+            :remote => true do %>
+        <%= image_submit_tag "commontator/thumbs_up_hover.png",
+              :onmouseover => "this.src='/assets/commontator/thumbs_up.png'",
+              :onmouseout => "this.src='/assets/commontator/thumbs_up_hover.png'" %>
+        <%= label_tag comment.upvotes.size %>
+      <% end %>
+    <% else %>
+      <%= form_tag upvote_comment_path(comment),
+            :method => :put,
+            :remote => true do %>
         <%= image_submit_tag "commontator/thumbs_up.png",
               :onmouseover => "this.src='/assets/commontator/thumbs_up_hover.png'",
               :onmouseout => "this.src='/assets/commontator/thumbs_up.png'" %>
+        <%= label_tag comment.upvotes.size %>
       <% end %>
-      <%= label_tag comment.upvotes.size %>
     <% end %>
   </span>
 
   <span id="comment_<%= comment.id %>_downvote_span" class="comment_downvote">
-    <%= form_tag downvote_comment_path(@comment),
-               :method => :put,
-               :remote => true do %>
-      <% if !can_vote || (!vote.blank? && !vote.vote_flag) %>
-        <%= image_tag("commontator/thumbs_down_hover.png") %>
-      <% else %>
+    <% if !can_vote || (!vote.blank? && !vote.vote_flag) %>
+      <%= form_tag unvote_comment_path(comment),
+            :method => :put,
+            :remote => true do %>
+        <%= image_submit_tag "commontator/thumbs_down_hover.png",
+              :onmouseover => "this.src='/assets/commontator/thumbs_down.png'",
+              :onmouseout => "this.src='/assets/commontator/thumbs_down_hover.png'" %>
+        <%= label_tag comment.downvotes.size %>
+      <% end %>
+    <% else %>
+      <%= form_tag downvote_comment_path(comment),
+            :method => :put,
+            :remote => true do %>
         <%= image_submit_tag "commontator/thumbs_down.png",
               :onmouseover => "this.src='/assets/commontator/thumbs_down_hover.png'",
               :onmouseout => "this.src='/assets/commontator/thumbs_down.png'" %>
+        <%= label_tag comment.downvotes.size %>
       <% end %>
-      <%= label_tag comment.downvotes.size %>
     <% end %>
   </span>
 </div>

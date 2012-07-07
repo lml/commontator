@@ -2,43 +2,37 @@
   font-size: 12px;
   font-weight: normal;
   font-style: normal;
+
+  border-top: 1px solid;
+  border-left: 1px solid;
+  
   margin-top: 15px;
   margin-bottom: 15px;
-  border-left: 1px solid;
-  border-top: 1px solid;
-  padding: 8px;
+
+  padding-top: 8px;
   padding-left: 15px;
-  border-color: #ddd;
+
   color: #000;
+  border-color: #ddd;
   background-color: #fff;
-  clear: both;
 }
 
 .comment_actions {
   float: right;
 }
 
-.comment_actions a {
-  display: inline;
-}
-
 .comment_body_container {
    float: left;
+   
+   margin-left: 80px;
+   margin-top: -80px;
+   margin-right: 50px;
+   
+   padding: 8px;
 }
 
 .comment_body {
-	clear: both; 
-	margin: 3px; 
-	padding-left: 8px;
-	padding-bottom: 6px;
-	padding-top: 8px;
-	float: left;
-}
-
-.comment_profile_picture {
-  float: left;
-  padding-top: 8px;
-  height: auto;
+	margin: 0px;
 }
 
 .comment_timestamp {
@@ -51,6 +45,7 @@
 
 .comment_votes input {
   border: none;
+  
   background-color: transparent;
 }
 
