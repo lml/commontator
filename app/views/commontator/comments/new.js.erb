@@ -3,7 +3,7 @@ $("#thread_<%= @thread.id %>_new_comment_div").html("<%= escape_javascript(
          :locals => {
                        :comment => @comment,
                        :thread => @thread
-                    }) %>").show();
+                    }) %>");
 
 $("#thread_<%= @thread.id %>_new_comment_link_span").hide();
 

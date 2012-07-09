@@ -53,6 +53,6 @@
   margin-top: 15px;
 }
 
-#new_comment_form textarea {
+.thread_new_comment textarea {
 	width: 100%;
 }
