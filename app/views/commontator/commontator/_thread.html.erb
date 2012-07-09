@@ -6,7 +6,8 @@
 <% thread = commontable.thread %>
 
 <% if thread.can_be_read_by?(user) %>
-  <%= stylesheet_link_tag 'commontator/application' %>
+  <%= stylesheet_link_tag "commontator/application", :media => "all" %>
+  <%= javascript_include_tag "commontator/application" %>
 
   <div id="thread_<%= thread.id %>_div" class="thread">
     <%= link_to 'View ' + thread.config.comment_name.pluralize, commontator.thread_path(thread), :remote => true %>
