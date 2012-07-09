@@ -30,8 +30,8 @@ module Commontator
 
       respond_to do |format|
         if @comment.save
-          @thread.subscribe(user) if config.auto_subscribe_on_comment
-          @thread.mark_as_unread_except_for(user)
+          @thread.subscribe(@commontator) if config.auto_subscribe_on_comment
+          @thread.mark_as_unread_except_for(@commontator)
           SubscriptionsMailer.comment_created_email(comment)
           @thread.comment_created_callback(@commontator, @comment)
           flash[:notice] = @thread.config.comment_name + ' ' + @thread.config.comment_create_verb_past
