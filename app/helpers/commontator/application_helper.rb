@@ -1,13 +1,11 @@
 module Commontator
   module ApplicationHelper
     def heading(string)
-      Commontator.heading_function.blank? ? \
-      '<h1>'.html_safe + string + '</h1>'.html_safe : \
-      send(Commontator.heading_function, string).html_safe
+      Commontator.heading_proc.call unless Commontator.heading_proc.blank?
     end
     
     def javascript_callback
-      Commontator.javascript_callback.blank? ? '' : send(Commontator.javascript_callback).html_safe
+      Commontator.javascript_proc.call unless Commontator.javascript_proc.blank?
     end
   end
 end

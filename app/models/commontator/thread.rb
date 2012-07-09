@@ -91,9 +91,6 @@ module Commontator
     ####################
     
     def comment_created_callback(user, comment)
-      self.subscribe(user) if config.auto_subscribe_on_comment
-      self.mark_as_unread_except_for(user)
-      SubscriptionMailer.comment_created_email(comment)
       commontable.send(config.comment_created_callback, user, comment) unless config.comment_created_callback.blank?
     end
     
