@@ -15,7 +15,7 @@
             :onmouseout => "this.src='/assets/commontator/thumbs_up_hover.png'" %>
       <%= label_tag comment.upvotes.size %>
     <% end %>
-  <% else %>
+  <% elsif can_vote %>
     <%= form_tag upvote_comment_path(comment),
           :method => :put,
           :remote => true do %>
@@ -24,6 +24,8 @@
             :onmouseout => "this.src='/assets/commontator/thumbs_up.png'" %>
       <%= label_tag comment.upvotes.size %>
     <% end %>
+  <% else %>
+    <%= image_tag "commontator/thumbs_up_hover.png" %>
   <% end %>
 </span>
 
@@ -37,7 +39,7 @@
             :onmouseout => "this.src='/assets/commontator/thumbs_down_hover.png'" %>
       <%= label_tag comment.downvotes.size %>
     <% end %>
-  <% else %>
+  <% elsif can_vote %>
     <%= form_tag downvote_comment_path(comment),
           :method => :put,
           :remote => true do %>
@@ -46,5 +48,7 @@
             :onmouseout => "this.src='/assets/commontator/thumbs_down.png'" %>
       <%= label_tag comment.downvotes.size %>
     <% end %>
+  <% else %>
+    <%= image_tag "commontator/thumbs_down_hover.png" %>
   <% end %>
 </span>
