@@ -18,7 +18,7 @@
   </span>
   
   <span id="comment_<%= comment.id.to_s %>_actions_span" class="comment_actions">
-    <%= render :partial => :actions,
+    <%= render :partial => 'commontator/comments/actions',
                :locals => { :comment => comment } %>
   </span>
   
