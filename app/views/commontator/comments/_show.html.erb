@@ -1,8 +1,6 @@
 <% # Clients of this partial must supply the following variables:
    # comment
 %>
-
-<% enable_votes = comment.can_be_voted_on? %>
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
   <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
@@ -28,17 +26,15 @@
     <%= gravatar_image comment %>
   </span>
   
+  <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">
+    <%= render :partial => 'commontator/comments/votes',
+               :locals => {:comment => comment} %>
+  </span>
+  
   <div id="comment_<%= comment.id.to_s %>_body_div" class="comment_body">
     <%= render :partial => 'commontator/comments/body',
                :locals => {:comment => comment} %>
   </div>
-  
-  <% if enable_votes %>
-    <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">
-      <%= render :partial => 'commontator/comments/votes',
-                 :locals => {:comment => comment} %>
-    </span>
-  <% end %>
 
 </div>
 

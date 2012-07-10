@@ -2,57 +2,59 @@
    # comment
 %>
 
-<% can_vote = comment.can_be_voted_on_by?(@commontator) %>
-<% vote = comment.votes.find_by_voter_id_and_voter_type(@commontator.id, @commontator.class.name) %>
+<% if comment.can_be_voted_on? %>
+  <% can_vote = comment.can_be_voted_on_by?(@commontator) %>
+  <% vote = comment.votes.find_by_voter_id_and_voter_type(@commontator.id, @commontator.class.name) %>
 
-<span id="comment_<%= comment.id %>_upvote_span" class="comment_upvote">
-  <% if can_vote && (vote.blank? || !vote.vote_flag) %>
-    <%= form_tag upvote_comment_path(comment),
-          :method => :put,
-          :remote => true do %>
-      <%= image_submit_tag "commontator/upvote.png",
-            :onmouseover => "this.src='/assets/commontator/upvote_hover.png'",
-            :onmouseout => "this.src='/assets/commontator/upvote.png'" %>
+  <span id="comment_<%= comment.id %>_upvote_span" class="comment_upvote">
+    <% if can_vote && (vote.blank? || !vote.vote_flag) %>
+      <%= form_tag upvote_comment_path(comment),
+            :method => :put,
+            :remote => true do %>
+        <%= image_submit_tag "commontator/upvote.png",
+              :onmouseover => "this.src='/assets/commontator/upvote_hover.png'",
+              :onmouseout => "this.src='/assets/commontator/upvote.png'" %>
+      <% end %>
+    <% elsif can_vote %>
+      <%= form_tag unvote_comment_path(comment),
+            :method => :put,
+            :remote => true do %>
+        <%= image_submit_tag "commontator/upvote_hover.png",
+              :onmouseover => "this.src='/assets/commontator/upvote.png'",
+              :onmouseout => "this.src='/assets/commontator/upvote_hover.png'" %>
+      <% end %>
+    <% else %>
+      <%= image_tag "commontator/upvote_hover.png" %>
     <% end %>
-  <% elsif can_vote %>
-    <%= form_tag unvote_comment_path(comment),
-          :method => :put,
-          :remote => true do %>
-      <%= image_submit_tag "commontator/upvote_hover.png",
-            :onmouseover => "this.src='/assets/commontator/upvote.png'",
-            :onmouseout => "this.src='/assets/commontator/upvote_hover.png'" %>
-    <% end %>
-  <% else %>
-    <%= image_tag "commontator/upvote_hover.png" %>
-  <% end %>
-  <span id="comment_<%= comment.id %>_upvote_count_span" class="comment_upvote_count">
-    <%= comment.upvotes.size %>
+    <span id="comment_<%= comment.id %>_upvote_count_span" class="comment_upvote_count">
+      <%= comment.upvotes.size %>
+    </span>
   </span>
-</span>
 
-<br/>
+  <br/>
 
-<span id="comment_<%= comment.id %>_downvote_span" class="comment_downvote">
-  <% if can_vote && (vote.blank? || vote.vote_flag) %>
-    <%= form_tag downvote_comment_path(comment),
-          :method => :put,
-          :remote => true do %>
-      <%= image_submit_tag "commontator/downvote.png",
-            :onmouseover => "this.src='/assets/commontator/downvote_hover.png'",
-            :onmouseout => "this.src='/assets/commontator/downvote.png'" %>
+  <span id="comment_<%= comment.id %>_downvote_span" class="comment_downvote">
+    <% if can_vote && (vote.blank? || vote.vote_flag) %>
+      <%= form_tag downvote_comment_path(comment),
+            :method => :put,
+            :remote => true do %>
+        <%= image_submit_tag "commontator/downvote.png",
+              :onmouseover => "this.src='/assets/commontator/downvote_hover.png'",
+              :onmouseout => "this.src='/assets/commontator/downvote.png'" %>
+      <% end %>
+    <% elsif can_vote %>
+      <%= form_tag unvote_comment_path(comment),
+            :method => :put,
+            :remote => true do %>
+        <%= image_submit_tag "commontator/downvote_hover.png",
+              :onmouseover => "this.src='/assets/commontator/downvote.png'",
+              :onmouseout => "this.src='/assets/commontator/downvote_hover.png'" %>
+      <% end %>
+    <% else %>
+      <%= image_tag "commontator/downvote_hover.png" %>
     <% end %>
-  <% elsif can_vote %>
-    <%= form_tag unvote_comment_path(comment),
-          :method => :put,
-          :remote => true do %>
-      <%= image_submit_tag "commontator/downvote_hover.png",
-            :onmouseover => "this.src='/assets/commontator/downvote.png'",
-            :onmouseout => "this.src='/assets/commontator/downvote_hover.png'" %>
-    <% end %>
-  <% else %>
-    <%= image_tag "commontator/downvote_hover.png" %>
-  <% end %>
-  <span id="comment_<%= comment.id %>_downvote_count_span" class="comment_downvote_count">
-    <%= comment.downvotes.size %>
+    <span id="comment_<%= comment.id %>_downvote_count_span" class="comment_downvote_count">
+      <%= comment.downvotes.size %>
+    </span>
   </span>
-</span>
+<% end %>
