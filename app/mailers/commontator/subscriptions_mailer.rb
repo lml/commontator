@@ -8,8 +8,7 @@ module Commontator
       setup_variables(comment)
 
       mail(:bcc => @bcc,
-           :subject => @subject,
-           :body => @body)
+           :subject => @subject)
     end
 
 protected
@@ -43,8 +42,6 @@ protected
       params[:commontable_id] = @commontable_id
       
       @subject = @config.subscription_email_subject_proc.call(params)
-      @body = @config.subscription_email_body_proc.blank? ? nil : \
-                @config.subscription_email_body_proc.call?(params)
     end
 
   end
