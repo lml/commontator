@@ -23,14 +23,20 @@
 
 .comment_body p {
 	margin: 0px;
+	
+	overflow: hidden;
 }
 
 .comment_body {
-   margin-left: 55px;
-   margin-top: -55px;
-   margin-right: 45px;
+  margin-left: 55px;
+  margin-top: -60px;
+  margin-right: 45px;
    
-   padding: 8px;
+  padding: 8px;
+}
+
+.comment_profile_picture img {
+  margin-top: 5px;
 }
 
 .comment_timestamp {
@@ -41,16 +47,42 @@
   float: right;
 }
 
-.comment_votes input {
+.comment_votes input,
+.comment_votes img {
   border: none;
-  
   background-color: transparent;
+  padding: 0px;
+  margin: 5px;
 }
 
-.comment_votes label {
-  float: right;
+.comment_upvote {
+  display: table;
+}
+
+.comment_upvote form {
+  display: table-cell;
+}
+
+.comment_downvote {
+  display: table;
+}
+
+.comment_downvote form {
+  display: table-cell;
+}
+
+.comment_upvote_count {
+  display: table-cell;
+  vertical-align: middle;
   
-  margin-top: 15px;
+  padding-top: 1px;
+}
+
+.comment_downvote_count {
+  display: table-cell;
+  vertical-align: middle;
+  
+  padding-bottom: 7px;
 }
 
 .thread_new_comment textarea {

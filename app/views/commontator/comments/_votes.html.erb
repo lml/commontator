@@ -13,7 +13,6 @@
       <%= image_submit_tag "commontator/upvote.png",
             :onmouseover => "this.src='/assets/commontator/upvote_hover.png'",
             :onmouseout => "this.src='/assets/commontator/upvote.png'" %>
-      <%= label_tag comment.upvotes.size %>
     <% end %>
   <% elsif can_vote %>
     <%= form_tag unvote_comment_path(comment),
@@ -22,12 +21,16 @@
       <%= image_submit_tag "commontator/upvote_hover.png",
             :onmouseover => "this.src='/assets/commontator/upvote.png'",
             :onmouseout => "this.src='/assets/commontator/upvote_hover.png'" %>
-      <%= label_tag comment.upvotes.size %>
     <% end %>
   <% else %>
     <%= image_tag "commontator/upvote_hover.png" %>
   <% end %>
+  <span id="comment_<%= comment.id %>_upvote_count_span" class="comment_upvote_count">
+    <%= comment.downvotes.size %>
+  </span>
 </span>
+
+<br/>
 
 <span id="comment_<%= comment.id %>_downvote_span" class="comment_downvote">
   <% if can_vote && (vote.blank? || vote.vote_flag) %>
@@ -37,7 +40,6 @@
       <%= image_submit_tag "commontator/downvote.png",
             :onmouseover => "this.src='/assets/commontator/downvote_hover.png'",
             :onmouseout => "this.src='/assets/commontator/downvote.png'" %>
-      <%= label_tag comment.downvotes.size %>
     <% end %>
   <% elsif can_vote %>
     <%= form_tag unvote_comment_path(comment),
@@ -46,9 +48,11 @@
       <%= image_submit_tag "commontator/downvote_hover.png",
             :onmouseover => "this.src='/assets/commontator/downvote.png'",
             :onmouseout => "this.src='/assets/commontator/downvote_hover.png'" %>
-      <%= label_tag comment.downvotes.size %>
     <% end %>
   <% else %>
     <%= image_tag "commontator/downvote_hover.png" %>
   <% end %>
+  <span id="comment_<%= comment.id %>_downvote_count_span" class="comment_downvote_count">
+    <%= comment.downvotes.size %>
+  </span>
 </span>
