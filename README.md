@@ -92,11 +92,17 @@ Follow the steps below to add commontator to your models and views:
     
   Where commontable is an instance of some model that acts_as_commontable.
 
-That's it! Commontator is now ready to use.
+That's it! Commontator is now ready for use.
 
 ## Customization
 
-Coming soon!
+Copy commontator's views, controllers or even models to your app using the following command:
+
+    ```
+    Coming soon!
+    ```
+
+You can now modify them and the changes should be reflected in your application.
 
 ## Contributing
 
