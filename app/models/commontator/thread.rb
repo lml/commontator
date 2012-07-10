@@ -11,6 +11,15 @@ module Commontator
     
     attr_accessible :is_closed
     
+    def config
+      commontable.commontable_config
+    end
+    
+    def comments
+      (comments_can_be_voted_on && config.comments_ordered_by_votes) ? \
+        super.order("cached_votes_down - cached_votes_up") : super
+    end
+    
     def subscribers
       subscriptions.collect{|s| s.subscriber}
     end
@@ -21,10 +30,6 @@ module Commontator
     
     def is_closed?
       !closed_at.blank?
-    end
-    
-    def config
-      commontable.commontable_config
     end
     
     def is_subscribed?(user)

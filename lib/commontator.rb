@@ -1,5 +1,5 @@
 module Commontator
-  # Attributes and default values
+  # Attributes
 
   # Can be set in initializer only
   ENGINE_ATTRIBUTES = [
@@ -32,6 +32,7 @@ module Commontator
     :can_delete_old_comments,
     :can_subscribe_to_thread,
     :comments_can_be_voted_on,
+    :comments_ordered_by_votes,
     :closed_threads_are_readable,
     :deleted_comments_are_visible,
     :commontable_id_method,
