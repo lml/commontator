@@ -81,10 +81,18 @@ Follow the steps below to add commontator to your models and views:
   ```ruby
   acts_as_commontable
   ```
-    
-2. Views
 
-  Add the following line to any view where you want to display comments:
+2. Controllers
+
+  Add the following line to the controller(s) that handle the views where you want to display comments:
+
+  ```ruby
+  helper Commontator::CommontatorHelper
+  ```
+    
+3. Views
+
+  Add the following line to any view where you would like to display comments:
 
   ```erb
   <%= commontator_thread_link(commontable) %>

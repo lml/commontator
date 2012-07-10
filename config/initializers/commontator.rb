@@ -9,11 +9,11 @@ Commontator.configure do |config|
   config.current_user_method = 'current_user'
 
   # Proc that is called when a view wants to set the page heading.
-  # Default: Proc.new {}
+  # Default: nil
   config.heading_proc = nil
 
   # Proc that is called after any javascript runs (e.g. to clear flash notices)
-  # Default: Proc.new {}
+  # Default: nil
   config.javascript_proc = nil
 
 
@@ -59,10 +59,15 @@ Commontator.configure do |config|
   config.commontable_name = 'commontable'
 
   # Proc that returns the subscription email subject
-  # Default: Proc.new {}
-  config.subscription_email_subject_proc = Proc.new {|params| \
+  # Default:
+  # Proc.new do |params|
+  #   "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
+  #   "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
+  # end
+  config.subscription_email_subject_proc = Proc.new do |params|
     "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
-    "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"}
+    "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
+  end
 
   # The format of the timestamps used by Commontator
   # Default: '%b %d %Y, %I:%M %p'
