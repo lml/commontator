@@ -15,23 +15,24 @@ module Commontator
 protected
 
     def setup_variables(comment)
-      @comment = comment
-      @thread = @comment.thread
-      @commontator = @comment.commontator
-      @commontable = @thread.commontable
-      @config = @thread.config
-      @bcc = @thread.subscribers.reject{|s| s == @commontator}\
-                                .collect{|s| email(s)}
+      params = Hash.new
+      params[:comment] = comment
+      params[:thread] = params[:comment].thread
+      params[:commontator] = params[:comment].commontator
+      params[:commontable] = params[:thread].commontable
+      params[:config] = params[:thread].config
+      @bcc = params[:thread].subscribers.reject{|s| s == params[:commontator]}\
+                                        .collect{|s| email(s)}
                                 
-      @commontator_name = commontator_name(@comment)
-      @comment_timestamp = comment_timestamp(@comment)
+      params[:commontator_name] = commontator_name(params[:comment])
+      params[:comment_timestamp] = comment_timestamp(params[:comment])
       
-      @commontable_name = commontable_name(@thread)
-      @commontable_id = commontable_id(@thread).to_s
+      params[:commontable_name] = commontable_name(params[:thread])
+      params[:commontable_id] = commontable_id(params[:thread]).to_s
       
-      @subject = @config.subscription_email_subject_proc.call
-      @body = @config.subscription_email_body_proc.blank? ? nil : \
-                @config.subscription_email_body_proc.call
+      @subject = params[:config].subscription_email_subject_proc.call(params)
+      @body = params[:config].subscription_email_body_proc.blank? ? nil : \
+                params[:config].subscription_email_body_proc.call?(params)
     end
 
   end

@@ -22,9 +22,9 @@ module Commontator
     :comment_create_verb_present => 'post',
     :comment_create_verb_past => 'posted',
     :commontable_name => 'commontable',
-    :subscription_email_subject_proc => Proc.new {
-      "#{@commontator_name} #{@config.comment_create_verb_past}" + \
-      " a #{@config.comment_name} on #{@commontable_name} ##{@commontable_id}" },
+    :subscription_email_subject_proc => Proc.new {|params| \
+      "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
+      "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"},
     :subscription_email_body_proc => nil,
     :timestamp_format => '%b %d %Y, %I:%M %p',
     :admin_can_edit_comments => false,
