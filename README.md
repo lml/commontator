@@ -96,13 +96,19 @@ That's it! Commontator is now ready for use.
 
 ## Customization
 
-Copy commontator's views, controllers or even models to your app using the following command:
+Copy commontator's files to your app using any of the following commands:
 
-```
-Coming soon!
+```sh
+rake commontator:copy:images
+rake commontator:copy:stylesheets
+rake commontator:copy:views
+rake commontator:copy:mailers
+rake commontator:copy:helpers
+rake commontator:copy:controllers
+rake commontator:copy:models
 ```
 
-You can now modify them and the changes should be reflected in your application.
+You are now free to modify them and have any changes made manifest in your application.
 
 ## Contributing
 
