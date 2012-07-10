@@ -1,3 +1,3 @@
 module Commontator
-  VERSION = "0.1.46"
+  VERSION = "0.2.0"
 end

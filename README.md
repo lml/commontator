@@ -8,25 +8,25 @@ There are 4 steps you must follow to install commontator:
 
 1. Gem
 
-Add this line to your application's Gemfile:
+  Add this line to your application's Gemfile:
 
     gem 'commontator'
 
-And then execute:
+  And then execute:
 
     $ bundle
 
-Or install it yourself as:
+  Or install it yourself as:
 
     $ gem install commontator
 
 2. Initializer and Migration
 
-Run the following command to copy commontator's initializer and migration to your own app:
+  Run the following command to copy commontator's initializer and migration to your own app:
 
     $ rake commontator:install
 
-And then execute:
+  And then execute:
 
     $ rake db:migrate
 
@@ -40,15 +40,15 @@ Or run each rake task manually:
 
 3. Configuration
 
-Change commontator's configurations to suit your needs by editing config/intializers/commontator.rb.
+  Change commontator's configurations to suit your needs by editing config/intializers/commontator.rb.
 
 4. Routes
 
-Add this line to your application's routes file:
+  Add this line to your application's routes file:
 
     mount Commontator::Engine => "/commontator"
 
-You can change the mount path if you would like a different one.
+  You can change the mount path if you would like a different one.
 
 ## Usage
 
@@ -56,21 +56,21 @@ Follow the steps below to add commontator to your models and views:
 
 1. Models
 
-Add this line to your user model(s) (or any models that should be able to make comments):
+  Add this line to your user model(s) (or any models that should be able to make comments):
 
     acts_as_commontator
     
-Add this line to any models you want to be able to comment on:
+  Add this line to any models you want to be able to comment on:
 
     acts_as_commontable
     
 2. Views
 
-Add the following line to any view where you want to display comments:
+  Add the following line to any view where you want to display comments:
 
     <%= commontator_thread_link(commontable) %>
     
-Where commontable is an instance of some model that acts_as_commontable.
+  Where commontable is an instance of some model that acts_as_commontable.
 
 That's it! Commontator is now ready to use.
 
