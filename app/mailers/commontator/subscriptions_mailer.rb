@@ -15,24 +15,36 @@ module Commontator
 protected
 
     def setup_variables(comment)
-      params = Hash.new
-      params[:comment] = comment
-      params[:thread] = params[:comment].thread
-      params[:commontator] = params[:comment].commontator
-      params[:commontable] = params[:thread].commontable
-      params[:config] = params[:thread].config
-      @bcc = params[:thread].subscribers.reject{|s| s == params[:commontator]}\
+      
+      @comment = comment
+      @thread = @comment.thread
+      
+      @commontator = @comment.commontator
+      @commontable = @thread.commontable
+      @config = @thread.config
+      @bcc = @thread.subscribers.reject{|s| s == @commontator}\
                                         .collect{|s| email(s)}
                                 
-      params[:commontator_name] = commontator_name(params[:comment])
-      params[:comment_timestamp] = comment_timestamp(params[:comment])
+      @commontator_name = commontator_name(@comment)
+      @comment_timestamp = comment_timestamp(@comment)
       
-      params[:commontable_name] = commontable_name(params[:thread])
-      params[:commontable_id] = commontable_id(params[:thread]).to_s
+      @commontable_name = commontable_name(@thread)
+      @commontable_id = commontable_id(@thread).to_s
       
-      @subject = params[:config].subscription_email_subject_proc.call(params)
-      @body = params[:config].subscription_email_body_proc.blank? ? nil : \
-                params[:config].subscription_email_body_proc.call?(params)
+      params = Hash.new
+      params[:comment] = @comment
+      params[:thread] = @thread
+      params[:commontator] = @commontator
+      params[:commontable] = @commontable
+      params[:config] = @config
+      params[:commontator_name] = @commontator_name
+      params[:comment_timestamp] = @comment_timestamp
+      params[:commontable_name] = @commontable_name
+      params[:commontable_id] = @commontable_id
+      
+      @subject = @config.subscription_email_subject_proc.call(params)
+      @body = @config.subscription_email_body_proc.blank? ? nil : \
+                @config.subscription_email_body_proc.call?(params)
     end
 
   end
