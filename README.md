@@ -10,33 +10,33 @@ There are 4 steps you must follow to install commontator:
 
   Add this line to your application's Gemfile:
 
-    gem 'commontator'
+      gem 'commontator'
 
   And then execute:
 
-    $ bundle
+      $ bundle
 
   Or install it yourself as:
 
-    $ gem install commontator
+      $ gem install commontator
 
 2. Initializer and Migration
 
   Run the following command to copy commontator's initializer and migration to your own app:
 
-    $ rake commontator:install
+      $ rake commontator:install
 
   And then execute:
 
-    $ rake db:migrate
+      $ rake db:migrate
 
-Or run each rake task manually:
+  Or run each rake task manually:
 
-    $ rake commontator:install:initializers
+      $ rake commontator:install:initializers
 
-    $ rake commontator:install:migrations
+      $ rake commontator:install:migrations
 
-    $ rake db:migrate
+      $ rake db:migrate
 
 3. Configuration
 
@@ -46,7 +46,7 @@ Or run each rake task manually:
 
   Add this line to your application's routes file:
 
-    mount Commontator::Engine => "/commontator"
+      mount Commontator::Engine => "/commontator"
 
   You can change the mount path if you would like a different one.
 
@@ -58,17 +58,17 @@ Follow the steps below to add commontator to your models and views:
 
   Add this line to your user model(s) (or any models that should be able to make comments):
 
-    acts_as_commontator
+      acts_as_commontator
     
   Add this line to any models you want to be able to comment on:
 
-    acts_as_commontable
+      acts_as_commontable
     
 2. Views
 
   Add the following line to any view where you want to display comments:
 
-    <%= commontator_thread_link(commontable) %>
+      <%= commontator_thread_link(commontable) %>
     
   Where commontable is an instance of some model that acts_as_commontable.
 
