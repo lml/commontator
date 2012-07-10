@@ -1,3 +1,9 @@
+.thread_header {
+  font-size: 16px;
+  font-weight: bold;
+  font-style: normal;
+}
+
 .thread_new_comment {
   display: none;
 }

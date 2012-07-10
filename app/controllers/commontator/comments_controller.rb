@@ -81,7 +81,7 @@ module Commontator
 
       respond_to do |format|
         format.html { redirect_to @thread }
-        format.js { render :update }
+        format.js { render :delete }
       end
     end
     
@@ -93,7 +93,7 @@ module Commontator
 
       respond_to do |format|
         format.html { redirect_to @thread }
-        format.js { render :update }
+        format.js { render :delete }
       end
     end
     

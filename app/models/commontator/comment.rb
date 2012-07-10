@@ -65,7 +65,7 @@ module Commontator
     end
 
     def can_be_deleted_by?(user)
-      !thread.is_closed? && !is_deleted? &&\
+      !thread.is_closed? &&\
         ((user == commontator && thread.config.can_delete_own_comments) &&\
         (thread.comments.last == self || thread.config.can_delete_old_comments)) ||\
         thread.can_be_edited_by?(user)
