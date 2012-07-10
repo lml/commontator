@@ -2,14 +2,14 @@ module Commontator
   # Attributes and default values
 
   # Can be set in initializer only
-  ENGINE_CONFIG = [
+  ENGINE_ATTRIBUTES = [
     :current_user_method,
     :heading_proc,
     :javascript_proc
   ]
 
   # Can be set in initializer or passed as an option to acts_as_commontator
-  COMMONTATOR_CONFIG = [
+  COMMONTATOR_ATTRIBUTES = [
     :commontator_name_clickable,
     :commontator_email_method,
     :commontator_name_method,
@@ -17,7 +17,7 @@ module Commontator
   ]
   
   # Can be set in initializer or passed as an option to acts_as_commontable
-  COMMONTABLE_CONFIG = [
+  COMMONTABLE_ATTRIBUTES = [
     :comment_name,
     :comment_create_verb_present,
     :comment_create_verb_past,
@@ -45,8 +45,8 @@ module Commontator
     :unsubscribe_callback
   ]
   
-  (ENGINE_CONFIG + COMMONTATOR_CONFIG + \
-    COMMONTABLE_CONFIG).each do |attribute|
+  (ENGINE_ATTRIBUTES + COMMONTATOR_ATTRIBUTES + \
+    COMMONTABLE_ATTRIBUTES).each do |attribute|
     mattr_accessor attribute
   end
   
