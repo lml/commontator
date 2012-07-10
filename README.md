@@ -101,9 +101,11 @@ Copy commontator's files to your app using any of the following commands:
 ```sh
 rake commontator:copy:images
 rake commontator:copy:stylesheets
+
 rake commontator:copy:views
 rake commontator:copy:mailers
 rake commontator:copy:helpers
+
 rake commontator:copy:controllers
 rake commontator:copy:models
 ```
