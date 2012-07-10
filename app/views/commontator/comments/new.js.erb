@@ -4,6 +4,8 @@ $("#thread_<%= @thread.id %>_new_comment_div").html("<%= escape_javascript(
                        :comment => @comment,
                        :thread => @thread
                     }) %>");
+                    
+$("#thread_<%= @thread.id %>_new_comment_div").show();
 
 $("#thread_<%= @thread.id %>_new_comment_link_span").hide();
 

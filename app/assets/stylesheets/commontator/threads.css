@@ -1,0 +1,7 @@
+.thread_new_comment {
+  display: none;
+}
+
+.thread_new_comment textarea {
+	width: 100%;
+}
