@@ -10,45 +10,45 @@ There are 4 steps you must follow to install commontator:
 
   Add this line to your application's Gemfile:
 
-      ```ruby
-      gem 'commontator'
-      ```
+  ```ruby
+  gem 'commontator'
+  ```
 
   And then execute:
 
-      ```sh
-      $ bundle
-      ```
+  ```sh
+  $ bundle
+  ```
 
   Or install it yourself as:
 
-      ```sh
-      $ gem install commontator
-      ```
+  ```sh
+  $ gem install commontator
+  ```
 
 2. Initializer and Migration
 
   Run the following command to copy commontator's initializer and migration to your own app:
 
-      ```sh
-      $ rake commontator:install
-      ```
+  ```sh
+  $ rake commontator:install
+  ```
 
   And then execute:
 
-      ```sh
-      $ rake db:migrate
-      ```
+  ```sh
+  $ rake db:migrate
+  ```
 
   Or run each rake task manually:
 
-      ```sh
-      $ rake commontator:install:initializers
+  ```sh
+  $ rake commontator:install:initializers
 
-      $ rake commontator:install:migrations
+  $ rake commontator:install:migrations
 
-      $ rake db:migrate
-      ```
+  $ rake db:migrate
+  ```
 
 3. Configuration
 
@@ -58,9 +58,9 @@ There are 4 steps you must follow to install commontator:
 
   Add this line to your application's routes file:
 
-      ```ruby
-      mount Commontator::Engine => "/commontator"
-      ```
+  ```ruby
+  mount Commontator::Engine => "/commontator"
+  ```
 
   You can change the mount path if you would like a different one.
 
@@ -72,23 +72,23 @@ Follow the steps below to add commontator to your models and views:
 
   Add this line to your user model(s) (or any models that should be able to make comments):
 
-      ```ruby
-      acts_as_commontator
-      ```
+  ```ruby
+  acts_as_commontator
+  ```
     
   Add this line to any models you want to be able to comment on:
 
-      ```ruby
-      acts_as_commontable
-      ```
+  ```ruby
+  acts_as_commontable
+  ```
     
 2. Views
 
   Add the following line to any view where you want to display comments:
 
-      ```erb
-      <%= commontator_thread_link(commontable) %>
-      ```
+  ```erb
+  <%= commontator_thread_link(commontable) %>
+  ```
     
   Where commontable is an instance of some model that acts_as_commontable.
 
@@ -98,9 +98,9 @@ That's it! Commontator is now ready for use.
 
 Copy commontator's views, controllers or even models to your app using the following command:
 
-    ```
-    Coming soon!
-    ```
+```
+Coming soon!
+```
 
 You can now modify them and the changes should be reflected in your application.
 
