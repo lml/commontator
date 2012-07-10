@@ -1,4 +1,4 @@
-<% @thread.comments.each do |comment|
+<% @thread.comments.each do |comment| %>
   $("#comment_<%= comment.id.to_s %>_actions_span").html("<%= escape_javascript(
     render :partial => 'actions',
            :locals => {:comment => comment}) %>");
