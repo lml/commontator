@@ -1,6 +1,5 @@
 module Commontator
   class Subscription < ActiveRecord::Base
-
     belongs_to :subscriber, :polymorphic => true
     belongs_to :thread
 
@@ -16,6 +15,5 @@ module Commontator
     def mark_as_unread
       self.update_attribute(:is_unread, true)
     end
-
   end
 end

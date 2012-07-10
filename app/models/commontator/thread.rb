@@ -1,22 +1,21 @@
 module Commontator
   class Thread < ActiveRecord::Base
-
     belongs_to :closer, :polymorphic => true
     belongs_to :commontable, :polymorphic => true
 
     has_many :comments, :dependent => :destroy
     has_many :subscriptions, :dependent => :destroy
 
-    validates_presence_of :commontable, :allow_nil => true
+    validates_presence_of :commontable, :on => :create
     
     attr_accessible :is_closed
     
     def config
-      commontable.commontable_config
+      commontable.try(:commontable_config)
     end
     
     def comments
-      (comments_can_be_voted_on && config.comments_ordered_by_votes) ? \
+      (!commontable.blank? && config.comments_can_be_voted_on && config.comments_ordered_by_votes) ? \
         super.order("cached_votes_down - cached_votes_up") : super
     end
     
@@ -74,7 +73,9 @@ module Commontator
     
     # Creates a new empty thread and assigns it to the commontable
     # The old thread is kept in the database for archival purposes
+    
     def clear(user = nil)
+      return if commontable.blank?
       new_thread = Thread.new
       new_thread.commontable = commontable
       self.with_lock do
@@ -96,27 +97,27 @@ module Commontator
     ####################
     
     def comment_created_callback(user, comment)
-      commontable.send(config.comment_created_callback, user, comment) unless config.comment_created_callback.blank?
+      commontable.send(config.comment_created_callback, user, comment) unless commontable.blank? || config.comment_created_callback.blank?
     end
     
     def comment_edited_callback(user, comment)
-      commontable.send(config.comment_edited_callback, user, comment) unless config.comment_edited_callback.blank?
+      commontable.send(config.comment_edited_callback, user, comment) unless commontable.blank? || config.comment_edited_callback.blank?
     end
     
     def comment_deleted_callback(user, comment)
-      commontable.send(config.comment_deleted_callback, user, comment) unless config.comment_deleted_callback.blank?
+      commontable.send(config.comment_deleted_callback, user, comment) unless commontable.blank? || config.comment_deleted_callback.blank?
     end
     
     def thread_closed_callback(user)
-      commontable.send(config.thread_closed_callback, user) unless config.thread_closed_callback.blank?
+      commontable.send(config.thread_closed_callback, user) unless commontable.blank? || config.thread_closed_callback.blank?
     end
     
     def subscribe_callback(user)
-      commontable.send(config.subscribe_callback, user) unless config.subscribe_callback.blank?
+      commontable.send(config.subscribe_callback, user) unless commontable.blank? || config.subscribe_callback.blank?
     end
           
     def unsubscribe_callback(user)
-      commontable.send(config.unsubscribe_callback, user) unless config.unsubscribe_callback.blank?
+      commontable.send(config.unsubscribe_callback, user) unless commontable.blank? || config.unsubscribe_callback.blank?
     end
 
     ##########################
@@ -124,20 +125,19 @@ module Commontator
     ##########################
 
     def can_be_read_by?(user) # Reader and poster capabilities
-      ((!is_closed? || config.closed_threads_are_readable) &&\
+      (!commontable.blank? && (!is_closed? || config.closed_threads_are_readable) &&\
         config.can_read_thread_method.blank? ? true : commontable.send(config.can_read_thread_method, user)) ||\
         can_be_edited_by?(user)
     end
 
     def can_be_edited_by?(user) # Thread admin capabilities
-      config.can_edit_thread_method.blank? ?
+      !commontable.blank? && (config.can_edit_thread_method.blank? ?
         (user.commontator_config.is_admin_method.blank? ? false : user.send(user.commontator_config.is_admin_method)) :
-        commontable.send(config.can_edit_thread_method, user)
+        commontable.send(config.can_edit_thread_method, user))
     end
 
     def can_subscribe?(user)
-      config.can_subscribe_to_thread && can_be_read_by?(user)
+      !commontable.blank? && config.can_subscribe_to_thread && can_be_read_by?(user)
     end
-
   end
 end

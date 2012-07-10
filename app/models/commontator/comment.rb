@@ -1,6 +1,5 @@
 module Commontator
   class Comment < ActiveRecord::Base
-
     belongs_to :commontator, :polymorphic => true
     belongs_to :deleter, :polymorphic => true
     belongs_to :thread
@@ -79,6 +78,5 @@ module Commontator
       can_be_voted_on? && !thread.is_closed? &&\
         thread.can_be_read_by?(user) && user != commontator
     end
-    
   end
 end

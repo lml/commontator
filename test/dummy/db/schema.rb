@@ -11,6 +11,51 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20120710213148) do
+
+  create_table "commontator_comments", :force => true do |t|
+    t.text     "body"
+    t.integer  "commontator_id"
+    t.string   "commontator_type"
+    t.datetime "deleted_at"
+    t.integer  "deleter_id"
+    t.string   "deleter_type"
+    t.integer  "thread_id"
+    t.integer  "cached_votes_total", :default => 0
+    t.integer  "cached_votes_up",    :default => 0
+    t.integer  "cached_votes_down",  :default => 0
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  add_index "commontator_comments", ["cached_votes_down"], :name => "index_commontator_comments_on_cached_votes_down"
+  add_index "commontator_comments", ["cached_votes_total"], :name => "index_commontator_comments_on_cached_votes_total"
+  add_index "commontator_comments", ["cached_votes_up"], :name => "index_commontator_comments_on_cached_votes_up"
+  add_index "commontator_comments", ["commontator_id", "commontator_type", "thread_id"], :name => "index_c_c_on_c_id_and_c_type_and_t_id"
+  add_index "commontator_comments", ["thread_id"], :name => "index_commontator_comments_on_thread_id"
+
+  create_table "commontator_subscriptions", :force => true do |t|
+    t.integer  "subscriber_id"
+    t.string   "subscriber_type"
+    t.integer  "thread_id"
+    t.boolean  "is_unread"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "commontator_subscriptions", ["subscriber_id", "subscriber_type", "thread_id"], :name => "index_c_s_on_s_id_and_s_type_and_t_id", :unique => true
+  add_index "commontator_subscriptions", ["thread_id"], :name => "index_commontator_subscriptions_on_thread_id"
+
+  create_table "commontator_threads", :force => true do |t|
+    t.integer  "commontable_id"
+    t.string   "commontable_type"
+    t.datetime "closed_at"
+    t.integer  "closer_id"
+    t.string   "closer_type"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "commontator_threads", ["commontable_id", "commontable_type"], :name => "index_commontator_threads_on_commontable_id_and_commontable_type"
 
 end
