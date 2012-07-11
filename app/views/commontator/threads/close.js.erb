@@ -2,4 +2,4 @@ $("#thread_<%= @thread.id.to_s %>_actions_span").html("<%= escape_javascript(
   render :partial => 'actions',
          :locals => {:thread => @thread}) %>");
 
-<%= javascript_callback %>
+<%= javascript_proc %>

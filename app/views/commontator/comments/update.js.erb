@@ -4,4 +4,4 @@ $("#comment_<%= @comment.id.to_s %>_body_div").html("<%= escape_javascript(
 $("#comment_<%= @comment.id.to_s %>_timestamp_span").html("<%= escape_javascript(
                                                            comment_timestamp(@comment)) %>");
 
-<%= javascript_callback %>
+<%= javascript_proc %>

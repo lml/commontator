@@ -2,4 +2,4 @@ $("#thread_<%= @thread.id.to_s %>_subscription_span").html("<%= escape_javascrip
   render :partial => 'link',
          :locals => {:thread => @thread}) %>");
 
-<%= javascript_callback %>
+<%= javascript_proc %>

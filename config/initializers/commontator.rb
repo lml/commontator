@@ -9,9 +9,11 @@ Commontator.configure do |config|
   config.current_user_method = 'current_user'
 
   # Proc that is called after any javascript runs (e.g. to clear flash)
-  # Should return a string containing javascript to be appended to all JS responses
-  # Default: Proc.new { '$("#error_explanation").remove();' }
-  config.javascript_proc = Proc.new { '$("#error_explanation").remove();' }
+  # It is passed the 'self' object from the view template, so you should be able to
+  # access anything you normally could in a view template (by using, e.g. view.flash)
+  # Should return a string containing JS to be appended to all Commontator JS responses
+  # Default: lambda { |view| '$("#error_explanation").remove();' }
+  config.javascript_proc = lambda { |view| '$("#error_explanation").remove();' }
 
 
   # Commontator (User model) Configuration

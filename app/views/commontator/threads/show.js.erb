@@ -3,4 +3,4 @@ $("#thread_<%= @thread.id %>_div").html(
     render :partial => 'show',
            :locals => {:thread => @thread}) %>");
 
-<%= javascript_callback %>
+<%= javascript_proc %>

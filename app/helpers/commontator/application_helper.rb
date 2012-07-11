@@ -1,7 +1,7 @@
 module Commontator
   module ApplicationHelper
-    def javascript_callback
-      Commontator.javascript_proc.call.html_safe
+    def javascript_proc
+      Commontator.javascript_proc.call(self).html_safe
     end
   end
 end

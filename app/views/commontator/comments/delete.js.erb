@@ -12,4 +12,4 @@ $("#comment_<%= @comment.id %>_votes_span").html("<%= escape_javascript(
   render :partial => 'votes',
          :locals => {:comment => @comment}) %>");
 
-<%= javascript_callback %>
+<%= javascript_proc %>
