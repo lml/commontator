@@ -15,7 +15,7 @@
 &nbsp;
 
 <% if can_edit %>
-  <% is_closed = thread.is_closed?
+  <% is_closed = thread.is_closed? %>
   <% close_string = is_closed ? "reopen" : "close" %>
   <%= link_to close_string.capitalize,
               polymorphic_path([close_string, thread]),

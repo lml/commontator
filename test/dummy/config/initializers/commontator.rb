@@ -122,8 +122,9 @@ Commontator.configure do |config|
   config.commontable_id_method = 'id'
 
   # Method called on commontable and passed user as argument
-  # If true, that user is an admin for that particular commontable's thread
-  # Default: '' (no thread-specific admins)
+  # If true, that user is a moderator for that particular commontable's thread
+  # and is given admin-like capabilities for that thread only
+  # Default: '' (no thread-specific moderators)
   config.can_edit_thread_method = ''
 
   # Method called on commontable and passed user as argument

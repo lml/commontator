@@ -15,7 +15,7 @@
 &nbsp;
 
 <% if can_delete %>
-  <% is_deleted = comment.is_deleted?
+  <% is_deleted = comment.is_deleted? %>
   <% del_string = is_deleted ? "undelete" : "delete" %>
   <%= link_to del_string.capitalize,
               polymorphic_path([del_string, comment]),

@@ -2,7 +2,7 @@
    # thread
 %>
 
-<% is_subscribed = thread.is_subscribed?(@commontator)
+<% is_subscribed = thread.is_subscribed?(@commontator) %>
 <% sub_string = is_subscribed ? "unsubscribe" : "subscribe" %>
 <%= link_to sub_string.capitalize,
             polymorphic_path([sub_string, thread]),
