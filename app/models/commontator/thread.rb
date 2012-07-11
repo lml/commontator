@@ -14,9 +14,9 @@ module Commontator
       commontable.try(:commontable_config)
     end
     
-    def comments
+    def ordered_comments
       (!commontable.blank? && config.comments_can_be_voted_on && config.comments_ordered_by_votes) ? \
-        super.order("cached_votes_down - cached_votes_up") : super
+        comments.order("cached_votes_down - cached_votes_up") : comments
     end
     
     def subscribers

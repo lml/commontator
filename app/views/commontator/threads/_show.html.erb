@@ -7,7 +7,7 @@
 </span>
 
 <div id="thread_<%= thread.id %>_comment_list_div" class="thread_comment_list">
-  <% thread.comments.each do |comment| %>
+  <% thread.ordered_comments.each do |comment| %>
     <% next unless comment.can_be_read_by?(@commontator) %>
     <%= render :partial => 'commontator/comments/show',
                :locals => {:comment => comment} %>
