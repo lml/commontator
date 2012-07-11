@@ -8,9 +8,10 @@ Commontator.configure do |config|
   # Default: 'current_user'
   config.current_user_method = 'current_user'
 
-  # Proc that is called after any javascript runs (e.g. to clear flash notices)
-  # Default: Proc.new {}
-  config.javascript_proc = nil
+  # Proc that is called after any javascript runs (e.g. to clear flash)
+  # Should return a string containing javascript to be appended to all JS responses
+  # Default: Proc.new { '$("#error_explanation").remove();' }
+  config.javascript_proc = Proc.new { '$("#error_explanation").remove();' }
 
 
   # Commontator (User model) Configuration
