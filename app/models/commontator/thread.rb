@@ -23,15 +23,15 @@ module Commontator
       subscriptions.collect{|s| s.subscriber}
     end
     
-    def subscription_for(user)
-      Subscription.find_by_thread_id_and_subscriber_id_and_subscriber_type(self.id, user.id, user.class.name)
+    def subscription_for(subscriber)
+      Subscription.find_by_thread_id_and_subscriber_id_and_subscriber_type(self.id, subscriber.id, subscriber.class.name)
     end
     
     def is_closed?
       !closed_at.blank?
     end
     
-    def is_subscribed?(user)
+    def is_subscribed?(subscriber)
       !subscription_for(subscriber).blank?
     end
 
