@@ -137,7 +137,7 @@ module Commontator
     end
 
     def can_subscribe?(user)
-      !commontable.blank? && config.can_subscribe_to_thread && can_be_read_by?(user)
+      !commontable.blank? && config.can_subscribe_to_thread && !is_closed? && can_be_read_by?(user)
     end
   end
 end
