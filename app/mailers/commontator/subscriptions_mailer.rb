@@ -6,8 +6,8 @@ module Commontator
     def comment_created_email(comment) 
       setup_variables(comment)
 
-      mail(:bcc => @bcc,
-           :subject => @subject)
+      mail(:bcc => @bcc, :subject => @subject) \
+        unless @bcc.empty
     end
 
 protected
@@ -16,13 +16,16 @@ protected
       
       @comment = comment
       @thread = @comment.thread
-      
       @commontator = @comment.commontator
+      
+      @bcc = @thread.subscribers.reject{|s| s == @commontator}\
+                                .collect{|s| email(s)}
+      
+      return if @bcc.empty
+      
       @commontable = @thread.commontable
       @config = @thread.config
-      @bcc = @thread.subscribers.reject{|s| s == @commontator}\
-                                        .collect{|s| email(s)}
-                                
+      
       @commontator_name = commontator_name(@comment)
       @comment_timestamp = comment_timestamp(@comment)
       
