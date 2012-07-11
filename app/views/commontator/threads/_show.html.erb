@@ -2,11 +2,16 @@
    # thread
 %>
 
-<span id="thread_<%= thread.id %>_header_span" class="thread_header">
+<span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
   <%= thread.config.comment_name.capitalize.pluralize %>
 </span>
 
-<div id="thread_<%= thread.id %>_comment_list_div" class="thread_comment_list">
+<span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
+  <%= render :partial => 'actions',
+             :locals => { :thread => thread } %>
+</span>
+
+<div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
   <% thread.ordered_comments.each do |comment| %>
     <% next unless comment.can_be_read_by?(@commontator) %>
     <%= render :partial => 'commontator/comments/show',

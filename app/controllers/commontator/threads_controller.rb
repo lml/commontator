@@ -23,7 +23,7 @@ module Commontator
 
       respond_to do |format|
         format.html { redirect_to @thread }
-        format.js
+        format.js { render :close }
       end
     end
     
@@ -35,7 +35,7 @@ module Commontator
 
       respond_to do |format|
         format.html { redirect_to @thread }
-        format.js
+        format.js { render :close }
       end
     end
   end

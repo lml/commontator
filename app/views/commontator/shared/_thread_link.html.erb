@@ -1,9 +1,8 @@
 <% # Clients of this partial must supply the following variable:
-   # commontable
+   # thread
 %>
 
 <% user = send(Commontator.current_user_method) %>
-<% thread = commontable.thread %>
 
 <% if thread.can_be_read_by?(user) %>
   <%= stylesheet_link_tag "commontator/application", :media => "all" %>

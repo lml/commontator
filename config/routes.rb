@@ -12,10 +12,10 @@ Commontator::Engine.routes.draw do
     put 'close', :on => :member
     put 'reopen', :on => :member
     
-    get 'subscribe', :to => 'subscriptions#create',
+    put 'subscribe', :to => 'subscriptions#create',
                      :as => 'subscribe',
                      :on => :member
-    get 'unsubscribe', :to => 'subscriptions#destroy',
+    put 'unsubscribe', :to => 'subscriptions#destroy',
                        :as => 'unsubscribe',
                        :on => :member
   end

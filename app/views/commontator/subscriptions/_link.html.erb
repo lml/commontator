@@ -1,0 +1,15 @@
+<% # Clients of this partial must supply the following variable:
+   # thread
+%>
+
+<% is_subscribed = thread.is_subscribed?(@commontator)
+<% sub_string = is_subscribed ? "unsubscribe" : "subscribe" %>
+<%= link_to sub_string.capitalize,
+            polymorphic_path([sub_string, thread]),
+            :confirm => (is_subscribed ? \
+                          "Are you sure you want to unsubscribe from " + \
+                          "#{commontable_name(thread)}?\n" : nil),
+            :method => :put,
+            :id => "thread_#{thread.id.to_s}_#{sub_string}_link",
+            :class => "thread_#{sub_string}_link",
+            :remote => true %>
