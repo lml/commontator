@@ -8,10 +8,6 @@ Commontator.configure do |config|
   # Default: 'current_user'
   config.current_user_method = 'current_user'
 
-  # Proc that is called when a view wants to set the page heading.
-  # Default: Proc.new {}
-  config.heading_proc = nil
-
   # Proc that is called after any javascript runs (e.g. to clear flash notices)
   # Default: Proc.new {}
   config.javascript_proc = nil

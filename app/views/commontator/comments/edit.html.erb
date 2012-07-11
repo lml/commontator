@@ -1,6 +1,0 @@
-<%= heading("Editing " +\
-            @thread.config.comment_name + " #" + @comment.id.to_s) %>
-
-<%= render :partial => 'form', :locals => {:comment => @comment} %>
-
-<%= link_to 'Back to thread', @thread %>

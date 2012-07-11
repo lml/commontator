@@ -1,6 +1,6 @@
 module Commontator
   class SubscriptionsController < ApplicationController
-    include ThreadsHelper
+    helper ThreadsHelper
     
     before_filter :get_thread, :except => :index
 

@@ -1,6 +1,5 @@
 module Commontator
   class SubscriptionsMailer < ActionMailer::Base
-  
     include CommentsHelper
     include ThreadsHelper
   
@@ -43,6 +42,5 @@ protected
       
       @subject = @config.subscription_email_subject_proc.call(params)
     end
-
   end
 end
