@@ -36,7 +36,7 @@ module Commontator
     end
 
     def subscribe(subscriber)
-      return false if is_subscribed?(user)
+      return false if is_subscribed?(subscriber)
       subscription = Subscription.create(
         :subscriber => subscriber, :thread => self)
       subscribe_callback(subscriber)
