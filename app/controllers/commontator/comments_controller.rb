@@ -14,7 +14,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_created_by?(@commontator)
 
       respond_to do |format|
-        format.html
+        format.html { redirect_to :back }
         format.js
       end
      
@@ -27,20 +27,19 @@ module Commontator
       @comment.commontator = @commontator
       
       raise SecurityTransgression unless @comment.can_be_created_by?(@commontator)
+      
+      if @comment.save
+        @thread.subscribe(@commontator) if @thread.config.auto_subscribe_on_comment
+        @thread.mark_as_unread_except_for(@commontator)
+        SubscriptionsMailer.comment_created_email(@comment)
+        @thread.comment_created_callback(@commontator, @comment)
+      else
+        @errors = @comment.errors
+      end
 
       respond_to do |format|
-        if @comment.save
-          @thread.subscribe(@commontator) if @thread.config.auto_subscribe_on_comment
-          @thread.mark_as_unread_except_for(@commontator)
-          SubscriptionsMailer.comment_created_email(@comment)
-          @thread.comment_created_callback(@commontator, @comment)
-          format.html { redirect_to @thread }
-          format.js
-        else
-          @errors = @comment.errors
-          format.html { render :action => 'new' }
-          format.js
-        end
+        format.html { redirect_to :back }
+        format.js
       end
     end
 
@@ -49,7 +48,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_edited_by?(@commontator)
 
       respond_to do |format|
-        format.html
+        format.html { redirect_to :back }
         format.js
       end
     end
@@ -57,16 +56,13 @@ module Commontator
     # PUT /comments/1
     def update
       raise SecurityTransgression unless @comment.can_be_edited_by?(@commontator)
+      
+      @thread.comment_edited_callback(@commontator, @comment) \
+        if @comment.update_attributes(params[:comment])
 
       respond_to do |format|
-        if @comment.update_attributes(params[:comment])
-          @thread.comment_edited_callback(@commontator, @comment)
-          format.html { redirect_to @thread }
-          format.js
-        else
-          format.html { render :action => "edit" }
-          format.js
-        end
+        format.html { redirect_to :back }
+        format.js
       end
     end
 
@@ -78,7 +74,7 @@ module Commontator
       @thread.comment_deleted_callback(@commontator, @comment)
 
       respond_to do |format|
-        format.html { redirect_to @thread }
+        format.html { redirect_to :back }
         format.js { render :delete }
       end
     end
@@ -90,7 +86,7 @@ module Commontator
       @comment.undelete
 
       respond_to do |format|
-        format.html { redirect_to @thread }
+        format.html { redirect_to :back }
         format.js { render :delete }
       end
     end
@@ -102,7 +98,7 @@ module Commontator
       @comment.upvote_from @commontator
 
       respond_to do |format|
-        format.html { redirect_to @thread }
+        format.html { redirect_to :back }
         format.js { render :vote }
       end
     end
@@ -114,7 +110,7 @@ module Commontator
       @comment.downvote_from @commontator
 
       respond_to do |format|
-        format.html { redirect_to @thread }
+        format.html { redirect_to :back }
         format.js { render :vote }
       end
     end
@@ -126,7 +122,7 @@ module Commontator
       @comment.unvote :voter => @commontator
 
       respond_to do |format|
-        format.html { redirect_to @thread }
+        format.html { redirect_to :back }
         format.js { render :vote }
       end
     end
