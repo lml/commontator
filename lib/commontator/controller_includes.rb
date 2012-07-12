@@ -1,7 +1,7 @@
 require 'commontator/shared_helper'
 
 module Commontator
-  module Controllers
+  module ControllerIncludes
     def self.included(base)
       base.helper Commontator::SharedHelper
     end
@@ -16,4 +16,4 @@ module Commontator
   end
 end
 
-ActionController::Base.send :include, Commontator::Controllers
+ActionController::Base.send :include, Commontator::ControllerIncludes

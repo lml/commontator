@@ -4,6 +4,10 @@ Commontator.configure do |config|
 
   # Engine Configuration
 
+  # Method called on ApplicationController to return the current user
+  # Default: 'current_user'
+  config.current_user_method = 'current_user'
+
   # Proc that is called after any javascript runs (e.g. to clear flash)
   # It is passed the 'self' object from the view template, so you should be able to
   # access anything you normally could in a view template (by using, e.g. view.flash)

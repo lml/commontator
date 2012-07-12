@@ -59,4 +59,4 @@ end
 require 'commontator/engine'
 require 'commontator/acts_as_commontator'
 require 'commontator/acts_as_commontable'
-require 'commontator/controllers'
+require 'commontator/controller_includes'
