@@ -21,7 +21,7 @@ module Commontator
     :comment_create_verb_present,
     :comment_create_verb_past,
     :commontable_name,
-    :thread_url_proc,
+    :commontable_url_proc,
     :subscription_email_subject_proc,
     :timestamp_format,
     :admin_can_edit_comments,
