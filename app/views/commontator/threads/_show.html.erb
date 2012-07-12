@@ -2,13 +2,34 @@
    # thread
 %>
 
+<% can_subscribe = thread.can_subscribe?(@commontator) %>
+<% can_edit = thread.can_be_edited_by?(@commontator) %>
+
 <span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
   <%= thread.config.comment_name.capitalize.pluralize %>
 </span>
 
 <span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
-  <%= render :partial => 'actions',
-             :locals => { :thread => thread } %>
+  <% if can_subscribe %>
+    <span id="thread_<%= thread.id.to_s %>_subscription_span" class="thread_subscription">
+      <%= render :partial => 'commontator/subscriptions/link',
+                 :locals => {:thread => thread} %>
+    </span>
+  <% end %>
+  
+  &nbsp;
+
+  <% if can_edit %>
+    <% is_closed = thread.is_closed? %>
+    <% close_string = is_closed ? "reopen" : "close" %>
+    <%= link_to close_string.capitalize,
+                polymorphic_path([close_string, thread]),
+                :confirm => (!is_closed ? \
+                              'Are you sure you want to close this thread' : nil),
+                :method => :put,
+                :id => "thread_#{thread.id.to_s}_#{close_string}_link",
+                :class => "thread_#{close_string}_link" %>
+  <% end %>
 </span>
 
 <div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
