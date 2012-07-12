@@ -1,6 +1,7 @@
 $("#thread_<%= @thread.id %>_div").html(
   "<%= escape_javascript(
     render :partial => 'show',
-           :locals => {:thread => @thread}) %>");
+           :locals => {:thread => @thread,
+                       :user => @commontator}) %>");
 
 <%= javascript_proc %>

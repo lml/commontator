@@ -12,7 +12,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_created_by?(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js
       end
      
@@ -36,7 +36,7 @@ module Commontator
       end
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js
       end
     end
@@ -46,7 +46,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_edited_by?(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js
       end
     end
@@ -59,7 +59,7 @@ module Commontator
         if @comment.update_attributes(params[:comment])
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js
       end
     end
@@ -72,7 +72,7 @@ module Commontator
       @thread.comment_deleted_callback(@commontator, @comment)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js { render :delete }
       end
     end
@@ -84,7 +84,7 @@ module Commontator
       @comment.undelete
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js { render :delete }
       end
     end
@@ -96,7 +96,7 @@ module Commontator
       @comment.upvote_from @commontator
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js { render :vote }
       end
     end
@@ -108,7 +108,7 @@ module Commontator
       @comment.downvote_from @commontator
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js { render :vote }
       end
     end
@@ -120,7 +120,7 @@ module Commontator
       @comment.unvote :voter => @commontator
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js { render :vote }
       end
     end

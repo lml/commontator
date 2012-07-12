@@ -1,5 +1,6 @@
 <% # Clients of this partial must supply the following variables:
    # comment
+   # user
 %>
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
@@ -17,7 +18,8 @@
   
   <span id="comment_<%= comment.id.to_s %>_actions_span" class="comment_actions">
     <%= render :partial => 'commontator/comments/actions',
-               :locals => { :comment => comment } %>
+               :locals => {:comment => comment,
+                           :user => user} %>
   </span>
   
   <br clear="all"/>
@@ -28,7 +30,8 @@
   
   <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">
     <%= render :partial => 'commontator/comments/votes',
-               :locals => {:comment => comment} %>
+               :locals => {:comment => comment,
+                           :user => user} %>
   </span>
   
   <div id="comment_<%= comment.id.to_s %>_body_div" class="comment_body">

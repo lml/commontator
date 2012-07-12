@@ -10,7 +10,7 @@ module Commontator
         unless @thread.subscribe(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js { render :subscribe }
       end
 
@@ -24,7 +24,7 @@ module Commontator
         unless @thread.unsubscribe(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js { render :subscribe }
       end
     end

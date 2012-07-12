@@ -4,12 +4,10 @@ module Commontator
 
     # GET /threads/1
     def show
-      raise SecurityTransgression unless @thread.can_be_read_by?(@commontator)
-
-      @thread.mark_as_read_for(@commontator)
+      commontator_thread_show(@thread.commontable, @commontator)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
         format.js
       end
     end
@@ -22,7 +20,7 @@ module Commontator
       @thread.thread_closed_callback(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
       end
     end
     
@@ -33,7 +31,7 @@ module Commontator
       @thread.reopen
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to @commontable_url, :show => true }
       end
     end
   end

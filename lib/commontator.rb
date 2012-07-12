@@ -3,7 +3,6 @@ module Commontator
 
   # Can be set in initializer only
   ENGINE_ATTRIBUTES = [
-    :current_user_method,
     :javascript_proc
   ]
 
@@ -62,3 +61,4 @@ require 'commontator/commontator_config'
 require 'commontator/commontable_config'
 require 'commontator/acts_as_commontator'
 require 'commontator/acts_as_commontable'
+require 'commontator/controllers'

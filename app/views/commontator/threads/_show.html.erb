@@ -1,9 +1,10 @@
-<% # Clients of this partial must supply the following variable:
+<% # Clients of this partial must supply the following variables:
    # thread
+   # user
 %>
 
-<% can_subscribe = thread.can_subscribe?(@commontator) %>
-<% can_edit = thread.can_be_edited_by?(@commontator) %>
+<% can_subscribe = thread.can_subscribe?(user) %>
+<% can_edit = thread.can_be_edited_by?(user) %>
 
 <span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
   <%= thread.config.comment_name.capitalize.pluralize %>
@@ -13,7 +14,8 @@
   <% if can_subscribe %>
     <span id="thread_<%= thread.id.to_s %>_subscription_span" class="thread_subscription">
       <%= render :partial => 'commontator/subscriptions/link',
-                 :locals => {:thread => thread} %>
+                 :locals => {:thread => thread,
+                             :user => user} %>
     </span>
   <% end %>
   
@@ -23,7 +25,7 @@
     <% is_closed = thread.is_closed? %>
     <% close_string = is_closed ? "reopen" : "close" %>
     <%= link_to close_string.capitalize,
-                polymorphic_path([close_string, thread]),
+                commontator.polymorphic_path([close_string, thread]),
                 :confirm => (!is_closed ? \
                               'Are you sure you want to close this thread?' : nil),
                 :method => :put,
@@ -34,9 +36,10 @@
 
 <div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
   <% thread.ordered_comments.each do |comment| %>
-    <% next unless comment.can_be_read_by?(@commontator) %>
+    <% next unless comment.can_be_read_by?(user) %>
     <%= render :partial => 'commontator/comments/show',
-               :locals => {:comment => comment} %>
+               :locals => {:comment => comment,
+                           :user => user} %>
   <% end %>
 </div>
 
@@ -48,7 +51,7 @@
 
   <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
     <%= link_to thread.config.comment_create_verb_present.capitalize + ' ' + thread.config.comment_name,
-        new_thread_comment_path(thread), :remote => true %>
+        commontator.new_thread_comment_path(thread), :remote => true %>
   </span>
   
 <% end %>
