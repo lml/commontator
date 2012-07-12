@@ -1,7 +1,9 @@
+require 'commontator/shared_helper'
+
 module Commontator
   module Controllers
     def self.included(base)
-      base.helper_method :commontator_thread_link
+      base.helper Commontator::SharedHelper
     end
     
     protected
@@ -10,13 +12,6 @@ module Commontator
       thread = commontable.thread
       raise SecurityTransgression unless thread.can_be_read_by?(user)
       thread.mark_as_read_for(user)
-    end
-    
-    def commontator_thread_link(commontable, user, show = nil)
-      render(:partial => 'commontator/shared/thread_link',
-             :locals => {:thread => commontable.thread,
-                         :user => user,
-                         :show => show}).html_safe
     end
   end
 end

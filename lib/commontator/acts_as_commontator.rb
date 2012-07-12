@@ -1,3 +1,5 @@
+require 'commontator/commontator_config'
+
 module Commontator
   module ActsAsCommontator
     def self.included(base)

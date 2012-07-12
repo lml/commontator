@@ -57,8 +57,6 @@ module Commontator
 end
 
 require 'commontator/engine'
-require 'commontator/commontator_config'
-require 'commontator/commontable_config'
 require 'commontator/acts_as_commontator'
 require 'commontator/acts_as_commontable'
 require 'commontator/controllers'
