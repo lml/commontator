@@ -18,7 +18,7 @@ module Commontator
         unless @thread.subscribe(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to thread_url(@thread) }
+        format.html { redirect_to commontable_url(@thread) }
         format.js { render :subscribe }
       end
 
@@ -32,7 +32,7 @@ module Commontator
         unless @thread.unsubscribe(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to thread_url(@thread) }
+        format.html { redirect_to commontable_url(@thread) }
         format.js { render :subscribe }
       end
     end

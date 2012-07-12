@@ -29,7 +29,7 @@ protected
       @commontator_name = commontator_name(@comment)
       @comment_timestamp = comment_timestamp(@comment)
       
-      @thread_url = thread_url(@thread)
+      @commontable_url = commontable_url(@thread)
       @commontable_name = commontable_name(@thread)
       @commontable_id = commontable_id(@thread).to_s
       
@@ -41,7 +41,7 @@ protected
       params[:config] = @config
       params[:commontator_name] = @commontator_name
       params[:comment_timestamp] = @comment_timestamp
-      params[:thread_url] = @thread_url
+      params[:commontable_url] = @commontable_url
       params[:commontable_name] = @commontable_name
       params[:commontable_id] = @commontable_id
       

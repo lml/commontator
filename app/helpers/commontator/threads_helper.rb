@@ -1,7 +1,7 @@
 module Commontator
   module ThreadsHelper
-    def thread_url(thread)
-      thread.config.thread_url_proc.call(main_app, thread)
+    def commontable_url(thread)
+      thread.config.commontable_url_proc.call(main_app, thread.commontable)
     end
     
     def commontable_name(thread)

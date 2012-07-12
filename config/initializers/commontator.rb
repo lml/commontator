@@ -57,10 +57,11 @@ Commontator.configure do |config|
   # Default: 'commontable'
   config.commontable_name = 'commontable'
   
-  # Proc that returns the thread's view url (defaults to commontable's show url)
+  # Proc that returns the commontable url that contains the thread
+  # (defaults to the commontable show url)
   # Main application's routes can be accessed using main_app object
-  # Default: lambda { |main_app, thread| main_app.polymorphic_url(thread.commontable) }
-  config.thread_url_proc = lambda { |main_app, thread| main_app.polymorphic_url(thread.commontable) }
+  # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
+  config.commontable_url_proc = lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
 
   # Proc that returns the subscription email subject
   # Default:
