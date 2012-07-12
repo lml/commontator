@@ -4,10 +4,10 @@ module Commontator
 
     # POST /1/subscribe
     def create
-      raise SecurityTransgression unless @thread.can_subscribe?(@commontator)
+      raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
       @thread.errors.add(:base, "You are already subscribed to this thread") \
-        unless @thread.subscribe(@commontator)
+        unless @thread.subscribe(@user)
 
       respond_to do |format|
         format.html { redirect_to @commontable_url, :show => true }
@@ -18,10 +18,10 @@ module Commontator
 
     # POST /1/unsubscribe
     def destroy
-      raise SecurityTransgression unless @thread.can_subscribe?(@commontator)
+      raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
       @thread.errors.add(:base, "You are not subscribed to this thread") \
-        unless @thread.unsubscribe(@commontator)
+        unless @thread.unsubscribe(@user)
 
       respond_to do |format|
         format.html { redirect_to @commontable_url, :show => true }

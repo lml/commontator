@@ -16,31 +16,31 @@ Commontator.configure do |config|
   config.javascript_proc = lambda { |view| '$("#error_explanation").remove();' }
 
 
-  # Commontator (User model) Configuration
+  # User (acts_as_commontator) Configuration
   
-  # The name used if the commontator's name cannot be retrieved
+  # The name used if the user's name cannot be retrieved
   # Default: 'Anonymous'
-  config.commontator_missing_name = 'Anonymous'
+  config.user_missing_name = 'Anonymous'
 
-  # Whether the commontator's name is clickable in the comment view
+  # Whether the user's name is clickable in the comment view
   # Default: false
-  config.commontator_name_clickable = false
+  config.user_name_clickable = false
 
-  # The method that return the commontator's email address
+  # The method that returns the user's email address
   # Default: 'email'
-  config.commontator_email_method = 'email'
+  config.user_email_method = 'email'
 
-  # The method that return the commontator's name
-  # Default: '' (use missing name)
-  config.commontator_name_method = ''
+  # The method that returns the user's name
+  # Default: '' (use user_missing_name)
+  config.user_name_method = ''
 
-  # Method that returns true if the commontator is an admin for all threads
+  # Method that returns true if the user is an admin for all threads
   # Admins can always delete other users' comments and close threads
   # Default: '' (no admins)
   config.is_admin_method = ''
 
 
-  # Commontable (Commentable model) Configuration
+  # Commontable (acts_as_commontable) Configuration
 
   # What a comment is called in your application
   # Default: 'comment'
@@ -70,11 +70,11 @@ Commontator.configure do |config|
   # Proc that returns the subscription email subject
   # Default:
   # lambda do |params|
-  #   "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
+  #   "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
   #   "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
   # end
   config.subscription_email_subject_proc = lambda do |params|
-    "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
+    "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
     "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
   end
 

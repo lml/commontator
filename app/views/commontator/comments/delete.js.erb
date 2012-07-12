@@ -7,11 +7,11 @@ $("#comment_<%= @comment.id.to_s %>_timestamp_span").html("<%= escape_javascript
 $("#comment_<%= @comment.id.to_s %>_actions_span").html("<%= escape_javascript(
   render :partial => 'actions',
          :locals => {:comment => @comment,
-                     :user => @commontator}) %>");
+                     :user => @user}) %>");
          
 $("#comment_<%= @comment.id %>_votes_span").html("<%= escape_javascript(
   render :partial => 'votes',
          :locals => {:comment => @comment,
-                     :user => @commontator}) %>");
+                     :user => @user}) %>");
 
 <%= javascript_proc %>

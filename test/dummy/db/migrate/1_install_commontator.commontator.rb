@@ -3,8 +3,8 @@ class InstallCommontator < ActiveRecord::Migration
   def change
     create_table "commontator_comments" do |t|
       t.text     "body"
-      t.integer  "commontator_id"
-      t.string   "commontator_type"
+      t.integer  "creator_id"
+      t.string   "creator_type"
       t.datetime "deleted_at"
       t.integer  "deleter_id"
       t.string   "deleter_type"
@@ -36,7 +36,7 @@ class InstallCommontator < ActiveRecord::Migration
       t.timestamps
     end
     
-    add_index :commontator_comments, [:commontator_id, :commontator_type, :thread_id], :name => "index_c_c_on_c_id_and_c_type_and_t_id"
+    add_index :commontator_comments, [:creator_id, :creator_type, :thread_id], :name => "index_c_c_on_c_id_and_c_type_and_t_id"
     add_index :commontator_comments, :thread_id
     add_index :commontator_subscriptions, [:subscriber_id, :subscriber_type, :thread_id], :unique => true, :name => "index_c_s_on_s_id_and_s_type_and_t_id"
     add_index :commontator_subscriptions, :thread_id

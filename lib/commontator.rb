@@ -9,10 +9,10 @@ module Commontator
 
   # Can be set in initializer or passed as an option to acts_as_commontator
   COMMONTATOR_ATTRIBUTES = [
-    :commontator_missing_name,
-    :commontator_name_clickable,
-    :commontator_email_method,
-    :commontator_name_method,
+    :user_missing_name,
+    :user_name_clickable,
+    :user_email_method,
+    :user_name_method,
     :is_admin_method
   ]
   

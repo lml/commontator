@@ -16,9 +16,9 @@ protected
       
       @comment = comment
       @thread = @comment.thread
-      @commontator = @comment.commontator
+      @creator = @comment.creator
       
-      @bcc = @thread.subscribers.reject{|s| s == @commontator}\
+      @bcc = @thread.subscribers.reject{|s| s == @creator}\
                                 .collect{|s| email(s)}
       
       return if @bcc.empty?
@@ -26,7 +26,7 @@ protected
       @commontable = @thread.commontable
       @config = @thread.config
       
-      @commontator_name = commontator_name(@comment)
+      @creator_name = creator_name(@comment)
       @comment_timestamp = comment_timestamp(@comment)
       
       @commontable_name = commontable_name(@thread)
@@ -37,10 +37,10 @@ protected
       params = Hash.new
       params[:comment] = @comment
       params[:thread] = @thread
-      params[:commontator] = @commontator
+      params[:creator] = @creator
       params[:commontable] = @commontable
       params[:config] = @config
-      params[:commontator_name] = @commontator_name
+      params[:creator_name] = @creator_name
       params[:comment_timestamp] = @comment_timestamp
       params[:commontable_name] = @commontable_name
       params[:commontable_id] = @commontable_id

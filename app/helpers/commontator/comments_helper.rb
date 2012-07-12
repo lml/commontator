@@ -1,19 +1,19 @@
 module Commontator
   module CommentsHelper
-    def commontator_name(comment)
-      commontator = comment.commontator
-      return Commontator.commontator_missing_name if commontator.nil?
-      config = commontator.commontator_config
-      config.commontator_name_method.blank? ? config.commontator_missing_name : \
-        commontator.send(config.commontator_name_method)
+    def creator_name(comment)
+      user = comment.creator
+      return Commontator.user_missing_name if user.nil?
+      config = user.commontator_config
+      config.user_name_method.blank? ? config.user_missing_name : \
+        user.send(config.user_name_method)
     end
     
     def deleter_name(comment)
-      deleter = comment.deleter
-      return Commontator.commontator_missing_name if deleter.nil?
-      config = deleter.commontator_config
-      config.commontator_name_method.blank? ? config.commontator_missing_name : \
-        deleter.send(config.commontator_name_method)
+      user = comment.deleter
+      return Commontator.user_missing_name if user.nil?
+      config = user.commontator_config
+      config.user_name_method.blank? ? config.user_missing_name : \
+        user.send(config.user_name_method)
     end
     
     def comment_timestamp(comment)
@@ -24,24 +24,24 @@ module Commontator
     end
     
     def gravatar_url(comment, options = {})
-      commontator = comment.commontator
-      return '' if commontator.nil?
-      config = commontator.commontator_config
+      user = comment.creator
+      return '' if user.nil?
+      config = user.commontator_config
       
       options[:secure] ||= request.ssl?
       options[:size] ||= 50
     
-      hash = Digest::MD5.hexdigest(commontator.send(config.commontator_email_method))
+      hash = Digest::MD5.hexdigest(user.send(config.user_email_method))
       base = options[:secure] ? "s://secure" : "://www"
       
       "http#{base}.gravatar.com/avatar/#{hash}?s=#{options[:size]}"
     end
   
     def gravatar_image(comment, options = {})
-      commontator = comment.commontator
-      return '' if commontator.nil?
-      config = commontator.commontator_config
-      name = commontator.send(config.commontator_name_method)
+      user = comment.creator
+      return '' if user.nil?
+      config = user.commontator_config
+      name = user.send(config.user_name_method)
       image_tag(gravatar_url(comment, options), 
                 { :alt => name, 
                   :title => name,

@@ -12,11 +12,11 @@ module Commontator
     end
     
     def closer_name(thread)
-      closer = thread.closer
-      return Commontator.commontator_missing_name if closer.nil?
-      config = closer.commontator_config
-      config.commontator_name_method.blank? ? config.commontator_missing_name : \
-        closer.send(config.commontator_name_method)
+      user = thread.closer
+      return Commontator.user_missing_name if user.nil?
+      config = user.commontator_config
+      config.user_name_method.blank? ? config.user_missing_name : \
+        user.send(config.user_name_method)
     end
   end
 end

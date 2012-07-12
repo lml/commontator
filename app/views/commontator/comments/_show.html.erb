@@ -5,10 +5,10 @@
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
   <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
-    <% if !commontator.nil? && commontator.commontator_config.commontator_name_clickable %>
-      <%= link_to commontator_name(comment), main_app.polymorphic_path(comment.commontator) %>
+    <% if !user.nil? && user.commontator_config.user_name_clickable %>
+      <%= link_to creator_name(comment), main_app.polymorphic_path(comment.creator) %>
     <% else %>
-      <%= commontator_name(comment) %>
+      <%= creator_name(comment) %>
     <% end %>
     &nbsp;&nbsp;
     <span id="comment_<%= comment.id.to_s %>_timestamp_span" class="comment_timestamp">
