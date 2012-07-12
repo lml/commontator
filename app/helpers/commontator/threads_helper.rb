@@ -1,5 +1,9 @@
 module Commontator
-  module ThreadsHelper    
+  module ThreadsHelper
+    def thread_url(thread)
+      thread.config.thread_url_proc.call(main_app, thread)
+    end
+    
     def commontable_name(thread)
       config = thread.config
       config.commontable_name.blank? ? \

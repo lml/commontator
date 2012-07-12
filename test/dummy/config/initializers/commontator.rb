@@ -57,11 +57,21 @@ Commontator.configure do |config|
   # Default: 'commontable'
   config.commontable_name = 'commontable'
 
+  # Proc that returns the thread's view path (defaults to commontable's show path)
+  # Main application's routes can be accessed from main_app object
+  # Default: lambda { |main_app, thread| main_app.polymorphic_path(thread.commontable) }
+  config.thread_path_proc = lambda { |main_app, thread| main_app.polymorphic_path(thread.commontable) }
+
   # Proc that returns the subscription email subject
-  # Default: Proc.new {}
-  config.subscription_email_subject_proc = Proc.new {|params| \
+  # Default:
+  # lambda do |params|
+  #   "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
+  #   "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
+  # end
+  config.subscription_email_subject_proc = lambda do |params|
     "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
-    "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"}
+    "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
+  end
 
   # The format of the timestamps used by Commontator
   # Default: '%b %d %Y, %I:%M %p'

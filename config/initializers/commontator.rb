@@ -56,14 +56,19 @@ Commontator.configure do |config|
   # as an argument to acts_as_commontable in each one
   # Default: 'commontable'
   config.commontable_name = 'commontable'
+  
+  # Proc that returns the thread's view url (defaults to commontable's show url)
+  # Main application's routes can be accessed using main_app object
+  # Default: lambda { |main_app, thread| main_app.polymorphic_url(thread.commontable) }
+  config.thread_url_proc = lambda { |main_app, thread| main_app.polymorphic_url(thread.commontable) }
 
   # Proc that returns the subscription email subject
   # Default:
-  # Proc.new do |params|
+  # lambda do |params|
   #   "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
   #   "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
   # end
-  config.subscription_email_subject_proc = Proc.new do |params|
+  config.subscription_email_subject_proc = lambda do |params|
     "#{params[:commontator_name]} #{params[:config].comment_create_verb_past} a " + \
     "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
   end
