@@ -25,7 +25,7 @@
     <%= link_to close_string.capitalize,
                 polymorphic_path([close_string, thread]),
                 :confirm => (!is_closed ? \
-                              'Are you sure you want to close this thread' : nil),
+                              'Are you sure you want to close this thread?' : nil),
                 :method => :put,
                 :id => "thread_#{thread.id.to_s}_#{close_string}_link",
                 :class => "thread_#{close_string}_link" %>

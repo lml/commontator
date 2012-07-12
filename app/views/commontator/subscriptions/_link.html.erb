@@ -7,8 +7,8 @@
 <%= link_to sub_string.capitalize,
             polymorphic_path([sub_string, thread]),
             :confirm => (is_subscribed ? \
-                          "Are you sure you want to unsubscribe from " + \
-                          "#{commontable_name(thread)}?\n" : nil),
+                          "Are you sure you want to unsubscribe from this thread?" : \
+                          nil),
             :method => :put,
             :id => "thread_#{thread.id.to_s}_#{sub_string}_link",
             :class => "thread_#{sub_string}_link",

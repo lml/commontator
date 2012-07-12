@@ -9,7 +9,7 @@ module Commontator
       @thread.mark_as_read_for(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to thread_url(thread) }
+        format.html { redirect_to thread_url(@thread) }
         format.js
       end
     end
@@ -22,7 +22,7 @@ module Commontator
       @thread.thread_closed_callback(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to thread_url(thread) }
+        format.html { redirect_to thread_url(@thread) }
       end
     end
     
@@ -33,7 +33,7 @@ module Commontator
       @thread.reopen
 
       respond_to do |format|
-        format.html { redirect_to thread_url(thread) }
+        format.html { redirect_to thread_url(@thread) }
       end
     end
   end
