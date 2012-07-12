@@ -1,7 +1,5 @@
 module Commontator
   class CommentsController < ApplicationController
-    include ThreadsHelper
-
     before_filter :get_thread, :only => [:new, :create]
     before_filter :get_comment_and_thread, :except => [:new, :create]
 
@@ -14,7 +12,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_created_by?(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js
       end
      
@@ -31,14 +29,14 @@ module Commontator
       if @comment.save
         @thread.subscribe(@commontator) if @thread.config.auto_subscribe_on_comment
         @thread.mark_as_unread_except_for(@commontator)
-        SubscriptionsMailer.comment_created_email(@comment)
+        SubscriptionsMailer.comment_created_email(@comment, @commontable_url)
         @thread.comment_created_callback(@commontator, @comment)
       else
         @errors = @comment.errors
       end
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js
       end
     end
@@ -48,7 +46,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_edited_by?(@commontator)
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js
       end
     end
@@ -61,7 +59,7 @@ module Commontator
         if @comment.update_attributes(params[:comment])
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js
       end
     end
@@ -74,7 +72,7 @@ module Commontator
       @thread.comment_deleted_callback(@commontator, @comment)
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js { render :delete }
       end
     end
@@ -86,7 +84,7 @@ module Commontator
       @comment.undelete
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js { render :delete }
       end
     end
@@ -98,7 +96,7 @@ module Commontator
       @comment.upvote_from @commontator
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js { render :vote }
       end
     end
@@ -110,7 +108,7 @@ module Commontator
       @comment.downvote_from @commontator
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js { render :vote }
       end
     end
@@ -122,7 +120,7 @@ module Commontator
       @comment.unvote :voter => @commontator
 
       respond_to do |format|
-        format.html { redirect_to commontable_url(@thread) }
+        format.html { redirect_to @commontable_url }
         format.js { render :vote }
       end
     end
@@ -132,6 +130,7 @@ module Commontator
     def get_comment_and_thread
       @comment = Comment.find(params[:id])
       @thread = @comment.thread
+      get_commontable_url
     end
   end
 end

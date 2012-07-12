@@ -19,6 +19,4 @@ Commontator::Engine.routes.draw do
                        :as => 'unsubscribe',
                        :on => :member
   end
-  
-  resources :subscriptions, :only => [:index]
 end
