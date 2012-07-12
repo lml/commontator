@@ -17,6 +17,10 @@ Commontator.configure do |config|
 
 
   # Commontator (User model) Configuration
+  
+  # The name used if the commontator's name cannot be retrieved
+  # Default: 'Anonymous'
+  config.commontator_missing_name = 'Anonymous'
 
   # Whether the commontator's name is clickable in the comment view
   # Default: false
@@ -27,7 +31,7 @@ Commontator.configure do |config|
   config.commontator_email_method = 'email'
 
   # The method that return the commontator's name
-  # Default: '' (Anonymous)
+  # Default: '' (use missing name)
   config.commontator_name_method = ''
 
   # Method that returns true if the commontator is an admin for all threads

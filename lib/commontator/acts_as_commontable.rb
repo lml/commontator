@@ -9,7 +9,7 @@ module Commontator
     module ClassMethods
       def acts_as_commontable(options = {})
         class_eval do
-          has_one :thread, :as => :commontable, :class_name => 'Commontator::Thread', :dependent => :destroy
+          has_one :thread, :as => :commontable, :class_name => 'Commontator::Thread'
           has_many :comments, :class_name => 'Commontator::Comment', :through => :thread
           has_many :subscriptions, :class_name => 'Commontator::Subscription', :through => :thread
           

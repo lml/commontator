@@ -2,16 +2,18 @@ module Commontator
   module CommentsHelper
     def commontator_name(comment)
       commontator = comment.commontator
+      return Commontator.commontator_missing_name if commontator.nil?
       config = commontator.commontator_config
-      config.commontator_name_method.blank? ? config.anonymous_name : \
-      commontator.send(config.commontator_name_method)
+      config.commontator_name_method.blank? ? config.commontator_missing_name : \
+        commontator.send(config.commontator_name_method)
     end
     
     def deleter_name(comment)
       deleter = comment.deleter
+      return Commontator.commontator_missing_name if deleter.nil?
       config = deleter.commontator_config
-      config.commontator_name_method.blank? ? config.anonymous_name : \
-      deleter.send(config.commontator_name_method)
+      config.commontator_name_method.blank? ? config.commontator_missing_name : \
+        deleter.send(config.commontator_name_method)
     end
     
     def comment_timestamp(comment)
@@ -23,6 +25,7 @@ module Commontator
     
     def gravatar_url(comment, options = {})
       commontator = comment.commontator
+      return '' if commontator.nil?
       config = commontator.commontator_config
       
       options[:secure] ||= request.ssl?
@@ -36,6 +39,7 @@ module Commontator
   
     def gravatar_image(comment, options = {})
       commontator = comment.commontator
+      return '' if commontator.nil?
       config = commontator.commontator_config
       name = commontator.send(config.commontator_name_method)
       image_tag(gravatar_url(comment, options), 
