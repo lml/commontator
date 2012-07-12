@@ -7,7 +7,7 @@ module Commontator
       setup_variables(comment)
 
       mail(:bcc => @bcc, :subject => @subject) \
-        unless @bcc.empty
+        unless @bcc.empty?
     end
 
 protected
@@ -21,7 +21,7 @@ protected
       @bcc = @thread.subscribers.reject{|s| s == @commontator}\
                                 .collect{|s| email(s)}
       
-      return if @bcc.empty
+      return if @bcc.empty?
       
       @commontable = @thread.commontable
       @config = @thread.config

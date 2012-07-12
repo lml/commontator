@@ -34,7 +34,6 @@ module Commontator
           @thread.mark_as_unread_except_for(@commontator)
           SubscriptionsMailer.comment_created_email(@comment)
           @thread.comment_created_callback(@commontator, @comment)
-          flash[:notice] = @thread.config.comment_name + ' ' + @thread.config.comment_create_verb_past
           format.html { redirect_to @thread }
           format.js
         else
@@ -61,7 +60,6 @@ module Commontator
 
       respond_to do |format|
         if @comment.update_attributes(params[:comment])
-          flash[:notice] = @thread.config.comment_name + ' updated'
           @thread.comment_edited_callback(@commontator, @comment)
           format.html { redirect_to @thread }
           format.js

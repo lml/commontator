@@ -1,6 +1,6 @@
 module Commontator
   class SubscriptionsController < ApplicationController
-    helper ThreadsHelper
+    include ThreadsHelper
     
     before_filter :get_thread, :except => :index
 
@@ -14,9 +14,8 @@ module Commontator
     def create
       raise SecurityTransgression unless @thread.can_subscribe?(@commontator)
 
-      if !@thread.subscribe(@commontator)
-        flash[:alert] = "You are already subscribed to this " + commontable_name(@thread)
-      end
+      @thread.errors.add(:base, "You are already subscribed to this #{commontable_name(@thread)}") \
+        unless @thread.subscribe(@commontator)
 
       respond_to do |format|
         format.html { redirect_to @thread }
@@ -29,9 +28,8 @@ module Commontator
     def destroy
       raise SecurityTransgression unless @thread.can_subscribe?(@commontator)
 
-      if !@thread.unsubscribe(@commontator)
-        flash[:alert] = "You are not subscribed to this " + commontable_name(@thread)
-      end
+      @thread.errors.add(:base, "You are not subscribed to this #{commontable_name(@thread)}") \
+        unless @thread.unsubscribe(@commontator)
 
       respond_to do |format|
         format.html { redirect_to @thread }

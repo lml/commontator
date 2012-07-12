@@ -97,27 +97,27 @@ module Commontator
     ####################
     
     def comment_created_callback(user, comment)
-      commontable.send(config.comment_created_callback, user, comment) unless commontable.blank? || config.comment_created_callback.blank?
+      commontable.blank? || config.comment_created_callback.blank? || commontable.send(config.comment_created_callback, user, comment)
     end
     
     def comment_edited_callback(user, comment)
-      commontable.send(config.comment_edited_callback, user, comment) unless commontable.blank? || config.comment_edited_callback.blank?
+      commontable.blank? || config.comment_edited_callback.blank? || commontable.send(config.comment_edited_callback, user, comment)
     end
     
     def comment_deleted_callback(user, comment)
-      commontable.send(config.comment_deleted_callback, user, comment) unless commontable.blank? || config.comment_deleted_callback.blank?
+      commontable.blank? || config.comment_deleted_callback.blank? || commontable.send(config.comment_deleted_callback, user, comment)
     end
     
     def thread_closed_callback(user)
-      commontable.send(config.thread_closed_callback, user) unless commontable.blank? || config.thread_closed_callback.blank?
+      commontable.blank? || config.thread_closed_callback.blank? || commontable.send(config.thread_closed_callback, user)
     end
     
     def subscribe_callback(user)
-      commontable.send(config.subscribe_callback, user) unless commontable.blank? || config.subscribe_callback.blank?
+      commontable.blank? || config.subscribe_callback.blank? || commontable.send(config.subscribe_callback, user)
     end
           
     def unsubscribe_callback(user)
-      commontable.send(config.unsubscribe_callback, user) unless commontable.blank? || config.unsubscribe_callback.blank?
+      commontable.blank? || config.unsubscribe_callback.blank? || commontable.send(config.unsubscribe_callback, user)
     end
 
     ##########################
