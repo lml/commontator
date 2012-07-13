@@ -1,17 +1,14 @@
 <% # Clients of this partial must supply the following variables:
    # thread
    # user
-   #
-   # Additionally, they can override the following variable:
-   show ||= false
 %>
 
 <% if thread.can_be_read_by?(user) %>
   <%= stylesheet_link_tag "commontator/application", :media => "all" %>
 
   <div id="thread_<%= thread.id %>_div" class="thread">
-    <% if show %>
-      <%= render :partial => 'show', :locals => {:thread => thread} %>
+    <% if @commontator_thread_show %>
+      <%= render :partial => 'commontator/threads/show', :locals => {:thread => thread} %>
     <% else %>
       <%= link_to "Show #{thread.config.comment_name.pluralize} (#{thread.comments.count})", commontator.thread_path(thread), :remote => true %>
     <% end %>

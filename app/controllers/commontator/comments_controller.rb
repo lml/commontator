@@ -2,6 +2,7 @@ module Commontator
   class CommentsController < ApplicationController
     before_filter :get_thread, :only => [:new, :create]
     before_filter :get_comment_and_thread, :except => [:new, :create]
+    before_filter :get_commontable_url, :only => :create
 
     # GET /1/comments/new
     def new
@@ -12,7 +13,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_created_by?(@user)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        #format.html
         format.js
       end
      
@@ -36,7 +37,7 @@ module Commontator
       end
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js
       end
     end
@@ -46,7 +47,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        #format.html
         format.js
       end
     end
@@ -59,7 +60,7 @@ module Commontator
         if @comment.update_attributes(params[:comment])
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js
       end
     end
@@ -72,7 +73,7 @@ module Commontator
       @thread.comment_deleted_callback(@user, @comment)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js { render :delete }
       end
     end
@@ -84,7 +85,7 @@ module Commontator
       @comment.undelete
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js { render :delete }
       end
     end
@@ -96,7 +97,7 @@ module Commontator
       @comment.upvote_from @user
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js { render :vote }
       end
     end
@@ -108,7 +109,7 @@ module Commontator
       @comment.downvote_from @user
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js { render :vote }
       end
     end
@@ -120,7 +121,7 @@ module Commontator
       @comment.unvote :voter => @user
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js { render :vote }
       end
     end
@@ -130,7 +131,6 @@ module Commontator
     def get_comment_and_thread
       @comment = Comment.find(params[:id])
       @thread = @comment.thread
-      get_commontable_url
     end
   end
 end

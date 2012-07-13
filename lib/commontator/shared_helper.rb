@@ -1,10 +1,9 @@
 module Commontator
   module SharedHelper
-    def commontator_thread_link(commontable, user, show = nil)
-      render(:partial => 'commontator/shared/thread_link',
+    def commontator_thread(commontable, user)
+      render(:partial => 'commontator/shared/thread',
              :locals => {:thread => commontable.thread,
-                         :user => user,
-                         :show => show}).html_safe
+                         :user => user}).html_safe
     end
   end
 end

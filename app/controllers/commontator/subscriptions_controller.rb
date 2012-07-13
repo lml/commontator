@@ -1,6 +1,7 @@
 module Commontator
   class SubscriptionsController < ApplicationController
-    before_filter :get_thread, :except => :index
+    before_filter :get_thread
+    before_filter :get_commontable_url
 
     # POST /1/subscribe
     def create
@@ -10,7 +11,7 @@ module Commontator
         unless @thread.subscribe(@user)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js { render :subscribe }
       end
 
@@ -24,7 +25,7 @@ module Commontator
         unless @thread.unsubscribe(@user)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url, :show => true }
+        format.html { redirect_to @thread }
         format.js { render :subscribe }
       end
     end

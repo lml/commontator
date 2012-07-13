@@ -1,6 +1,8 @@
-# Common Tator
+# Commontator
 
-A Rails engine for comments
+Commontator is a Rails engine for comments.
+That means it is fully functional as soon as you install and configure its gem, providing models, views and controllers of its own.
+At the same time, it is highly configurable, so you can change anything about it if you would like.
 
 ## Installation
 
@@ -84,33 +86,33 @@ Follow the steps below to add commontator to your models and views:
     
 2. Views
 
-  Add the following line to any view where you would like to display comments:
+  Add the following line to any erb view where you would like to display comments:
 
   ```erb
-  <%= commontator_thread_link(commontable, user) %>
+  <%= commontator_thread(commontable, user) %>
   ```
 
-  Where commontable is an instance of some model that acts_as_commontable and user is the current user.
-
-  Alternatively, you might want to have the thread display right away, as opposed to linking to it.
-  In that case, use the following version instead:
-
-  ```erb
-  <%= commontator_thread_link(commontable, user, true) %>
-  ```
+  Where commontable is an instance of some model that acts_as_commontable and user is the current user (acts_as_commontator).
 
 3. Controllers
 
-  If you chose the direct display approach, you are responsible for controlling thread read access
-  and marking the thread as read for that user. However, you can do both of those with the following method:
+  Instead of linking to the thread, you might want to have the thread display right away, when the corresponding view page is loaded.
+  If that's the case, add the following to the controller action that displays the view where the thread is located:
   
   ```ruby
   commontator_thread_show(commontable, user)
   ```
-  
-  If you chose the link approach, no modifications are necessary on your controllers.
+
+  Note that the above method also checks the user's read permission on the thread.
+  It will raise a SecurityTransgression if the user is not allowed to read the thread.
+  You can specify the name of the method that determines which users are allowed to read which threads in the initializer.
 
 That's it! Commontator is now ready for use.
+
+## Browser Support
+
+No incompatibilities are currently known with any of the major browsers.
+Currently commontator requires javascript to be enabled to function properly.
 
 ## Customization
 
