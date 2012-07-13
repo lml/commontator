@@ -8,7 +8,8 @@
 
   <div id="thread_<%= thread.id %>_div" class="thread">
     <% if @commontator_thread_show %>
-      <%= render :partial => 'commontator/threads/show', :locals => {:thread => thread} %>
+      <%= render :partial => 'commontator/threads/show', :locals => {:thread => thread,
+                                                                     :user => user} %>
     <% else %>
       <%= link_to "Show #{thread.config.comment_name.pluralize} (#{thread.comments.count})", commontator.thread_path(thread), :remote => true %>
     <% end %>
