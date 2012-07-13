@@ -18,7 +18,7 @@ module Commontator
     def commontator_email(user)
       return '' if user.nil?
       config = user.commontator_config
-      config.email_method.blank? ? '' : user.send(config.email_method)
+      config.user_email_method.blank? ? '' : user.send(config.user_email_method)
     end
     
     def commontator_gravatar_url(user, options = {})
