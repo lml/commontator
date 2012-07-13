@@ -1,8 +1,8 @@
 <% # Clients of this partial must provide the following variables:
    # comment
    #
-   # Additionally, they can override the following variable:
-   thread ||= nil
+   # Additionally, they can override the following variables:
+   thread ||= comment.thread
    no_remote ||= false
 %>
 
@@ -14,7 +14,10 @@
   </p>
   
   <p>
-    <%= f.submit %>
+    <%= f.submit (comment.id.blank? ? \
+                   thread.config.comment_create_verb_present : \
+                   'Update') + \
+                 ' ' + thread.config.comment_name %>
   </p>
   
 <% end %>
