@@ -112,7 +112,7 @@ That's it! Commontator is now ready for use.
 ## Browser Support
 
 No incompatibilities are currently known with any of the major browsers.
-Currently commontator requires javascript to be enabled to function properly.
+Currently commontator requires javascript enabled to function properly.
 
 ## Customization
 
@@ -131,6 +131,10 @@ $ rake commontator:copy:models
 ```
 
 You are now free to modify them and have any changes made manifest in your application.
+
+## Testing
+
+Soon
 
 ## Contributing
 

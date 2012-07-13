@@ -15,20 +15,22 @@ module Commontator
           has_many :comments, :class_name => 'Commontator::Comment', :through => :thread
           has_many :subscriptions, :class_name => 'Commontator::Subscription', :through => :thread
           
-          after_initialize :create_thread, :unless => :thread, :if => :id
-          before_validation :build_thread, :unless => :thread
-          
           validates_presence_of :thread
           
           cattr_accessor :commontable_config
           self.commontable_config = Commontator::CommontableConfig.new
           self.is_commontable = true
           
-          def create_thread
-            thread = Commontator::Thread.new
-            thread.commontable = self
-            thread.save!
-            self.reload
+          alias_method :thread_raw, :thread
+          
+          def thread
+            raw = thread_raw
+            return raw unless raw.nil?
+            return Commontator::Thread.find_or_create_by_commontable_id_and_commontable_type(self.id, self.class.name) \
+              unless self.id.nil?
+            self.thread = Commontator::Thread.new
+            self.thread.commontable = self
+            self.thread
           end
         end
       end
