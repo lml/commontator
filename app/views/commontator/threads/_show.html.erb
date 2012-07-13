@@ -7,7 +7,7 @@
 <% can_edit = thread.can_be_edited_by?(user) %>
 
 <span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
-  <%= thread.config.comment_name.capitalize.pluralize %>
+  <%= thread.config.comment_name.capitalize.pluralize + (thread.is_closed? ? ' (closed)' : '') %>
 </span>
 
 <span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
@@ -43,9 +43,13 @@
   <% end %>
 </div>
 
-<% unless thread.is_closed? %>
+<br/>
 
-  <br/>
+<% if thread.is_closed? %>
+
+  <p><%= thread.config.comment_name.capitalize.pluralize %> cannot be <%= thread.config.comment_create_verb_past %> at this time.</p>
+
+<% else %>
 
   <div id="thread_<%= thread.id %>_new_comment_div" class="thread_new_comment"></div>
 

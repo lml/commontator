@@ -5,7 +5,7 @@ module Commontator
 
     # GET /threads/1
     def show
-      commontator_thread_show(@thread.commontable, @user)
+      commontator_thread_show(@thread.commontable)
 
       respond_to do |format|
         format.html { redirect_to @commontable_url }
