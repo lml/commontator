@@ -22,7 +22,7 @@
               commontator.polymorphic_path([del_string, comment]),
               :confirm => (!is_deleted ? \
                             "Are you sure you want to delete this " + \
-                            "#{@thread.config.comment_name}?" : nil),
+                            "#{comment.thread.config.comment_name}?" : nil),
               :method => :put,
               :id => "comment_#{comment.id.to_s}_#{del_string}_link",
               :class => "comment_#{del_string}_link",

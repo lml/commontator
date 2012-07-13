@@ -6,13 +6,13 @@
 <div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
   <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
     <% if !user.nil? && user.commontator_config.user_name_clickable %>
-      <%= link_to creator_name(comment), main_app.polymorphic_path(comment.creator) %>
+      <%= link_to commontator_name(comment.creator), main_app.polymorphic_path(comment.creator) %>
     <% else %>
-      <%= creator_name(comment) %>
+      <%= commontator_name(comment.creator) %>
     <% end %>
     &nbsp;&nbsp;
     <span id="comment_<%= comment.id.to_s %>_timestamp_span" class="comment_timestamp">
-      <%= comment_timestamp(comment) %>
+      <%= comment.timestamp %>
     </span>
   </span>
   
@@ -24,8 +24,8 @@
   
   <br clear="all"/>
   
-  <span id="comment_<%= comment.id.to_s %>_profile_picture_span" class="comment_profile_picture">
-    <%= gravatar_image comment %>
+  <span id="comment_<%= comment.id.to_s %>_gravatar_image_span" class="comment_gravatar_image">
+    <%= commontator_gravatar_image comment.creator %>
   </span>
   
   <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">

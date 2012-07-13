@@ -1,6 +1,6 @@
 module Commontator
   class SubscriptionsMailer < ActionMailer::Base
-    include CommentsHelper
+    include SharedHelper
     include ThreadsHelper
   
     def comment_created_email(comment, commontable_url) 
@@ -19,15 +19,15 @@ protected
       @creator = @comment.creator
       
       @bcc = @thread.subscribers.reject{|s| s == @creator}\
-                                .collect{|s| email(s)}
+                                .collect{|s| commontator_email(s)}
       
       return if @bcc.empty?
       
       @commontable = @thread.commontable
       @config = @thread.config
       
-      @creator_name = creator_name(@comment)
-      @comment_timestamp = comment_timestamp(@comment)
+      @creator_name = commontator_name(@creator)
+      @comment_timestamp = @comment.timestamp
       
       @commontable_name = commontable_name(@thread)
       @commontable_id = commontable_id(@thread).to_s

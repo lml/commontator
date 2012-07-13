@@ -27,6 +27,13 @@ module Commontator
       !deleted_at.blank?
     end
     
+    def timestamp
+      config = thread.config
+      (is_modified? ? 'Last modified on ' : \
+        "#{config.comment_create_verb_past.capitalize} on ") + \
+        updated_at.strftime(config.timestamp_format)
+    end
+    
     def delete(user = nil)
       self.deleted_at = Time.now
       self.deleter = user
