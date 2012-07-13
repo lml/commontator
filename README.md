@@ -89,10 +89,10 @@ Follow the steps below to add commontator to your models and views:
   Add the following line to any erb view where you would like to display comments:
 
   ```erb
-  <%= commontator_thread(commontable, user) %>
+  <%= commontator_thread(commontable) %>
   ```
 
-  Where commontable is an instance of some model that acts_as_commontable and user is the current user (acts_as_commontator).
+  Where commontable is an instance of some model that acts_as_commontable.
 
 3. Controllers
 
@@ -100,10 +100,10 @@ Follow the steps below to add commontator to your models and views:
   If that's the case, add the following to the controller action that displays the view where the thread is located:
   
   ```ruby
-  commontator_thread_show(commontable, user)
+  commontator_thread_show(commontable)
   ```
 
-  Note that the above method also checks the user's read permission on the thread.
+  Note that the above method also checks the current user's read permission on the thread.
   It will raise a SecurityTransgression if the user is not allowed to read the thread.
   You can specify the name of the method that determines which users are allowed to read which threads in the initializer.
 

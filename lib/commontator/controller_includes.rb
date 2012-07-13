@@ -8,7 +8,10 @@ module Commontator
     
     protected
     
-    def commontator_thread_show(commontable, user)
+    def commontator_thread_show(commontable)
+      user = send Commontator.current_user_method	
+      raise SecurityTransgression unless (user.nil? || user.is_commontator)
+      
       thread = commontable.thread
       raise SecurityTransgression unless thread.can_be_read_by?(user)
       thread.mark_as_read_for(user)
