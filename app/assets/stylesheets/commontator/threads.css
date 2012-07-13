@@ -1,3 +1,7 @@
+.thread {
+  display: block !important;
+}
+
 .thread_actions {
   float: right;
 }

@@ -3,7 +3,7 @@
    # user
 %>
   
-<div id="comment_<%= comment.id.to_s %>_div" class="comment" style="clear:both">                 
+<div id="comment_<%= comment.id.to_s %>_div" class="comment">
   <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
     <% if !user.nil? && user.commontator_config.user_name_clickable %>
       <%= link_to commontator_name(comment.creator), main_app.polymorphic_path(comment.creator) %>
