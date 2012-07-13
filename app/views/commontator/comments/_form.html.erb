@@ -2,9 +2,11 @@
    # comment
    #
    # Additionally, they can override the following variables:
-   thread ||= comment.thread
+   thread ||= nil
    no_remote ||= false
 %>
+
+<% config = comment.thread.config %>
 
 <%= form_for([commontator, thread, comment],
              :remote => !no_remote) do |f| %>
@@ -15,9 +17,9 @@
   
   <p>
     <%= f.submit (comment.id.blank? ? \
-                   thread.config.comment_create_verb_present : \
-                   'Update') + \
-                 ' ' + thread.config.comment_name %>
+                   config.comment_create_verb_present : \
+                   'update').capitalize + \
+          ' ' + config.comment_name %>
   </p>
   
 <% end %>
