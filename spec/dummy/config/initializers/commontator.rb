@@ -37,7 +37,7 @@ Commontator.configure do |config|
   # Method that returns true if the user is an admin for all threads
   # Admins can always delete other users' comments and close threads
   # Default: '' (no admins)
-  config.is_admin_method = ''
+  config.is_admin_method = 'is_admin'
 
 
   # Commontable (acts_as_commontable) Configuration
