@@ -1,7 +1,7 @@
 module Commontator
   class CommontableConfig
     Commontator::COMMONTABLE_ATTRIBUTES.each do |attribute|
-      cattr_accessor attribute
+      attr_accessor attribute
     end
   
     def initialize(options = {})

@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe Commontator do
-  it 'should respond to all attributes' do
+  it 'must respond to all attributes' do
     (Commontator::ENGINE_ATTRIBUTES + Commontator::COMMONTATOR_ATTRIBUTES + \
       Commontator::COMMONTABLE_ATTRIBUTES).each do |attribute|
       Commontator.must_respond_to attribute
     end
   end
   
-  it 'should be configurable' do
+  it 'must be configurable' do
     Commontator.configure do |config|
-      config.comment_create_verb_present = 'create'
+      config.current_user_method = 'user'
     end
-    Commontator.comment_create_verb_present.must_equal 'create'
+    Commontator.current_user_method.must_equal 'user'
     Commontator.configure do |config|
-      config.comment_create_verb_present = 'post'
+      config.current_user_method = 'current_user'
     end
-    Commontator.comment_create_verb_present.must_equal 'post'
+    Commontator.current_user_method.must_equal 'current_user'
   end
 end

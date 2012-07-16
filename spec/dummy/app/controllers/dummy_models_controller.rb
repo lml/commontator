@@ -1,4 +1,4 @@
-class DummyController < ActionController::Base
+class DummyModelsController < ActionController::Base
   before_filter :get_dummy
   
   def hide

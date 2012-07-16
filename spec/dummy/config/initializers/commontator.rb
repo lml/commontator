@@ -4,7 +4,7 @@ Commontator.configure do |config|
 
   # Engine Configuration
 
-  # Method called on ApplicationController to return the current user
+  # Name of the ApplicationController helper method that returns the current user
   # Default: 'current_user'
   config.current_user_method = 'current_user'
 
