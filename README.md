@@ -93,6 +93,8 @@ Follow the steps below to add commontator to your models and views:
   ```
 
   Where commontable is an instance of some model that acts_as_commontable.
+  Note that model's record must already exist in the database, so do not use this in new.html.erb, _form.html.erb or similar.
+  We recommend you use this in the model's show.html.erb.
 
 3. Controllers
 
