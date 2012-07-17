@@ -134,7 +134,24 @@ $ rake commontator:copy:models
 
 You are now free to modify them and have any changes made manifest in your application.
 
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Write tests for your feature
+4. Implement your new feature
+5. Test your feature (`rake`)
+6. Commit your changes (`git commit -am 'Added some feature'`)
+7. Push to the branch (`git push origin my-new-feature`)
+8. Create new Pull Request
+
 ## Testing
+
+Browse to commontator's main folder, then user bundler to install all dependencies:
+
+```sh
+$ bundle install
+```
 
 To run all existing tests for commontator, simply execute:
 
@@ -147,17 +164,6 @@ Or if the above fails:
 ```sh
 $ bundle exec rake
 ```
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Write tests for your feature
-4. Implement your new feature
-5. Test your feature (`rake`)
-6. Commit your changes (`git commit -am 'Added some feature'`)
-7. Push to the branch (`git push origin my-new-feature`)
-8. Create new Pull Request
 
 ## License
 

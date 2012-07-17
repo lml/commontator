@@ -24,6 +24,7 @@ module Commontator
     end
     
     def subscription_for(subscriber)
+      return nil if subscriber.nil?
       Subscription.find_by_thread_id_and_subscriber_id_and_subscriber_type(self.id, subscriber.id, subscriber.class.name)
     end
     
