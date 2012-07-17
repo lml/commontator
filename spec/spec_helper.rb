@@ -12,3 +12,11 @@ Rails.backtrace_cleaner.remove_silencers!
 Commontator::ApplicationController.class_eval do
   include ApplicationHelper
 end
+
+def spec_setup(save_thread = false)
+  @commontable = DummyModel.create
+  @user = User.create
+  @thread = Commontator::Thread.new
+  @thread.commontable = @commontable
+  @thread.save! if save_thread
+end

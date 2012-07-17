@@ -8,16 +8,13 @@ module Commontator
     
     validates_presence_of :creator, :on => :create
     validates_presence_of :thread
+    validates_presence_of :body
 
     attr_accessible :body
     
     cattr_accessor :is_votable
-    if respond_to?(:acts_as_votable)
-      acts_as_votable if respond_to?(:acts_as_votable)
-      self.is_votable = true
-    else
-      self.is_votable = false
-    end
+    self.is_votable = respond_to?(:acts_as_votable)
+    acts_as_votable if is_votable
     
     def is_modified?
       updated_at != created_at
