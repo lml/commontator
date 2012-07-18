@@ -40,14 +40,12 @@ module Commontator
       return false if is_subscribed?(subscriber)
       subscription = Subscription.create(
         :subscriber => subscriber, :thread => self)
-      subscribe_callback(subscriber)
     end
 
     def unsubscribe(subscriber)
       subscription = subscription_for(subscriber)
       return false if subscription.blank?
       subscription.destroy
-      unsubscribe_callback(subscriber)
     end
 
     def mark_as_read_for(subscriber)
@@ -92,49 +90,24 @@ module Commontator
         self.close(user)
       end
     end
-    
-    ####################
-    # Callback methods #
-    ####################
-    
-    def comment_created_callback(user, comment)
-      commontable.blank? || config.comment_created_callback.blank? || commontable.send(config.comment_created_callback, user, comment)
-    end
-    
-    def comment_edited_callback(user, comment)
-      commontable.blank? || config.comment_edited_callback.blank? || commontable.send(config.comment_edited_callback, user, comment)
-    end
-    
-    def comment_deleted_callback(user, comment)
-      commontable.blank? || config.comment_deleted_callback.blank? || commontable.send(config.comment_deleted_callback, user, comment)
-    end
-    
-    def thread_closed_callback(user)
-      commontable.blank? || config.thread_closed_callback.blank? || commontable.send(config.thread_closed_callback, user)
-    end
-    
-    def subscribe_callback(user)
-      commontable.blank? || config.subscribe_callback.blank? || commontable.send(config.subscribe_callback, user)
-    end
-          
-    def unsubscribe_callback(user)
-      commontable.blank? || config.unsubscribe_callback.blank? || commontable.send(config.unsubscribe_callback, user)
-    end
 
     ##########################
     # Access control methods #
     ##########################
-
-    def can_be_read_by?(user) # Reader and poster capabilities
-      (!commontable.blank? && (!is_closed? || config.closed_threads_are_readable) &&\
-        config.can_read_thread_method.blank? ? true : commontable.send(config.can_read_thread_method, user)) ||\
+    
+    # Reader and poster capabilities
+    def can_be_read_by?(user)
+      (!commontable.blank? && \
+        (!is_closed? || config.closed_threads_are_readable) && \
+        config.can_read_thread_proc.call(self, user)) || \
         can_be_edited_by?(user)
     end
 
-    def can_be_edited_by?(user) # Thread admin capabilities
-      !commontable.blank? && (config.can_edit_thread_method.blank? ?
-        (user.commontator_config.is_admin_method.blank? ? false : user.send(user.commontator_config.is_admin_method)) :
-        commontable.send(config.can_edit_thread_method, user))
+    # Thread moderator capabilities
+    def can_be_edited_by?(user)
+      !commontable.blank? && \
+        (config.can_edit_thread_proc.call(thread, user) || \
+        user.commontator_config.is_admin_proc.call(user))
     end
 
     def can_subscribe?(user)

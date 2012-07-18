@@ -9,7 +9,7 @@ Commontator.configure do |config|
   config.current_user_method = 'current_user'
 
   # Proc that is called after any javascript runs (e.g. to clear flash)
-  # It is passed the 'self' object from the view template, so you should be able to
+  # It is passed the view_context object (self from the view template), so you should be able to
   # access anything you normally could in a view template (by using, e.g. view.flash)
   # Should return a string containing JS to be appended to all Commontator JS responses
   # Default: lambda { |view| '$("#error_explanation").remove();' }
@@ -39,10 +39,10 @@ Commontator.configure do |config|
   # Default: '' (use user_missing_name)
   config.user_name_method = ''
 
-  # Method that returns true if the user is an admin for all threads
+  # Proc called with user as argument that returns true if the user is an admin
   # Admins can always delete other users' comments and close threads
-  # Default: '' (no admins)
-  config.is_admin_method = 'is_admin'
+  # Default: lambda { |user| false } (no admins)
+  config.user_admin_proc = lambda { |user| user.is_admin }
 
 
   # Commontable (acts_as_commontable) Configuration
@@ -65,23 +65,6 @@ Commontator.configure do |config|
   # as an argument to acts_as_commontable in each one
   # Default: 'commontable'
   config.commontable_name = 'commontable'
-  
-  # Proc that returns the commontable url that contains the thread
-  # (defaults to the commontable show url)
-  # Main application's routes can be accessed using main_app object
-  # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
-  config.commontable_url_proc = lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
-
-  # Proc that returns the subscription email subject
-  # Default:
-  # lambda do |params|
-  #   "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
-  #   "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
-  # end
-  config.subscription_email_subject_proc = lambda do |params|
-    "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
-    "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
-  end
 
   # The format of the timestamps used by Commontator
   # Default: '%b %d %Y, %I:%M %p'
@@ -137,48 +120,35 @@ Commontator.configure do |config|
   # Default: true
   config.deleted_comments_are_visible = true
 
-  # Method called on commontable to return its id
+  # The method returns the commontable's id
   # Default: 'id'
   config.commontable_id_method = 'id'
 
-  # Method called on commontable and passed user as argument
-  # If true, that user is a moderator for that particular commontable's thread
+  # Proc called with thread and user as arguments
+  # If it returns true, that user is a moderator for that particular thread
   # and is given admin-like capabilities for that thread only
-  # Default: '' (no thread-specific moderators)
-  config.can_edit_thread_method = ''
+  # Default: lambda { |thread, user| false } (no thread-specific moderators)
+  config.can_edit_thread_proc = lambda { |thread, user| false }
 
-  # Method called on commontable and passed user as argument
-  # If true, that user is allowed to read that commontable's thread
-  # Default: '' (no read restrictions)
-  config.can_read_thread_method = ''
+  # Proc called with thread and user as arguments
+  # If it returns true, that user is allowed to read that thread
+  # Default: lambda { |thread, user| true } (no read restrictions)
+  config.can_read_thread_proc = lambda { |thread, user| true }
 
-  # Method called on commontable when a comment is created
-  # Passed user, comment as arguments
-  # Default: '' (no callback)
-  config.comment_created_callback = ''
+  # Proc that returns the commontable url that contains the thread
+  # (defaults to the commontable show url)
+  # Main application's routes can be accessed using main_app object
+  # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
+  config.commontable_url_proc = lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
 
-  # Method called on commontable when a comment is edited
-  # Passed user, comment as arguments
-  # Default: '' (no callback)
-  config.comment_edited_callback = ''
-
-  # Method called on commontable when a comment is deleted
-  # Passed user, comment as arguments
-  # Default: '' (no callback)
-  config.comment_deleted_callback = ''
-
-  # Method called on commontable when a thread is closed
-  # Passed user as argument
-  # Default: '' (no callback)
-  config.thread_closed_callback = ''
-
-  # Method called on commontable when a thread is subscribed to
-  # Passed user as argument
-  # Default: '' (no callback)
-  config.subscribe_callback = ''
-
-  # Method called on commontable when a thread is unsubscribed to
-  # Passed user as argument
-  # Default: '' (no callback)
-  config.unsubscribe_callback = ''
+  # Proc that returns the subscription email subject string
+  # Default:
+  # lambda do |params|
+  #   "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
+  #   "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
+  # end
+  config.subscription_email_subject_proc = lambda do |params|
+    "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
+    "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
+  end
 end

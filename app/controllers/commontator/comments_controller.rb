@@ -31,7 +31,6 @@ module Commontator
         @thread.subscribe(@user) if @thread.config.auto_subscribe_on_comment
         @thread.add_unread_except_for(@user)
         SubscriptionsMailer.comment_created_email(@comment, @commontable_url)
-        @thread.comment_created_callback(@user, @comment)
       else
         @errors = @comment.errors
       end
@@ -55,9 +54,8 @@ module Commontator
     # PUT /comments/1
     def update
       raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
-      
-      @thread.comment_edited_callback(@user, @comment) \
-        if @comment.update_attributes(params[:comment])
+
+      @comment.update_attributes(params[:comment])
 
       respond_to do |format|
         format.html { redirect_to @thread }
@@ -70,7 +68,6 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
       @comment.delete(@user)
-      @thread.comment_deleted_callback(@user, @comment)
 
       respond_to do |format|
         format.html { redirect_to @thread }

@@ -18,7 +18,6 @@ module Commontator
       raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
 
       @thread.close(@user)
-      @thread.thread_closed_callback(@user)
 
       respond_to do |format|
         format.html { redirect_to @thread }
