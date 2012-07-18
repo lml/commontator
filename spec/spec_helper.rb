@@ -13,8 +13,14 @@ Commontator::ApplicationController.class_eval do
   include ApplicationHelper
 end
 
-def setup_spec_variables
+def setup_model_spec
   @user = DummyUser.create
   @commontable = DummyModel.create
   @thread = @commontable.thread
+end
+
+def setup_controller_spec
+  class_eval {include ApplicationHelper}
+  sign_out
+  setup_model_spec
 end

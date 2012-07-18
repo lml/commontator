@@ -1,4 +1,5 @@
 require 'commontator/shared_helper'
+require 'commontator/security_transgression'
 
 module Commontator
   module ControllerIncludes

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Commontator::Subscription do
   before do
-    setup_spec_variables
+    setup_model_spec
     @subscription = Commontator::Subscription.new
     @subscription.thread = @thread
     @subscription.subscriber = @user

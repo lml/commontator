@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Commontator::Thread do
   before do
-    setup_spec_variables
+    setup_model_spec
   end
   
   it 'must have a config' do

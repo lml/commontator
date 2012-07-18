@@ -41,6 +41,7 @@ Commontator.configure do |config|
 
   # Proc called with user as argument that returns true if the user is an admin
   # Admins can always delete other users' comments and close threads
+  # Note: user can be nil
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
 
@@ -127,11 +128,13 @@ Commontator.configure do |config|
   # Proc called with thread and user as arguments
   # If it returns true, that user is a moderator for that particular thread
   # and is given admin-like capabilities for that thread only
+  # Note: user can be nil
   # Default: lambda { |thread, user| false } (no thread-specific moderators)
   config.can_edit_thread_proc = lambda { |thread, user| false }
 
   # Proc called with thread and user as arguments
   # If it returns true, that user is allowed to read that thread
+  # Note: user can be nil
   # Default: lambda { |thread, user| true } (no read restrictions)
   config.can_read_thread_proc = lambda { |thread, user| true }
 

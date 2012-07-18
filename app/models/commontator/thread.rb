@@ -106,8 +106,8 @@ module Commontator
     # Thread moderator capabilities
     def can_be_edited_by?(user)
       !commontable.blank? && \
-        (config.can_edit_thread_proc.call(thread, user) || \
-        user.commontator_config.is_admin_proc.call(user))
+        (config.can_edit_thread_proc.call(self, user) || \
+        (!user.nil? && user.commontator_config.user_admin_proc.call(user)))
     end
 
     def can_subscribe?(user)

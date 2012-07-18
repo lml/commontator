@@ -2,6 +2,8 @@ module Commontator
   class ApplicationController < ActionController::Base
     before_filter :get_user
     
+    rescue_from SecurityTransgression, :with => lambda { head(:forbidden) }
+    
     protected
     
     def get_user
