@@ -145,15 +145,30 @@ You are now free to modify them and have any changes made manifest in your appli
 7. Push to the branch (`git push origin my-new-feature`)
 8. Create new Pull Request
 
+## Development Environment Setup
+
+1. Browse to commontator's spec/dummy folder
+2. Use bundler to install all dependencies:
+
+  ```sh
+  $ bundle install
+  ```
+
+3. Load the schema:
+
+  ```sh
+  $ rake db:schema:load
+  ```
+
+  Or if the above fails:
+
+  ```sh
+  $ bundle exec rake db:schema:load
+  ```
+
 ## Testing
 
-Browse to commontator's main folder, then user bundler to install all dependencies:
-
-```sh
-$ bundle install
-```
-
-To run all existing tests for commontator, simply execute:
+To run all existing tests for commontator, simply execute the following from the main folder:
 
 ```sh
 $ rake
