@@ -13,10 +13,8 @@ Commontator::ApplicationController.class_eval do
   include ApplicationHelper
 end
 
-def setup_spec_variables(save_thread = false)
+def setup_spec_variables
+  @user = DummyUser.create
   @commontable = DummyModel.create
-  @user = User.create
-  @thread = Commontator::Thread.new
-  @thread.commontable = @commontable
-  @thread.save! if save_thread
+  @thread = @commontable.thread
 end

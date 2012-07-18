@@ -8,9 +8,9 @@ describe Commontator::ActsAsCommontable do
     DummyModel.must_respond_to :acts_as_commontable
     DummyModel.must_respond_to :is_commontable
     DummyModel.is_commontable.must_equal true
-    User.must_respond_to :acts_as_commontable
-    User.must_respond_to :is_commontable
-    User.is_commontable.must_equal false
+    DummyUser.must_respond_to :acts_as_commontable
+    DummyUser.must_respond_to :is_commontable
+    DummyUser.is_commontable.must_equal false
   end
   
   it 'must modify models that act_as_commontable' do

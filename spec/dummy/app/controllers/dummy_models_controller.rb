@@ -6,7 +6,7 @@ class DummyModelsController < ActionController::Base
   end
   
   def show
-    commontator_thread_show(@dummy)
+    commontator_thread_show(@dummy_model)
   end
   
   def url_options
@@ -24,6 +24,6 @@ class DummyModelsController < ActionController::Base
   protected
   
   def get_dummy
-    @dummy = Dummy.find(params[:id])
+    @dummy_model = DummyModel.find(params[:id])
   end
 end

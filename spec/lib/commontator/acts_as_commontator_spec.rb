@@ -8,13 +8,13 @@ describe Commontator::ActsAsCommontator do
     DummyModel.must_respond_to :acts_as_commontator
     DummyModel.must_respond_to :is_commontator
     DummyModel.is_commontator.must_equal false
-    User.must_respond_to :acts_as_commontator
-    User.must_respond_to :is_commontator
-    User.is_commontator.must_equal true
+    DummyUser.must_respond_to :acts_as_commontator
+    DummyUser.must_respond_to :is_commontator
+    DummyUser.is_commontator.must_equal true
   end
   
   it 'must modify models that act_as_commontator' do
-    user = User.create
+    user = DummyUser.create
     user.must_respond_to :comments
     user.must_respond_to :subscriptions
     user.must_respond_to :commontator_config

@@ -1,8 +1,8 @@
 # Commontator
 
 Commontator is a Rails engine for comments.
-That means it is fully functional as soon as you install and configure its gem, providing models, views and controllers of its own.
-At the same time, it is highly configurable, so you can change anything about it if you would like.
+Being an engine means it is fully functional as soon as you install and configure its gem, providing models, views and controllers of its own.
+At the same time, almost anything about it can be configured or customized to suit your needs.
 
 ## Installation
 
