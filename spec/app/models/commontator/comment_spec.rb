@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Commontator::Comment do
   before do
-    spec_setup(true)
+    setup_spec_variables(true)
     @comment = Commontator::Comment.new
     @comment.thread = @thread
     @comment.creator = @user

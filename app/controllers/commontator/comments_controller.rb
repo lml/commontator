@@ -29,7 +29,7 @@ module Commontator
       
       if @comment.save
         @thread.subscribe(@user) if @thread.config.auto_subscribe_on_comment
-        @thread.mark_as_unread_except_for(@user)
+        @thread.add_unread_except_for(@user)
         SubscriptionsMailer.comment_created_email(@comment, @commontable_url)
         @thread.comment_created_callback(@user, @comment)
       else

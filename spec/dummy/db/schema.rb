@@ -38,9 +38,9 @@ ActiveRecord::Schema.define(:version => 2) do
     t.integer  "subscriber_id"
     t.string   "subscriber_type"
     t.integer  "thread_id"
-    t.boolean  "is_unread"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.integer  "unread",          :default => 0
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   add_index "commontator_subscriptions", ["subscriber_id", "subscriber_type", "thread_id"], :name => "index_c_s_on_s_id_and_s_type_and_t_id", :unique => true

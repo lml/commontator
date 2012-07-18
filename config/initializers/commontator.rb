@@ -25,6 +25,11 @@ Commontator.configure do |config|
   # Whether the user's name is clickable in the comment view
   # Default: false
   config.user_name_clickable = false
+  
+  # Whether automated emails are sent to the user whenever
+  # a comment is posted on a thread they subscribe to
+  # Default: true
+  config.subscription_emails = true
 
   # The method that returns the user's email address
   # Default: 'email'

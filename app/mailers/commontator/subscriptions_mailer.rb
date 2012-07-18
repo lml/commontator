@@ -18,7 +18,8 @@ protected
       @thread = @comment.thread
       @creator = @comment.creator
       
-      @bcc = @thread.subscribers.reject{|s| s == @creator}\
+      @bcc = @thread.subscribers.reject{|s| !s.commontator_config.subscription_emails || \
+                                            s == @creator} \
                                 .collect{|s| commontator_email(s)}
       
       return if @bcc.empty?

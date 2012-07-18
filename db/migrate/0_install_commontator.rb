@@ -20,7 +20,7 @@ class InstallCommontator < ActiveRecord::Migration
       t.integer  "subscriber_id"
       t.string   "subscriber_type"
       t.integer  "thread_id"
-      t.boolean  "is_unread"
+      t.integer  "unread", :default => 0
 
       t.timestamps
     end

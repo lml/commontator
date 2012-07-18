@@ -3,6 +3,8 @@
    # user
 %>
 
+<% subscription = thread.subscription_for(user) %>
+
 <% if thread.can_be_read_by?(user) %>
   <%= stylesheet_link_tag "commontator/application", :media => "all" %>
 
@@ -11,7 +13,8 @@
       <%= render :partial => 'commontator/threads/show', :locals => {:thread => thread,
                                                                      :user => user} %>
     <% else %>
-      <%= link_to "Show #{thread.config.comment_name.pluralize} (#{thread.comments.count})", commontator.thread_path(thread), :remote => true %>
+      <%= link_to "Show #{thread.config.comment_name.pluralize} (#{subscription ? subscription.unread + '/' + thread.comments.count : thread.comments.count})", \
+                  commontator.thread_path(thread), :remote => true %>
     <% end %>
   </div>
 <% end %>

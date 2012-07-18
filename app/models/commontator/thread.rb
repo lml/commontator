@@ -55,9 +55,9 @@ module Commontator
       subscription_for(subscriber).mark_as_read
     end
     
-    def mark_as_unread_except_for(subscriber)
+    def add_unread_except_for(subscriber)
       Subscription.transaction do
-        subscriptions.each{|s| s.mark_as_unread unless s.subscriber == subscriber}
+        subscriptions.each{|s| s.add_unread unless s.subscriber == subscriber}
       end
     end
     

@@ -11,6 +11,7 @@ module Commontator
   COMMONTATOR_ATTRIBUTES = [
     :user_missing_name,
     :user_name_clickable,
+    :subscription_emails,
     :user_email_method,
     :user_name_method,
     :is_admin_method

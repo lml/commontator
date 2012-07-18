@@ -9,11 +9,11 @@ module Commontator
     attr_accessible :subscriber, :thread
     
     def mark_as_read
-      self.update_attribute(:is_unread, false)
+      self.update_attribute(:unread, 0)
     end
 
-    def mark_as_unread
-      self.update_attribute(:is_unread, true)
+    def add_unread
+      self.update_attribute(:unread, unread + 1)
     end
   end
 end
