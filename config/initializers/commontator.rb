@@ -89,8 +89,8 @@ Commontator.configure do |config|
   config.can_edit_old_comments = false
 
   # Whether users can delete their own comments
-  # Default: false
-  config.can_delete_own_comments = false
+  # Default: true
+  config.can_delete_own_comments = true
 
   # Whether users can delete their own comments
   # after someone posted a newer comment

@@ -60,12 +60,14 @@ module Commontator
     end
     
     def close(user = nil)
+      return false if is_closed?
       self.closed_at = Time.now
       self.closer = user
       self.save!
     end
     
     def reopen
+      return false unless is_closed?
       self.closed_at = nil
       self.save!
     end

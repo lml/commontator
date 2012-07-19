@@ -32,12 +32,14 @@ module Commontator
     end
     
     def delete(user = nil)
+      return false if is_deleted?
       self.deleted_at = Time.now
       self.deleter = user
       self.save!
     end
     
     def undelete
+      return false unless is_deleted?
       self.deleted_at = nil
       self.save!
     end
@@ -58,14 +60,15 @@ module Commontator
 
     def can_be_edited_by?(user)
       !thread.is_closed? && !is_deleted? &&\
-        ((user == creator && thread.config.can_edit_own_comments) ||\
+        ((user == creator && thread.config.can_edit_own_comments && thread.can_be_read_by?(user)) ||\
         (thread.can_be_edited_by?(user) && thread.config.admin_can_edit_comments)) &&\
         (thread.comments.last == self || thread.config.can_edit_old_comments)
     end
 
     def can_be_deleted_by?(user)
       (!thread.is_closed? &&\
-        ((user == creator && thread.config.can_delete_own_comments) &&\
+        ((user == creator && thread.config.can_delete_own_comments && \
+        thread.can_be_read_by?(user) && (!is_deleted? || deleter == user)) &&\
         (thread.comments.last == self || thread.config.can_delete_old_comments))) ||\
         thread.can_be_edited_by?(user)
     end

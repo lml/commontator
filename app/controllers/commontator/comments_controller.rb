@@ -13,7 +13,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_created_by?(@user)
 
       respond_to do |format|
-        #format.html
+        format.html { redirect_to @thread }
         format.js
       end
      
@@ -46,7 +46,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
 
       respond_to do |format|
-        #format.html
+        format.html { redirect_to @thread }
         format.js
       end
     end
@@ -67,7 +67,8 @@ module Commontator
     def delete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
-      @comment.delete(@user)
+      @comment.errors.add(:base, 'This comment has already been deleted.') \
+        unless @comment.delete(@user)
 
       respond_to do |format|
         format.html { redirect_to @thread }
@@ -79,7 +80,8 @@ module Commontator
     def undelete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
-      @comment.undelete
+      @comment.errors.add(:base, 'This comment is not deleted.') \
+        unless @comment.undelete
 
       respond_to do |format|
         format.html { redirect_to @thread }

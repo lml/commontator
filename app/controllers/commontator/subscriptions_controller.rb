@@ -7,7 +7,7 @@ module Commontator
     def create
       raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
-      @thread.errors.add(:base, "You are already subscribed to this thread") \
+      @thread.errors.add(:subscription, "You are already subscribed to this thread") \
         unless @thread.subscribe(@user)
 
       respond_to do |format|
@@ -21,7 +21,7 @@ module Commontator
     def destroy
       raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
-      @thread.errors.add(:base, "You are not subscribed to this thread") \
+      @thread.errors.add(:subscription, "You are not subscribed to this thread") \
         unless @thread.unsubscribe(@user)
 
       respond_to do |format|
