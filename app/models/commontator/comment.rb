@@ -78,7 +78,7 @@ module Commontator
     end
     
     def can_be_voted_on?
-      is_votable? && !is_deleted? && thread.config.comments_can_be_voted_on
+      is_votable? && !is_deleted? && thread.config.can_vote_on_comments
     end
 
     def can_be_voted_on_by?(user)

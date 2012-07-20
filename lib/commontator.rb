@@ -31,7 +31,7 @@ module Commontator
     :can_delete_own_comments,
     :can_delete_old_comments,
     :can_subscribe_to_thread,
-    :comments_can_be_voted_on,
+    :can_vote_on_comments,
     :comments_ordered_by_votes,
     :closed_threads_are_readable,
     :deleted_comments_are_visible,

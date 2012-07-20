@@ -15,7 +15,7 @@ module Commontator
     end
     
     def ordered_comments
-      (!commontable.blank? && config.comments_can_be_voted_on && config.comments_ordered_by_votes) ? \
+      (!commontable.blank? && config.can_vote_on_comments && config.comments_ordered_by_votes) ? \
         comments.order("cached_votes_down - cached_votes_up") : comments
     end
     

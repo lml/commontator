@@ -371,7 +371,7 @@ describe Commontator::CommentsController do
     assigns(:comment).upvotes.count.must_equal 1
     assigns(:comment).downvotes.must_be_empty
     
-    @comment.downvote(user2).must_equal true
+    @comment.downvote_from(user2).must_equal true
     
     put :upvote, :id => @comment.id, :use_route => :commontator
     assert_redirected_to @thread
