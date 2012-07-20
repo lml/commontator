@@ -1,4 +1,4 @@
-<h4><%= @creator_name %>'s <%= @thread.config.comment_name %> on <%= @commontable_name %> #<%= @commontable_id %>:</h4>
+<h4><%= @creator_name %>'s <%= @thread.config.comment_name %> on <%= @commontable_name %> <%= @commontable_id %>:</h4>
 
 <%= render :partial => 'commontator/comments/body',
            :locals => { :comment => @comment } %>

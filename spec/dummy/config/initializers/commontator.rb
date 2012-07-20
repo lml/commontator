@@ -13,7 +13,7 @@ Commontator.configure do |config|
   # access anything you normally could in a view template (by using, e.g. view.flash)
   # Should return a string containing JS to be appended to all Commontator JS responses
   # Default: lambda { |view| '$("#error_explanation").remove();' }
-  config.javascript_proc = lambda { |view| '$("#error_explanation").remove();' }
+  config.javascript_proc = lambda { |view| 'Dummy Javascript' }
 
 
   # User (acts_as_commontator) Configuration
@@ -50,7 +50,7 @@ Commontator.configure do |config|
 
   # What a comment is called in your application
   # Default: 'comment'
-  config.comment_name = 'comment'
+  config.comment_name = 'dummy comment'
 
   # Verb used when creating comments (present)
   # Default: 'post'
@@ -65,7 +65,7 @@ Commontator.configure do |config|
   # you might want to pass this configuration value
   # as an argument to acts_as_commontable in each one
   # Default: 'commontable'
-  config.commontable_name = 'commontable'
+  config.commontable_name = 'dummy model'
 
   # The format of the timestamps used by Commontator
   # Default: '%b %d %Y, %I:%M %p'
@@ -121,7 +121,7 @@ Commontator.configure do |config|
   # Default: true
   config.deleted_comments_are_visible = true
 
-  # The method returns the commontable's id
+  # The method which returns the commontable's id that is sent to users in email messages
   # Default: 'id'
   config.commontable_id_method = 'id'
 

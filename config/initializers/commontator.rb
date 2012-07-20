@@ -121,7 +121,7 @@ Commontator.configure do |config|
   # Default: true
   config.deleted_comments_are_visible = true
 
-  # The method returns the commontable's id
+  # The method which returns the commontable's id that is sent to users in email messages
   # Default: 'id'
   config.commontable_id_method = 'id'
 

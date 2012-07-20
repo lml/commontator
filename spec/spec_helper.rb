@@ -24,3 +24,7 @@ def setup_controller_spec
   sign_out
   setup_model_spec
 end
+
+def setup_helper_spec
+  setup_model_spec
+end

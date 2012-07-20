@@ -1,14 +1,17 @@
+require 'spec_helper'
+
 module Commontator
-  module ThreadsHelper
-    def commontable_name(thread)
-      config = thread.config
-      config.commontable_name.blank? ? \
-      thread.commontable.class.name : \
-      config.commontable_name
+  describe ThreadsHelper do
+    before do
+      setup_helper_spec
     end
     
-    def commontable_id(thread)
-      thread.commontable.send(thread.config.commontable_id_method)
+    it 'must print commontable name' do
+      commontable_name(@thread).must_equal 'dummy model'
+    end
+    
+    it 'must print commontable id' do
+      commontable_id(@thread).must_equal @thread.commontable_id
     end
   end
 end

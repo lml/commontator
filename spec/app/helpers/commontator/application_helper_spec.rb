@@ -1,7 +1,7 @@
 module Commontator
-  module ApplicationHelper
-    def javascript_proc
-      Commontator.javascript_proc.call(self).html_safe
+  describe ApplicationHelper do
+    it 'must print javascript proc' do
+      javascript_proc.must_equal 'Dummy Javascript'
     end
   end
 end
