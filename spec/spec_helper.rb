@@ -28,3 +28,7 @@ end
 def setup_helper_spec
   setup_model_spec
 end
+
+def setup_mailer_spec
+  setup_model_spec
+end
