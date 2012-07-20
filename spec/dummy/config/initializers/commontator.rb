@@ -22,7 +22,8 @@ Commontator.configure do |config|
   # Default: 'Anonymous'
   config.user_missing_name = 'Anonymous'
 
-  # Whether the user's name is clickable in the comment view
+  # Whether the comment creator's name is clickable in the comment view
+  # If enabled, the link will point to the comment creator's show page
   # Default: false
   config.user_name_clickable = false
   
@@ -121,7 +122,7 @@ Commontator.configure do |config|
   # Default: true
   config.deleted_comments_are_visible = true
 
-  # The method which returns the commontable's id that is sent to users in email messages
+  # The method which returns the commontable's id, sent to users in email messages
   # Default: 'id'
   config.commontable_id_method = 'id'
 
@@ -148,10 +149,10 @@ Commontator.configure do |config|
   # Default:
   # lambda do |params|
   #   "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
-  #   "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
+  #   "#{params[:config].comment_name} on #{params[:commontable_name]} #{params[:commontable_id]}"
   # end
   config.subscription_email_subject_proc = lambda do |params|
     "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
-    "#{params[:config].comment_name} on #{params[:commontable_name]} ##{params[:commontable_id]}"
+    "#{params[:config].comment_name} on #{params[:commontable_name]} #{params[:commontable_id]}"
   end
 end
