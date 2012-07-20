@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'acts_as_votable'
 
 describe Commontator::Comment do
   before do
@@ -10,7 +11,9 @@ describe Commontator::Comment do
   end
   
   it 'must be votable if acts_as_votable is installed' do
-    @comment.is_votable.must_equal @comment.respond_to?(:acts_as_votable)
+    Commontator::Comment.must_respond_to(:acts_as_votable)
+    @comment.is_votable?.must_equal true
+    @comment.acts_as_votable_initialized.must_equal true
   end
   
   it 'must know if it has been modified' do

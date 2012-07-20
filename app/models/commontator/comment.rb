@@ -12,9 +12,13 @@ module Commontator
 
     attr_accessible :body
     
-    cattr_accessor :is_votable
-    self.is_votable = respond_to?(:acts_as_votable)
-    acts_as_votable if is_votable
+    cattr_accessor :acts_as_votable_initialized
+    
+    def is_votable?
+      return false unless self.class.respond_to?(:acts_as_votable)
+      self.class.acts_as_votable unless acts_as_votable_initialized
+      self.class.acts_as_votable_initialized = true
+    end
     
     def is_modified?
       updated_at != created_at
@@ -74,7 +78,7 @@ module Commontator
     end
     
     def can_be_voted_on?
-      is_votable && !is_deleted? && thread.config.comments_can_be_voted_on
+      is_votable? && !is_deleted? && thread.config.comments_can_be_voted_on
     end
 
     def can_be_voted_on_by?(user)
