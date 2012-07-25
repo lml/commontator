@@ -47,6 +47,8 @@
 
 .comment_votes {
   float: right;
+  
+  text-align: center;
 }
 
 .comment_votes input,
@@ -54,35 +56,9 @@
   border: none;
   background-color: transparent;
   padding: 0px;
-  margin: 5px;
+  margin: 0px;
 }
 
-.comment_upvote {
-  display: table;
-}
-
-.comment_upvote form {
-  display: table-cell;
-}
-
-.comment_downvote {
-  display: table;
-}
-
-.comment_downvote form {
-  display: table-cell;
-}
-
-.comment_upvote_count {
-  display: table-cell;
-  vertical-align: middle;
-  
-  padding-top: 1px;
-}
-
-.comment_downvote_count {
-  display: table-cell;
-  vertical-align: middle;
-  
-  padding-bottom: 7px;
+.comment_vote_count p {
+  margin: 0px;
 }

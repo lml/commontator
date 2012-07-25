@@ -27,12 +27,11 @@
     <% else %>
       <%= image_tag "commontator/upvote_hover.png" %>
     <% end %>
-    <span id="comment_<%= comment.id %>_upvote_count_span" class="comment_upvote_count">
-      <%= comment.upvotes.size %>
-    </span>
   </span>
 
-  <br/>
+  <span id="comment_<%= comment.id %>_vote_count_span" class="comment_vote_count">
+    <p>+ <%= comment.upvotes.size %><br><br>- <%= comment.downvotes.size %></p>
+  </span>
 
   <span id="comment_<%= comment.id %>_downvote_span" class="comment_downvote">
     <% if can_vote && (vote.blank? || vote.vote_flag) %>
@@ -54,8 +53,5 @@
     <% else %>
       <%= image_tag "commontator/downvote_hover.png" %>
     <% end %>
-    <span id="comment_<%= comment.id %>_downvote_count_span" class="comment_downvote_count">
-      <%= comment.downvotes.size %>
-    </span>
   </span>
 <% end %>
