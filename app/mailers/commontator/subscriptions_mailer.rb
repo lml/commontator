@@ -3,26 +3,18 @@ module Commontator
     include SharedHelper
     include ThreadsHelper
   
-    def comment_created_email(comment, commontable_url) 
-      setup_variables(comment, commontable_url)
+    def comment_created(comment, recipients)
+      setup_variables(comment, recipients)
 
-      mail(:bcc => @bcc, :subject => @subject) \
-        unless @bcc.empty?
+      mail(:bcc => @bcc, :from => @from, :subject => @subject)
     end
 
 protected
 
-    def setup_variables(comment, commontable_url)
-      
+    def setup_variables(comment, recipients)
       @comment = comment
       @thread = @comment.thread
       @creator = @comment.creator
-      
-      @bcc = @thread.subscribers.reject{|s| !s.commontator_config.subscription_emails || \
-                                            s == @creator} \
-                                .collect{|s| commontator_email(s)}
-      
-      return if @bcc.empty?
       
       @commontable = @thread.commontable
       @config = @thread.config
@@ -33,7 +25,7 @@ protected
       @commontable_name = commontable_name(@thread)
       @commontable_id = commontable_id(@thread).to_s
       
-      @commontable_url = commontable_url
+      @commontable_url = ApplicationController.commontable_url
       
       params = Hash.new
       params[:comment] = @comment
@@ -47,6 +39,8 @@ protected
       params[:commontable_id] = @commontable_id
       params[:commontable_url] = @commontable_url
       
+      @bcc = recipients.collect{|s| commontator_email(s)}
+      @from = @config.subscription_email_from_proc.call(params)
       @subject = @config.subscription_email_subject_proc.call(params)
     end
   end

@@ -1,14 +1,14 @@
 module Commontator
   class ThreadsController < ApplicationController
     before_filter :get_thread
-    before_filter :get_commontable_url, :only => :show
+    before_filter :set_commontable_url, :only => :show
 
     # GET /threads/1
     def show
       commontator_thread_show(@thread.commontable)
 
       respond_to do |format|
-        format.html { redirect_to @commontable_url }
+        format.html { redirect_to commontable_url }
         format.js
       end
     end

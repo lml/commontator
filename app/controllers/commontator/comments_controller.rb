@@ -2,7 +2,7 @@ module Commontator
   class CommentsController < ApplicationController
     before_filter :get_thread, :only => [:new, :create]
     before_filter :get_comment_and_thread, :except => [:new, :create]
-    before_filter :get_commontable_url, :only => :create
+    before_filter :set_commontable_url, :only => :create
 
     # GET /1/comments/new
     def new
@@ -29,9 +29,6 @@ module Commontator
       
       respond_to do |format|
         if @comment.save
-          @thread.subscribe(@user) if @thread.config.auto_subscribe_on_comment
-          @thread.add_unread_except_for(@user)
-          SubscriptionsMailer.comment_created_email(@comment, @commontable_url)
           format.html { redirect_to @thread }
           format.js
         else

@@ -11,10 +11,10 @@ module Commontator
   COMMONTATOR_ATTRIBUTES = [
     :user_missing_name,
     :user_name_clickable,
-    :subscription_emails,
     :user_email_method,
     :user_name_method,
-    :user_admin_proc
+    :user_admin_proc,
+    :subscription_email_enable_proc
   ]
   
   # Can be set in initializer or passed as an option to acts_as_commontable
@@ -39,6 +39,7 @@ module Commontator
     :can_edit_thread_proc,
     :can_read_thread_proc,
     :commontable_url_proc,
+    :subscription_email_from_proc,
     :subscription_email_subject_proc
   ]
   

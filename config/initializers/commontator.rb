@@ -28,11 +28,6 @@ Commontator.configure do |config|
   # If enabled, the link will point to the comment creator's show page
   # Default: false
   config.user_name_clickable = false
-  
-  # Whether automated emails are sent to the user whenever
-  # a comment is posted on a thread they subscribe to
-  # Default: true
-  config.subscription_emails = true
 
   # The method that returns the user's email address
   # Default: 'email'
@@ -47,6 +42,11 @@ Commontator.configure do |config|
   # Note: user can be nil
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
+  
+  # Proc called with user as argument that returns true
+  # if the user should receive subscription emails
+  # Default: lambda { |user| true } (always receive subscription emails)
+  config.subscription_email_enable_proc = lambda { |user| true }
 
 
   # Commontable (acts_as_commontable) Configuration
@@ -146,8 +146,13 @@ Commontator.configure do |config|
   # Main application's routes can be accessed using main_app object
   # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
   config.commontable_url_proc = lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
+  
+  # Proc that returns the subscription email 'from' address
+  # Default:
+  # lambda { |params| 'no-reply@example.com' }
+  config.subscription_email_from_proc = lambda { |params| 'no-reply@example.com' }
 
-  # Proc that returns the subscription email subject string
+  # Proc that returns the subscription email 'subject' string
   # Default:
   # lambda do |params|
   #   "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \

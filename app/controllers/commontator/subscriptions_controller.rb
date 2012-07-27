@@ -1,7 +1,6 @@
 module Commontator
   class SubscriptionsController < ApplicationController
     before_filter :get_thread
-    before_filter :get_commontable_url
 
     # POST /1/subscribe
     def create
