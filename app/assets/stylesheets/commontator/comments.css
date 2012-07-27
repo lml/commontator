@@ -37,12 +37,19 @@
 	overflow: hidden;
 }
 
-.comment_body textarea {
-	width: 100%;
+.comment_form_actions {
+  margin-top: 15px;
 }
 
-.comment_form_actions {
-  margin-top: 10px;
+.comment_form_field > .field_with_errors {
+  display: block;
+  padding-right: 4px;
+}
+
+.comment_form_field textarea {
+  padding: 0px;
+  
+  width: 100%;
 }
 
 .comment_gravatar_image img {
