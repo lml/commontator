@@ -27,17 +27,17 @@ module Commontator
       
       raise SecurityTransgression unless @comment.can_be_created_by?(@user)
       
-      if @comment.save
-        @thread.subscribe(@user) if @thread.config.auto_subscribe_on_comment
-        @thread.add_unread_except_for(@user)
-        SubscriptionsMailer.comment_created_email(@comment, @commontable_url)
-      else
-        @errors = @comment.errors
-      end
-
       respond_to do |format|
-        format.html { redirect_to @thread }
-        format.js
+        if @comment.save
+          @thread.subscribe(@user) if @thread.config.auto_subscribe_on_comment
+          @thread.add_unread_except_for(@user)
+          SubscriptionsMailer.comment_created_email(@comment, @commontable_url)
+          format.html { redirect_to @thread }
+          format.js
+        else
+          format.html { redirect_to @thread }
+          format.js { render :new }
+        end
       end
     end
 
@@ -55,11 +55,14 @@ module Commontator
     def update
       raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
 
-      @comment.update_attributes(params[:comment])
-
       respond_to do |format|
-        format.html { redirect_to @thread }
-        format.js
+        if @comment.update_attributes(params[:comment])
+          format.html { redirect_to @thread }
+          format.js
+        else
+          format.html { redirect_to @thread }
+          format.js { render :edit }
+        end
       end
     end
 

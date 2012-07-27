@@ -8,18 +8,31 @@
 
 <% config = comment.thread.config %>
 
+<% if comment.errors.any? %>
+  <div class="comment_error_explanation">
+    <h3>This <%= config.comment_name %> could not be
+          <%= comment.id.blank? ? config.comment_create_verb_past : 'updated' %> because of the following error<%= comment.errors.count == 1 ? '' : 's' %>:</h3>
+
+    <ul>
+      <% comment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <%= form_for([commontator, thread, comment],
              :remote => !no_remote) do |f| %>
-             
-  <p>
-    <%= f.text_area :body, :rows => '7' %>
-  </p>
   
-  <p>
+  <div class="comment_form_field">
+    <%= f.text_area :body, :rows => '7' %>
+  </div>
+  
+  <div class="comment_form_actions">
     <%= f.submit (comment.id.blank? ? \
                    config.comment_create_verb_present : \
                    'update').capitalize + \
           ' ' + config.comment_name %>
-  </p>
+  </div>
   
 <% end %>

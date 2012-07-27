@@ -23,18 +23,26 @@
   float: right;
 }
 
-.comment_body p {
-	margin: 0px;
-	
-	overflow: hidden;
-}
-
 .comment_body {
   margin-left: 55px;
   margin-top: -60px;
   margin-right: 45px;
    
   padding: 8px;
+}
+
+.comment_body p {
+	margin: 0px;
+	
+	overflow: hidden;
+}
+
+.comment_body textarea {
+	width: 100%;
+}
+
+.comment_form_actions {
+  margin-top: 10px;
 }
 
 .comment_gravatar_image img {
