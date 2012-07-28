@@ -6,7 +6,9 @@ module Commontator
     def comment_created(comment, recipients)
       setup_variables(comment, recipients)
 
-      mail(:bcc => @bcc, :from => @from, :subject => @subject)
+      mail :bcc => @bcc,
+           :from => @from,
+           :subject => @subject
     end
 
 protected
