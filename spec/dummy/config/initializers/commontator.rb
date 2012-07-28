@@ -14,7 +14,7 @@ Commontator.configure do |config|
   # However, be aware that it does not have access to the main application's helpers
   # Should return a string containing JS to be appended to all Commontator JS responses
   # Default: lambda { |view| '$("#error_explanation").remove();' }
-  config.javascript_proc = lambda { |view| '$("#error_explanation").remove();' }
+  config.javascript_proc = lambda { |view| 'Dummy Javascript' }
 
 
   # User (acts_as_commontator) Configuration
