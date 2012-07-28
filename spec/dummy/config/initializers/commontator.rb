@@ -8,12 +8,12 @@ Commontator.configure do |config|
   # Default: 'current_user'
   config.current_user_method = 'current_user'
 
-  # Proc that is called after any javascript runs (e.g. to clear flash)
+  # Proc that is called after any javascript runs (e.g. to display/clear flash messages)
   # It is passed the view_context object (self from the view template), so you should be able to
   # access anything you normally could in a view template (by using, e.g. view.flash)
   # Should return a string containing JS to be appended to all Commontator JS responses
-  # Default: lambda { |view| '$("#error_explanation").remove();' }
-  config.javascript_proc = lambda { |view| 'Dummy Javascript' }
+  # Default: lambda { |view| '$("#error_explanation").hide();' }
+  config.javascript_proc = lambda { |view| '' }
 
 
   # User (acts_as_commontator) Configuration
