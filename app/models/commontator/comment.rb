@@ -86,4 +86,6 @@ module Commontator
         thread.can_be_read_by?(user) && user != creator
     end
   end
+  
+  CommentObserver.instance
 end
