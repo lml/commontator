@@ -4,7 +4,7 @@ module Commontator
   describe CommentObserver do
     before do
       setup_model_spec
-      @comment_observer = CommentObserver.send :new
+      @comment_observer = CommentObserver.instance
       @thread.subscribe(@user)
       @comment = Comment.new
       @comment.thread = @thread
