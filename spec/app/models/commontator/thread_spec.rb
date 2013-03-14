@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'minitest_helper'
 
 module Commontator
   describe Thread do
