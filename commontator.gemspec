@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Dante Soares"]
   s.email       = ["dms3@rice.edu"]
   s.homepage    = "http://github.com/lml/commontator"
-  s.summary     = "Common Tator"
+  s.summary     = "Allows users to comment on any model in your application."
   s.description = "A Rails engine for comments."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]

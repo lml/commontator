@@ -1,3 +1,3 @@
 ## Dummy
 
-A dummy application used for testing the commontator engine.
+A dummy application used to test the Commontator engine.
