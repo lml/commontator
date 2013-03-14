@@ -1,3 +1,4 @@
 module Commontator
-  class SecurityTransgression < StandardError; end
+  class SecurityTransgression < StandardError
+  end
 end

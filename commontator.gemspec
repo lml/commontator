@@ -1,25 +1,26 @@
-$:.push File.expand_path("../lib", __FILE__)
-
-# Maintain your gem's version:
+# -*- encoding: utf-8 -*-
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "commontator/version"
 
-# Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = "commontator"
-  s.version     = Commontator::VERSION
-  s.authors     = ["Dante Soares"]
-  s.email       = ["dms3@rice.edu"]
-  s.homepage    = "http://rubygems.org/gems/commontator"
-  s.summary     = "Common Tator"
-  s.description = "A Rails engine for comments."
+Gem::Specification.new do |gem|
+  gem.name          = "commontator"
+  gem.version       = Commontator::VERSION
+  gem.authors       = ["Dante Soares"]
+  gem.email         = ["dms3@rice.edu"]
+  gem.description   = "A Rails engine for comments."
+  gem.summary       = "Common Tator"
+  gem.homepage      = "http://rubygems.org/gems/commontator"
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
-  s.test_files = Dir["spec/**/*"]
+  gem.files         = `git ls-files`.split($/)
+  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ["lib"]
 
-  s.add_dependency "rails", ">= 3.1"
-  s.add_dependency "jquery-rails"
+  gem.add_dependency "rails", ">= 3.1"
+  gem.add_dependency "jquery-rails"
 
-  s.add_development_dependency "sqlite3"
-  s.add_development_dependency "minitest-rails"
-  s.add_development_dependency "acts_as_votable"
+  gem.add_development_dependency "sqlite3"
+  gem.add_development_dependency "minitest-rails"
+  gem.add_development_dependency "acts_as_votable"
 end
