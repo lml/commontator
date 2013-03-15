@@ -1,3 +1,6 @@
+require 'commontator/engine'
+require 'commontator/controller_includes'
+
 module Commontator
   # Attributes
 
@@ -53,7 +56,6 @@ module Commontator
   end
 end
 
-require 'commontator/engine'
 require 'commontator/acts_as_commontator'
 require 'commontator/acts_as_commontable'
-require 'commontator/controller_includes'
+
