@@ -1,4 +1,4 @@
-COPY_TASKS = ['assets/images', 'assets/stylesheets', 'views', 'mailers', 'helpers', 'controllers', 'models']
+COMMONTATOR_COPY_TASKS = ['assets/images', 'assets/stylesheets', 'views', 'mailers', 'helpers', 'controllers', 'models']
 
 namespace :commontator do
   namespace :install do
@@ -16,7 +16,7 @@ namespace :commontator do
   end
   
   namespace :copy do
-    COPY_TASKS.each do |path|
+    COMMONTATOR_COPY_TASKS.each do |path|
       name = File.basename(path)
       desc "Copy #{name} from commontator to application"
       task name.to_sym do
@@ -34,7 +34,7 @@ namespace :commontator do
   
   desc "Copy assets, views, mailers, helpers, controllers and models from commontator to application"
   task :copy do
-    COPY_TASKS.each do |path|
+    COMMONTATOR_COPY_TASKS.each do |path|
       Rake::Task["commontator:copy:#{File.basename(path)}"].invoke
     end
   end
