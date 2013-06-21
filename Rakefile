@@ -20,4 +20,3 @@ Rake::TestTask.new(:test => 'app:db:test:prepare') do |t|
 end
 
 task :default => :test
-

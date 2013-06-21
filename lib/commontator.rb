@@ -58,4 +58,3 @@ end
 
 require 'commontator/acts_as_commontator'
 require 'commontator/acts_as_commontable'
-

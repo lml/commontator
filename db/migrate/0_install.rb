@@ -1,4 +1,4 @@
-class InstallCommontator < ActiveRecord::Migration
+class Install < ActiveRecord::Migration
   def change
     create_table "commontator_comments" do |t|
       t.text     "body"

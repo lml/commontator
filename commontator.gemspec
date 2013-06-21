@@ -23,4 +23,3 @@ Gem::Specification.new do |s|
   s.add_development_dependency "minitest-rails"
   s.add_development_dependency "acts_as_votable"
 end
-
