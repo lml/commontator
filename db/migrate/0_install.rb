@@ -15,6 +15,13 @@ class Install < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :commontator_comments, [:creator_id, :creator_type, :thread_id], :name => "index_c_c_on_c_id_and_c_type_and_t_id"
+    add_index :commontator_comments, :thread_id
+
+    add_index :commontator_comments, :cached_votes_total
+    add_index :commontator_comments, :cached_votes_up
+    add_index :commontator_comments, :cached_votes_down
     
     create_table "commontator_subscriptions" do |t|
       t.integer  "subscriber_id"
@@ -25,6 +32,9 @@ class Install < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index :commontator_subscriptions, [:subscriber_id, :subscriber_type, :thread_id], :unique => true, :name => "index_c_s_on_s_id_and_s_type_and_t_id"
+    add_index :commontator_subscriptions, :thread_id
+
     create_table "commontator_threads" do |t|
       t.integer  "commontable_id"
       t.string   "commontable_type"
@@ -34,15 +44,7 @@ class Install < ActiveRecord::Migration
 
       t.timestamps
     end
-    
-    add_index :commontator_comments, [:creator_id, :creator_type, :thread_id], :name => "index_c_c_on_c_id_and_c_type_and_t_id"
-    add_index :commontator_comments, :thread_id
-    add_index :commontator_subscriptions, [:subscriber_id, :subscriber_type, :thread_id], :unique => true, :name => "index_c_s_on_s_id_and_s_type_and_t_id"
-    add_index :commontator_subscriptions, :thread_id
+
     add_index :commontator_threads, [:commontable_id, :commontable_type]
-    
-    add_index :commontator_comments, :cached_votes_total
-    add_index :commontator_comments, :cached_votes_up
-    add_index :commontator_comments, :cached_votes_down
   end
 end
