@@ -43,7 +43,7 @@ module Commontator
 
     def timestamp
       config = thread.config
-      (is_modified? ? 'Last modified on ' : \
+      (is_modified? ? "Last #{config.comment_edit_verb_past} on " : \
         "#{config.comment_create_verb_past.capitalize} on ") + \
         updated_at.strftime(config.timestamp_format)
     end
@@ -66,8 +66,8 @@ module Commontator
     ##################
 
     def can_be_read_by?(user)
-      (thread.can_be_read_by?(user) && (!is_deleted? ||\
-        thread.config.deleted_comments_are_visible)) ||\
+      (thread.can_be_read_by?(user) && \
+        (!is_deleted? || thread.config.deleted_comments_are_visible)) ||\
         thread.can_be_edited_by?(user)
     end
 
@@ -91,12 +91,11 @@ module Commontator
     end
 
     def can_be_voted_on?
-      is_votable? && !is_deleted? && thread.config.can_vote_on_comments
+      !thread.is_closed? && is_votable? && !is_deleted? && thread.config.can_vote_on_comments
     end
 
     def can_be_voted_on_by?(user)
-      can_be_voted_on? && !thread.is_closed? &&\
-        thread.can_be_read_by?(user) && user != creator
+      can_be_voted_on? && thread.can_be_read_by?(user) && user != creator
     end
   end
 

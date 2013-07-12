@@ -11,11 +11,11 @@ module Commontator
     validates_uniqueness_of :thread_id, :scope => [:subscriber_type, :subscriber_id]
 
     def mark_as_read
-      self.update_attribute(:unread, 0)
+      update_attribute(:unread, 0)
     end
 
     def add_unread
-      self.update_attribute(:unread, unread + 1)
+      update_attribute(:unread, unread + 1)
     end
   end
 end

@@ -28,8 +28,8 @@ module Commontator
           def thread
             raw = thread_raw
             return raw unless raw.nil?
-            return Commontator::Thread.find_or_create_by_commontable_id_and_commontable_type(self.id, self.class.name) \
-              unless self.id.nil?
+            return Commontator::Thread.find_or_create_by_commontable_type_and_commontable_id(self.class.name, id) \
+              unless id.nil?
             self.thread = Commontator::Thread.new
             self.thread.commontable = self
             self.thread

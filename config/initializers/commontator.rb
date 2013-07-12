@@ -1,7 +1,6 @@
 # Change the settings below to suit your needs
 # All settings are initially set to their default values
 Commontator.configure do |config|
-
   # Engine Configuration
 
   # Name of the ApplicationController helper method that returns the current user
@@ -62,9 +61,13 @@ Commontator.configure do |config|
   # Default: 'posted'
   config.comment_create_verb_past = 'posted'
 
+  # Verb used when editing comments (past)
+  # Default: 'modified'
+  config.comment_edit_verb_past = 'modified'
+
   # What a commontable is called in your application
   # If you have multiple commontable models,
-  # you might want to pass this configuration value
+  # you will want to pass this configuration value
   # as an argument to acts_as_commontable in each one
   # Default: 'commontable'
   config.commontable_name = 'commontable'
@@ -114,11 +117,11 @@ Commontator.configure do |config|
   # Default: false
   config.comments_ordered_by_votes = false
 
-  # Whether users can read threads closed by admins
+  # Whether users can read threads closed by moderators
   # Default: true
   config.closed_threads_are_readable = true
 
-  # Whether comments deleted by admins can be seen
+  # Whether comments deleted by moderators can be seen
   # (the content will still be hidden)
   # Default: true
   config.deleted_comments_are_visible = true

@@ -25,6 +25,7 @@ module Commontator
     :comment_name,
     :comment_create_verb_present,
     :comment_create_verb_past,
+    :comment_edit_verb_past,
     :commontable_name,
     :timestamp_format,
     :admin_can_edit_comments,

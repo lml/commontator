@@ -11,14 +11,16 @@ module Commontator
 
     attr_accessible :is_closed
 
-    validates_presence_of :commontable, :on => :create
+    validates_presence_of :commontable, :unless => :is_closed?
+
+    validates_uniqueness_of :commontable, :allow_nil => true
 
     def config
-      commontable.try(:commontable_config)
+      commontable.try(:commontable_config) || Commontator
     end
 
     def ordered_comments
-      (!commontable.blank? && config.can_vote_on_comments && config.comments_ordered_by_votes) ? \
+      (config.can_vote_on_comments && config.comments_ordered_by_votes) ? \
         comments.order("cached_votes_down - cached_votes_up") : comments
     end
 
@@ -27,7 +29,7 @@ module Commontator
     end
 
     def active_subscribers
-      subscribers.select{|s| s.commontator_config.subscription_email_enable_proc.call(s)}
+      subscribers.select{|s| s.is_commontator && s.commontator_config.subscription_email_enable_proc.call(s)}
     end
 
     def subscription_for(subscriber)
@@ -40,7 +42,7 @@ module Commontator
     end
 
     def subscribe(subscriber)
-      return false if is_subscribed?(subscriber)
+      return false if is_subscribed?(subscriber) || !subscriber.is_commontator
       subscription = Subscription.create(
         :subscriber => subscriber, :thread => self)
     end
@@ -51,28 +53,28 @@ module Commontator
       subscription.destroy
     end
 
-    def mark_as_read_for(subscriber)
-      return if !subscription_for(subscriber)
-      subscription_for(subscriber).mark_as_read
-    end
-
     def add_unread_except_for(subscriber)
       Subscription.transaction do
         subscriptions.each{|s| s.add_unread unless s.subscriber == subscriber}
       end
     end
 
+    def mark_as_read_for(subscriber)
+      return if !subscription_for(subscriber)
+      subscription_for(subscriber).mark_as_read
+    end
+
     def close(user = nil)
       return false if is_closed?
       self.closed_at = Time.now
       self.closer = user
-      self.save!
+      save
     end
 
     def reopen
-      return false unless is_closed?
+      return false unless is_closed? && !commontable.nil?
       self.closed_at = nil
-      self.save!
+      save
     end
 
     # Creates a new empty thread and assigns it to the commontable
@@ -81,17 +83,17 @@ module Commontator
       return if commontable.blank?
       new_thread = Thread.new
       new_thread.commontable = commontable
-      self.with_lock do
+      with_lock do
+        self.commontable = nil
+        self.closed_at = Time.now
+        self.closer = user
+        save!
         new_thread.save!
-        commontable.thread = new_thread
-        commontable.save!
         subscriptions.each do |s|
           s.thread = new_thread
           s.save!
           s.mark_as_read
         end
-        self.commontable = nil
-        self.close(user)
       end
     end
 
@@ -101,7 +103,7 @@ module Commontator
 
     # Reader and poster capabilities
     def can_be_read_by?(user)
-      (!commontable.blank? && \
+      (!commontable.nil? && \
         (!is_closed? || config.closed_threads_are_readable) && \
         config.can_read_thread_proc.call(self, user)) || \
         can_be_edited_by?(user)
@@ -109,13 +111,14 @@ module Commontator
 
     # Thread moderator capabilities
     def can_be_edited_by?(user)
-      !commontable.blank? && \
-        (config.can_edit_thread_proc.call(self, user) || \
-        (!user.nil? && user.commontator_config.user_admin_proc.call(user)))
+      (!commontable.nil? && \
+        config.can_edit_thread_proc.call(self, user)) || \
+        (!user.nil? && user.is_commontator && \
+        user.commontator_config.user_admin_proc.call(user))
     end
 
     def can_subscribe?(user)
-      !commontable.blank? && config.can_subscribe_to_thread && !is_closed? && can_be_read_by?(user)
+      !commontable.nil? && config.can_subscribe_to_thread && !is_closed? && can_be_read_by?(user)
     end
   end
 end
