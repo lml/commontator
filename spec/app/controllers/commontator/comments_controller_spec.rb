@@ -45,7 +45,7 @@ module Commontator
     
     it 'wont create unless authorized' do
       attributes = Hash.new
-      attributes[:body] = 'Something'
+      attributes[:body] = 'Something else'
       
       post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
       assert_response 403
@@ -65,33 +65,59 @@ module Commontator
     it 'must create if authorized' do
       sign_in @user
       attributes = Hash.new
-      attributes[:body] = 'Something'
       
+      attributes[:body] = 'Something else'
       @user.can_read = true
       post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
-      assigns(:comment).body.must_equal 'Something'
+      assigns(:comment).body.must_equal 'Something else'
       assigns(:comment).creator.must_equal @user
       assigns(:comment).thread.must_equal @thread
       
+      attributes[:body] = 'Another thing'
       @user.can_read = false
       @user.can_edit = true
       post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
-      assigns(:comment).body.must_equal 'Something'
+      assigns(:comment).body.must_equal 'Another thing'
       assigns(:comment).creator.must_equal @user
       assigns(:comment).thread.must_equal @thread
       
+      attributes[:body] = 'And this too'
       @user.can_edit = false
       @user.is_admin = true
       post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
-      assigns(:comment).body.must_equal 'Something'
+      assigns(:comment).body.must_equal 'And this too'
       assigns(:comment).creator.must_equal @user
       assigns(:comment).thread.must_equal @thread
+    end
+    
+    it 'wont create if double posting' do
+      sign_in @user
+      @user.can_read = true
+      attributes = Hash.new
+      
+      attributes[:body] = 'Something'
+      post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
+      assert_redirected_to @thread
+      assigns(:comment).errors.wont_be_empty
+      
+      attributes[:body] = 'Something else'
+      post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
+      assert_redirected_to @thread
+      assigns(:comment).errors.must_be_empty
+      assigns(:comment).body.must_equal 'Something else'
+      assigns(:comment).creator.must_equal @user
+      assigns(:comment).thread.must_equal @thread
+      
+      attributes[:body] = 'Something else'
+      post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
+      assert_redirected_to @thread
+      assigns(:comment).errors.wont_be_empty
     end
     
     it 'wont edit unless authorized' do

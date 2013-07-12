@@ -11,17 +11,16 @@ module Commontator
     module ClassMethods
       def acts_as_commontable(options = {})
         class_eval do
+          cattr_accessor :commontable_config
+          self.commontable_config = Commontator::CommontableConfig.new(options)
+          self.is_commontable = true
+
           has_one :thread, :as => :commontable, :class_name => 'Commontator::Thread'
           has_many :comments, :class_name => 'Commontator::Comment', :through => :thread
 
           has_many :subscriptions, :class_name => 'Commontator::Subscription', :through => :thread
-          has_many :subscribers, :through => :subscriptions
           
           validates_presence_of :thread
-          
-          cattr_accessor :commontable_config
-          self.commontable_config = Commontator::CommontableConfig.new(options)
-          self.is_commontable = true
           
           alias_method :thread_raw, :thread
           

@@ -7,13 +7,12 @@ module Commontator
     has_many :comments, :dependent => :destroy
 
     has_many :subscriptions, :dependent => :destroy
-    has_many :subscribers, :through => :subscriptions
 
     attr_accessible :is_closed
 
     validates_presence_of :commontable, :unless => :is_closed?
 
-    validates_uniqueness_of :commontable, :allow_nil => true
+    validates_uniqueness_of :commontable_id, :scope => :commontable_type, :allow_nil => true
 
     def config
       commontable.try(:commontable_config) || Commontator
@@ -26,6 +25,10 @@ module Commontator
 
     def is_closed?
       !closed_at.blank?
+    end
+
+    def subscribers
+      subscriptions.collect{|s| s.subscriber}
     end
 
     def active_subscribers

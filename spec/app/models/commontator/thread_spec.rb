@@ -9,7 +9,7 @@ module Commontator
     it 'must have a config' do
       @thread.config.must_be_instance_of CommontableConfig
       @thread.commontable = nil
-      @thread.config.must_be_nil
+      @thread.config.must_equal Commontator
     end
     
     it 'must order all comments' do

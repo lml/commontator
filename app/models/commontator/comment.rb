@@ -13,7 +13,8 @@ module Commontator
     validates_presence_of :thread
     validates_presence_of :body
 
-    validates_uniqueness_of :body, :scope => [:creator_type, :creator_id, :thread_id]
+    validates_uniqueness_of :body, :scope => [:creator_type, :creator_id, :thread_id],
+                                   :message => 'has already been posted'
 
     protected
 
