@@ -5,7 +5,7 @@
 
 <% if comment.can_be_voted_on? %>
   <% can_vote = comment.can_be_voted_on_by?(user) %>
-  <% vote = comment.votes.find_by_voter_id_and_voter_type(user.id, user.class.name) %>
+  <% vote = comment.vote_from(user) %>
 
   <span id="comment_<%= comment.id %>_upvote_span" class="comment_upvote">
     <% if can_vote && (vote.blank? || !vote.vote_flag) %>

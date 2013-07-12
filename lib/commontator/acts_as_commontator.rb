@@ -12,6 +12,7 @@ module Commontator
       def acts_as_commontator(options = {})
         class_eval do
           has_many :comments, :as => :commontator, :class_name => 'Commontator::Comment'
+
           has_many :subscriptions, :as => :subscriber, :class_name => 'Commontator::Subscription', :dependent => :destroy
           
           cattr_accessor :commontator_config

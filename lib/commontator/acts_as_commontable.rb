@@ -13,7 +13,9 @@ module Commontator
         class_eval do
           has_one :thread, :as => :commontable, :class_name => 'Commontator::Thread'
           has_many :comments, :class_name => 'Commontator::Comment', :through => :thread
+
           has_many :subscriptions, :class_name => 'Commontator::Subscription', :through => :thread
+          has_many :subscribers, :through => :subscriptions
           
           validates_presence_of :thread
           

@@ -1,41 +1,40 @@
 module Commontator
   class Thread < ActiveRecord::Base
     belongs_to :closer, :polymorphic => true
+
     belongs_to :commontable, :polymorphic => true
 
     has_many :comments, :dependent => :destroy
+
     has_many :subscriptions, :dependent => :destroy
+    has_many :subscribers, :through => :subscriptions
+
+    attr_accessible :is_closed
 
     validates_presence_of :commontable, :on => :create
-    
-    attr_accessible :is_closed
-    
+
     def config
       commontable.try(:commontable_config)
     end
-    
+
     def ordered_comments
       (!commontable.blank? && config.can_vote_on_comments && config.comments_ordered_by_votes) ? \
         comments.order("cached_votes_down - cached_votes_up") : comments
     end
-    
-    def subscribers
-      subscriptions.collect{|s| s.subscriber}
-    end
-    
-    def active_subscribers
-      subscribers.select{|s| s.commontator_config.subscription_email_enable_proc.call(s)}
-    end
-    
-    def subscription_for(subscriber)
-      return nil if subscriber.nil?
-      Subscription.find_by_thread_id_and_subscriber_id_and_subscriber_type(self.id, subscriber.id, subscriber.class.name)
-    end
-    
+
     def is_closed?
       !closed_at.blank?
     end
-    
+
+    def active_subscribers
+      subscribers.select{|s| s.commontator_config.subscription_email_enable_proc.call(s)}
+    end
+
+    def subscription_for(subscriber)
+      return nil if subscriber.nil? || !subscriber.is_commontator
+      subscriber.subscriptions.where(:thread_id => self.id).first
+    end
+
     def is_subscribed?(subscriber)
       !subscription_for(subscriber).blank?
     end
@@ -56,29 +55,28 @@ module Commontator
       return if !subscription_for(subscriber)
       subscription_for(subscriber).mark_as_read
     end
-    
+
     def add_unread_except_for(subscriber)
       Subscription.transaction do
         subscriptions.each{|s| s.add_unread unless s.subscriber == subscriber}
       end
     end
-    
+
     def close(user = nil)
       return false if is_closed?
       self.closed_at = Time.now
       self.closer = user
       self.save!
     end
-    
+
     def reopen
       return false unless is_closed?
       self.closed_at = nil
       self.save!
     end
-    
+
     # Creates a new empty thread and assigns it to the commontable
     # The old thread is kept in the database for archival purposes
-    
     def clear(user = nil)
       return if commontable.blank?
       new_thread = Thread.new
@@ -97,10 +95,10 @@ module Commontator
       end
     end
 
-    ##########################
-    # Access control methods #
-    ##########################
-    
+    ##################
+    # Access Control #
+    ##################
+
     # Reader and poster capabilities
     def can_be_read_by?(user)
       (!commontable.blank? && \
