@@ -18,14 +18,14 @@ ActiveRecord::Schema.define(:version => 3) do
     t.integer  "creator_id"
     t.string   "editor_type"
     t.integer  "editor_id"
-    t.integer  "thread_id"
-    t.text     "body"
+    t.integer  "thread_id",                          :null => false
+    t.text     "body",               :default => "", :null => false
     t.datetime "deleted_at"
     t.integer  "cached_votes_total", :default => 0
     t.integer  "cached_votes_up",    :default => 0
     t.integer  "cached_votes_down",  :default => 0
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   add_index "commontator_comments", ["cached_votes_down"], :name => "index_commontator_comments_on_cached_votes_down"
@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(:version => 3) do
   add_index "commontator_comments", ["thread_id"], :name => "index_commontator_comments_on_thread_id"
 
   create_table "commontator_subscriptions", :force => true do |t|
-    t.string   "subscriber_type"
-    t.integer  "subscriber_id"
-    t.integer  "thread_id"
-    t.integer  "unread",          :default => 0
+    t.string   "subscriber_type",                :null => false
+    t.integer  "subscriber_id",                  :null => false
+    t.integer  "thread_id",                      :null => false
+    t.integer  "unread",          :default => 0, :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
   end

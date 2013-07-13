@@ -60,9 +60,10 @@ module Commontator
 
     def timestamp
       config = thread.config
-      (is_modified? ? "Last #{config.comment_edit_verb_past} on " : \
-        "#{config.comment_create_verb_past.capitalize} on ") + \
-        updated_at.strftime(config.timestamp_format)
+      "#{config.comment_create_verb_past.capitalize} on " + \
+        created_at.strftime(config.timestamp_format) + \
+        (is_modified? ? " | Last #{config.comment_edit_verb_past} on " + \
+          updated_at.strftime(config.timestamp_format) : '')
     end
 
     ##################
