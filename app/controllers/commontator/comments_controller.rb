@@ -51,6 +51,7 @@ module Commontator
     # PUT /comments/1
     def update
       raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
+      @comment.editor = @user
 
       respond_to do |format|
         if @comment.update_attributes(params[:comment])
@@ -68,7 +69,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
       @comment.errors.add(:base, 'This comment has already been deleted.') \
-        unless @comment.delete(@user)
+        unless @comment.delete_by(@user)
 
       respond_to do |format|
         format.html { redirect_to @thread }
@@ -81,7 +82,7 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
       @comment.errors.add(:base, 'This comment is not deleted.') \
-        unless @comment.undelete
+        unless @comment.undelete_by(@user)
 
       respond_to do |format|
         format.html { redirect_to @thread }

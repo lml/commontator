@@ -31,7 +31,7 @@
   <div class="comment_form_actions">
     <%= f.submit (comment.id.blank? ? \
                    config.comment_create_verb_present : \
-                   'update').capitalize + \
+                   config.comment_edit_verb_present).capitalize + \
           ' ' + config.comment_name %>
   </div>
   

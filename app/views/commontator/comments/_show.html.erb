@@ -12,7 +12,7 @@
     <% end %>
     &nbsp;&nbsp;
     <span id="comment_<%= comment.id.to_s %>_timestamp_span" class="comment_timestamp">
-      <%= comment.timestamp %>
+      <%= comment.timestamp %> by <%= commontator_name(comment.editor) %>
     </span>
   </span>
   

@@ -61,6 +61,10 @@ Commontator.configure do |config|
   # Default: 'posted'
   config.comment_create_verb_past = 'posted'
 
+  # Verb used when editing comments (present)
+  # Default: 'modify'
+  config.comment_edit_verb_present = 'modify'
+
   # Verb used when editing comments (past)
   # Default: 'modified'
   config.comment_edit_verb_past = 'modified'

@@ -3,11 +3,11 @@ class Install < ActiveRecord::Migration
     create_table "commontator_comments" do |t|
       t.string   "creator_type"
       t.integer  "creator_id"
+      t.string   "editor_type"
+      t.integer  "editor_id"
       t.integer  "thread_id"
       t.text     "body"
       t.datetime "deleted_at"
-      t.string   "deleter_type"
-      t.integer  "deleter_id"
       
       t.integer  "cached_votes_total", :default => 0
       t.integer  "cached_votes_up", :default => 0

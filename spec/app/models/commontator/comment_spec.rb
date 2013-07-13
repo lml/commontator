@@ -22,8 +22,8 @@ module Commontator
       
       @comment.is_modified?.must_equal false
       
-      sleep 1
       @comment.body = 'Something else'
+      @comment.editor = @user
       @comment.save!
       
       @comment.is_modified?.must_equal true
@@ -33,14 +33,14 @@ module Commontator
       user = DummyUser.new
       
       @comment.is_deleted?.must_equal false
-      @comment.deleter.must_be_nil
+      @comment.editor.must_be_nil
       
-      @comment.delete(user)
+      @comment.delete_by(user)
       
       @comment.is_deleted?.must_equal true
-      @comment.deleter.must_equal user
+      @comment.editor.must_equal user
       
-      @comment.undelete
+      @comment.undelete_by(user)
       
       @comment.is_deleted?.must_equal false
     end
@@ -50,11 +50,11 @@ module Commontator
       
       @comment.timestamp.must_equal "#{@thread.config.comment_create_verb_past.capitalize} on #{@comment.created_at.strftime(@thread.config.timestamp_format)}"
       
-      sleep 1
       @comment.body = 'Something else'
+      @comment.editor = @user
       @comment.save!
       
-      @comment.timestamp.must_equal "Last modified on #{@comment.updated_at.strftime(@thread.config.timestamp_format)}"
+      @comment.timestamp.must_equal "Last #{@thread.config.comment_edit_verb_past} on #{@comment.updated_at.strftime(@thread.config.timestamp_format)}"
     end
   end
 end

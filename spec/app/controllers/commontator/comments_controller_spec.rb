@@ -73,6 +73,7 @@ module Commontator
       assigns(:comment).errors.must_be_empty
       assigns(:comment).body.must_equal 'Something else'
       assigns(:comment).creator.must_equal @user
+      assigns(:comment).editor.must_be_nil
       assigns(:comment).thread.must_equal @thread
       
       attributes[:body] = 'Another thing'
@@ -83,6 +84,7 @@ module Commontator
       assigns(:comment).errors.must_be_empty
       assigns(:comment).body.must_equal 'Another thing'
       assigns(:comment).creator.must_equal @user
+      assigns(:comment).editor.must_be_nil
       assigns(:comment).thread.must_equal @thread
       
       attributes[:body] = 'And this too'
@@ -93,6 +95,7 @@ module Commontator
       assigns(:comment).errors.must_be_empty
       assigns(:comment).body.must_equal 'And this too'
       assigns(:comment).creator.must_equal @user
+      assigns(:comment).editor.must_be_nil
       assigns(:comment).thread.must_equal @thread
     end
     
@@ -112,6 +115,7 @@ module Commontator
       assigns(:comment).errors.must_be_empty
       assigns(:comment).body.must_equal 'Something else'
       assigns(:comment).creator.must_equal @user
+      assigns(:comment).editor.must_be_nil
       assigns(:comment).thread.must_equal @thread
       
       attributes[:body] = 'Something else'
@@ -177,11 +181,13 @@ module Commontator
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_response 403
       assigns(:comment).body.must_equal 'Something'
+      assigns(:comment).editor.must_be_nil
       
       sign_in @user
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_response 403
       assigns(:comment).body.must_equal 'Something'
+      assigns(:comment).editor.must_be_nil
       
       user2 = DummyUser.create
       user2.can_read = true
@@ -191,6 +197,7 @@ module Commontator
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_response 403
       assigns(:comment).body.must_equal 'Something'
+      assigns(:comment).editor.must_be_nil
       
       @user.can_read = true
       @user.can_edit = true
@@ -204,6 +211,7 @@ module Commontator
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_response 403
       assigns(:comment).body.must_equal 'Something'
+      assigns(:comment).editor.must_be_nil
     end
     
     it 'must update if authorized' do
@@ -215,18 +223,21 @@ module Commontator
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
+      assigns(:comment).editor.must_equal @user
       
       @user.can_read = false
       @user.can_edit = true
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
+      assigns(:comment).editor.must_equal @user
       
       @user.can_edit = false
       @user.is_admin = true
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
+      assigns(:comment).editor.must_equal @user
     end
     
     it 'wont delete unless authorized and not deleted' do
@@ -241,7 +252,7 @@ module Commontator
       assigns(:comment).is_deleted?.must_equal false
       
       @user.can_read = true
-      @comment.delete(@user).must_equal true
+      @comment.delete_by(@user).must_equal true
       put :delete, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.wont_be_empty
@@ -251,7 +262,7 @@ module Commontator
       comment2.creator = @user
       comment2.body = 'Something else'
       comment2.save!
-      @comment.undelete.must_equal true
+      @comment.undelete_by(@user).must_equal true
       put :delete, :id => @comment.id, :use_route => :commontator
       assert_response 403
       assigns(:comment).is_deleted?.must_equal false
@@ -265,7 +276,7 @@ module Commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
       assigns(:comment).is_deleted?.must_equal true
-      assigns(:comment).deleter.must_equal @user
+      assigns(:comment).editor.must_equal @user
       
       user2 = DummyUser.create
       sign_in user2
@@ -275,26 +286,26 @@ module Commontator
       comment2.body = 'Something else'
       comment2.save!
       
-      assigns(:comment).undelete.must_equal true
+      assigns(:comment).undelete_by(@user).must_equal true
       user2.can_edit = true
       put :delete, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
       assigns(:comment).is_deleted?.must_equal true
-      assigns(:comment).deleter.must_equal user2
+      assigns(:comment).editor.must_equal user2
       
-      assigns(:comment).undelete.must_equal true
+      assigns(:comment).undelete_by(@user).must_equal true
       user2.can_edit = false
       user2.is_admin = true
       put :delete, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
       assigns(:comment).is_deleted?.must_equal true
-      assigns(:comment).deleter.must_equal user2
+      assigns(:comment).editor.must_equal user2
     end
     
     it 'wont undelete unless authorized and deleted' do
-      @comment.delete(@user).must_equal true
+      @comment.delete_by(@user).must_equal true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_response 403
       assigns(:comment).is_deleted?.must_equal true
@@ -306,12 +317,16 @@ module Commontator
       assigns(:comment).is_deleted?.must_equal true
       
       @user.can_read = true
-      @comment.undelete.must_equal true
+      @comment.undelete_by(@user).must_equal true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.wont_be_empty
       
-      @comment.delete.must_equal true
+      user2 = DummyUser.create
+      user2.can_read = true
+      user2.can_edit = true
+      user2.is_admin = true
+      @comment.delete_by(user2).must_equal true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_response 403
       assigns(:comment).is_deleted?.must_equal true
@@ -321,8 +336,8 @@ module Commontator
       comment2.creator = @user
       comment2.body = 'Something else'
       comment2.save!
-      @comment.undelete.must_equal true
-      @comment.delete(@user).must_equal true
+      @comment.undelete_by(@user).must_equal true
+      @comment.delete_by(@user).must_equal true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_response 403
       assigns(:comment).is_deleted?.must_equal true
@@ -331,7 +346,7 @@ module Commontator
     it 'must undelete if authorized and deleted' do
       sign_in @user
       
-      @comment.delete(@user).must_equal true
+      @comment.delete_by(@user).must_equal true
       @user.can_read = true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
@@ -346,14 +361,14 @@ module Commontator
       comment2.body = 'Something else'
       comment2.save!
       
-      assigns(:comment).delete(@user).must_equal true
+      assigns(:comment).delete_by(@user).must_equal true
       user2.can_edit = true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:comment).errors.must_be_empty
       assigns(:comment).is_deleted?.must_equal false
       
-      assigns(:comment).delete(@user).must_equal true
+      assigns(:comment).delete_by(@user).must_equal true
       user2.can_edit = false
       user2.is_admin = true
       put :undelete, :id => @comment.id, :use_route => :commontator

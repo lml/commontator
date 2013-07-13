@@ -1,7 +1,7 @@
 module Commontator
   class Comment < ActiveRecord::Base
     belongs_to :creator, :polymorphic => true
-    belongs_to :deleter, :polymorphic => true
+    belongs_to :editor, :polymorphic => true
 
     belongs_to :thread
 
@@ -10,6 +10,8 @@ module Commontator
     attr_accessible :body
 
     validates_presence_of :creator, :on => :create
+    validates_presence_of :editor, :on => :update
+
     validates_presence_of :thread
     validates_presence_of :body
 
@@ -29,17 +31,31 @@ module Commontator
       self.class.acts_as_votable_initialized = true
     end
 
-    def vote_from(user)
+    def get_vote_by(user)
       return nil unless is_votable?
       votes.where(:voter_type => user.class.name, :voter_id => user.id).first
     end
 
     def is_modified?
-      updated_at != created_at
+      !editor.nil?
     end
 
     def is_deleted?
       !deleted_at.blank?
+    end
+
+    def delete_by(user)
+      return false if is_deleted?
+      self.deleted_at = Time.now
+      self.editor = user
+      self.save
+    end
+
+    def undelete_by(user)
+      return false unless is_deleted?
+      self.deleted_at = nil
+      self.editor = user
+      self.save
     end
 
     def timestamp
@@ -47,19 +63,6 @@ module Commontator
       (is_modified? ? "Last #{config.comment_edit_verb_past} on " : \
         "#{config.comment_create_verb_past.capitalize} on ") + \
         updated_at.strftime(config.timestamp_format)
-    end
-
-    def delete(user = nil)
-      return false if is_deleted?
-      self.deleted_at = Time.now
-      self.deleter = user
-      self.save!
-    end
-
-    def undelete
-      return false unless is_deleted?
-      self.deleted_at = nil
-      self.save!
     end
 
     ##################
@@ -86,7 +89,7 @@ module Commontator
     def can_be_deleted_by?(user)
       (!thread.is_closed? &&\
         ((user == creator && thread.config.can_delete_own_comments && \
-        thread.can_be_read_by?(user) && (!is_deleted? || deleter == user)) &&\
+        thread.can_be_read_by?(user) && (!is_deleted? || editor == user)) &&\
         (thread.comments.last == self || thread.config.can_delete_old_comments))) ||\
         thread.can_be_edited_by?(user)
     end
