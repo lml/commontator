@@ -6,7 +6,7 @@ class Install < ActiveRecord::Migration
       t.string   "editor_type"
       t.integer  "editor_id"
       t.integer  "thread_id", :null => false
-      t.text     "body", :null => false, :default => ''
+      t.text     "body", :null => false
       t.datetime "deleted_at"
       
       t.integer  "cached_votes_total", :default => 0
