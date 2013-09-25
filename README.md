@@ -129,8 +129,7 @@ And enabling the relevant option in commontator's initializer:
 config.can_vote_on_comments = true
 ```
 
-Note: acts_as_votable is currently incompatible with the protected_attributes gem
-if config.active_record.whitelist_attributes is set to true
+Note that acts_as_votable is currently incompatible with the protected_attributes gem if config.active_record.whitelist_attributes is set to true.
 
 ## Browser Support
 
