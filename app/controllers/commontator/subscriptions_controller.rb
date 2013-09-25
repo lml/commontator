@@ -1,9 +1,9 @@
 module Commontator
-  class SubscriptionsController < ApplicationController
+  class SubscriptionsController < Commontator::ApplicationController
     before_filter :get_thread
 
-    # POST /1/subscribe
-    def create
+    # PATCH /threads/1/subscribe
+    def subscribe
       raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
       @thread.errors.add(:subscription, "You are already subscribed to this thread") \
@@ -16,8 +16,8 @@ module Commontator
 
     end
 
-    # POST /1/unsubscribe
-    def destroy
+    # PATCH /threads/1/unsubscribe
+    def unsubscribe
       raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
       @thread.errors.add(:subscription, "You are not subscribed to this thread") \

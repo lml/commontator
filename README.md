@@ -10,13 +10,13 @@ There are 4 steps you must follow to install commontator:
 
 1. Gem
 
-  Add this line to your application's Gemfile (for Rails 4):
+  Add this line to your application's Gemfile (for Rails 4+):
 
   ```ruby
   gem 'commontator', '~> 4.0.0'
   ```
 
-  If you are still using rails 3.x, use Commontator version 2.0.1 instead.
+  If you are still using rails 3, use Commontator version 2.0.1 instead.
 
   And then execute:
 
@@ -114,6 +114,23 @@ Follow the steps below to add commontator to your models and views:
   You can specify the name of the method that determines which users are allowed to read which threads in the initializer.
 
 That's it! Commontator is now ready for use.
+
+## Voting
+
+You can allow users to vote on each others' comments by adding the acts_as_votable gem to your gemfile:
+
+```ruby
+gem 'acts_as_votable'
+```
+
+And enabling the relevant option in commontator's initializer:
+
+```ruby
+config.can_vote_on_comments = true
+```
+
+Note: acts_as_votable is currently incompatible with the protected_attributes gem
+if config.active_record.whitelist_attributes is set to true
 
 ## Browser Support
 

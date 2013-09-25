@@ -1,10 +1,10 @@
 module Commontator
-  class CommentsController < ApplicationController
+  class CommentsController < Commontator::ApplicationController
     before_filter :get_thread, :only => [:new, :create]
     before_filter :get_comment_and_thread, :except => [:new, :create]
     before_filter :set_commontable_url, :only => :create
 
-    # GET /1/comments/new
+    # GET /threads/1/comments/new
     def new
       @comment = Comment.new
       @comment.thread = @thread
@@ -19,9 +19,10 @@ module Commontator
      
     end
 
-    # POST /1/comments
+    # POST /threads/1/comments
     def create
-      @comment = Comment.new(comment_params)
+      @comment = Comment.new
+      @comment.body = params[:comment].nil? ? nil : params[:comment][:body]
       @comment.thread = @thread
       @comment.creator = @user
       
@@ -54,13 +55,14 @@ module Commontator
       end
     end
 
-    # PUT /comments/1
+    # PATCH /comments/1
     def update
       raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
+      @comment.body = params[:comment].nil? ? nil : params[:comment][:body]
       @comment.editor = @user
 
       respond_to do |format|
-        if @comment.update_attributes(comment_params)
+        if @comment.save
           format.html { redirect_to @thread }
           format.js
         else
@@ -70,7 +72,7 @@ module Commontator
       end
     end
 
-    # PUT /comments/1/delete
+    # PATCH /comments/1/delete
     def delete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
@@ -83,7 +85,7 @@ module Commontator
       end
     end
     
-    # PUT /comments/1/undelete
+    # PATCH /comments/1/undelete
     def undelete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
@@ -96,7 +98,7 @@ module Commontator
       end
     end
     
-    # PUT /comments/1/upvote
+    # PATCH /comments/1/upvote
     def upvote
       raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
       
@@ -108,7 +110,7 @@ module Commontator
       end
     end
     
-    # PUT /comments/1/downvote
+    # PATCH /comments/1/downvote
     def downvote
       raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
       
@@ -120,7 +122,7 @@ module Commontator
       end
     end
     
-    # PUT /comments/1/unvote
+    # PATCH /comments/1/unvote
     def unvote
       raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
       
@@ -137,10 +139,6 @@ module Commontator
     def get_comment_and_thread
       @comment = Comment.find(params[:id])
       @thread = @comment.thread
-    end
-
-    def comment_params
-      params.require(:comment).permit(:body)
     end
   end
 end

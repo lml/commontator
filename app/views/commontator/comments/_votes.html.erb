@@ -10,7 +10,7 @@
   <span id="comment_<%= comment.id %>_upvote_span" class="comment_upvote">
     <% if can_vote && (vote.blank? || !vote.vote_flag) %>
       <%= form_tag commontator.upvote_comment_path(comment),
-            :method => :put,
+            :method => :patch,
             :remote => true do %>
         <%= image_submit_tag "commontator/upvote.png",
               :onmouseover => "this.src='/assets/commontator/upvote_hover.png'",
@@ -18,7 +18,7 @@
       <% end %>
     <% elsif can_vote %>
       <%= form_tag commontator.unvote_comment_path(comment),
-            :method => :put,
+            :method => :patch,
             :remote => true do %>
         <%= image_submit_tag "commontator/upvote_hover.png",
               :onmouseover => "this.src='/assets/commontator/upvote.png'",
@@ -36,7 +36,7 @@
   <span id="comment_<%= comment.id %>_downvote_span" class="comment_downvote">
     <% if can_vote && (vote.blank? || vote.vote_flag) %>
       <%= form_tag commontator.downvote_comment_path(comment),
-            :method => :put,
+            :method => :patch,
             :remote => true do %>
         <%= image_submit_tag "commontator/downvote.png",
               :onmouseover => "this.src='/assets/commontator/downvote_hover.png'",
@@ -44,7 +44,7 @@
       <% end %>
     <% elsif can_vote %>
       <%= form_tag commontator.unvote_comment_path(comment),
-            :method => :put,
+            :method => :patch,
             :remote => true do %>
         <%= image_submit_tag "commontator/downvote_hover.png",
               :onmouseover => "this.src='/assets/commontator/downvote.png'",

@@ -23,7 +23,7 @@ Commontator.configure do |config|
   config.user_missing_name = 'Anonymous'
 
   # Whether the comment creator's name is clickable in the comment view
-  # If enabled, the link will point to the comment creator's show page
+  # If enabled, the link will point to the comment creator's 'show' page
   # Default: false
   config.user_name_clickable = false
 

@@ -1,22 +1,22 @@
 Commontator::Engine.routes.draw do
   resources :threads, :only => [:show] do
     resources :comments, :except => [:index, :destroy], :shallow => true do
-      put 'delete', :on => :member
-      put 'undelete', :on => :member
-      
-      put 'upvote', :on => :member
-      put 'downvote', :on => :member
-      put 'unvote', :on => :member
+      member do
+        patch 'delete'
+        patch 'undelete'
+        
+        patch 'upvote'
+        patch 'downvote'
+        patch 'unvote'
+      end
     end
     
-    put 'close', :on => :member
-    put 'reopen', :on => :member
-    
-    put 'subscribe', :to => 'subscriptions#create',
-                     :as => 'subscribe',
-                     :on => :member
-    put 'unsubscribe', :to => 'subscriptions#destroy',
-                       :as => 'unsubscribe',
-                       :on => :member
+    member do
+      patch 'close'
+      patch 'reopen'
+      
+      patch 'subscribe', :to => 'subscriptions#subscribe'
+      patch 'unsubscribe', :to => 'subscriptions#unsubscribe'
+    end
   end
 end

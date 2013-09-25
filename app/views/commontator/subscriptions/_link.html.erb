@@ -10,7 +10,7 @@
             :confirm => (is_subscribed ? \
                           "Are you sure you want to unsubscribe from this thread?" : \
                           nil),
-            :method => :put,
+            :method => :patch,
             :id => "thread_#{thread.id.to_s}_#{sub_string}_link",
             :class => "thread_#{sub_string}_link",
             :remote => true %>

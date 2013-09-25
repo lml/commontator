@@ -35,23 +35,23 @@ module Commontator
     end
     
     it 'wont close unless authorized and open' do
-      put :close, :id => @thread.id, :use_route => :commontator
+      patch :close, :id => @thread.id, :use_route => :commontator
       assert_response 403
       assigns(:thread).is_closed?.must_equal false
       
       sign_in @user
-      put :close, :id => @thread.id, :use_route => :commontator
+      patch :close, :id => @thread.id, :use_route => :commontator
       assert_response 403
       assigns(:thread).is_closed?.must_equal false
       
       @user.can_read = true
-      put :close, :id => @thread.id, :use_route => :commontator
+      patch :close, :id => @thread.id, :use_route => :commontator
       assert_response 403
       assigns(:thread).is_closed?.must_equal false
       
       @user.can_edit = true
       @thread.close.must_equal true
-      put :close, :id => @thread.id, :use_route => :commontator
+      patch :close, :id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.wont_be_empty
     end
@@ -60,7 +60,7 @@ module Commontator
       sign_in @user
       
       @user.can_edit = true
-      put :close, :id => @thread.id, :use_route => :commontator
+      patch :close, :id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       assigns(:thread).is_closed?.must_equal true
@@ -69,7 +69,7 @@ module Commontator
       assigns(:thread).reopen.must_equal true
       @user.can_edit = false
       @user.is_admin = true
-      put :close, :id => @thread.id, :use_route => :commontator
+      patch :close, :id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       assigns(:thread).is_closed?.must_equal true
@@ -78,23 +78,23 @@ module Commontator
     
     it 'wont reopen unless authorized and closed' do
       @thread.close.must_equal true
-      put :reopen, :id => @thread.id, :use_route => :commontator
+      patch :reopen, :id => @thread.id, :use_route => :commontator
       assert_response 403
       assigns(:thread).is_closed?.must_equal true
       
       sign_in @user
-      put :reopen, :id => @thread.id, :use_route => :commontator
+      patch :reopen, :id => @thread.id, :use_route => :commontator
       assert_response 403
       assigns(:thread).is_closed?.must_equal true
       
       @user.can_read = true
-      put :reopen, :id => @thread.id, :use_route => :commontator
+      patch :reopen, :id => @thread.id, :use_route => :commontator
       assert_response 403
       assigns(:thread).is_closed?.must_equal true
       
       @thread.reopen.must_equal true
       @user.can_edit = true
-      put :reopen, :id => @thread.id, :use_route => :commontator
+      patch :reopen, :id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.wont_be_empty
     end
@@ -104,7 +104,7 @@ module Commontator
       
       @thread.close.must_equal true
       @user.can_edit = true
-      put :reopen, :id => @thread.id, :use_route => :commontator
+      patch :reopen, :id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       assigns(:thread).is_closed?.must_equal false
@@ -112,7 +112,7 @@ module Commontator
       assigns(:thread).close.must_equal true
       @user.can_edit = false
       @user.is_admin = true
-      put :reopen, :id => @thread.id, :use_route => :commontator
+      patch :reopen, :id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       assigns(:thread).is_closed?.must_equal false

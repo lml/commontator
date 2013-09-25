@@ -1,5 +1,5 @@
 module Commontator
-  class ThreadsController < ApplicationController
+  class ThreadsController < Commontator::ApplicationController
     before_filter :get_thread
     before_filter :set_commontable_url, :only => :show
 
@@ -13,7 +13,7 @@ module Commontator
       end
     end
     
-    # PUT /threads/1/close
+    # PATCH /threads/1/close
     def close
       raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
 
@@ -26,7 +26,7 @@ module Commontator
       end
     end
     
-    # PUT /threads/1/reopen
+    # PATCH /threads/1/reopen
     def reopen
       raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
 

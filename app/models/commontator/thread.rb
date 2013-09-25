@@ -41,8 +41,10 @@ module Commontator
 
     def subscribe(subscriber)
       return false if is_subscribed?(subscriber) || !subscriber.is_commontator
-      subscription = Subscription.create(
-        :subscriber => subscriber, :thread => self)
+      subscription = Subscription.new
+      subscription.subscriber = subscriber
+      subscription.thread = self
+      subscription.save
     end
 
     def unsubscribe(subscriber)
