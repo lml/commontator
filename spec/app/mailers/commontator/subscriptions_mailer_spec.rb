@@ -18,7 +18,7 @@ module Commontator
     it 'must create deliverable mail' do
       mail = SubscriptionsMailer.comment_created(@comment, @recipients)
       mail.must_be_instance_of Mail::Message
-      mail.to.must_be_nil
+      mail.to.must_equal 'Undisclosed Recipients'
       mail.cc.must_be_nil
       mail.bcc.size.must_equal 1
       mail.bcc.must_include @user2.email
