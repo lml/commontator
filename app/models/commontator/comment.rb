@@ -2,16 +2,12 @@ module Commontator
   class Comment < ActiveRecord::Base
     belongs_to :creator, :polymorphic => true
     belongs_to :editor, :polymorphic => true
-
     belongs_to :thread
 
     has_one :commontable, :through => :thread
 
-    attr_accessible :body
-
     validates_presence_of :creator, :on => :create
     validates_presence_of :editor, :on => :update
-
     validates_presence_of :thread
     validates_presence_of :body
 
@@ -103,6 +99,4 @@ module Commontator
       can_be_voted_on? && thread.can_be_read_by?(user) && user != creator
     end
   end
-
-  CommentObserver.instance
 end

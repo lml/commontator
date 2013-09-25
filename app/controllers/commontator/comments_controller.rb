@@ -21,7 +21,7 @@ module Commontator
 
     # POST /1/comments
     def create
-      @comment = Comment.new(params[:comment])
+      @comment = Comment.new(comment_params)
       @comment.thread = @thread
       @comment.creator = @user
       
@@ -29,6 +29,12 @@ module Commontator
       
       respond_to do |format|
         if @comment.save
+          @thread.subscribe(@user) if @thread.config.auto_subscribe_on_comment
+          @thread.add_unread_except_for(@user)
+          recipients = @thread.active_subscribers.reject{|s| s == @user}
+          SubscriptionsMailer.comment_created(@comment, recipients).deliver \
+            unless recipients.empty?
+
           format.html { redirect_to @thread }
           format.js
         else
@@ -54,7 +60,7 @@ module Commontator
       @comment.editor = @user
 
       respond_to do |format|
-        if @comment.update_attributes(params[:comment])
+        if @comment.update_attributes(comment_params)
           format.html { redirect_to @thread }
           format.js
         else
@@ -131,6 +137,10 @@ module Commontator
     def get_comment_and_thread
       @comment = Comment.find(params[:id])
       @thread = @comment.thread
+    end
+
+    def comment_params
+      params.require(:comment).permit(:body)
     end
   end
 end

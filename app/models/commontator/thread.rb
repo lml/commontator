@@ -1,17 +1,12 @@
 module Commontator
   class Thread < ActiveRecord::Base
     belongs_to :closer, :polymorphic => true
-
     belongs_to :commontable, :polymorphic => true
 
     has_many :comments, :dependent => :destroy
-
     has_many :subscriptions, :dependent => :destroy
 
-    attr_accessible :is_closed
-
     validates_presence_of :commontable, :unless => :is_closed?
-
     validates_uniqueness_of :commontable_id, :scope => :commontable_type, :allow_nil => true
 
     def config

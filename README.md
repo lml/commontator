@@ -10,11 +10,13 @@ There are 4 steps you must follow to install commontator:
 
 1. Gem
 
-  Add this line to your application's Gemfile:
+  Add this line to your application's Gemfile (for Rails 4):
 
   ```ruby
-  gem 'commontator', '~> 2.0.1'
+  gem 'commontator', '~> 4.0.0'
   ```
+
+  If you are still using rails 3.x, use Commontator version 2.0.1 instead.
 
   And then execute:
 

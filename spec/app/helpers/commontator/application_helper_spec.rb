@@ -1,4 +1,4 @@
-require 'minitest_helper'
+require 'test_helper'
 
 module Commontator
   describe ApplicationHelper do

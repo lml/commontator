@@ -1,4 +1,4 @@
-require 'minitest_helper'
+require 'test_helper'
 require 'acts_as_votable'
 
 module Commontator
