@@ -2,7 +2,7 @@ module Commontator
   class SubscriptionsController < Commontator::ApplicationController
     before_filter :get_thread
 
-    # PATCH /threads/1/subscribe
+    # PUT /threads/1/subscribe
     def subscribe
       raise SecurityTransgression unless @thread.can_subscribe?(@user)
 
@@ -16,7 +16,7 @@ module Commontator
 
     end
 
-    # PATCH /threads/1/unsubscribe
+    # PUT /threads/1/unsubscribe
     def unsubscribe
       raise SecurityTransgression unless @thread.can_subscribe?(@user)
 

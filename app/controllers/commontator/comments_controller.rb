@@ -55,7 +55,7 @@ module Commontator
       end
     end
 
-    # PATCH /comments/1
+    # PUT /comments/1
     def update
       raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
       @comment.body = params[:comment].nil? ? nil : params[:comment][:body]
@@ -72,7 +72,7 @@ module Commontator
       end
     end
 
-    # PATCH /comments/1/delete
+    # PUT /comments/1/delete
     def delete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
@@ -85,7 +85,7 @@ module Commontator
       end
     end
     
-    # PATCH /comments/1/undelete
+    # PUT /comments/1/undelete
     def undelete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
@@ -98,7 +98,7 @@ module Commontator
       end
     end
     
-    # PATCH /comments/1/upvote
+    # PUT /comments/1/upvote
     def upvote
       raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
       
@@ -110,7 +110,7 @@ module Commontator
       end
     end
     
-    # PATCH /comments/1/downvote
+    # PUT /comments/1/downvote
     def downvote
       raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
       
@@ -122,7 +122,7 @@ module Commontator
       end
     end
     
-    # PATCH /comments/1/unvote
+    # PUT /comments/1/unvote
     def unvote
       raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
       

@@ -7,19 +7,19 @@ module Commontator
     end
     
     it 'wont subscribe unless authorized' do
-      patch :subscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :subscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_response 403
       @thread.subscription_for(nil).must_be_nil
       @thread.subscription_for(@user).must_be_nil
       
       sign_in @user
-      patch :subscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :subscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_response 403
       @thread.subscription_for(@user).must_be_nil
       
       @thread.subscribe(@user)
       @user.can_read = true
-      patch :subscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :subscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.wont_be_empty
     end
@@ -28,7 +28,7 @@ module Commontator
       sign_in @user
       
       @user.can_read = true
-      patch :subscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :subscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       @thread.subscription_for(@user).wont_be_nil
@@ -36,7 +36,7 @@ module Commontator
       @thread.unsubscribe(@user)
       @user.can_read = false
       @user.can_edit = true
-      patch :subscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :subscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       @thread.subscription_for(@user).wont_be_nil
@@ -44,7 +44,7 @@ module Commontator
       @thread.unsubscribe(@user)
       @user.can_edit = false
       @user.is_admin = true
-      patch :subscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :subscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       @thread.subscription_for(@user).wont_be_nil
@@ -52,19 +52,19 @@ module Commontator
     
     it 'wont unsubscribe unless authorized' do
       @thread.subscribe(@user)
-      patch :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_response 403
       @thread.subscription_for(nil).must_be_nil
       @thread.subscription_for(@user).wont_be_nil
       
       sign_in @user
-      patch :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_response 403
       @thread.subscription_for(@user).wont_be_nil
       
       @thread.unsubscribe(@user)
       @user.can_read = true
-      patch :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.wont_be_empty
     end
@@ -74,7 +74,7 @@ module Commontator
       
       @thread.subscribe(@user)
       @user.can_read = true
-      patch :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       @thread.subscription_for(@user).must_be_nil
@@ -82,7 +82,7 @@ module Commontator
       @thread.subscribe(@user)
       @user.can_read = false
       @user.can_edit = true
-      patch :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       @thread.subscription_for(@user).must_be_nil
@@ -90,7 +90,7 @@ module Commontator
       @thread.subscribe(@user)
       @user.can_edit = false
       @user.is_admin = true
-      patch :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
+      put :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_redirected_to @thread
       assigns(:thread).errors.must_be_empty
       @thread.subscription_for(@user).must_be_nil

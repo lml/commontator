@@ -13,7 +13,7 @@ module Commontator
       end
     end
     
-    # PATCH /threads/1/close
+    # PUT /threads/1/close
     def close
       raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
 
@@ -26,7 +26,7 @@ module Commontator
       end
     end
     
-    # PATCH /threads/1/reopen
+    # PUT /threads/1/reopen
     def reopen
       raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
 
