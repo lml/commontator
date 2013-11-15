@@ -36,8 +36,7 @@ Commontator.configure do |config|
   config.user_name_method = ''
 
   # Proc called with user as argument that returns true if the user is an admin
-  # Admins can always delete other users' comments and close threads
-  # Note: user can be nil
+  # Admins can delete other users' comments and close threads
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
   
@@ -125,8 +124,8 @@ Commontator.configure do |config|
   # Default: true
   config.closed_threads_are_readable = true
 
-  # Whether comments deleted by moderators can be seen
-  # (the content will still be hidden)
+  # Whether to show that comments deleted by a moderator actually existed
+  # (the content will be hidden either way)
   # Default: true
   config.deleted_comments_are_visible = true
 
@@ -136,15 +135,14 @@ Commontator.configure do |config|
 
   # Proc called with thread and user as arguments
   # If it returns true, that user is a moderator for that particular thread
-  # and is given admin-like capabilities for that thread only
-  # Note: user can be nil
+  # and can delete users' comments in the thread or close it
   # Default: lambda { |thread, user| false } (no thread-specific moderators)
   config.can_edit_thread_proc = lambda { |thread, user| false }
 
   # Proc called with thread and user as arguments
   # If it returns true, that user is allowed to read that thread
-  # Note: user can be nil
-  # Default: lambda { |thread, user| true } (no read restrictions)
+  # Note: user can be false or nil
+  # Default: lambda { |thread, user| true } (anyone can read threads even if not logged in)
   config.can_read_thread_proc = lambda { |thread, user| true }
 
   # Proc that returns the commontable url that contains the thread

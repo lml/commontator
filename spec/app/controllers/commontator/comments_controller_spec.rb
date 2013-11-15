@@ -13,7 +13,7 @@ module Commontator
       @comment.is_votable?.must_equal true
     end
     
-    it 'wont get new unless authorized' do
+    it "won't get new unless authorized" do
       get :new, :thread_id => @thread.id, :use_route => :commontator
       assert_response 403
       
@@ -43,7 +43,7 @@ module Commontator
       assigns(:comment).errors.must_be_empty
     end
     
-    it 'wont create unless authorized' do
+    it "won't create unless authorized" do
       attributes = Hash.new
       attributes[:body] = 'Something else'
       
@@ -99,7 +99,7 @@ module Commontator
       assigns(:comment).thread.must_equal @thread
     end
     
-    it 'wont create if double posting' do
+    it "won't create if double posting" do
       sign_in @user
       @user.can_read = true
       attributes = Hash.new
@@ -124,7 +124,7 @@ module Commontator
       assigns(:comment).errors.wont_be_empty
     end
     
-    it 'wont edit unless authorized' do
+    it "won't edit unless authorized" do
       get :edit, :id => @comment.id, :use_route => :commontator
       assert_response 403
       
@@ -174,20 +174,22 @@ module Commontator
       assigns(:comment).errors.must_be_empty
     end
     
-    it 'wont update unless authorized' do
+    it "won't update unless authorized" do
       attributes = Hash.new
       attributes[:body] = 'Something else'
       
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_response 403
-      assigns(:comment).body.must_equal 'Something'
-      assigns(:comment).editor.must_be_nil
+      @comment.reload
+      @comment.body.must_equal 'Something'
+      @comment.editor.must_be_nil
       
       sign_in @user
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_response 403
-      assigns(:comment).body.must_equal 'Something'
-      assigns(:comment).editor.must_be_nil
+      @comment.reload
+      @comment.body.must_equal 'Something'
+      @comment.editor.must_be_nil
       
       user2 = DummyUser.create
       user2.can_read = true
@@ -196,8 +198,9 @@ module Commontator
       sign_in user2
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
       assert_response 403
-      assigns(:comment).body.must_equal 'Something'
-      assigns(:comment).editor.must_be_nil
+      @comment.reload
+      @comment.body.must_equal 'Something'
+      @comment.editor.must_be_nil
       
       @user.can_read = true
       @user.can_edit = true
@@ -209,9 +212,9 @@ module Commontator
       comment2.body = 'Something else'
       comment2.save!
       put :update, :id => @comment.id, :comment => attributes, :use_route => :commontator
-      assert_response 403
-      assigns(:comment).body.must_equal 'Something'
-      assigns(:comment).editor.must_be_nil
+      @comment.reload
+      @comment.body.must_equal 'Something'
+      @comment.editor.must_be_nil
     end
     
     it 'must update if authorized' do
@@ -240,16 +243,18 @@ module Commontator
       assigns(:comment).editor.must_equal @user
     end
     
-    it 'wont delete unless authorized and not deleted' do
+    it "won't delete unless authorized and not deleted" do
       put :delete, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).is_deleted?.must_equal false
+      @comment.reload
+      @comment.is_deleted?.must_equal false
       
       sign_in @user
       
       put :delete, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).is_deleted?.must_equal false
+      @comment.reload
+      @comment.is_deleted?.must_equal false
       
       @user.can_read = true
       @comment.delete_by(@user).must_equal true
@@ -265,7 +270,8 @@ module Commontator
       @comment.undelete_by(@user).must_equal true
       put :delete, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).is_deleted?.must_equal false
+      @comment.reload
+      @comment.is_deleted?.must_equal false
     end
     
     it 'must delete if authorized and not deleted' do
@@ -304,17 +310,19 @@ module Commontator
       assigns(:comment).editor.must_equal user2
     end
     
-    it 'wont undelete unless authorized and deleted' do
+    it "won't undelete unless authorized and deleted" do
       @comment.delete_by(@user).must_equal true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).is_deleted?.must_equal true
+      @comment.reload
+      @comment.is_deleted?.must_equal true
       
       sign_in @user
       
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).is_deleted?.must_equal true
+      @comment.reload
+      @comment.is_deleted?.must_equal true
       
       @user.can_read = true
       @comment.undelete_by(@user).must_equal true
@@ -329,7 +337,8 @@ module Commontator
       @comment.delete_by(user2).must_equal true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).is_deleted?.must_equal true
+      @comment.reload
+      @comment.is_deleted?.must_equal true
       
       comment2 = Comment.new
       comment2.thread = @thread
@@ -340,7 +349,8 @@ module Commontator
       @comment.delete_by(@user).must_equal true
       put :undelete, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).is_deleted?.must_equal true
+      @comment.reload
+      @comment.is_deleted?.must_equal true
     end
     
     it 'must undelete if authorized and deleted' do
@@ -377,25 +387,28 @@ module Commontator
       assigns(:comment).is_deleted?.must_equal false
     end
     
-    it 'wont upvote if not authorized' do
+    it "won't upvote unless authorized" do
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.must_be_empty
+      @comment.downvotes.must_be_empty
       
       sign_in @user
       @user.can_read = true
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.must_be_empty
+      @comment.downvotes.must_be_empty
       
       user2 = DummyUser.create
       sign_in user2
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.must_be_empty
+      @comment.downvotes.must_be_empty
     end
     
     it 'must upvote if authorized' do
@@ -421,25 +434,28 @@ module Commontator
       assigns(:comment).downvotes.must_be_empty
     end
     
-    it 'wont downvote if not authorized' do
+    it "won't downvote unless authorized" do
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.must_be_empty
+      @comment.downvotes.must_be_empty
       
       sign_in @user
       @user.can_read = true
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.must_be_empty
+      @comment.downvotes.must_be_empty
       
       user2 = DummyUser.create
       sign_in user2
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.must_be_empty
+      @comment.downvotes.must_be_empty
     end
     
     it 'must downvote if authorized' do
@@ -465,27 +481,30 @@ module Commontator
       assigns(:comment).downvotes.count.must_equal 1
     end
     
-    it 'wont unvote if not authorized' do
+    it "won't unvote unless authorized" do
       @comment.upvote_from(@user).must_equal true
       
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.count.must_equal 1
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.count.must_equal 1
+      @comment.downvotes.must_be_empty
       
       sign_in @user
       @user.can_read = true
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.count.must_equal 1
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.count.must_equal 1
+      @comment.downvotes.must_be_empty
       
       user2 = DummyUser.create
       sign_in user2
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
-      assigns(:comment).upvotes.count.must_equal 1
-      assigns(:comment).downvotes.must_be_empty
+      @comment.reload
+      @comment.upvotes.count.must_equal 1
+      @comment.downvotes.must_be_empty
     end
     
     it 'must unvote if authorized' do
@@ -511,7 +530,7 @@ module Commontator
       assigns(:comment).downvotes.must_be_empty
     end
 
-    it 'wont send mail if recipients empty' do
+    it "won't send mail if recipients empty" do
       if defined?(CommentsController::SubscriptionsMailer)
         CommentsController::SubscriptionsMailer.__send__(:initialize)
       else

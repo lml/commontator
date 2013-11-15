@@ -6,7 +6,7 @@ module Commontator
       setup_controller_spec
     end
     
-    it 'wont show unless authorized' do
+    it "won't show unless authorized" do
       get :show, :id => @thread.id, :use_route => :commontator
       assert_response 403
       
@@ -34,20 +34,23 @@ module Commontator
       assert_redirected_to commontable_path
     end
     
-    it 'wont close unless authorized and open' do
+    it "won't close unless authorized and open" do
       put :close, :id => @thread.id, :use_route => :commontator
       assert_response 403
-      assigns(:thread).is_closed?.must_equal false
+      @thread.reload
+      @thread.is_closed?.must_equal false
       
       sign_in @user
       put :close, :id => @thread.id, :use_route => :commontator
       assert_response 403
-      assigns(:thread).is_closed?.must_equal false
+      @thread.reload
+      @thread.is_closed?.must_equal false
       
       @user.can_read = true
       put :close, :id => @thread.id, :use_route => :commontator
       assert_response 403
-      assigns(:thread).is_closed?.must_equal false
+      @thread.reload
+      @thread.is_closed?.must_equal false
       
       @user.can_edit = true
       @thread.close.must_equal true
@@ -76,21 +79,24 @@ module Commontator
       assigns(:thread).closer.must_equal @user
     end
     
-    it 'wont reopen unless authorized and closed' do
+    it "won't reopen unless authorized and closed" do
       @thread.close.must_equal true
       put :reopen, :id => @thread.id, :use_route => :commontator
       assert_response 403
-      assigns(:thread).is_closed?.must_equal true
+      @thread.reload
+      @thread.is_closed?.must_equal true
       
       sign_in @user
       put :reopen, :id => @thread.id, :use_route => :commontator
       assert_response 403
-      assigns(:thread).is_closed?.must_equal true
+      @thread.reload
+      @thread.is_closed?.must_equal true
       
       @user.can_read = true
       put :reopen, :id => @thread.id, :use_route => :commontator
       assert_response 403
-      assigns(:thread).is_closed?.must_equal true
+      @thread.reload
+      @thread.is_closed?.must_equal true
       
       @thread.reopen.must_equal true
       @user.can_edit = true

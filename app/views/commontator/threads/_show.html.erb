@@ -47,16 +47,14 @@
 <br/>
 
 <% if thread.is_closed? %>
-
   <p><%= thread.config.comment_name.capitalize.pluralize %> cannot be <%= thread.config.comment_create_verb_past %> at this time.</p>
-
+<% elsif !user %>
+  <p>You must log in before you can <%= thread.config.comment_create_verb_present %> a <%= thread.config.comment_name %> to this thread.</p>
 <% else %>
-
   <div id="thread_<%= thread.id %>_new_comment_div" class="thread_new_comment"></div>
 
   <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
     <%= link_to thread.config.comment_create_verb_present.capitalize + ' ' + thread.config.comment_name,
         commontator.new_thread_comment_path(thread), :remote => true %>
   </span>
-  
 <% end %>

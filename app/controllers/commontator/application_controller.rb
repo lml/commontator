@@ -1,6 +1,6 @@
 module Commontator
   class ApplicationController < ActionController::Base
-    before_filter :get_user
+    before_filter :get_user, :ensure_user
     
     cattr_accessor :commontable_url
     
@@ -10,7 +10,10 @@ module Commontator
     
     def get_user
       @user = self.send Commontator.current_user_method	
-      raise SecurityTransgression unless (@user.nil? || @user.is_commontator)
+    end
+
+    def ensure_user
+      raise SecurityTransgression unless (@user && @user.is_commontator)
     end
     
     def get_thread

@@ -9,14 +9,14 @@ module Commontator
     end
     
     def commontator_name(user)
-      return Commontator.user_missing_name if user.nil?
+      return Commontator.user_missing_name unless user
       config = user.commontator_config
       config.user_name_method.blank? ? config.user_missing_name : \
         user.send(config.user_name_method)
     end
     
     def commontator_email(user)
-      return '' if user.nil?
+      return '' unless user
       config = user.commontator_config
       config.user_email_method.blank? ? '' : user.send(config.user_email_method)
     end

@@ -6,7 +6,7 @@ module Commontator
       setup_controller_spec
     end
     
-    it 'wont subscribe unless authorized' do
+    it "won't subscribe unless authorized" do
       put :subscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_response 403
       @thread.subscription_for(nil).must_be_nil
@@ -50,7 +50,7 @@ module Commontator
       @thread.subscription_for(@user).wont_be_nil
     end
     
-    it 'wont unsubscribe unless authorized' do
+    it "won't unsubscribe unless authorized" do
       @thread.subscribe(@user)
       put :unsubscribe, :thread_id => @thread.id, :use_route => :commontator
       assert_response 403
@@ -69,7 +69,7 @@ module Commontator
       assigns(:thread).errors.wont_be_empty
     end
     
-    it 'must destroy if authorized' do
+    it 'must unsubscribe if authorized' do
       sign_in @user
       
       @thread.subscribe(@user)

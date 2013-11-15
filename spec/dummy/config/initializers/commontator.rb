@@ -1,7 +1,6 @@
 # Change the settings below to suit your needs
 # All settings are initially set to their default values
 Commontator.configure do |config|
-
   # Engine Configuration
 
   # Name of the ApplicationController helper method that returns the current user
@@ -24,7 +23,7 @@ Commontator.configure do |config|
   config.user_missing_name = 'Anonymous'
 
   # Whether the comment creator's name is clickable in the comment view
-  # If enabled, the link will point to the comment creator's show page
+  # If enabled, the link will point to the comment creator's 'show' page
   # Default: false
   config.user_name_clickable = false
 
@@ -37,8 +36,7 @@ Commontator.configure do |config|
   config.user_name_method = ''
 
   # Proc called with user as argument that returns true if the user is an admin
-  # Admins can always delete other users' comments and close threads
-  # Note: user can be nil
+  # Admins can delete other users' comments and close threads
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| user.try(:is_admin) }
   
@@ -62,9 +60,17 @@ Commontator.configure do |config|
   # Default: 'posted'
   config.comment_create_verb_past = 'posted'
 
+  # Verb used when editing comments (present)
+  # Default: 'modify'
+  config.comment_edit_verb_present = 'modify'
+
+  # Verb used when editing comments (past)
+  # Default: 'modified'
+  config.comment_edit_verb_past = 'modified'
+
   # What a commontable is called in your application
   # If you have multiple commontable models,
-  # you might want to pass this configuration value
+  # you will want to pass this configuration value
   # as an argument to acts_as_commontable in each one
   # Default: 'commontable'
   config.commontable_name = 'dummy model'
@@ -114,12 +120,12 @@ Commontator.configure do |config|
   # Default: false
   config.comments_ordered_by_votes = false
 
-  # Whether users can read threads closed by admins
+  # Whether users can read threads closed by moderators
   # Default: true
   config.closed_threads_are_readable = true
 
-  # Whether comments deleted by admins can be seen
-  # (the content will still be hidden)
+  # Whether to show that comments deleted by a moderator actually existed
+  # (the content will be hidden either way)
   # Default: true
   config.deleted_comments_are_visible = true
 
@@ -129,15 +135,14 @@ Commontator.configure do |config|
 
   # Proc called with thread and user as arguments
   # If it returns true, that user is a moderator for that particular thread
-  # and is given admin-like capabilities for that thread only
-  # Note: user can be nil
+  # and can delete users' comments in the thread or close it
   # Default: lambda { |thread, user| false } (no thread-specific moderators)
   config.can_edit_thread_proc = lambda { |thread, user| user.try(:can_edit) }
 
   # Proc called with thread and user as arguments
   # If it returns true, that user is allowed to read that thread
-  # Note: user can be nil
-  # Default: lambda { |thread, user| true } (no read restrictions)
+  # Note: user can be false or nil
+  # Default: lambda { |thread, user| true } (anyone can read threads even if not logged in)
   config.can_read_thread_proc = lambda { |thread, user| user.try(:can_read) }
 
   # Proc that returns the commontable url that contains the thread
@@ -145,7 +150,7 @@ Commontator.configure do |config|
   # Main application's routes can be accessed using main_app object
   # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
   config.commontable_url_proc = lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
-
+  
   # Proc that returns the subscription email 'from' address
   # Default:
   # lambda { |params| 'no-reply@example.com' }

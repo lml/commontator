@@ -67,28 +67,28 @@ module Commontator
     ##################
 
     def can_be_read_by?(user)
-      (thread.can_be_read_by?(user) && \
-        (!is_deleted? || thread.config.deleted_comments_are_visible)) ||\
-        thread.can_be_edited_by?(user)
+      ((!is_deleted? || thread.config.deleted_comments_are_visible) &&\
+        thread.can_be_read_by?(user)) ||\
+      thread.can_be_edited_by?(user)
     end
 
     def can_be_created_by?(user)
-      !thread.is_closed? && thread.can_be_read_by?(user) && user == creator
+      !thread.is_closed? && user == creator && thread.can_be_read_by?(user)
     end
 
     def can_be_edited_by?(user)
-      !thread.is_closed? && !is_deleted? &&\
-        ((user == creator && thread.config.can_edit_own_comments && thread.can_be_read_by?(user)) ||\
-        (thread.can_be_edited_by?(user) && thread.config.admin_can_edit_comments)) &&\
-        (thread.comments.last == self || thread.config.can_edit_old_comments)
+      (!thread.is_closed? && !is_deleted? &&\
+        (thread.comments.last == self || thread.config.can_edit_old_comments) &&\
+        user == creator && thread.config.can_edit_own_comments && thread.can_be_read_by?(user)) ||\
+      (thread.config.admin_can_edit_comments && thread.can_be_edited_by?(user))
     end
 
     def can_be_deleted_by?(user)
-      (!thread.is_closed? &&\
-        ((user == creator && thread.config.can_delete_own_comments && \
-        thread.can_be_read_by?(user) && (!is_deleted? || editor == user)) &&\
-        (thread.comments.last == self || thread.config.can_delete_old_comments))) ||\
-        thread.can_be_edited_by?(user)
+      (!thread.is_closed? && (!is_deleted? || editor == user) &&\
+        (thread.comments.last == self || thread.config.can_delete_old_comments) &&\
+        user == creator && thread.config.can_delete_own_comments &&\
+        thread.can_be_read_by?(user)) ||\
+      thread.can_be_edited_by?(user)
     end
 
     def can_be_voted_on?
@@ -96,7 +96,7 @@ module Commontator
     end
 
     def can_be_voted_on_by?(user)
-      can_be_voted_on? && thread.can_be_read_by?(user) && user != creator
+      can_be_voted_on? && user != creator && thread.can_be_read_by?(user)
     end
   end
 end

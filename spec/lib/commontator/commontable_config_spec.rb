@@ -9,7 +9,7 @@ module Commontator
       end
     end
     
-    it 'wont respond to engine or commontator attributes' do
+    it "won't respond to engine or commontator attributes" do
       config = CommontableConfig.new
       (ENGINE_ATTRIBUTES + COMMONTATOR_ATTRIBUTES).each do |attribute|
         config.wont_respond_to attribute
