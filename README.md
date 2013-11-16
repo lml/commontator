@@ -95,12 +95,10 @@ Follow the steps below to add commontator to your models and views:
   Where commontable is an instance of some model that acts_as_commontable.
   Note that model's record must already exist in the database, so do not use this in new.html.erb, _form.html.erb or similar.
   We recommend you use this in the model's show.html.erb.
-  When you do this, it is up to you to ensure that the user has the proper permission
-  to read the thread or else a SecurityTransgression will be raised.
 
 3. Controllers
 
-  Instead of linking to the thread, you might want to have the thread display right away, when the corresponding view page is loaded.
+  Instead of linking to the thread, you might want to have the thread display right away when the corresponding view page is loaded.
   If that's the case, add the following to the controller action that displays the view where the thread is located:
   
   ```ruby
@@ -109,7 +107,7 @@ Follow the steps below to add commontator to your models and views:
 
   Note that the above method also checks the current user's read permission on the thread.
   It will raise a SecurityTransgression if the user is not allowed to read the thread.
-  You can specify the name of the method that determines which users are allowed to read which threads in the initializer.
+  You can specify the proc that determines which users are allowed to read which threads in the initializer.
 
 That's it! Commontator is now ready for use.
 
@@ -132,7 +130,7 @@ Note that acts_as_votable is currently incompatible with the protected_attribute
 ## Browser Support
 
 No incompatibilities are currently known with any of the major browsers.
-Currently commontator requires javascript enabled to function properly.
+Commontator requires javascript enabled to function properly.
 
 ## Customization
 
