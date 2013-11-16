@@ -9,16 +9,11 @@ module Commontator
     end
     
     def commontator_name(user)
-      return Commontator.user_missing_name unless user
-      config = user.commontator_config
-      config.user_name_method.blank? ? config.user_missing_name : \
-        user.send(config.user_name_method)
+      user.commontator_config.user_name_proc.call(user)
     end
     
     def commontator_email(user)
-      return '' unless user
-      config = user.commontator_config
-      config.user_email_method.blank? ? '' : user.send(config.user_email_method)
+      user.commontator_config.user_email_proc.call(user)
     end
     
     def commontator_gravatar_url(user, options = {})

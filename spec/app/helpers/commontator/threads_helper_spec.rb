@@ -7,11 +7,7 @@ module Commontator
     end
     
     it 'must print commontable name' do
-      commontable_name(@thread).must_equal 'dummy model'
-    end
-    
-    it 'must print commontable id' do
-      commontable_id(@thread).must_equal @thread.commontable_id
+      commontable_name(@thread).must_equal 'DummyModel #2'
     end
   end
 end

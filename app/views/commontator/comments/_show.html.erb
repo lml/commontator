@@ -4,41 +4,43 @@
 %>
   
 <div id="comment_<%= comment.id.to_s %>_div" class="comment">
-  <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
-    <% if user && user.commontator_config.user_name_clickable %>
-      <%= link_to commontator_name(comment.creator), main_app.polymorphic_path(comment.creator) %>
-    <% else %>
-      <%= commontator_name(comment.creator) %>
-    <% end %>
-    &nbsp;&nbsp;
-    <span id="comment_<%= comment.id.to_s %>_timestamp_span" class="comment_timestamp">
-      <%= comment.timestamp %><%= " by #{commontator_name(comment.editor)}" if comment.is_modified? %>
+  <div id="comment_<%= comment.id.to_s %>_top_div" class="comment_div">
+    <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
+      <% if user && user.commontator_config.user_name_clickable %>
+        <%= link_to commontator_name(comment.creator), main_app.polymorphic_path(comment.creator) %>
+      <% else %>
+        <%= commontator_name(comment.creator) %>
+      <% end %>
     </span>
-  </span>
-  
-  <span id="comment_<%= comment.id.to_s %>_actions_span" class="comment_actions">
-    <%= render :partial => 'commontator/comments/actions',
-               :locals => {:comment => comment,
-                           :user => user} %>
-  </span>
-  
-  <br clear="all"/>
-  
-  <span id="comment_<%= comment.id.to_s %>_gravatar_image_span" class="comment_gravatar_image">
-    <%= commontator_gravatar_image comment.creator %>
-  </span>
-  
-  <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">
-    <%= render :partial => 'commontator/comments/votes',
-               :locals => {:comment => comment,
-                           :user => user} %>
-  </span>
-  
-  <div id="comment_<%= comment.id.to_s %>_body_div" class="comment_body">
-    <%= render :partial => 'commontator/comments/body',
-               :locals => {:comment => comment} %>
+    <span id="comment_<%= comment.id.to_s %>_actions_span" class="comment_actions">
+      <%= render :partial => 'commontator/comments/actions',
+                 :locals => {:comment => comment,
+                             :user => user} %>
+    </span>
   </div>
-
+  <div id="comment_<%= comment.id.to_s %>_middle_div" class="comment_div">
+    <span id="comment_<%= comment.id.to_s %>_gravatar_image_span" class="comment_gravatar_image">
+      <%= commontator_gravatar_image comment.creator %>
+    </span>
+    <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">
+      <%= render :partial => 'commontator/comments/votes',
+                 :locals => {:comment => comment,
+                             :user => user} %>
+    </span>
+    <div id="comment_<%= comment.id.to_s %>_body_div" class="comment_body">
+      <%= render :partial => 'commontator/comments/body',
+                 :locals => {:comment => comment} %>
+    </div>
+  </div>
+  <div id="comment_<%= comment.id.to_s %>_bottom_div" class="comment_div">
+    <span id="comment_<%= comment.id.to_s %>_created_timestamp_span" class="comment_timestamp">
+      <%= comment.created_timestamp %>
+    </span>
+    <br/>
+    <span id="comment_<%= comment.id.to_s %>_updated_timestamp_span" class="comment_timestamp">
+    <% if comment.is_modified? %>
+      <%= comment.updated_timestamp %><%= " by #{commontator_name(comment.editor)}" %>
+    <% end %>
+    </span>
+  </div>
 </div>
-
-<br clear="all"/>

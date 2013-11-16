@@ -1,4 +1,4 @@
-<% # Clients of this partial must provide the following variable:
+<% # Clients of this partial must provide the following variables:
    # comment
    # user
 %>
@@ -30,7 +30,11 @@
   </span>
 
   <span id="comment_<%= comment.id %>_vote_count_span" class="comment_vote_count">
-    <p>+ <%= comment.upvotes.size %><br><br>- <%= comment.downvotes.size %></p>
+    <% if comment.thread.config.combine_upvotes_and_downvotes %>
+      <p><%= "%+d" % (comment.upvotes.size - comment.downvotes.size) %></p>
+    <% else %>
+      <p>+<%= comment.upvotes.size %>/-<%= comment.downvotes.size %></p>
+    <% end %>
   </span>
 
   <span id="comment_<%= comment.id %>_downvote_span" class="comment_downvote">

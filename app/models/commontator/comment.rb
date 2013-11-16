@@ -28,7 +28,7 @@ module Commontator
     end
 
     def get_vote_by(user)
-      return nil unless is_votable?
+      return nil unless is_votable? && user && user.is_commontator
       votes.where(:voter_type => user.class.name, :voter_id => user.id).first
     end
 
@@ -54,12 +54,16 @@ module Commontator
       self.save
     end
 
-    def timestamp
+    def created_timestamp
       config = thread.config
       "#{config.comment_create_verb_past.capitalize} on " + \
-        created_at.strftime(config.timestamp_format) + \
-        (is_modified? ? " | Last #{config.comment_edit_verb_past} on " + \
-          updated_at.strftime(config.timestamp_format) : '')
+        created_at.strftime(config.timestamp_format)
+    end
+
+    def updated_timestamp
+      config = thread.config
+      is_modified? ? ("Last #{config.comment_edit_verb_past} on " + \
+        updated_at.strftime(config.timestamp_format)) : ''
     end
 
     ##################
@@ -96,7 +100,7 @@ module Commontator
     end
 
     def can_be_voted_on_by?(user)
-      can_be_voted_on? && user != creator && thread.can_be_read_by?(user)
+      can_be_voted_on? && user && user.is_commontator && user != creator && thread.can_be_read_by?(user)
     end
   end
 end

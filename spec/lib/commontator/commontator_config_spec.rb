@@ -17,10 +17,10 @@ module Commontator
     end
     
     it 'must be configurable' do
-      config = CommontatorConfig.new(:user_missing_name => 'Anon')
-      config.user_missing_name.must_equal 'Anon'
-      config = CommontatorConfig.new(:user_missing_name => 'Anonymous')
-      config.user_missing_name.must_equal 'Anonymous'
+      config = CommontatorConfig.new(:user_name_clickable => true)
+      config.user_name_clickable.must_equal true
+      config = CommontatorConfig.new(:user_name_clickable => false)
+      config.user_name_clickable.must_equal false
     end
   end
 end

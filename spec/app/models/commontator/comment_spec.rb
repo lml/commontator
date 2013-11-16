@@ -48,14 +48,15 @@ module Commontator
     it 'must make proper timestamps' do
       @comment.save!
       
-      @comment.timestamp.must_equal "#{@thread.config.comment_create_verb_past.capitalize} on #{@comment.created_at.strftime(@thread.config.timestamp_format)}"
+      @comment.created_timestamp.must_equal "#{@thread.config.comment_create_verb_past.capitalize} on #{@comment.created_at.strftime(@thread.config.timestamp_format)}"
+      @comment.updated_timestamp.must_equal ''
       
       @comment.body = 'Something else'
       @comment.editor = @user
       @comment.save!
       
-      @comment.timestamp.must_equal "#{@thread.config.comment_create_verb_past.capitalize} on #{@comment.created_at.strftime(@thread.config.timestamp_format)}" + \
-        " | Last #{@thread.config.comment_edit_verb_past} on #{@comment.updated_at.strftime(@thread.config.timestamp_format)}"
+      @comment.created_timestamp.must_equal "#{@thread.config.comment_create_verb_past.capitalize} on #{@comment.created_at.strftime(@thread.config.timestamp_format)}"
+      @comment.updated_timestamp.must_equal "Last #{@thread.config.comment_edit_verb_past} on #{@comment.updated_at.strftime(@thread.config.timestamp_format)}"
     end
   end
 end

@@ -23,10 +23,9 @@ module Commontator
       @config = @thread.config
       
       @creator_name = commontator_name(@creator)
-      @comment_timestamp = @comment.timestamp
+      @comment_created_timestamp = @comment.created_timestamp
       
       @commontable_name = commontable_name(@thread)
-      @commontable_id = commontable_id(@thread).to_s
       
       @commontable_url = ApplicationController.commontable_url
       
@@ -37,9 +36,8 @@ module Commontator
       params[:commontable] = @commontable
       params[:config] = @config
       params[:creator_name] = @creator_name
-      params[:comment_timestamp] = @comment_timestamp
+      params[:comment_created_timestamp] = @comment_created_timestamp
       params[:commontable_name] = @commontable_name
-      params[:commontable_id] = @commontable_id
       params[:commontable_url] = @commontable_url
       
       @bcc = recipients.collect{|s| commontator_email(s)}

@@ -1,6 +1,6 @@
-<h4><%= @creator_name %>'s <%= @thread.config.comment_name %> on <%= @commontable_name %> <%= @commontable_id %>:</h4>
+<h4><%= @creator_name %>'s <%= @thread.config.comment_name %> on <%= @commontable_name %>:</h4>
 
 <%= render :partial => 'commontator/comments/body',
            :locals => { :comment => @comment } %>
 
-<p><a href="<%= @commontable_url %>">Click here</a> to visit this thread.</p>
+<p><a href="<%= @commontable_url %>">Click here</a> to view all comments on <%= @commontable_name %>.</p>
