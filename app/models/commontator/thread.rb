@@ -14,8 +14,11 @@ module Commontator
     end
 
     def ordered_comments
-      (config.can_vote_on_comments && config.comments_ordered_by_votes) ? \
-        comments.order("cached_votes_down - cached_votes_up") : comments
+      case config.comments_order
+        when :votes then comments.order("cached_votes_down - cached_votes_up")
+        when :id_asc then comments.order(:id => :asc)
+        else comments
+      end
     end
 
     def is_closed?
