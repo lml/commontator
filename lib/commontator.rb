@@ -6,7 +6,7 @@ module Commontator
 
   # Can be set in initializer only
   ENGINE_ATTRIBUTES = [
-    :current_user_method,
+    :current_user_proc,
     :javascript_proc
   ]
 

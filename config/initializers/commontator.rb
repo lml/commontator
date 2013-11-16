@@ -3,9 +3,10 @@
 Commontator.configure do |config|
   # Engine Configuration
 
-  # Name of the ApplicationController helper method that returns the current user
-  # Default: 'current_user'
-  config.current_user_method = 'current_user'
+  # Proc that is passed the current controller as argument
+  # Returns the current user
+  # Default: lambda { |controller| controller.current_user }
+  config.current_user_proc = lambda { |controller| controller.current_user }
 
   # Proc that is called after any javascript runs (e.g. to display/clear flash messages)
   # It is passed the view_context object (self from the view template), so you should be able to

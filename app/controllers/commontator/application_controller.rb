@@ -9,7 +9,7 @@ module Commontator
     protected
     
     def get_user
-      @user = self.send Commontator.current_user_method	
+      @user = Commontator.current_user_proc.call(self)	
     end
 
     def ensure_user

@@ -10,14 +10,16 @@ module Commontator
     end
     
     it 'must be configurable' do
+      l1 = lambda { |controller| controller.current_user }
+      l2 = lambda { |controller| controller.current_user }
       Commontator.configure do |config|
-        config.current_user_method = 'user'
+        config.current_user_proc = l1
       end
-      Commontator.current_user_method.must_equal 'user'
+      assert_equal(Commontator.current_user_proc, l1)
       Commontator.configure do |config|
-        config.current_user_method = 'current_user'
+        config.current_user_proc = l2
       end
-      Commontator.current_user_method.must_equal 'current_user'
+      assert_equal(Commontator.current_user_proc, l2)
     end
   end
 end

@@ -3,9 +3,10 @@
 Commontator.configure do |config|
   # Engine Configuration
 
-  # Name of the ApplicationController helper method that returns the current user
-  # Default: 'current_user'
-  config.current_user_method = 'current_user'
+  # Proc that is passed the current controller as argument
+  # Returns the current user
+  # Default: lambda { |controller| controller.current_user }
+  config.current_user_proc = lambda { |controller| controller.current_user }
 
   # Proc that is called after any javascript runs (e.g. to display/clear flash messages)
   # It is passed the view_context object (self from the view template), so you should be able to
@@ -13,7 +14,7 @@ Commontator.configure do |config|
   # However, be aware that it does not have access to the main application's helpers
   # Should return a string containing JS to be appended to all Commontator JS responses
   # Default: lambda { |view| '$("#error_explanation").remove();' }
-  config.javascript_proc = lambda { |view| 'Dummy Javascript' }
+  config.javascript_proc = lambda { |view| '' }
 
 
   # User (acts_as_commontator) Configuration
@@ -24,12 +25,12 @@ Commontator.configure do |config|
   config.user_name_clickable = false
 
   # Proc called with user as argument
-  # It returns the user's name
+  # Returns the user's name
   # Default: lambda { |user| 'Anonymous' } (all users are Anonymous)
   config.user_name_proc = lambda { |user| 'Anonymous' }
 
   # Proc called with user as argument
-  # It returns the user's email address
+  # Returns the user's email address
   # Used in the subscription mailer
   # Default: lambda { |user| user.email }
   config.user_email_proc = lambda { |user| user.email }
