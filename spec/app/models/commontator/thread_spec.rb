@@ -6,6 +6,13 @@ module Commontator
       setup_model_spec
     end
     
+    describe "#subscription_for(subscriber)" do
+      it "returns nil if subscriber is false" do
+        subscription = @thread.subscription_for(false)
+        subscription.must_equal nil
+      end
+    end
+
     it 'must have a config' do
       @thread.config.must_be_instance_of CommontableConfig
       @thread.commontable = nil
