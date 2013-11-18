@@ -6,8 +6,7 @@ module Commontator
     def comment_created(comment, recipients)
       setup_variables(comment, recipients)
 
-      mail :to => 'Undisclosed Recipients',
-           :bcc => @bcc,
+      mail :bcc => @bcc,
            :from => @from,
            :subject => @subject
     end

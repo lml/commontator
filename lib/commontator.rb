@@ -36,7 +36,7 @@ module Commontator
     :can_subscribe_to_thread,
     :can_vote_on_comments,
     :combine_upvotes_and_downvotes,
-    :comments_ordered_by_votes,
+    :comments_order,
     :closed_threads_are_readable,
     :deleted_comments_are_visible,
     :can_read_thread_proc,

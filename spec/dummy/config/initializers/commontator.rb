@@ -114,10 +114,11 @@ Commontator.configure do |config|
   # Default: true
   config.combine_upvotes_and_downvotes = true
 
-  # Whether comments should be ordered by vote score
-  # instead of by order posted
-  # Default: false
-  config.comments_ordered_by_votes = false
+  # What order to use for comments
+  # default: from latest posted
+  # :id_asc : from first posted
+  # :votes : from most voted
+  config.comments_order = :default
 
   # Whether users can read threads closed by moderators
   # Default: true
