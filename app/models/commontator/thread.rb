@@ -31,7 +31,8 @@ module Commontator
     end
 
     def subscription_for(subscriber)
-      return nil if subscriber.nil? || !subscriber.is_commontator
+      return nil if !subscriber
+      return nil if !subscriber.is_commontator
       subscriber.subscriptions.where(:thread_id => self.id).first
     end
 
