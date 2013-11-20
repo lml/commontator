@@ -102,9 +102,9 @@ Follow the steps below to add commontator to your models and views:
 
 3. Controllers
 
-  By default, the `commontator_thread` function only links to the desired comment thread.
+  By default, the `commontator_thread` method only links to the desired comment thread.
   If you want, instead, to have the thread display right away when the corresponding view page is loaded,
-  just add the following function call to the controller action that displays the view in question:
+  just add the following method call to the controller action that displays the view in question:
   
   ```ruby
   commontator_thread_show(commontable)
@@ -206,5 +206,5 @@ $ bundle exec rake
 
 ## License
 
-This engine is distributed under the terms of the MIT license.
+This gem is distributed under the terms of the MIT license.
 See the MIT-LICENSE file for details.
