@@ -1,7 +1,8 @@
 # Commontator
 
 Commontator is a Rails engine for comments. It is compatible with Rails 3.1+ and Rails 4.
-Being an engine means it is fully functional as soon as you install and configure its gem, providing models, views and controllers of its own.
+Being an engine means it is fully functional as soon as you install and
+configure the gem, providing models, views and controllers of its own.
 At the same time, almost anything about it can be configured or customized to suit your needs.
 
 ## Installation
@@ -72,7 +73,7 @@ Follow the steps below to add commontator to your models and views:
 
 1. Models
 
-  Add this line to your user model(s) (or any models that should be able to make comments):
+  Add this line to your user model(s) (or any models that should be able to post comments):
 
   ```ruby
   acts_as_commontator
@@ -86,28 +87,34 @@ Follow the steps below to add commontator to your models and views:
     
 2. Views
 
+  In the following instructions, `commontable` is an instance of a model that `acts_as_commontable`.
+
   Add the following line to any erb view where you would like to display comments:
 
   ```erb
   <%= commontator_thread(commontable) %>
   ```
 
-  Where commontable is an instance of some model that acts_as_commontable.
+  This will create a link in the view that the user will be able to click to display the comment thread.
+
   Note that model's record must already exist in the database, so do not use this in new.html.erb, _form.html.erb or similar.
   We recommend you use this in the model's show.html.erb.
 
 3. Controllers
 
-  Instead of linking to the thread, you might want to have the thread display right away when the corresponding view page is loaded.
-  If that's the case, add the following to the controller action that displays the view where the thread is located:
+  By default, the `commontator_thread` function only links to the desired comment thread.
+  If you want, instead, to have the thread display right away when the corresponding view page is loaded,
+  just add the following function call to the controller action that displays the view in question:
   
   ```ruby
   commontator_thread_show(commontable)
   ```
 
-  Note that the above method also checks the current user's read permission on the thread.
-  It will raise a SecurityTransgression if the user is not allowed to read the thread.
-  You can specify the proc that determines which users are allowed to read which threads in the initializer.
+  Note that the call to `commontator_thread` in the view is still necessary in either case.
+
+  The `commontator_thread_show` method checks the current user's read permission on the thread and will raise an
+  exception if the user is not allowed to read it according to the configuration options in the initializer.
+  It is up to you to ensure that this method is only called if the user is authorized to read the thread.
 
 That's it! Commontator is now ready for use.
 
@@ -125,12 +132,13 @@ And enabling the relevant option in commontator's initializer:
 config.can_vote_on_comments = true
 ```
 
-Note that acts_as_votable is currently incompatible with the protected_attributes gem if config.active_record.whitelist_attributes is set to true.
+Note that acts_as_votable is currently incompatible with the protected_attributes
+gem if config.active_record.whitelist_attributes is set to true.
 
 ## Browser Support
 
-No incompatibilities are currently known with any of the major browsers.
-Commontator requires javascript enabled to function properly.
+Commontator should work properly on any of the major browsers.
+To function properly, this gem requires that visitors to the site have javascript enabled.
 
 ## Customization
 
