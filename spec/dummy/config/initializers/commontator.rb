@@ -8,13 +8,14 @@ Commontator.configure do |config|
   # Default: lambda { |controller| controller.current_user }
   config.current_user_proc = lambda { |controller| controller.current_user }
 
-  # Proc that is called after any javascript runs (e.g. to display/clear flash messages)
-  # It is passed the view_context object (self from the view template), so you should be able to
-  # access anything you normally could in a view template (by using, e.g. view.flash)
-  # However, be aware that it does not have access to the main application's helpers
-  # Should return a string containing JS to be appended to all Commontator JS responses
-  # Default: lambda { |view| '$("#error_explanation").remove();' }
-  config.javascript_proc = lambda { |view| '' }
+  # Proc called with the view_context object as argument
+  # Returns a string to be appended to all JavaScript responses from commontator
+  # Can be used, for example, to display/clear Rails error messages
+  # Objects visible in view templates can be accessed through
+  # the view_context object (for example, view_context.flash)
+  # However, the view_context does not include the main application's helpers
+  # Default: lambda { |view_context| '$("#error_explanation").remove();' }
+  config.javascript_proc = lambda { |view_context| '' }
 
 
   # User (acts_as_commontator) Configuration
