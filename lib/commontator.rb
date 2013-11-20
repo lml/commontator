@@ -43,6 +43,7 @@ module Commontator
     :can_edit_thread_proc,
     :commontable_name_proc,
     :commontable_url_proc,
+    :subscription_email_to_proc,
     :subscription_email_from_proc,
     :subscription_email_subject_proc
   ]

@@ -5,7 +5,7 @@ $("#thread_<%= @thread.id %>_new_comment_div").html("<%= escape_javascript(
                        :thread => @thread
                     }) %>");
                     
-$("#thread_<%= @thread.id %>_new_comment_div").show();
+$("#thread_<%= @thread.id %>_new_comment_div").fadeIn()[0].scrollIntoView();
 
 $("#thread_<%= @thread.id %>_new_comment_link_span").hide();
 

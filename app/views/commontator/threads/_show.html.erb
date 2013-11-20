@@ -36,12 +36,9 @@
 </span>
 
 <div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
-  <% thread.ordered_comments.each do |comment| %>
-    <% next unless comment.can_be_read_by?(user) %>
-    <%= render :partial => 'commontator/comments/show',
-               :locals => {:comment => comment,
-                           :user => user} %>
-  <% end %>
+  <%= render :partial => 'commontator/comments/list',
+             :locals => {:comments => thread.ordered_comments,
+                         :user => user} %>
 </div>
 
 <% if thread.is_closed? %>

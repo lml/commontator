@@ -115,10 +115,13 @@ Commontator.configure do |config|
   config.combine_upvotes_and_downvotes = true
 
   # What order to use for comments
-  # default: from latest posted
-  # :id_asc : from first posted
-  # :votes : from most voted
-  config.comments_order = :default
+  # Valid values:
+  #   :e (earliest comment first)
+  #   :l (latest comment first)
+  #   :ve (highest voted first; earliest first if tied)
+  #   :vl (highest voted first; latest first if tied)
+  # Default: :e (earliest comment first)
+  config.comments_order = :e
 
   # Whether users can read threads closed by moderators
   # Default: true
@@ -154,6 +157,14 @@ Commontator.configure do |config|
   # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
   # (defaults to the commontable's show url)
   config.commontable_url_proc = lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
+
+  # Proc called with params from the subscription mailer as arguments
+  # Returns the subscription email 'to' addresses
+  # Available params can be seen in the subscription mailer
+  # Note that the actual addresses are already set in the BCC field
+  # Default:
+  # lambda { |params| 'Undisclosed Recipients' }
+  config.subscription_email_to_proc = lambda { |params| 'Undisclosed Recipients' }
   
   # Proc called with params from the subscription mailer as arguments
   # Returns the subscription email 'from' address

@@ -20,6 +20,14 @@ module Commontator
 
     public
 
+    def is_modified?
+      !editor.nil?
+    end
+
+    def is_latest?
+      thread.comments.last == self
+    end
+
     def is_votable?
       return true if acts_as_votable_initialized
       return false unless self.class.respond_to?(:acts_as_votable)
@@ -30,10 +38,6 @@ module Commontator
     def get_vote_by(user)
       return nil unless is_votable? && user && user.is_commontator
       votes.where(:voter_type => user.class.name, :voter_id => user.id).first
-    end
-
-    def is_modified?
-      !editor.nil?
     end
 
     def is_deleted?
@@ -82,14 +86,14 @@ module Commontator
 
     def can_be_edited_by?(user)
       (!thread.is_closed? && !is_deleted? &&\
-        (thread.comments.last == self || thread.config.can_edit_old_comments) &&\
+        (is_latest? || thread.config.can_edit_old_comments) &&\
         user == creator && thread.config.can_edit_own_comments && thread.can_be_read_by?(user)) ||\
       (thread.config.admin_can_edit_comments && thread.can_be_edited_by?(user))
     end
 
     def can_be_deleted_by?(user)
       (!thread.is_closed? && (!is_deleted? || editor == user) &&\
-        (thread.comments.last == self || thread.config.can_delete_old_comments) &&\
+        (is_latest? || thread.config.can_delete_old_comments) &&\
         user == creator && thread.config.can_delete_own_comments &&\
         thread.can_be_read_by?(user)) ||\
       thread.can_be_edited_by?(user)
