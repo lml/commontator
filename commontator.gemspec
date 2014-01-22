@@ -22,5 +22,5 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "minitest-rails"
-  s.add_development_dependency "acts_as_votable"
+  s.add_development_dependency "acts_as_votable", "~> 0.8.0"
 end
