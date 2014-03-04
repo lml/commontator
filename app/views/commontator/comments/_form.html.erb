@@ -10,7 +10,7 @@
 
 <% if comment.errors.any? %>
   <div class="comment_error_explanation">
-    <h3><%= t “comment.errors.#{comment.id.blank? ? ‘create’ : ‘update’}” %></h3>
+    <h3><%= t "comment.errors.#{comment.id.blank? ? 'create' : 'update'}" %></h3>
 
     <ul>
       <% comment.errors.full_messages.each do |msg| %>
@@ -28,7 +28,7 @@
   </div>
   
   <div class="comment_form_actions">
-    <%= f.submit t(“comment.actions.#{comment.id.blank? ? ‘create’ : ‘update’}”) %>
+    <%= f.submit t("comment.actions.#{comment.id.blank? ? 'create' : 'update'}") %>
   </div>
   
 <% end %>

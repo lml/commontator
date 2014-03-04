@@ -22,7 +22,7 @@ Commontator.configure do |config|
 
   # Proc called with user as argument
   # Returns the user's name
-  # Important: change this to return the users’ display names
+  # Important: change this to return the users' display names
   # Default: lambda { |user| 'Anonymous' } (all users are Anonymous)
   config.user_name_proc = lambda { |user| 'Anonymous' }
 

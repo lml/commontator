@@ -3,6 +3,6 @@
 %>
 
 <%= simple_format comment.is_deleted? ? \
-      t(‘comment.status.deleted_by’,
+      t('comment.status.deleted_by',
         :deleter_name => commontator_name(comment.editor)) : \
       comment.body %>

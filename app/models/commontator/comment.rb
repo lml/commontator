@@ -12,7 +12,7 @@ module Commontator
     validates_presence_of :body
 
     validates_uniqueness_of :body, :scope => [:creator_type, :creator_id, :thread_id],
-                                   :message => t(‘comment.errors.double_posted’)
+                                   :message => t('comment.errors.double_posted')
 
     protected
 
