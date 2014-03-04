@@ -9,7 +9,7 @@ Commontator.configure do |config|
   config.current_user_proc = lambda { |controller| controller.current_user }
 
   # Proc called with the view_context object as argument
-  # Returns a string to be appended to all JavaScript responses from commontator
+  # Returns a string to be appended to all JavaScript responses from Commontator
   # Can be used, for example, to display/clear Rails error messages
   # Objects visible in view templates can be accessed through
   # the view_context object (for example, view_context.flash)
@@ -20,59 +20,38 @@ Commontator.configure do |config|
 
   # User (acts_as_commontator) Configuration
 
+  # Proc called with user as argument
+  # Returns the user's name
+  # Important: change this to return the users’ display names
+  # Default: lambda { |user| 'Anonymous' } (all users are Anonymous)
+  config.user_name_proc = lambda { |user| 'Anonymous' }
+
   # Whether the comment creator's name is clickable in the comment view
   # If enabled, the link will point to the comment creator's 'show' page
   # Default: false
   config.user_name_clickable = false
 
   # Proc called with user as argument
-  # Returns the user's name
-  # Default: lambda { |user| 'Anonymous' } (all users are Anonymous)
-  config.user_name_proc = lambda { |user| 'Anonymous' }
-
-  # Proc called with user as argument
   # Returns the user's email address
-  # Used in the subscription mailer
+  # Used in mailers
   # Default: lambda { |user| user.email }
   config.user_email_proc = lambda { |user| user.email }
 
   # Proc called with user as argument
-  # Returns true iif the user is an admin
+  # Returns true iif the user is an admin (a moderator for all threads)
   # Admins can delete other users' comments and close threads
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
-  
-  # Proc called with user as argument
-  # Returns true iif the user should receive subscription emails
-  # Default: lambda { |user| true } (always receive subscription emails)
-  config.subscription_email_enable_proc = lambda { |user| true }
 
 
-  # Commontable (acts_as_commontable) Configuration
+  # Thread/Commontable (acts_as_commontable) Configuration
 
-  # What a comment is called in your application
-  # Default: 'comment'
-  config.comment_name = 'comment'
-
-  # Verb used when creating comments (present)
-  # Default: 'post'
-  config.comment_create_verb_present = 'post'
-
-  # Verb used when creating comments (past)
-  # Default: 'posted'
-  config.comment_create_verb_past = 'posted'
-
-  # Verb used when editing comments (present)
-  # Default: 'modify'
-  config.comment_edit_verb_present = 'modify'
-
-  # Verb used when editing comments (past)
-  # Default: 'modified'
-  config.comment_edit_verb_past = 'modified'
-
-  # The format of the timestamps used by Commontator
-  # Default: '%b %d %Y at %I:%M %p'
-  config.timestamp_format = '%b %d %Y at %I:%M %p'
+  # Proc called with a mailer as argument
+  # Returns the address emails are sent 'from'
+  # Important: Change this to at least match your domain name
+  # Default:
+  # lambda { |mailer| 'no-reply@example.com' }
+  config.email_from_proc = lambda { |mailer| 'no-reply@example.com' }
 
   # Whether admins can edit other users' comments
   # Default: false
@@ -153,32 +132,4 @@ Commontator.configure do |config|
   # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
   # (defaults to the commontable's show url)
   config.commontable_url_proc = lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
-
-  # Proc called with params from the subscription mailer as arguments
-  # Returns the subscription email 'to' addresses
-  # Available params can be seen in the subscription mailer
-  # Note that the actual addresses are already set in the BCC field
-  # Default:
-  # lambda { |params| 'Undisclosed Recipients' }
-  config.subscription_email_to_proc = lambda { |params| 'Undisclosed Recipients' }
-  
-  # Proc called with params from the subscription mailer as arguments
-  # Returns the subscription email 'from' address
-  # Available params can be seen in the subscription mailer
-  # Default:
-  # lambda { |params| 'no-reply@example.com' }
-  config.subscription_email_from_proc = lambda { |params| 'no-reply@example.com' }
-
-  # Proc called with params from the subscription mailer as arguments
-  # Returns the subscription email 'subject' string
-  # Available params can be seen in the subscription mailer
-  # Default:
-  # lambda do |params|
-  #   "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
-  #   "#{params[:config].comment_name} on #{params[:commontable_name]}"
-  # end
-  config.subscription_email_subject_proc = lambda do |params|
-    "#{params[:creator_name]} #{params[:config].comment_create_verb_past} a " + \
-    "#{params[:config].comment_name} on #{params[:commontable_name]}"
-  end
 end

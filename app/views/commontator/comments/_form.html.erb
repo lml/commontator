@@ -10,8 +10,7 @@
 
 <% if comment.errors.any? %>
   <div class="comment_error_explanation">
-    <h3>This <%= config.comment_name %> could not be
-          <%= comment.id.blank? ? config.comment_create_verb_past : 'updated' %> because of the following error<%= comment.errors.count == 1 ? '' : 's' %>:</h3>
+    <h3><%= t “comment.errors.#{comment.id.blank? ? ‘create’ : ‘update’}” %></h3>
 
     <ul>
       <% comment.errors.full_messages.each do |msg| %>
@@ -29,10 +28,7 @@
   </div>
   
   <div class="comment_form_actions">
-    <%= f.submit (comment.id.blank? ? \
-                   config.comment_create_verb_present : \
-                   config.comment_edit_verb_present).capitalize + \
-          ' ' + config.comment_name %>
+    <%= f.submit t(“comment.actions.#{comment.id.blank? ? ‘create’ : ‘update’}”) %>
   </div>
   
 <% end %>

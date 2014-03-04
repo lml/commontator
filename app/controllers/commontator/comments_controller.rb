@@ -76,7 +76,7 @@ module Commontator
     def delete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
-      @comment.errors.add(:base, 'This comment has already been deleted.') \
+      @comment.errors.add(:base, t(‘comment.errors.already_deleted’)) \
         unless @comment.delete_by(@user)
 
       respond_to do |format|
@@ -89,7 +89,7 @@ module Commontator
     def undelete
       raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
 
-      @comment.errors.add(:base, 'This comment is not deleted.') \
+      @comment.errors.add(:base, t(‘comment.errors.not_deleted’)) \
         unless @comment.undelete_by(@user)
 
       respond_to do |format|

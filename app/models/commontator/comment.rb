@@ -12,7 +12,7 @@ module Commontator
     validates_presence_of :body
 
     validates_uniqueness_of :body, :scope => [:creator_type, :creator_id, :thread_id],
-                                   :message => 'has already been posted'
+                                   :message => t(‘comment.errors.double_posted’)
 
     protected
 
@@ -56,18 +56,6 @@ module Commontator
       self.deleted_at = nil
       self.editor = user
       self.save
-    end
-
-    def created_timestamp
-      config = thread.config
-      "#{config.comment_create_verb_past.capitalize} on " + \
-        created_at.strftime(config.timestamp_format)
-    end
-
-    def updated_timestamp
-      config = thread.config
-      is_modified? ? ("Last #{config.comment_edit_verb_past} on " + \
-        updated_at.strftime(config.timestamp_format)) : ''
     end
 
     ##################

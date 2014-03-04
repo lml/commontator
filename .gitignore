@@ -1,6 +1,7 @@
 *~
 *.gem
 .bundle/
+.DS_Store
 Gemfile.lock
 log/*.log
 pkg/

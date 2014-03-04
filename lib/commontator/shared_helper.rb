@@ -26,7 +26,7 @@ module Commontator
       "http#{base}.gravatar.com/avatar/#{hash}?s=#{options[:size]}"
     end
   
-    def commontator_gravatar_image(user, options = {})
+    def commontator_avatar(user, options = {})
       name = commontator_name(user)
       image_tag(commontator_gravatar_url(user, options), 
                 { :alt => name, 

@@ -7,7 +7,7 @@
 <% can_edit = thread.can_be_edited_by?(user) %>
 
 <span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
-  <%= thread.config.comment_name.capitalize.pluralize + (thread.is_closed? ? ' (closed)' : '') %>
+  <%= t “thread.status.#{thread.is_closed? ? ‘closed’ : ‘open’}” %>
 </span>
 
 <span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
@@ -24,10 +24,9 @@
   <% if can_edit %>
     <% is_closed = thread.is_closed? %>
     <% close_string = is_closed ? "reopen" : "close" %>
-    <%= link_to close_string.capitalize,
+    <%= link_to t(“thread.actions.#{close_string}”),
                 commontator.polymorphic_path([close_string, thread]),
-                :confirm => (!is_closed ? \
-                              'Are you sure you want to close this thread?' : nil),
+                :confirm => (!is_closed ? t(‘thread.confirm_close’) : nil),
                 :method => :put,
                 :id => "thread_#{thread.id.to_s}_#{close_string}_link",
                 :class => "thread_#{close_string}_link",
@@ -42,14 +41,14 @@
 </div>
 
 <% if thread.is_closed? %>
-  <p><%= thread.config.comment_name.capitalize.pluralize %> cannot be <%= thread.config.comment_create_verb_past %> at this time.</p>
+  <p><%= t ‘thread.status.closed_by’ %></p>
 <% elsif !user %>
-  <p>You must log in before you can <%= thread.config.comment_create_verb_present %> a <%= thread.config.comment_name %>.</p>
+  <p><%= t ‘user.require_login’ %>.</p>
 <% else %>
   <div id="thread_<%= thread.id %>_new_comment_div" class="thread_new_comment"></div>
 
   <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
-    <%= link_to thread.config.comment_create_verb_present.capitalize + ' new ' + thread.config.comment_name,
+    <%= link_to t(‘comment.actions.new’),
         commontator.new_thread_comment_path(thread), :remote => true %>
   </span>
 <% end %>

@@ -9,7 +9,10 @@ module Commontator
       mail :to => @to,
            :bcc => @bcc,
            :from => @from,
-           :subject => @subject
+           :subject => t(‘emails.comment_created.subject’,
+                         :creator_name => @creator_name,
+                         :commontable_name => @commontable_name,
+                         :commontable_url => @commontable_url)
     end
 
     protected
@@ -23,7 +26,6 @@ module Commontator
       @config = @thread.config
 
       @creator_name = commontator_name(@creator)
-      @comment_created_timestamp = @comment.created_timestamp
 
       @commontable_name = commontable_name(@thread)
 
@@ -36,14 +38,12 @@ module Commontator
       params[:commontable] = @commontable
       params[:config] = @config
       params[:creator_name] = @creator_name
-      params[:comment_created_timestamp] = @comment_created_timestamp
       params[:commontable_name] = @commontable_name
       params[:commontable_url] = @commontable_url
 
-      @to = @config.subscription_email_to_proc.call(params)
+      @to = t(‘emails.undisclosed_recipients’)
       @bcc = recipients.collect{|s| commontator_email(s)}
-      @from = @config.subscription_email_from_proc.call(params)
-      @subject = @config.subscription_email_subject_proc.call(params)
+      @from = @config.email_from_proc.call(self)
     end
   end
 end

@@ -19,8 +19,8 @@
     </span>
   </div>
   <div id="comment_<%= comment.id.to_s %>_middle_div" class="comment_div">
-    <span id="comment_<%= comment.id.to_s %>_gravatar_image_span" class="comment_gravatar_image">
-      <%= commontator_gravatar_image comment.creator %>
+    <span id="comment_<%= comment.id.to_s %>_avatar_span" class="comment_avatar">
+      <%= commontator_avatar comment.creator %>
     </span>
     <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">
       <%= render :partial => 'commontator/comments/votes',
@@ -34,12 +34,14 @@
   </div>
   <div id="comment_<%= comment.id.to_s %>_bottom_div" class="comment_div">
     <span id="comment_<%= comment.id.to_s %>_created_timestamp_span" class="comment_timestamp">
-      <%= comment.created_timestamp %>
+      <%= t(‘comment.status.created_at’, :created_at => l(comment.created_at)) %>
     </span>
     <br/>
     <span id="comment_<%= comment.id.to_s %>_updated_timestamp_span" class="comment_timestamp">
     <% if comment.is_modified? %>
-      <%= comment.updated_timestamp %><%= " by #{commontator_name(comment.editor)}" %>
+      <%= t(‘comment.status.updated_at’,
+            :editor_name => commontator_name(comment.editor),
+            :updated_at => l(comment.updated_at)) %>
     <% end %>
     </span>
   </div>

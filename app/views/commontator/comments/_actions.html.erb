@@ -17,12 +17,10 @@
 
 <% if can_delete %>
   <% is_deleted = comment.is_deleted? %>
-  <% del_string = is_deleted ? "undelete" : "delete" %>
-  <%= link_to del_string.capitalize,
+  <% del_string = is_deleted ? ‘undelete’ : ‘delete’ %>
+  <%= link_to t(“comment.actions.#{del_string}”),
               commontator.polymorphic_path([del_string, comment]),
-              :confirm => (!is_deleted ? \
-                            "Are you sure you want to delete this " + \
-                            "#{comment.thread.config.comment_name}?" : nil),
+              :confirm => (!is_deleted ? t(‘comment.actions.confirm_delete’) : nil),
               :method => :put,
               :id => "comment_#{comment.id.to_s}_#{del_string}_link",
               :class => "comment_#{del_string}_link",

@@ -55,7 +55,7 @@
   width: 100%;
 }
 
-.comment_gravatar_image {
+.comment_avatar {
   float: left;
 
   margin-top: 5px;
@@ -63,7 +63,7 @@
 }
 
 .comment_timestamp {
-	color: #777;
+  color: #777;
   display: inline-block;
 }
 
