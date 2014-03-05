@@ -1,0 +1,11 @@
+<% unless @comment.try(:id).blank? %>
+  <% @comment.reload %>
+  $("#comment_<%= @comment.id.to_s %>_body_div").html("<%= escape_javascript(
+    render :partial => 'body', :locals => {:comment => @comment}) %>");
+<% end %>
+
+$("#thread_<%= @thread.id %>_new_comment_div").hide();
+
+$("#thread_<%= @thread.id %>_new_comment_link_span").fadeIn();
+
+<%= javascript_proc %>

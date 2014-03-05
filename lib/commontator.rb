@@ -16,6 +16,7 @@ module Commontator
     :user_name_clickable,
     :user_email_proc,
     :user_admin_proc,
+    :user_avatar_proc,
     :user_email_enable_proc
   ]
   
@@ -30,6 +31,7 @@ module Commontator
     :can_delete_old_comments,
     :can_subscribe_to_thread,
     :can_vote_on_comments,
+    :combine_upvotes_and_downvotes,
     :comments_order,
     :closed_threads_are_readable,
     :deleted_comments_are_visible,

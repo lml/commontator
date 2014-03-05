@@ -9,7 +9,7 @@
       <% if user && user.commontator_config.user_name_clickable %>
         <%= link_to commontator_name(comment.creator), main_app.polymorphic_path(comment.creator) %>
       <% else %>
-        <%= commontator_name(comment.creator) %>
+        <%= commontator_name comment.creator %>
       <% end %>
     </span>
     <span id="comment_<%= comment.id.to_s %>_actions_span" class="comment_actions">
@@ -34,12 +34,12 @@
   </div>
   <div id="comment_<%= comment.id.to_s %>_bottom_div" class="comment_div">
     <span id="comment_<%= comment.id.to_s %>_created_timestamp_span" class="comment_timestamp">
-      <%= created_timestamp(comment) %>
+      <%= created_timestamp comment %>
     </span>
     <br/>
     <span id="comment_<%= comment.id.to_s %>_updated_timestamp_span" class="comment_timestamp">
     <% if comment.is_modified? %>
-      <%= updated_timestamp(comment) %>
+      <%= updated_timestamp comment %>
     <% end %>
     </span>
   </div>

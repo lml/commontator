@@ -22,22 +22,23 @@
 en: 
   activerecord: 
     attributes: 
-      commontator: 
-        comment: 
-          body: Comment
-          creator: Creator
-          editor: Editor
-          thread: Discussion
-        subscription: 
-          subscriber: Subscriber
-          thread: Discussion
-        thread: 
-          commontable: Commontable
-    models: 
-      commontator: 
-        comment: Comment
-        subscription: Subscription
+      commontator/comment:
+        body: Comment
+        creator: Creator
+        editor: Editor
         thread: Discussion
+      commontator/subscription:
+        subscriber: Subscriber
+        thread: Discussion
+      commontator/thread:
+        commontable: Commontable
+    models:
+      commontator/comment: Comment
+      commontator/subscription: Subscription
+      commontator/thread: Discussion
+  time:
+    formats:
+      commontator: "%b %d %Y at %I:%M%p %Z"
   commontator: 
     comment: 
       actions: 
@@ -48,19 +49,17 @@ en:
         new: "New Comment"
         undelete: Undelete
         update: "Modify Comment"
+        cancel: Cancel
       errors: 
         already_deleted: "This comment has already been deleted."
         create: "This comment could not be posted because:"
-        double_posted: "has already been posted."
+        double_posted: "is a duplicate of another comment."
         not_deleted: "This comment is not deleted."
         update: "This comment could not be modified because:"
       status: 
         created_at: "Posted on %{created_at}."
         deleted_by: "Comment deleted by %{deleter_name}."
         updated_at: "Last modified by %{editor_name} on %{updated_at}."
-    date: 
-      formats: 
-        default: "%b %d %Y at %I:%M %p"
     emails: 
       comment_created: 
         body: "%{creator_name} commented on %{commontable_name}:"

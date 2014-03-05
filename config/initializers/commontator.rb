@@ -43,6 +43,13 @@ Commontator.configure do |config|
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
   
+  # Proc called with a user and the view_context object as arguments
+  # Returns a URL to the user's avatar image
+  # The commontator_gravatar_url helper (optional) takes a user object and an
+  # options hash (see options at http://en.gravatar.com/site/implement/images/)
+  # Default: lambda { |user, view_context| view_context.commontator_gravatar_url(user) }
+  config.user_avatar_proc = lambda { |user, view_context| view_context.commontator_gravatar_url(user, :s => 60, :d => 'mm') }
+  
   # Proc called with a user as argument
   # Returns true iif emails should be sent to this user
   # Currently, only the subscription email exists
@@ -94,6 +101,11 @@ Commontator.configure do |config|
   # and configured for your application
   # Default: false
   config.can_vote_on_comments = false
+  
+  # Whether to display upvotes and downvotes separately, as two numbers,
+  # or together, as their difference
+  # Default: false (display as two numbers)
+  config.combine_upvotes_and_downvotes = false
 
   # What order to use for comments
   # Valid values:

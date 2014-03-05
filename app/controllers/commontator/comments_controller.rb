@@ -29,7 +29,10 @@ module Commontator
       raise SecurityTransgression unless @comment.can_be_created_by?(@user)
       
       respond_to do |format|
-        if @comment.save
+        if  !params[:cancel].nil?
+          format.html { redirect_to @thread }
+          format.js { render :cancel }
+        elsif @comment.save
           @thread.subscribe(@user) if @thread.config.auto_subscribe_on_comment
           @thread.add_unread_except_for(@user)
           recipients = @thread.active_subscribers.reject{|s| s == @user}
@@ -62,7 +65,10 @@ module Commontator
       @comment.editor = @user
 
       respond_to do |format|
-        if @comment.save
+        if !params[:cancel].nil?
+          format.html { redirect_to @thread }
+          format.js { render :cancel }
+        elsif @comment.save
           format.html { redirect_to @thread }
           format.js
         else
