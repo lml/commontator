@@ -1,93 +1,92 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1265
-{\fonttbl\f0\fmodern\fcharset0 Courier;}
-{\colortbl;\red255\green255\blue255;}
-\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\deftab720
-\pard\pardeftab720
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
 
-\f0\fs26 \cf0 en:\
-  activerecord:\
-    models:\
-      comment: Comment\
-      subscription: Subscription\
-      thread: Discussion\
-\
-    attributes:\
-      comment:\
-        creator: Creator\
-        editor: Editor\
-        thread: Discussion\
-        body: Comment\
-\
-      subscription:\
-        subscriber: Subscriber\
-        thread: Discussion\
-\
-      thread:\
-        commontable: Commontable\
-\
-  date:\
-    formats:\
-      default: %b %d %Y at %I:%M %p\
-\
-  user:\
-    require_login: You must login before you can post a comment.\
-\
-  comment:\
-    status:\
-      created_at: Posted on %\{created_at\}.\
-      updated_at: Last modified by %\{editor_name\} on %\{updated_at\}.\
-      deleted_by: Comment deleted by %\{deleter_name\}.\
-\
-    actions:\
-      new: New Comment\
-      create: Post Comment\
-      edit: Edit Comment\
-      update: Modify Comment\
-      delete: Delete\
-      undelete: Undelete\
-      confirm_delete: Are you sure you want to delete this comment?\
-\
-    errors:\
-      create: This comment could not be posted because:\
-      update: This comment could not be modified because:\
-      already_deleted: This comment has already been deleted.\
-      not_deleted: This comment is not deleted.\
-\
-      # Rails will automatically prepend\
-      # activerecord.attributes.comment.body to the next one\
-      double_posted: has already been posted.\
-\
-  subscription:\
-    actions:\
-      subscribe: Subscribe\
-      unsubscribe: Unsubscribe\
-      confirm_unsubscribe: Are you sure you want to unsubscribe from this discussion?\
-\
-    errors:\
-      already_subscribed: You are already subscribed to this discussion.\
-      not_subscribed: You are not subscribed to this discussion.\
-\
-  thread:\
-    status:\
-      open: Comments\
-      closed: Comments (Closed)\
-      closed_by: This discussion has been closed by a moderator.\
-\
-    actions:\
-      show: Show Comments\
-      close: Close Discussion\
-      reopen: Reopen Discussion\
-\
-    errors:\
-      already_closed: This discussion has already been closed.\
-      not_closed: This discussion is not closed.\
-\
-  emails:\
-    undisclosed_recipients: Undisclosed Recipients\
-    thread_link_html: <a href=%\{commontable_url\}>Click here</a> to view all comments on %\{commontable_name\}.\
-\
-    comment_created:\
-      subject: %\{creator_name\} posted a comment on %\{commontable_name\}\
-      # The body can be further customized by modifying the view\
-      body: %\{creator_name\} commented on %\{commontable_name\}:}
+en: 
+  activerecord: 
+    attributes: 
+      commontator: 
+        comment: 
+          body: Comment
+          creator: Creator
+          editor: Editor
+          thread: Discussion
+        subscription: 
+          subscriber: Subscriber
+          thread: Discussion
+        thread: 
+          commontable: Commontable
+    models: 
+      commontator: 
+        comment: Comment
+        subscription: Subscription
+        thread: Discussion
+  commontator: 
+    comment: 
+      actions: 
+        confirm_delete: "Are you sure you want to delete this comment?"
+        create: "Post Comment"
+        delete: Delete
+        edit: "Edit Comment"
+        new: "New Comment"
+        undelete: Undelete
+        update: "Modify Comment"
+      errors: 
+        already_deleted: "This comment has already been deleted."
+        create: "This comment could not be posted because:"
+        double_posted: "has already been posted."
+        not_deleted: "This comment is not deleted."
+        update: "This comment could not be modified because:"
+      status: 
+        created_at: "Posted on %{created_at}."
+        deleted_by: "Comment deleted by %{deleter_name}."
+        updated_at: "Last modified by %{editor_name} on %{updated_at}."
+    date: 
+      formats: 
+        default: "%b %d %Y at %I:%M %p"
+    emails: 
+      comment_created: 
+        body: "%{creator_name} commented on %{commontable_name}:"
+        subject: "%{creator_name} posted a comment on %{commontable_name}"
+      thread_link_html: "<a href=%{commontable_url}>Click here</a> to view all comments on %{commontable_name}."
+      undisclosed_recipients: "Undisclosed Recipients"
+    subscription: 
+      actions: 
+        confirm_unsubscribe: "Are you sure you want to unsubscribe from this discussion?"
+        subscribe: Subscribe
+        unsubscribe: Unsubscribe
+      errors: 
+        already_subscribed: "You are already subscribed to this discussion."
+        not_subscribed: "You are not subscribed to this discussion."
+    thread: 
+      actions: 
+        close: "Close Discussion"
+        confirm_close: "Are you sure you want to close this discussion?"
+        reopen: "Reopen Discussion"
+        show: "Show Comments"
+      errors: 
+        already_closed: "This discussion has already been closed."
+        not_closed: "This discussion is not closed."
+      status: 
+        closed: "Comments (Closed)"
+        closed_by: "This discussion has been closed by a moderator."
+        open: Comments
+    anonymous: Anonymous
+    require_login: "You must login before you can post a comment."

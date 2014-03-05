@@ -12,7 +12,7 @@ module Commontator
     validates_presence_of :body
 
     validates_uniqueness_of :body, :scope => [:creator_type, :creator_id, :thread_id],
-                                   :message => t('comment.errors.double_posted')
+                                   :message => I18n.t('commontator.comment.errors.double_posted')
 
     protected
 
@@ -75,8 +75,10 @@ module Commontator
     def can_be_edited_by?(user)
       (!thread.is_closed? && !is_deleted? &&\
         (is_latest? || thread.config.can_edit_old_comments) &&\
-        user == creator && thread.config.can_edit_own_comments && thread.can_be_read_by?(user)) ||\
-      (thread.config.admin_can_edit_comments && thread.can_be_edited_by?(user))
+          user == creator && thread.config.can_edit_own_comments &&\
+          thread.can_be_read_by?(user)) ||\
+        (thread.config.moderators_can_edit_comments &&\
+          thread.can_be_edited_by?(user))
     end
 
     def can_be_deleted_by?(user)

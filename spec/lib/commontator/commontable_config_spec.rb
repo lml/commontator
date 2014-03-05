@@ -17,10 +17,10 @@ module Commontator
     end
     
     it 'must be configurable' do
-      config = CommontableConfig.new(:comment_create_verb_present => 'create')
-      config.comment_create_verb_present.must_equal 'create'
-      config = CommontableConfig.new(:comment_create_verb_present => 'post')
-      config.comment_create_verb_present.must_equal 'post'
+      config = CommontableConfig.new(:moderators_can_edit_comments => true)
+      config.moderators_can_edit_comments.must_equal true
+      config = CommontableConfig.new(:moderators_can_edit_comments => false)
+      config.moderators_can_edit_comments.must_equal false
     end
   end
 end

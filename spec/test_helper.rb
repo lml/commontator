@@ -30,6 +30,11 @@ end
 
 def setup_helper_spec
   setup_model_spec
+  @comment = Commontator::Comment.new
+  @comment.body = 'Some comment'
+  @comment.thread = @thread
+  @comment.creator = @user
+  @comment.save!
 end
 
 def setup_mailer_spec

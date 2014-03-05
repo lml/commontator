@@ -9,7 +9,7 @@ module Commontator
       mail :to => @to,
            :bcc => @bcc,
            :from => @from,
-           :subject => t('emails.comment_created.subject',
+           :subject => t('commontator.emails.comment_created.subject',
                          :creator_name => @creator_name,
                          :commontable_name => @commontable_name,
                          :commontable_url => @commontable_url)
@@ -41,7 +41,7 @@ module Commontator
       params[:commontable_name] = @commontable_name
       params[:commontable_url] = @commontable_url
 
-      @to = t('emails.undisclosed_recipients')
+      @to = t('commontator.emails.undisclosed_recipients')
       @bcc = recipients.collect{|s| commontator_email(s)}
       @from = @config.email_from_proc.call(self)
     end

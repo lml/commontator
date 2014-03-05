@@ -15,13 +15,14 @@ module Commontator
     :user_name_proc,
     :user_name_clickable,
     :user_email_proc,
-    :user_admin_proc
+    :user_admin_proc,
+    :user_email_enable_proc
   ]
   
   # Can be set in initializer or passed as an option to acts_as_commontable
   COMMONTABLE_ATTRIBUTES = [
     :email_from_proc,
-    :admin_can_edit_comments,
+    :moderators_can_edit_comments,
     :auto_subscribe_on_comment,
     :can_edit_own_comments,
     :can_edit_old_comments,

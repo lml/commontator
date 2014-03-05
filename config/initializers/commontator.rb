@@ -20,28 +20,34 @@ Commontator.configure do |config|
 
   # User (acts_as_commontator) Configuration
 
-  # Proc called with user as argument
+  # Proc called with a user as argument
   # Returns the user's name
   # Important: change this to return the users' display names
-  # Default: lambda { |user| 'Anonymous' } (all users are Anonymous)
-  config.user_name_proc = lambda { |user| 'Anonymous' }
+  # Default: lambda { |user| t('commontator.anonymous') } (all users are Anonymous)
+  config.user_name_proc = lambda { |user| I18n.t('commontator.anonymous') }
 
   # Whether the comment creator's name is clickable in the comment view
   # If enabled, the link will point to the comment creator's 'show' page
   # Default: false
   config.user_name_clickable = false
 
-  # Proc called with user as argument
+  # Proc called with a user as argument
   # Returns the user's email address
   # Used in mailers
   # Default: lambda { |user| user.email }
   config.user_email_proc = lambda { |user| user.email }
 
-  # Proc called with user as argument
+  # Proc called with a user as argument
   # Returns true iif the user is an admin (a moderator for all threads)
-  # Admins can delete other users' comments and close threads
+  # Moderators can delete other users' comments and close threads
   # Default: lambda { |user| false } (no admins)
   config.user_admin_proc = lambda { |user| false }
+  
+  # Proc called with a user as argument
+  # Returns true iif emails should be sent to this user
+  # Currently, only the subscription email exists
+  # Default: lambda { |user| true } (emails can be sent to all users)
+  config.user_email_enable_proc = lambda { |user| true }
 
 
   # Thread/Commontable (acts_as_commontable) Configuration
@@ -53,9 +59,9 @@ Commontator.configure do |config|
   # lambda { |mailer| 'no-reply@example.com' }
   config.email_from_proc = lambda { |mailer| 'no-reply@example.com' }
 
-  # Whether admins can edit other users' comments
+  # Whether moderators can edit other users' comments
   # Default: false
-  config.admin_can_edit_comments = false
+  config.moderators_can_edit_comments = false
 
   # Whether users automatically subscribe to a thread when commenting
   # Default: false
@@ -107,16 +113,17 @@ Commontator.configure do |config|
   # Default: true
   config.deleted_comments_are_visible = true
 
-  # Proc called with thread and user as arguments
+  # Proc called with a thread and a user as arguments
   # Returns true iif the user should be allowed to read that thread
   # Note: can be called with a user object that is false or nil if not logged in
   # Default: lambda { |thread, user| true } (anyone can read threads even if not logged in)
   config.can_read_thread_proc = lambda { |thread, user| true }
 
-  # Proc called with thread and user as arguments
+  # Proc called with a thread and a user as arguments
   # Returns true iif the user is a moderator for that particular thread
   # and can delete users' comments in the thread or close it
-  # Default: lambda { |thread, user| false } (no thread-specific moderators)
+  # Default: lambda { |thread, user| false }
+  #            (no thread-specific moderators, but there can still be admins)
   config.can_edit_thread_proc = lambda { |thread, user| false }
 
   # Proc called with the commontable object as argument
@@ -126,8 +133,8 @@ Commontator.configure do |config|
   # Default: lambda { |commontable| "#{commontable.class.name} ##{commontable.id}" }
   config.commontable_name_proc = lambda { |commontable| "#{commontable.class.name} ##{commontable.id}" }
 
-  # Proc called with main_app and commontable objects as arguments
-  # Return the url that contains the commontable's thread to be used in the subscription email
+  # Proc called with main_app and a commontable object as arguments
+  # Return the url that contains the commontable's thread (to be used in the subscription email)
   # The application's routes can be accessed using the main_app object
   # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
   # (defaults to the commontable's show url)

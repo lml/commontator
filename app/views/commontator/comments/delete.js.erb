@@ -2,7 +2,7 @@ $("#comment_<%= @comment.id.to_s %>_body_div").html("<%= escape_javascript(
   render :partial => 'body', :locals => {:comment => @comment}) %>");
 
 $("#comment_<%= @comment.id.to_s %>_updated_timestamp_span").html("<%= escape_javascript(
-  "#{@comment.updated_timestamp} by #{commontator_name(@comment.editor)}") %>");
+  updated_timestamp(@comment)) %>");
                                                            
 $("#comment_<%= @comment.id.to_s %>_actions_span").html("<%= escape_javascript(
   render :partial => 'actions',

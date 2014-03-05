@@ -7,7 +7,7 @@
 <% can_edit = thread.can_be_edited_by?(user) %>
 
 <span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
-  <%= t "thread.status.#{thread.is_closed? ? 'closed' : 'open'}" %>
+  <%= t "commontator.thread.status.#{thread.is_closed? ? 'closed' : 'open'}" %>
 </span>
 
 <span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
@@ -23,10 +23,10 @@
 
   <% if can_edit %>
     <% is_closed = thread.is_closed? %>
-    <% close_string = is_closed ? "reopen" : "close" %>
-    <%= link_to t("thread.actions.#{close_string}"),
+    <% close_string = is_closed ? 'reopen' : 'close' %>
+    <%= link_to t("commontator.thread.actions.#{close_string}"),
                 commontator.polymorphic_path([close_string, thread]),
-                :confirm => (!is_closed ? t('thread.confirm_close') : nil),
+                :confirm => (!is_closed ? t('commontator.thread.actions.confirm_close') : nil),
                 :method => :put,
                 :id => "thread_#{thread.id.to_s}_#{close_string}_link",
                 :class => "thread_#{close_string}_link",
@@ -41,14 +41,14 @@
 </div>
 
 <% if thread.is_closed? %>
-  <p><%= t 'thread.status.closed_by' %></p>
+  <p><%= t 'commontator.thread.status.closed_by' %></p>
 <% elsif !user %>
-  <p><%= t 'user.require_login' %>.</p>
+  <p><%= t 'commontator.require_login' %>.</p>
 <% else %>
   <div id="thread_<%= thread.id %>_new_comment_div" class="thread_new_comment"></div>
 
   <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
-    <%= link_to t('comment.actions.new'),
+    <%= link_to t('commontator.comment.actions.new'),
         commontator.new_thread_comment_path(thread), :remote => true %>
   </span>
 <% end %>

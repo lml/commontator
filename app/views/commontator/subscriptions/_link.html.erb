@@ -5,9 +5,9 @@
 
 <% is_subscribed = thread.is_subscribed?(user) %>
 <% sub_string = is_subscribed ? "unsubscribe" : "subscribe" %>
-<%= link_to t("subscription.actions.#{sub_string}"),
+<%= link_to t("commontator.subscription.actions.#{sub_string}"),
             commontator.polymorphic_path([sub_string, thread]),
-            :confirm => (is_subscribed ? t('subscription.actions.confirm_unsubscribe') : \
+            :confirm => (is_subscribed ? t('commontator.subscription.actions.confirm_unsubscribe') : \
                           nil),
             :method => :put,
             :id => "thread_#{thread.id.to_s}_#{sub_string}_link",

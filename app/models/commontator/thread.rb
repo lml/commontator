@@ -31,7 +31,7 @@ module Commontator
     end
 
     def active_subscribers
-      subscribers.select{|s| s.is_commontator && s.commontator_config.subscription_email_enable_proc.call(s)}
+      subscribers.select{|s| s.is_commontator && s.commontator_config.user_email_enable_proc.call(s)}
     end
 
     def subscription_for(subscriber)

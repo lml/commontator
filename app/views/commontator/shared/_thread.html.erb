@@ -13,7 +13,7 @@
       <%= render :partial => 'commontator/threads/show', :locals => {:thread => thread,
                                                                      :user => user} %>
     <% else %>
-      <%= link_to "#{t 'thread.actions.show'} (#{subscription ? (subscription.unread.to_s + '/' + thread.comments.count.to_s) : thread.comments.count.to_s})", \
+      <%= link_to "#{t 'commontator.thread.actions.show'} (#{subscription ? (subscription.unread.to_s + '/' + thread.comments.count.to_s) : thread.comments.count.to_s})", \
                   commontator.thread_path(thread), :remote => true %>
     <% end %>
   </div>
