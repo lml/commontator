@@ -16,20 +16,20 @@ module Commontator
       user.commontator_config.user_email_proc.call(user)
     end
     
-    def commontator_gravatar_url(user, options = {})
+    def commontator_gravatar_image_tag(user, border = 1, options = {})
       base = request.ssl? ? "s://secure" : "://www"
       hash = Digest::MD5.hexdigest(commontator_email(user))
-      size = 64
+      url = "http#{base}.gravatar.com/avatar/#{hash}?#{options.to_query}"
+
+      name = commontator_name(user)
       
-      "http#{base}.gravatar.com/avatar/#{hash}?#{options.to_query}"
+      image_tag(url, { :alt => name,
+                       :title => name,
+                       :border => border })
     end
   
-    def commontator_avatar(user, border = 1)
-      name = commontator_name(user)
-      image_tag(user.commontator_config.user_avatar_proc.call(user, self),
-                { :alt => name, 
-                  :title => name,
-                  :border => border })
+    def commontator_avatar(user)
+      user.commontator_config.user_avatar_proc.call(user, self)
     end
   end
 end

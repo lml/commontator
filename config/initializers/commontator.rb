@@ -44,11 +44,12 @@ Commontator.configure do |config|
   config.user_admin_proc = lambda { |user| false }
   
   # Proc called with a user and the view_context object as arguments
-  # Returns a URL to the user's avatar image
-  # The commontator_gravatar_url helper (optional) takes a user object and an
-  # options hash (see options at http://en.gravatar.com/site/implement/images/)
-  # Default: lambda { |user, view_context| view_context.commontator_gravatar_url(user) }
-  config.user_avatar_proc = lambda { |user, view_context| view_context.commontator_gravatar_url(user, :s => 60, :d => 'mm') }
+  # Returns an HTML image tag containing the user's avatar image
+  # The commontator_gravatar_image_tag helper takes a user object,
+  # a border size, and an options hash for gravatar
+  # See available options at http://en.gravatar.com/site/implement/images/)
+  # Default: lambda { |user, view_context| view_context.commontator_gravatar_image_tag(user, 1, :s => 60, :d => 'mm') }
+  config.user_avatar_proc = lambda { |user, view_context| view_context.commontator_gravatar_image_tag(user, 1, :s => 60, :d => 'mm') }
   
   # Proc called with a user as argument
   # Returns true iif emails should be sent to this user
