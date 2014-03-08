@@ -17,7 +17,7 @@ module Commontator
     
     # PUT /threads/1/close
     def close
-      raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
+      security_transgression_unless @thread.can_be_edited_by?(@user)
 
       @thread.errors.add(:base, t('commontator.thread.errors.already_closed')) \
         unless @thread.close(@user)
@@ -30,7 +30,7 @@ module Commontator
     
     # PUT /threads/1/reopen
     def reopen
-      raise SecurityTransgression unless @thread.can_be_edited_by?(@user)
+      security_transgression_unless @thread.can_be_edited_by?(@user)
 
       @thread.errors.add(:base, t('commontator.thread.errors.not_closed')) \
         unless @thread.reopen

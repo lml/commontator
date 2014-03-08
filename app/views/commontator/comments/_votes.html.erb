@@ -6,8 +6,12 @@
 <% if comment.can_be_voted_on? %>
   <% can_vote = comment.can_be_voted_on_by?(user) %>
   <% vote = comment.get_vote_by(user) %>
+  <% comment_voting = comment.thread.config.comment_voting.to_sym %>
 
-  <span id="comment_<%= comment.id %>_upvote_span" class="comment_upvote">
+  <% if comment_voting == :ld || comment_voting == :l %>
+  <% vtype = (comment_voting == :ld) ? 'upvote' : 'like' %>
+  <span id="comment_<%= comment.id %>_<%= vtype %>_span"
+        class="comment_<%= vtype %>">
     <% if can_vote && (vote.blank? || !vote.vote_flag) %>
       <%= form_tag commontator.upvote_comment_path(comment),
             :method => :put,
@@ -28,15 +32,15 @@
       <%= image_tag "commontator/upvote_hover.png" %>
     <% end %>
   </span>
+  <% end %>
 
   <span id="comment_<%= comment.id %>_vote_count_span" class="comment_vote_count">
-    <% if comment.thread.config.combine_upvotes_and_downvotes %>
-      <p><%= "%+d" % (comment.upvotes.size - comment.downvotes.size) %></p>
-    <% else %>
-      <p>+<%= comment.upvotes.size %>/-<%= comment.downvotes.size %></p>
-    <% end %>
+    <% config = comment.thread.config %>
+    <%= config.voting_text_proc.call(config.comment_voting,
+          comment.upvotes.size, comment.downvotes.size) %>
   </span>
 
+  <% if comment_voting == :ld %>
   <span id="comment_<%= comment.id %>_downvote_span" class="comment_downvote">
     <% if can_vote && (vote.blank? || vote.vote_flag) %>
       <%= form_tag commontator.downvote_comment_path(comment),
@@ -58,4 +62,5 @@
       <%= image_tag "commontator/downvote_hover.png" %>
     <% end %>
   </span>
+  <% end %>
 <% end %>

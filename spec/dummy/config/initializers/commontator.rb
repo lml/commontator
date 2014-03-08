@@ -2,11 +2,9 @@
 Commontator.configure do |config|
   config.javascript_proc = lambda { |view_context| '// Some javascript' }
 
-  config.user_admin_proc = lambda { |user| user.is_admin }
+  config.thread_read_proc = lambda { |thread, user| user && user.can_read }
 
-  config.can_vote_on_comments = true
+  config.thread_moderator_proc = lambda { |thread, user| user.is_admin || user.can_edit }
 
-  config.can_read_thread_proc = lambda { |thread, user| user && user.can_read }
-
-  config.can_edit_thread_proc = lambda { |thread, user| user.can_edit }
+  config.comment_voting = :ld
 end

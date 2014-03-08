@@ -8,148 +8,164 @@ Commontator.configure do |config|
   # Default: lambda { |controller| controller.current_user }
   config.current_user_proc = lambda { |controller| controller.current_user }
 
-  # Proc called with the view_context object as argument
+  # Proc called with the current view_context as argument
   # Returns a string to be appended to all JavaScript responses from Commontator
   # Can be used, for example, to display/clear Rails error messages
   # Objects visible in view templates can be accessed through
   # the view_context object (for example, view_context.flash)
   # However, the view_context does not include the main application's helpers
   # Default: lambda { |view_context| '$("#error_explanation").remove();' }
-  config.javascript_proc = lambda { |view_context| '$("#error_explanation").remove();' }
+  config.javascript_proc = lambda { |view_context|
+    '$("#error_explanation").remove();' }
+
 
 
   # User (acts_as_commontator) Configuration
 
   # Proc called with a user as argument
-  # Returns the user's name
-  # Important: change this to return the users' display names
+  # Returns the user's display name
+  # Important: change this to return actual names or usernames
   # Default: lambda { |user| t('commontator.anonymous') } (all users are Anonymous)
   config.user_name_proc = lambda { |user| I18n.t('commontator.anonymous') }
 
-  # Whether the comment creator's name is clickable in the comment view
-  # If enabled, the link will point to the comment creator's 'show' page
-  # Default: false
-  config.user_name_clickable = false
-
-  # Proc called with a user as argument
-  # Returns the user's email address
-  # Used in mailers
-  # Default: lambda { |user| user.email }
-  config.user_email_proc = lambda { |user| user.email }
-
-  # Proc called with a user as argument
-  # Returns true iif the user is an admin (a moderator for all threads)
-  # Moderators can delete other users' comments and close threads
-  # Default: lambda { |user| false } (no admins)
-  config.user_admin_proc = lambda { |user| false }
-  
-  # Proc called with a user and the view_context object as arguments
+  # Proc called with a user and the current view_context as arguments
   # Returns an HTML image tag containing the user's avatar image
   # The commontator_gravatar_image_tag helper takes a user object,
   # a border size, and an options hash for gravatar
   # See available options at http://en.gravatar.com/site/implement/images/)
-  # Default: lambda { |user, view_context| view_context.commontator_gravatar_image_tag(user, 1, :s => 60, :d => 'mm') }
-  config.user_avatar_proc = lambda { |user, view_context| view_context.commontator_gravatar_image_tag(user, 1, :s => 60, :d => 'mm') }
-  
-  # Proc called with a user as argument
-  # Returns true iif emails should be sent to this user
-  # Currently, only the subscription email exists
-  # Default: lambda { |user| true } (emails can be sent to all users)
-  config.user_email_enable_proc = lambda { |user| true }
+  # Default: lambda { |user, view_context|
+  #            view_context.commontator_gravatar_image_tag(
+  #              user, 1, :s => 60, :d => 'mm') }
+  config.user_avatar_proc = lambda { |user, view_context|
+                              view_context.commontator_gravatar_image_tag(
+                                user, 1, :s => 60, :d => 'mm') }
+
+  # Proc called with a user and a mailer object as arguments
+  # If the mailer argument is nil, the email is for internal use only and
+  # this method should always return the user's email, no matter what
+  # If the mailer argument is not nil, then an actual email will be sent to the
+  # address returned; you can prevent it from being sent by checking the
+  # arguments and returning a blank string, if appropriate
+  # Default: lambda { |user, mailer| user.email }
+  config.user_email_proc = lambda { |user, mailer| user.email }
+
+  # Proc called with a user and the current view_context as arguments
+  # Returns a link to the user's page
+  # If anything non-blank is returned, the user's name in comments
+  # will become a hyperlink pointing to this
+  # Default: lambda { |user, controller| '' } (no link)
+  config.user_link_proc = lambda { |user, view_context| '' }
+
 
 
   # Thread/Commontable (acts_as_commontable) Configuration
 
-  # Proc called with a mailer as argument
+  # Proc called with a mailer object as argument
   # Returns the address emails are sent 'from'
   # Important: Change this to at least match your domain name
-  # Default:
-  # lambda { |mailer| 'no-reply@example.com' }
+  # Default: lambda { |mailer| 'no-reply@example.com' }
   config.email_from_proc = lambda { |mailer| 'no-reply@example.com' }
+
+  # Proc called with a thread and a user as arguments
+  # Returns true iif the user should be allowed to read that thread
+  # Note: can be called with a user object that is false or nil if not logged in
+  # Default: lambda { |thread, user| true } (anyone can read any thread)
+  config.thread_read_proc = lambda { |thread, user| true }
+
+  # Proc called with a thread and a user as arguments
+  # Returns true iif the user is a moderator for that thread
+  # Moderators can delete other users' comments and close threads
+  # If you want global moderators, make the return value of this proc true for them
+  # Default: lambda { |thread, user| false } (no moderators)
+  config.thread_moderator_proc = lambda { |thread, user| false }
+
+  # Whether users can subscribe to threads to receive activity email notifications
+  # Valid options:
+  #   :n (no subscriptions)
+  #   :a (automatically subscribe when you comment; cannot do it manually)
+  #   :m (manual subscriptions only)
+  #   :b (both automatic, when commenting, and manual)
+  # Default: :m
+  config.thread_subscription = :m
+
+  # Whether users can vote on other users' comments
+  # Valid options:
+  #   :n (no voting)
+  #   :l (likes - requires acts_as_votable gem)
+  #   :ld (likes/dislikes - requires acts_as_votable gem)
+  # Not yet implemented:
+  #   :s (star ratings)
+  #   :r (reputation system)
+  # Note: you can format how the votes are displayed by modifying the locale file
+  # Default: :n
+  config.comment_voting = :n
+
+  # This proc is called with the value of config.comment_voting as an argument,
+  # as well as pos and neg
+  # pos is the number of likes or the rating or the reputation
+  # neg is the number of dislikes, if applicable, or 0 otherwise
+  # Returns the text to be displayed in between the voting buttons
+  # Default: lambda { |comment_voting, pos, neg| "%+d" % (pos - neg) }
+  config.voting_text_proc = lambda { |comment_voting, pos, neg|
+                              "%+d" % (pos - neg) }
+
+  # What order to use for comments
+  # Valid options:
+  #   :e (earliest comment first)
+  #   :l (latest comment first)
+  #   :ve (highest voted first; earliest first if tied)
+  #   :vl (highest voted first; latest first if tied)
+  # Default: :e
+  config.comment_order = :e
+
+  # Whether users can edit their own comments
+  # Valid options:
+  #   :a (always)
+  #   :l (only if it's the latest comment)
+  #   :n (never)
+  # Default: :l
+  config.comment_editing = :l
+
+  # Whether users can delete their own comments
+  # Valid options:
+  #   :a (always)
+  #   :l (only if it's the latest comment)
+  #   :n (never)
+  # Note: moderators can always delete any comment
+  # Default: :l
+  config.comment_deletion = :l
 
   # Whether moderators can edit other users' comments
   # Default: false
   config.moderators_can_edit_comments = false
 
-  # Whether users automatically subscribe to a thread when commenting
-  # Default: false
-  config.auto_subscribe_on_comment = false
+  # Whether to hide deleted comments completely or show a placeholder message
+  # that indicates when a comment was deleted in a thread
+  # (moderators will always see the placeholder;
+  # the content of the comment will be hidden from all users with either option)
+  # Default: false (show placeholder message)
+  config.hide_deleted_comments = false
 
-  # Whether users can edit their own comments
-  # Default: true
-  config.can_edit_own_comments = true
-
-  # Whether users can edit their own comments
-  # after someone posted a newer comment
-  # Default: false
-  config.can_edit_old_comments = false
-
-  # Whether users can delete their own comments
-  # Default: true
-  config.can_delete_own_comments = true
-
-  # Whether users can delete their own comments
-  # after someone posted a newer comment
-  # Default: false
-  config.can_delete_old_comments = false
-
-  # Whether users can manually subscribe or unsubscribe to threads
-  # Default: true
-  config.can_subscribe_to_thread = true
-
-  # Whether users can vote on other users' comments
-  # Note: requires acts_as_votable gem installed
-  # and configured for your application
-  # Default: false
-  config.can_vote_on_comments = false
-  
-  # Whether to display upvotes and downvotes separately, as two numbers,
-  # or together, as their difference
-  # Default: false (display as two numbers)
-  config.combine_upvotes_and_downvotes = false
-
-  # What order to use for comments
-  # Valid values:
-  #   :e (earliest comment first)
-  #   :l (latest comment first)
-  #   :ve (highest voted first; earliest first if tied)
-  #   :vl (highest voted first; latest first if tied)
-  # Default: :e (earliest comment first)
-  config.comments_order = :e
-
-  # Whether users can read threads closed by moderators
-  # Default: true
-  config.closed_threads_are_readable = true
-
-  # Whether to show that comments deleted by a moderator actually existed
-  # (the content will be hidden either way)
-  # Default: true
-  config.deleted_comments_are_visible = true
-
-  # Proc called with a thread and a user as arguments
-  # Returns true iif the user should be allowed to read that thread
-  # Note: can be called with a user object that is false or nil if not logged in
-  # Default: lambda { |thread, user| true } (anyone can read threads even if not logged in)
-  config.can_read_thread_proc = lambda { |thread, user| true }
-
-  # Proc called with a thread and a user as arguments
-  # Returns true iif the user is a moderator for that particular thread
-  # and can delete users' comments in the thread or close it
-  # Default: lambda { |thread, user| false }
-  #            (no thread-specific moderators, but there can still be admins)
-  config.can_edit_thread_proc = lambda { |thread, user| false }
+  # If set to true, threads closed by moderators will be invisible to normal users
+  # (moderators can still see them)
+  # Default: false (normal users can still read closed threads)
+  config.hide_closed_threads = false
 
   # Proc called with the commontable object as argument
   # Returns the name by which the commontable object will be called in email messages
   # If you have multiple commontable models, you may want to pass this
   # configuration value as an argument to acts_as_commontable in each one
-  # Default: lambda { |commontable| "#{commontable.class.name} ##{commontable.id}" }
-  config.commontable_name_proc = lambda { |commontable| "#{commontable.class.name} ##{commontable.id}" }
+  # Default: lambda { |commontable|
+  #            "#{commontable.class.name} ##{commontable.id}" }
+  config.commontable_name_proc = lambda { |commontable|
+    "#{commontable.class.name} ##{commontable.id}" }
 
   # Proc called with main_app and a commontable object as arguments
   # Return the url that contains the commontable's thread (to be used in the subscription email)
-  # The application's routes can be accessed using the main_app object
-  # Default: lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
+  # The main application's routes can be accessed using the main_app object
+  # Default: lambda { |commontable, main_app|
+  #            main_app.polymorphic_url(commontable) }
   # (defaults to the commontable's show url)
-  config.commontable_url_proc = lambda { |main_app, commontable| main_app.polymorphic_url(commontable) }
+  config.commontable_url_proc = lambda { |commontable, main_app|
+    main_app.polymorphic_url(commontable) }
 end

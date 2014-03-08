@@ -17,10 +17,12 @@ module Commontator
     end
     
     it 'must be configurable' do
-      config = CommontatorConfig.new(:user_name_clickable => true)
-      config.user_name_clickable.must_equal true
-      config = CommontatorConfig.new(:user_name_clickable => false)
-      config.user_name_clickable.must_equal false
+      proc = lambda { |user| 'Some name' }
+      proc2 = lambda { |user| 'Another name' }
+      config = CommontatorConfig.new(:user_name_proc => proc)
+      (config.user_name_proc == proc).must_equal true
+      config = CommontatorConfig.new(:user_name_proc => proc2)
+      (config.user_name_proc == proc2).must_equal true
     end
   end
 end

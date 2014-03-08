@@ -11,8 +11,9 @@ module Commontator
     validates_presence_of :thread
     validates_presence_of :body
 
-    validates_uniqueness_of :body, :scope => [:creator_type, :creator_id, :thread_id],
-                                   :message => I18n.t('commontator.comment.errors.double_posted')
+    validates_uniqueness_of :body,
+      :scope => [:creator_type, :creator_id, :thread_id],
+      :message => I18n.t('commontator.comment.errors.double_posted')
 
     protected
 
@@ -63,9 +64,9 @@ module Commontator
     ##################
 
     def can_be_read_by?(user)
-      ((!is_deleted? || thread.config.deleted_comments_are_visible) &&\
-        thread.can_be_read_by?(user)) ||\
-      thread.can_be_edited_by?(user)
+      return true if thread.can_be_edited_by?(user)
+      (!is_deleted? || !thread.config.hide_deleted_comments) &&\
+      thread.can_be_read_by?(user)
     end
 
     def can_be_created_by?(user)
@@ -73,28 +74,31 @@ module Commontator
     end
 
     def can_be_edited_by?(user)
-      (!thread.is_closed? && !is_deleted? &&\
-        (is_latest? || thread.config.can_edit_old_comments) &&\
-          user == creator && thread.config.can_edit_own_comments &&\
-          thread.can_be_read_by?(user)) ||\
-        (thread.config.moderators_can_edit_comments &&\
-          thread.can_be_edited_by?(user))
+      return true if thread.config.moderators_can_edit_comments &&\
+                     thread.can_be_edited_by?(user)
+      comment_edit = thread.config.comment_editing.to_sym
+      !thread.is_closed? && !is_deleted? && user == creator &&\
+      comment_edit != :n && (is_latest? || comment_edit == :a) &&\
+      thread.can_be_read_by?(user)
     end
 
     def can_be_deleted_by?(user)
-      (!thread.is_closed? && (!is_deleted? || editor == user) &&\
-        (is_latest? || thread.config.can_delete_old_comments) &&\
-        user == creator && thread.config.can_delete_own_comments &&\
-        thread.can_be_read_by?(user)) ||\
-      thread.can_be_edited_by?(user)
+      return true if thread.can_be_edited_by?(user)
+      comment_del = thread.config.comment_deletion.to_sym
+      !thread.is_closed? && (!is_deleted? || editor == user) &&\
+      user == creator && comment_del != :n &&\
+      (is_latest? || comment_del == :a) &&\
+      thread.can_be_read_by?(user)
     end
 
     def can_be_voted_on?
-      !thread.is_closed? && is_votable? && !is_deleted? && thread.config.can_vote_on_comments
+      !thread.is_closed? && !is_deleted? &&\
+      thread.config.comment_voting != :n && is_votable?
     end
 
     def can_be_voted_on_by?(user)
-      can_be_voted_on? && user && user.is_commontator && user != creator && thread.can_be_read_by?(user)
+      !user.nil? && user.is_commontator && user != creator &&\
+      thread.can_be_read_by?(user) && can_be_voted_on?
     end
   end
 end

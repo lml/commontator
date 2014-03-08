@@ -14,7 +14,7 @@ There are 4 steps you must follow to install commontator:
   Add this line to your application's Gemfile:
 
   ```ruby
-  gem 'commontator', '~> 4.3.0'
+  gem 'commontator', '~> 4.4.0'
   ```
 
   And then execute:
@@ -55,7 +55,8 @@ There are 4 steps you must follow to install commontator:
 
 3. Configuration
 
-  Change commontator's configurations to suit your needs by editing config/intializers/commontator.rb.
+  Change commontator's configurations to suit your needs by editing `config/initializers/commontator.rb`.
+  Make sure to check that your configuration file is up to date every time you update the gem, as available options can change with each minor version.
 
 4. Routes
 
@@ -97,14 +98,13 @@ Follow the steps below to add commontator to your models and views:
 
   This will create a link in the view that the user will be able to click to display the comment thread.
 
-  Note that model's record must already exist in the database, so do not use this in new.html.erb, _form.html.erb or similar.
-  We recommend you use this in the model's show.html.erb.
+  Note that model's record must already exist in the database, so do not use this in `new.html.erb`, `_form.html.erb` or similar.
+  We recommend you use this in the model's `show.html.erb` or similar.
 
 3. Controllers
 
   By default, the `commontator_thread` method only links to the desired comment thread.
-  If you want, instead, to have the thread display right away when the corresponding view page is loaded,
-  just add the following method call to the controller action that displays the view in question:
+  If you want, instead, to have the thread display right away when the corresponding view page is loaded, just add the following method call to the controller action that displays the view in question:
   
   ```ruby
   commontator_thread_show(commontable)
@@ -112,15 +112,14 @@ Follow the steps below to add commontator to your models and views:
 
   Note that the call to `commontator_thread` in the view is still necessary in either case.
 
-  The `commontator_thread_show` method checks the current user's read permission on the thread and will raise an
-  exception if the user is not allowed to read it according to the configuration options in the initializer.
+  The `commontator_thread_show` method checks the current user's read permission on the thread and will raise an exception if the user is not allowed to read it according to the configuration options in the initializer.
   It is up to you to ensure that this method is only called if the user is authorized to read the thread.
 
 That's it! Commontator is now ready for use.
 
 ## Voting
 
-You can allow users to vote on each others' comments by adding the acts_as_votable gem to your gemfile:
+You can allow users to vote on each others' comments by adding the `acts_as_votable` gem to your gemfile:
 
 ```ruby
 gem 'acts_as_votable'
@@ -132,8 +131,8 @@ And enabling the relevant option in commontator's initializer:
 config.can_vote_on_comments = true
 ```
 
-Note that acts_as_votable is currently incompatible with the protected_attributes
-gem if config.active_record.whitelist_attributes is set to true.
+Note that `acts_as_votable` is currently incompatible with the `protected_attributes`
+gem if `config.active_record.whitelist_attributes` is true.
 
 ## Browser Support
 
@@ -145,6 +144,8 @@ To function properly, this gem requires that visitors to the site have javascrip
 Copy commontator's files to your app using any of the following commands:
 
 ```sh
+$ rake commontator:copy:locales
+
 $ rake commontator:copy:images
 $ rake commontator:copy:stylesheets
 
@@ -157,6 +158,12 @@ $ rake commontator:copy:models
 ```
 
 You are now free to modify them and have any changes made manifest in your application.
+
+If copying commontator's locales, please note that by default Rails will not autoload locales in subfolders of `config/locales` (like ours) unless you add the following to your application's configuration file:
+
+```rb
+config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.{rb,yml}')]
+```
 
 ## Contributing
 

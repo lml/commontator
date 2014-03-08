@@ -10,7 +10,7 @@ module Commontator
       @comment.thread = @thread
       @comment.creator = @user
 
-      raise SecurityTransgression unless @comment.can_be_created_by?(@user)
+      security_transgression_unless @comment.can_be_created_by?(@user)
 
       respond_to do |format|
         format.html { redirect_to @thread }
@@ -26,16 +26,17 @@ module Commontator
       @comment.thread = @thread
       @comment.creator = @user
       
-      raise SecurityTransgression unless @comment.can_be_created_by?(@user)
+      security_transgression_unless @comment.can_be_created_by?(@user)
       
       respond_to do |format|
         if  !params[:cancel].nil?
           format.html { redirect_to @thread }
           format.js { render :cancel }
         elsif @comment.save
-          @thread.subscribe(@user) if @thread.config.auto_subscribe_on_comment
+          @thread.subscribe(@user) if @thread.config.thread_subscription == :a ||\
+                                      @thread.config.thread_subscription == :b
           @thread.add_unread_except_for(@user)
-          recipients = @thread.active_subscribers.reject{|s| s == @user}
+          recipients = @thread.subscribers.reject{|s| s == @user}
           SubscriptionsMailer.comment_created(@comment, recipients).deliver \
             unless recipients.empty?
 
@@ -50,7 +51,7 @@ module Commontator
 
     # GET /comments/1/edit
     def edit
-      raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
+      security_transgression_unless @comment.can_be_edited_by?(@user)
 
       respond_to do |format|
         format.html { redirect_to @thread }
@@ -60,7 +61,7 @@ module Commontator
 
     # PUT /comments/1
     def update
-      raise SecurityTransgression unless @comment.can_be_edited_by?(@user)
+      security_transgression_unless @comment.can_be_edited_by?(@user)
       @comment.body = params[:comment].nil? ? nil : params[:comment][:body]
       @comment.editor = @user
 
@@ -80,7 +81,7 @@ module Commontator
 
     # PUT /comments/1/delete
     def delete
-      raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
+      security_transgression_unless @comment.can_be_deleted_by?(@user)
 
       @comment.errors.add(:base, t('commontator.comment.errors.already_deleted')) \
         unless @comment.delete_by(@user)
@@ -93,7 +94,7 @@ module Commontator
     
     # PUT /comments/1/undelete
     def undelete
-      raise SecurityTransgression unless @comment.can_be_deleted_by?(@user)
+      security_transgression_unless @comment.can_be_deleted_by?(@user)
 
       @comment.errors.add(:base, t('commontator.comment.errors.not_deleted')) \
         unless @comment.undelete_by(@user)
@@ -106,7 +107,7 @@ module Commontator
     
     # PUT /comments/1/upvote
     def upvote
-      raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
+      security_transgression_unless @comment.can_be_voted_on_by?(@user)
       
       @comment.upvote_from @user
 
@@ -118,7 +119,8 @@ module Commontator
     
     # PUT /comments/1/downvote
     def downvote
-      raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
+      security_transgression_unless @comment.can_be_voted_on_by?(@user) &&\
+        @comment.thread.config.comment_voting.to_sym == :ld
       
       @comment.downvote_from @user
 
@@ -130,7 +132,7 @@ module Commontator
     
     # PUT /comments/1/unvote
     def unvote
-      raise SecurityTransgression unless @comment.can_be_voted_on_by?(@user)
+      security_transgression_unless @comment.can_be_voted_on_by?(@user)
       
       @comment.unvote :voter => @user
 

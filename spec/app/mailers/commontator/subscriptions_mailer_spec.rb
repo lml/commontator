@@ -12,7 +12,7 @@ module Commontator
       @comment.creator = @user
       @comment.body = 'Something'
       @comment.save!
-      @recipients = @thread.active_subscribers.reject{|s| s == @user}
+      @recipients = @thread.subscribers.reject{|s| s == @user}
     end
     
     it 'must create deliverable mail' do

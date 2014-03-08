@@ -1,4 +1,6 @@
-COMMONTATOR_COPY_TASKS = ['assets/images', 'assets/stylesheets', 'views', 'mailers', 'helpers', 'controllers', 'models']
+COMMONTATOR_COPY_TASKS = ['config/locales', 'app/assets/images',
+                          'app/assets/stylesheets', 'app/views', 'app/mailers',
+                          'app/helpers', 'app/controllers', 'app/models']
 
 namespace :commontator do
   namespace :install do
@@ -20,7 +22,8 @@ namespace :commontator do
       name = File.basename(path)
       desc "Copy #{name} from commontator to application"
       task name.to_sym do
-        cp_r File.expand_path("../../../app/#{path}/commontator", __FILE__), "app/#{path}", :verbose => false
+        cp_r File.expand_path("../../../#{path}/commontator", __FILE__),
+             path, :verbose => false
         print "Copied #{name} from commontator\n"
       end
     end

@@ -7,18 +7,20 @@ module Commontator
     has_many :subscriptions, :dependent => :destroy
 
     validates_presence_of :commontable, :unless => :is_closed?
-    validates_uniqueness_of :commontable_id, :scope => :commontable_type, :allow_nil => true
+    validates_uniqueness_of :commontable_id,
+                            :scope => :commontable_type,
+                            :allow_nil => true
 
     def config
       commontable.try(:commontable_config) || Commontator
     end
 
     def ordered_comments
-      case config.comments_order
-        when :l then comments.order('id DESC')
-        when :ve then comments.order('cached_votes_down - cached_votes_up')
-        when :vl then comments.order('cached_votes_down - cached_votes_up', 'id DESC')
-        else comments
+      case config.comment_order.to_sym
+      when :l then comments.order('id DESC')
+      when :ve then comments.order('cached_votes_down - cached_votes_up')
+      when :vl then comments.order('cached_votes_down - cached_votes_up', 'id DESC')
+      else comments
       end
     end
 
@@ -28,10 +30,6 @@ module Commontator
 
     def subscribers
       subscriptions.collect{|s| s.subscriber}
-    end
-
-    def active_subscribers
-      subscribers.select{|s| s.is_commontator && s.commontator_config.user_email_enable_proc.call(s)}
     end
 
     def subscription_for(subscriber)
@@ -105,24 +103,24 @@ module Commontator
     # Access Control #
     ##################
 
-    # Reader capabilities (user can be nil or false)
+    # Reader capabilities (remember: user can be nil or false)
     def can_be_read_by?(user)
-      (!commontable.nil? &&\
-        (!is_closed? || config.closed_threads_are_readable) &&\
-        config.can_read_thread_proc.call(self, user)) ||\
-      can_be_edited_by?(user)
+      return true if can_be_edited_by?(user)
+      !commontable.nil? && (!is_closed? || !config.hide_closed_threads) &&\
+      config.thread_read_proc.call(self, user)
     end
 
     # Thread moderator capabilities
     def can_be_edited_by?(user)
-      !commontable.nil? && user && user.is_commontator &&\
-      (user.commontator_config.user_admin_proc.call(user) ||\
-        config.can_edit_thread_proc.call(self, user))
+      !commontable.nil? && !user.nil? &&\
+      config.thread_moderator_proc.call(self, user)
     end
 
     def can_subscribe?(user)
-      !is_closed? && user && user.is_commontator &&\
-      config.can_subscribe_to_thread && can_be_read_by?(user)
+      thread_sub = config.thread_subscription.to_sym
+      !is_closed? && !user.nil? && user.is_commontator &&\
+      thread_sub != :n && thread_sub != :a &&\
+      can_be_read_by?(user)
     end
   end
 end

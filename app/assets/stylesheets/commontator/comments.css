@@ -64,7 +64,9 @@
 
 .comment_votes {
   float: right;
-  
+  margin-top: 5px;
+  margin-bottom: 5px;
+
   text-align: center;
 }
 
@@ -80,8 +82,27 @@
   margin: 0px;
 }
 
-.comment_vote_count p {
-  margin: 0px;
+.comment_vote_count {
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.comment_upvote {
+  display: block;
+  height: 32px;
+}
+
+.comment_downvote {
+  display: block;
+  height: 32px;
+}
+
+.comment_like {
+  float: left;
+}
+
+.comment_like + .comment_vote_count {
+  float: right;
 }
 
 .comment_error_explanation {

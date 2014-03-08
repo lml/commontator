@@ -4,7 +4,7 @@ module Commontator
 
     # PUT /threads/1/subscribe
     def subscribe
-      raise SecurityTransgression unless @thread.can_subscribe?(@user)
+      security_transgression_unless @thread.can_subscribe?(@user)
 
       @thread.errors.add(:base, t('commontator.subscription.errors.already_subscribed')) \
         unless @thread.subscribe(@user)
@@ -18,7 +18,7 @@ module Commontator
 
     # PUT /threads/1/unsubscribe
     def unsubscribe
-      raise SecurityTransgression unless @thread.can_subscribe?(@user)
+      security_transgression_unless @thread.can_subscribe?(@user)
 
       @thread.errors.add(:base, t('commontator.subscription.errors.not_subscribed')) \
         unless @thread.unsubscribe(@user)

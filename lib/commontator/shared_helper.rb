@@ -12,8 +12,12 @@ module Commontator
       user.commontator_config.user_name_proc.call(user)
     end
     
-    def commontator_email(user)
-      user.commontator_config.user_email_proc.call(user)
+    def commontator_email(user, mailer = nil)
+      user.commontator_config.user_email_proc.call(user, mailer)
+    end
+
+    def commontator_link(user)
+      user.commontator_config.user_link_proc.call(user, self)
     end
     
     def commontator_gravatar_image_tag(user, border = 1, options = {})
