@@ -15,6 +15,12 @@ module Commontator
       commontable.try(:commontable_config) || Commontator
     end
 
+    def will_paginate?
+      return false if config.comments_per_page.nil? || !comments.respond_to?(:paginate)
+      require 'commontator/remote_link_renderer'
+      true
+    end
+
     def ordered_comments
       case config.comment_order.to_sym
       when :l then comments.order('id DESC')
@@ -22,6 +28,12 @@ module Commontator
       when :vl then comments.order('cached_votes_down - cached_votes_up', 'id DESC')
       else comments
       end
+    end
+
+    def paginated_comments(page, per_page)
+      oc = ordered_comments
+      return oc unless will_paginate?
+      oc.paginate(:page => page, :per_page => per_page)
     end
 
     def is_closed?

@@ -14,6 +14,9 @@ module Commontator
       thread = commontable.thread
       raise SecurityTransgression unless thread.can_be_read_by?(user)
       thread.mark_as_read_for(user)
+      @commontator_page = params[:page] || 1
+      @commontator_per_page = params[:per_page] ||\
+                              thread.config.comments_per_page
       @commontator_thread_show = true
     end
   end

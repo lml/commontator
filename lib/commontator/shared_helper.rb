@@ -5,7 +5,7 @@ module Commontator
       
       render(:partial => 'commontator/shared/thread',
              :locals => {:thread => commontable.thread,
-             :user => user}).html_safe
+                         :user => user}).html_safe
     end
 
     def commontator_gravatar_image_tag(user, border = 1, options = {})

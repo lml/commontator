@@ -27,6 +27,8 @@ module Commontator
     :comment_voting,
     :voting_text_proc,
     :comment_order,
+    :comments_per_page,
+    :wp_link_renderer_proc,
     :comment_editing,
     :comment_deletion,
     :moderators_can_edit_comments,

@@ -10,8 +10,56 @@
   font-size: 16px;
   font-weight: bold;
   font-style: normal;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: block;
 }
 
 .thread_new_comment {
   display: none;
+}
+
+.thread_new_comment_link {
+  display: block;
+}
+
+/* Modified from:
+http://www.strangerstudios.com/sandbox/pagination/diggstyle.php */
+.thread_pagination {
+	padding: 3px;
+	margin: 3px;
+}
+
+.thread_pagination a {
+	padding: 2px 5px 2px 5px;
+	margin: 2px;
+	border: 1px solid #999;
+	
+	text-decoration: none;
+	color: #666;
+}
+
+.thread_pagination a:hover,
+.thread_pagination a:active {
+	border: 1px solid #555;
+
+	color: #000;
+}
+
+.thread_pagination em {
+	padding: 2px 5px 2px 5px;
+	margin: 2px;
+  border: 1px solid #555;
+
+  font-weight: bold;
+  background-color: #555;
+  color: #FFF;
+}
+
+.thread_pagination span {
+  padding: 2px 5px 2px 5px;
+  margin: 2px;
+  border: 1px solid #EEE;
+
+  color: #DDD;
 }

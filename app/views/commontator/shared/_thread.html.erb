@@ -10,11 +10,16 @@
 
   <div id="thread_<%= thread.id %>_div" class="thread" style="display: none;">
     <% if @commontator_thread_show %>
-      <%= render :partial => 'commontator/threads/show', :locals => {:thread => thread,
-                                                                     :user => user} %>
+      <%= render :partial => 'commontator/threads/show',
+                 :locals => {:thread => thread,
+                             :user => user,
+                             :page => @commontator_page,
+                             :per_page => @commontator_per_page} %>
     <% else %>
-      <%= link_to "#{t 'commontator.thread.actions.show'} (#{subscription ? (subscription.unread.to_s + '/' + thread.comments.count.to_s) : thread.comments.count.to_s})", \
-                  commontator.thread_path(thread), :remote => true %>
+      <%= link_to "#{t 'commontator.thread.actions.show'} (#{subscription ?
+                  (subscription.unread.to_s + '/' + thread.comments.count.to_s) :
+                  thread.comments.count.to_s})", commontator.thread_path(thread),
+                  :remote => true %>
     <% end %>
   </div>
 <% end %>

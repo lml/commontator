@@ -1,15 +1,12 @@
 <% # Clients of this partial must supply the following variables:
    # thread
    # user
+   # page
+   # per_page
 %>
 
 <% can_subscribe = thread.can_subscribe?(user) %>
 <% can_edit = thread.can_be_edited_by?(user) %>
-
-<span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
-  <%= t "commontator.thread.status.#{thread.is_closed? ? 'closed' : 'open'}",
-        :closer_name => thread.closer.try(:commontator_name) %>
-</span>
 
 <span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
   <% if can_subscribe %>
@@ -35,21 +32,29 @@
   <% end %>
 </span>
 
+<span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
+  <%= t "commontator.thread.status.#{thread.is_closed? ? 'closed' : 'open'}",
+        :closer_name => thread.closer.try(:commontator_name) %>
+</span>
+
+<% if thread.config.comment_order == :l %>
+  <%= render :partial => 'reply', :locals => {:thread => thread, :user => user} %>
+<% end %>
+
 <div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
+  <% comments = thread.paginated_comments(page, per_page) %>
   <%= render :partial => 'commontator/comments/list',
-             :locals => {:comments => thread.ordered_comments,
+             :locals => {:comments => comments,
                          :user => user} %>
 </div>
 
-<% if thread.is_closed? %>
-  <p><%= t 'commontator.thread.status.cannot_post' %></p>
-<% elsif !user %>
-  <p><%= t 'commontator.require_login' %>.</p>
-<% else %>
-  <div id="thread_<%= thread.id %>_new_comment_div" class="thread_new_comment"></div>
+<% if thread.will_paginate? %>
+  <div id="thread_<%= thread.id.to_s %>_pagination_div" class="thread_pagination">
+    <%= will_paginate comments,
+                      :renderer => thread.config.wp_link_renderer_proc.call(thread) %>
+  </div>
+<% end %>
 
-  <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
-    <%= link_to t('commontator.comment.actions.new'),
-        commontator.new_thread_comment_path(thread), :remote => true %>
-  </span>
+<% if thread.config.comment_order != :l %>
+  <%= render :partial => 'reply', :locals => {:thread => thread, :user => user} %>
 <% end %>

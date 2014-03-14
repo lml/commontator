@@ -1,0 +1,17 @@
+<% # Clients of this partial must supply the following variables:
+   # thread
+   # user
+%>
+
+<% if thread.is_closed? %>
+  <p><%= t 'commontator.thread.status.closed_by' %></p>
+<% elsif !user %>
+  <p><%= t 'commontator.require_login' %>.</p>
+<% else %>
+  <div id="thread_<%= thread.id %>_new_comment_div" class="thread_new_comment"></div>
+
+  <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
+    <%= link_to t('commontator.comment.actions.new'),
+        commontator.new_thread_comment_path(thread), :remote => true %>
+  </span>
+<% end %>

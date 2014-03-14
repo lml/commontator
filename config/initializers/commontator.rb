@@ -19,7 +19,7 @@ Commontator.configure do |config|
   # However, the view_context does not include the main application's helpers
   # Default: lambda { |view_context| '$("#error_explanation").remove();' }
   config.javascript_proc = lambda { |view_context|
-    '$("#error_explanation").remove();' }
+                                    '$("#error_explanation").remove();' }
 
 
 
@@ -40,8 +40,8 @@ Commontator.configure do |config|
   #            view_context.commontator_gravatar_image_tag(
   #              user, 1, :s => 60, :d => 'mm') }
   config.user_avatar_proc = lambda { |user, view_context|
-                              view_context.commontator_gravatar_image_tag(
-                                user, 1, :s => 60, :d => 'mm') }
+                                     view_context.commontator_gravatar_image_tag(
+                                       user, 1, :s => 60, :d => 'mm') }
 
   # Proc called with a user and a mailer object as arguments
   # If the mailer argument is nil, the email is for internal use only and
@@ -65,7 +65,7 @@ Commontator.configure do |config|
   # Thread/Commontable (acts_as_commontable) Configuration
 
   # Proc called with a mailer object as argument
-  # Returns the address emails are sent 'from'
+  # Returns the address emails are sent "from"
   # Important: Change this to at least match your domain name
   # Default: lambda { |mailer| 'no-reply@example.com' }
   config.email_from_proc = lambda { |mailer| 'no-reply@example.com' }
@@ -112,7 +112,7 @@ Commontator.configure do |config|
   # Returns the text to be displayed in between the voting buttons
   # Default: lambda { |comment_voting, pos, neg| "%+d" % (pos - neg) }
   config.voting_text_proc = lambda { |comment_voting, pos, neg|
-                              "%+d" % (pos - neg) }
+                                     "%+d" % (pos - neg) }
 
   # What order to use for comments
   # Valid options:
@@ -120,8 +120,32 @@ Commontator.configure do |config|
   #   :l (latest comment first)
   #   :ve (highest voted first; earliest first if tied)
   #   :vl (highest voted first; latest first if tied)
+  # Notes:
+  #   :e is usually used in forums (discussions)
+  #   :l is usually used in blogs (opinions)
+  #   :ve and :vl are usually used where it makes sense to rate comments
+  #     based on usefulness (q&a, reviews, guides, etc.)
+  # If :l is selected, the "reply to thread" form will appear before the comments
+  # Otherwise, it will appear after the comments
   # Default: :e
   config.comment_order = :e
+
+  # Number of comments to display in each page
+  # Set to nil to disable pagination
+  # Any other value requires the will_paginate gem
+  # Default: nil (no pagination)
+  config.comments_per_page = nil
+
+  # Proc called with a thread as argument
+  # Returns a LinkRenderer to be used with will_paginate for that thread,
+  # assuming pagination is enabled
+  # Commontator supplies its own RemoteLinkRenderer,
+  # which is exactly like will_paginate's default, except it returns remote links
+  # For more information, see:
+  # https://github.com/mislav/will_paginate/wiki/Link-renderer
+  # Default: lambda { |thread| Commontator::RemoteLinkRenderer }
+  config.wp_link_renderer_proc = lambda { |thread|
+                                          Commontator::RemoteLinkRenderer }
 
   # Whether users can edit their own comments
   # Valid options:
@@ -166,7 +190,8 @@ Commontator.configure do |config|
     "#{commontable.class.name} ##{commontable.id}" }
 
   # Proc called with main_app and a commontable object as arguments
-  # Return the url that contains the commontable's thread (to be used in the subscription email)
+  # Return the url that contains the commontable's thread
+  # This usually is the commontable's "show" page
   # The main application's routes can be accessed through the main_app object
   # Default: lambda { |commontable, main_app|
   #            main_app.polymorphic_url(commontable) }
