@@ -59,6 +59,19 @@ module Commontator
       self.save
     end
 
+    def created_timestamp
+      I18n.t 'commontator.comment.status.created_at',
+             :created_at => I18n.l(created_at, :format => :commontator)
+    end
+    
+    def updated_timestamp
+      return '' if editor.nil?
+      
+      I18n.t 'commontator.comment.status.updated_at',
+             :editor_name => editor.commontator_name,
+             :updated_at => I18n.l(updated_at, :format => :commontator)
+    end
+
     ##################
     # Access Control #
     ##################
@@ -70,7 +83,8 @@ module Commontator
     end
 
     def can_be_created_by?(user)
-      !thread.is_closed? && user == creator && thread.can_be_read_by?(user)
+      user == creator && user.is_commontator &&\
+      !thread.is_closed? && thread.can_be_read_by?(user)
     end
 
     def can_be_edited_by?(user)

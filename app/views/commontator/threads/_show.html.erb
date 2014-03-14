@@ -7,7 +7,8 @@
 <% can_edit = thread.can_be_edited_by?(user) %>
 
 <span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
-  <%= t "commontator.thread.status.#{thread.is_closed? ? 'closed' : 'open'}" %>
+  <%= t "commontator.thread.status.#{thread.is_closed? ? 'closed' : 'open'}",
+        :closer_name => thread.closer.try(:commontator_name) %>
 </span>
 
 <span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
@@ -41,7 +42,7 @@
 </div>
 
 <% if thread.is_closed? %>
-  <p><%= t 'commontator.thread.status.closed_by' %></p>
+  <p><%= t 'commontator.thread.status.cannot_post' %></p>
 <% elsif !user %>
   <p><%= t 'commontator.require_login' %>.</p>
 <% else %>

@@ -1,5 +1,8 @@
 # Change the settings below to suit your needs
 # All settings are initially set to their default values
+
+# Note: Do not "return" from procs
+#       Use "next" instead
 Commontator.configure do |config|
   # Engine Configuration
 
@@ -53,8 +56,9 @@ Commontator.configure do |config|
   # Returns a link to the user's page
   # If anything non-blank is returned, the user's name in comments
   # will become a hyperlink pointing to this
-  # Default: lambda { |user, controller| '' } (no link)
-  config.user_link_proc = lambda { |user, view_context| '' }
+  # The main application's routes can be accessed through the main_app object
+  # Default: lambda { |user, main_app| '' } (no link)
+  config.user_link_proc = lambda { |user, main_app| '' }
 
 
 
@@ -75,7 +79,8 @@ Commontator.configure do |config|
   # Proc called with a thread and a user as arguments
   # Returns true iif the user is a moderator for that thread
   # Moderators can delete other users' comments and close threads
-  # If you want global moderators, make the return value of this proc true for them
+  # If you want global moderators, make this proc true for them
+  # Note: moderators must "acts_as_commontator" too (like other users)
   # Default: lambda { |thread, user| false } (no moderators)
   config.thread_moderator_proc = lambda { |thread, user| false }
 
@@ -162,7 +167,7 @@ Commontator.configure do |config|
 
   # Proc called with main_app and a commontable object as arguments
   # Return the url that contains the commontable's thread (to be used in the subscription email)
-  # The main application's routes can be accessed using the main_app object
+  # The main application's routes can be accessed through the main_app object
   # Default: lambda { |commontable, main_app|
   #            main_app.polymorphic_url(commontable) }
   # (defaults to the commontable's show url)

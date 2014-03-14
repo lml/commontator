@@ -33,6 +33,10 @@ module Commontator
             self.thread.commontable = self
             self.thread
           end
+
+          def commontable_name
+            commontable_config.commontable_name_proc.call(self)
+          end
         end
       end
       

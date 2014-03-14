@@ -19,6 +19,10 @@ module Commontator
       user.must_respond_to :comments
       user.must_respond_to :subscriptions
       user.must_respond_to :commontator_config
+      user.must_respond_to :commontator_name
+      user.must_respond_to :commontator_email
+      user.must_respond_to :commontator_link
+      user.must_respond_to :commontator_avatar
       user.commontator_config.must_be_instance_of CommontatorConfig
     end
   end

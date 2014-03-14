@@ -2,13 +2,15 @@
    # comment
    # user
 %>
-  
+
+<% creator = comment.creator
+   name = creator.commontator_name
+   link = creator.commontator_link(main_app)
+   avatar = creator.commontator_avatar(self) %>
+
 <div id="comment_<%= comment.id.to_s %>_div" class="comment">
   <div id="comment_<%= comment.id.to_s %>_top_div" class="comment_div">
     <span id="comment_<%= comment.id.to_s %>_commontator_span" class="comment_commontator">
-      <% creator = comment.creator
-         name = commontator_name(creator)
-         link = commontator_link(creator) %>
       <%= link.blank? ? name : link_to(name, link) %>
     </span>
     <span id="comment_<%= comment.id.to_s %>_actions_span" class="comment_actions">
@@ -19,7 +21,7 @@
   </div>
   <div id="comment_<%= comment.id.to_s %>_middle_div" class="comment_div">
     <span id="comment_<%= comment.id.to_s %>_avatar_span" class="comment_avatar">
-      <%= commontator_avatar comment.creator %>
+      <%= avatar %>
     </span>
     <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">
       <%= render :partial => 'commontator/comments/votes',
@@ -33,12 +35,12 @@
   </div>
   <div id="comment_<%= comment.id.to_s %>_bottom_div" class="comment_div">
     <span id="comment_<%= comment.id.to_s %>_created_timestamp_span" class="comment_timestamp">
-      <%= created_timestamp comment %>
+      <%= comment.created_timestamp %>
     </span>
     <br/>
     <span id="comment_<%= comment.id.to_s %>_updated_timestamp_span" class="comment_timestamp">
     <% if comment.is_modified? %>
-      <%= updated_timestamp comment %>
+      <%= comment.updated_timestamp %>
     <% end %>
     </span>
   </div>

@@ -63,7 +63,7 @@ en:
       comment_created: 
         body: "%{creator_name} commented on %{commontable_name}:"
         subject: "%{creator_name} posted a comment on %{commontable_name}"
-      thread_link_html: "<a href=%{commontable_url}>Click here</a> to view all comments on %{commontable_name}."
+      thread_link_html: "<a href=\"%{commontable_url}\">Click here</a> to view all comments on %{commontable_name}."
       undisclosed_recipients: "Undisclosed Recipients"
     require_login: "You must login before you can post a comment."
     subscription: 
@@ -84,8 +84,8 @@ en:
         already_closed: "This discussion has already been closed."
         not_closed: "This discussion is not closed."
       status: 
-        closed: "Comments (Closed)"
-        closed_by: "This discussion has been closed by a moderator."
+        cannot_post: "New comments cannot be posted at this time."
+        closed: "Comments (Closed by %{closer_name})"
         open: Comments
   time: 
     formats: 

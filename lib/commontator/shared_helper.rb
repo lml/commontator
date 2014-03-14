@@ -5,35 +5,19 @@ module Commontator
       
       render(:partial => 'commontator/shared/thread',
              :locals => {:thread => commontable.thread,
-                         :user => user}).html_safe
-    end
-    
-    def commontator_name(user)
-      user.commontator_config.user_name_proc.call(user)
-    end
-    
-    def commontator_email(user, mailer = nil)
-      user.commontator_config.user_email_proc.call(user, mailer)
+             :user => user}).html_safe
     end
 
-    def commontator_link(user)
-      user.commontator_config.user_link_proc.call(user, self)
-    end
-    
     def commontator_gravatar_image_tag(user, border = 1, options = {})
       base = request.ssl? ? "s://secure" : "://www"
-      hash = Digest::MD5.hexdigest(commontator_email(user))
+      hash = Digest::MD5.hexdigest(user.commontator_email)
       url = "http#{base}.gravatar.com/avatar/#{hash}?#{options.to_query}"
-
-      name = commontator_name(user)
+      
+      name = user.commontator_name
       
       image_tag(url, { :alt => name,
-                       :title => name,
-                       :border => border })
-    end
-  
-    def commontator_avatar(user)
-      user.commontator_config.user_avatar_proc.call(user, self)
+                :title => name,
+                :border => border })
     end
   end
 end

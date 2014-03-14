@@ -44,5 +44,24 @@ module Commontator
       
       @comment.is_deleted?.must_equal false
     end
+
+    it 'must make proper timestamps' do
+      @comment.save!
+
+      editor_name = @user.commontator_config.user_name_proc.call(@user)
+      @comment.created_timestamp.must_equal I18n.t('commontator.comment.status.created_at', :created_at => I18n.l(@comment.created_at,
+                                          :format => :commontator))
+      @comment.updated_timestamp.must_equal ''
+
+      @comment.body = 'Something else'
+      @comment.editor = @user
+      @comment.save!
+
+      @comment.created_timestamp.must_equal I18n.t('commontator.comment.status.created_at', :created_at => I18n.l(@comment.created_at,
+                                          :format => :commontator))
+      @comment.updated_timestamp.must_equal I18n.t('commontator.comment.status.updated_at', :editor_name => editor_name,
+                     :updated_at => I18n.l(@comment.updated_at,
+                                          :format => :commontator))
+    end
   end
 end
