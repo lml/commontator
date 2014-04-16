@@ -56,5 +56,5 @@
 <% end %>
 
 <% if thread.config.comment_order != :l %>
-  <%= render :partial => 'reply', :locals => {:thread => thread, :user => user} %>
+  <%= render :partial => 'commontator/threads/reply', :locals => {:thread => thread, :user => user} %>
 <% end %>
