@@ -12,6 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 3) do
+
   create_table "commontator_comments", force: true do |t|
     t.string   "creator_type"
     t.integer  "creator_id"
@@ -81,4 +82,5 @@ ActiveRecord::Schema.define(version: 3) do
 
   add_index "votes", ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope"
   add_index "votes", ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
+
 end
