@@ -38,7 +38,7 @@
 </span>
 
 <% if thread.config.comment_order == :l %>
-  <%= render :partial => 'reply', :locals => {:thread => thread, :user => user} %>
+  <%= render :partial => 'commontator/threads/reply', :locals => {:thread => thread, :user => user} %>
 <% end %>
 
 <div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
