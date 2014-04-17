@@ -7,10 +7,11 @@
    can_delete = comment.can_be_deleted_by?(user) %>
 
 <% if can_edit %>
-  <%= link_to 'Edit', commontator.edit_comment_path(comment),
-                      :id => "comment_#{comment.id.to_s}_edit_link",
-                      :class => "comment_edit_link",
-                      :remote => true %>
+  <%= link_to t('commontator.comment.actions.edit'),
+              commontator.edit_comment_path(comment),
+              :id => "comment_#{comment.id.to_s}_edit_link",
+              :class => "comment_edit_link",
+              :remote => true %>
 <% end %>
 
 &nbsp;
