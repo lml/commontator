@@ -2,12 +2,6 @@ require 'will_paginate/view_helpers/action_view'
 
 module Commontator
   class LinkRenderer < WillPaginate::ActionView::LinkRenderer
-    def link(text, target, attributes = {})
-      attributes = attributes.merge('data-remote' => true) \
-        if @options[:remote]
-      super
-    end
-
     protected
 
     def url(page)
@@ -21,6 +15,14 @@ module Commontator
 
       routes_proxy = @options[:routes_proxy] || @template
       routes_proxy.url_for(url_params)
+    end
+
+    private
+
+    def link(text, target, attributes = {})
+      attributes = attributes.merge('data-remote' => true) \
+        if @options[:remote]
+      super
     end
   end
 end
