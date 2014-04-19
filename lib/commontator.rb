@@ -25,10 +25,9 @@ module Commontator
     :thread_moderator_proc,
     :thread_subscription,
     :comment_voting,
-    :voting_text_proc,
+    :vote_count_proc,
     :comment_order,
     :comments_per_page,
-    :wp_link_renderer_proc,
     :comment_editing,
     :comment_deletion,
     :moderators_can_edit_comments,
@@ -39,6 +38,8 @@ module Commontator
   ]
   
   DEPRECATED_ATTRIBUTES = [
+    [:wp_link_renderer_proc],
+    [:voting_text_proc, :vote_count_proc],
     [:user_name_clickable, :user_link_proc],
     [:user_admin_proc, :thread_moderator_proc],
     [:auto_subscribe_on_comment, :thread_subscription],
@@ -48,7 +49,7 @@ module Commontator
     [:can_delete_old_comments, :comment_deletion],
     [:can_subscribe_to_thread, :thread_subscription],
     [:can_vote_on_comments, :comment_voting],
-    [:combine_upvotes_and_downvotes, :voting_text_proc],
+    [:combine_upvotes_and_downvotes, :vote_count_proc],
     [:comments_order, :comment_order],
     [:closed_threads_are_readable, :hide_closed_threads],
     [:deleted_comments_are_visible, :hide_deleted_comments],
@@ -65,6 +66,7 @@ module Commontator
     [:subscription_email_to_proc, 'config/locales'],
     [:subscription_email_from_proc, :email_from_proc],
     [:subscription_email_subject_proc, 'config/locales'],
+    [:comments_ordered_by_votes, :comment_order],
     [:current_user_method, :current_user_proc],
     [:user_missing_name, 'config/locales'],
     [:user_email_method, :user_email_proc],

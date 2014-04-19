@@ -1,6 +1,6 @@
 # Dummy application configuration file
 Commontator.configure do |config|
-  config.javascript_proc = lambda { |view_context| '// Some javascript' }
+  config.javascript_proc = lambda { |view| '// Some javascript' }
 
   config.thread_read_proc = lambda { |thread, user| user && user.can_read }
 

@@ -17,7 +17,7 @@ module Commontator
 
     def will_paginate?
       return false if config.comments_per_page.nil? || !comments.respond_to?(:paginate)
-      require 'commontator/remote_link_renderer'
+      require 'commontator/link_renderer'
       true
     end
 

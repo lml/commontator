@@ -51,7 +51,10 @@
 <% if thread.will_paginate? %>
   <div id="thread_<%= thread.id.to_s %>_pagination_div" class="thread_pagination">
     <%= will_paginate comments,
-                      :renderer => thread.config.wp_link_renderer_proc.call(thread) %>
+                      :renderer => Commontator::LinkRenderer,
+                      :routes_proxy => commontator,
+                      :remote => true,
+                      :params => {:controller => 'commontator/threads', :action => 'show'} %>
   </div>
 <% end %>
 
