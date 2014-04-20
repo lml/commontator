@@ -4,7 +4,7 @@
 %>
 
 <% if thread.is_closed? %>
-  <p><%= t 'commontator.thread.status.closed_by' %></p>
+  <p><%= t 'commontator.thread.status.cannot_post' %></p>
 <% elsif !user %>
   <p><%= t 'commontator.require_login' %>.</p>
 <% else %>

@@ -3,7 +3,8 @@
    # user
    # page
    # per_page
-   # show_all
+   # Optionally, they can also supply the following variable:
+   show_all ||= false
 %>
 
 <% can_subscribe = thread.can_subscribe?(user) %>

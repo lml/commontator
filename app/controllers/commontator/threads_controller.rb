@@ -23,6 +23,8 @@ module Commontator
       @thread.errors.add(:base, t('commontator.thread.errors.already_closed')) \
         unless @thread.close(@user)
 
+      @show_all = true
+
       respond_to do |format|
         format.html { redirect_to @thread }
         format.js { render :show }
@@ -35,6 +37,8 @@ module Commontator
 
       @thread.errors.add(:base, t('commontator.thread.errors.not_closed')) \
         unless @thread.reopen
+
+      @show_all = true
 
       respond_to do |format|
         format.html { redirect_to @thread }
