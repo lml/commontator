@@ -12,14 +12,14 @@ module Commontator
     def commontator_thread_show(commontable)
       user = Commontator.current_user_proc.call(self)	
       thread = commontable.thread
-      raise SecurityTransgression unless thread.can_be_read_by?(user)
+      raise Commontator::SecurityTransgression unless thread.can_be_read_by?(user)
       thread.mark_as_read_for(user)
       @commontator_page = params[:page] || 1
-      @commontator_per_page = params[:per_page] ||\
-                              thread.config.comments_per_page
+      @commontator_per_page = params[:per_page] || thread.config.comments_per_page
       @commontator_thread_show = true
     end
   end
 end
 
 ActionController::Base.send :include, Commontator::ControllerIncludes
+

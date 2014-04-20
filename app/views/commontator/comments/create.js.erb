@@ -1,7 +1,8 @@
-$("#thread_<%= @thread.id %>_comment_list_div").html("<%= escape_javascript(
-    render :partial => 'list',
-           :locals => {:comments => @thread.ordered_comments,
-                       :user => @user}) %>");
+<%= render :partial => 'commontator/threads/show',
+           :locals => {:thread => @thread,
+                       :user => @user,
+                       :page => @thread.total_pages(@per_page),
+                       :per_page => @per_page} %>
 
 $("#thread_<%= @thread.id %>_new_comment_div").hide();
 
@@ -10,3 +11,4 @@ $("#thread_<%= @thread.id %>_new_comment_link_span").fadeIn();
 $("#comment_<%= @comment.id.to_s %>_div").hide().fadeIn()[0].scrollIntoView();
 
 <%= javascript_proc %>
+

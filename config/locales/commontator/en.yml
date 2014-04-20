@@ -76,6 +76,8 @@ en:
         not_subscribed: "You are not subscribed to this discussion."
     thread: 
       actions: 
+        show_all: "Show All Comments"
+        filter: "Filter Comments"
         close: "Close Discussion"
         confirm_close: "Are you sure you want to close this discussion?"
         reopen: "Reopen Discussion"
@@ -90,3 +92,4 @@ en:
   time: 
     formats: 
       commontator: "%b %d %Y at %I:%M%p %Z"
+

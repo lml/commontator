@@ -1,9 +1,9 @@
-$("#thread_<%= @thread.id %>_div").html(
-  "<%= escape_javascript(
-    render :partial => 'show',
+<%= render :partial => 'show',
            :locals => {:thread => @thread,
                        :user => @user,
                        :page => @commontator_page,
-                       :per_page => @commontator_per_page}) %>");
+                       :per_page => @commontator_per_page,
+                       :show_all => @show_all} %>
 
 <%= javascript_proc %>
+

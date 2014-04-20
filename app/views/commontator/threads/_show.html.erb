@@ -3,6 +3,7 @@
    # user
    # page
    # per_page
+   # show_all
 %>
 
 <% can_subscribe = thread.can_subscribe?(user) %>
@@ -20,8 +21,20 @@
   &nbsp;
 
   <% if can_edit %>
-    <% is_closed = thread.is_closed? %>
-    <% close_string = is_closed ? 'reopen' : 'close' %>
+    <% filter_string = show_all ? 'filter' : 'show_all'
+       is_closed = thread.is_closed?
+       close_string = is_closed ? 'reopen' : 'close' %>
+
+    <% if thread.is_filtered? %>
+      <%= link_to t("commontator.thread.actions.#{filter_string}"),
+                  commontator.thread_path(thread, :show_all => (show_all ? nil : true)),
+                  :id => "thread_#{thread.id.to_s}_#{filter_string}_link",
+                  :class => "thread_#{filter_string}_link",
+                  :remote => true %>
+
+      &nbsp;
+    <% end %>
+
     <%= link_to t("commontator.thread.actions.#{close_string}"),
                 commontator.polymorphic_path([close_string, thread]),
                 :confirm => (!is_closed ? t('commontator.thread.actions.confirm_close') : nil),
@@ -42,22 +55,25 @@
 <% end %>
 
 <div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
-  <% comments = thread.paginated_comments(page, per_page) %>
+  <% comments = show_all ? thread.ordered_comments(true) : thread.paginated_comments(page, per_page) %>
   <%= render :partial => 'commontator/comments/list',
              :locals => {:comments => comments,
                          :user => user} %>
 </div>
 
-<% if thread.will_paginate? %>
+<% if thread.will_paginate? && !show_all %>
   <div id="thread_<%= thread.id.to_s %>_pagination_div" class="thread_pagination">
     <%= will_paginate comments,
                       :renderer => Commontator::LinkRenderer,
                       :routes_proxy => commontator,
                       :remote => true,
-                      :params => {:controller => 'commontator/threads', :action => 'show'} %>
+                      :params => {:controller => 'commontator/threads',
+                                  :action => 'show',
+                                  :id => thread.id} %>
   </div>
 <% end %>
 
 <% if thread.config.comment_order != :l %>
   <%= render :partial => 'commontator/threads/reply', :locals => {:thread => thread, :user => user} %>
 <% end %>
+

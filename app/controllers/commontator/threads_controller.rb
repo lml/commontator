@@ -8,6 +8,7 @@ module Commontator
     # GET /threads/1
     def show
       commontator_thread_show(@thread.commontable)
+      @show_all = params[:show_all] && @thread.can_be_edited_by?(@user)
 
       respond_to do |format|
         format.html { redirect_to commontable_url }
@@ -42,3 +43,4 @@ module Commontator
     end
   end
 end
+

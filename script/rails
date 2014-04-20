@@ -6,3 +6,4 @@ ENGINE_PATH = File.expand_path('../../lib/commontator/engine', __FILE__)
 
 require 'rails/all'
 require 'rails/engine/commands'
+

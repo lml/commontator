@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 
 module Commontator
   describe CommontableConfig do
@@ -17,10 +17,13 @@ module Commontator
     end
     
     it 'must be configurable' do
-      config = CommontableConfig.new(:moderators_can_edit_comments => true)
-      config.moderators_can_edit_comments.must_equal true
-      config = CommontableConfig.new(:moderators_can_edit_comments => false)
-      config.moderators_can_edit_comments.must_equal false
+      proc = lambda { |thread| 'Some name' }
+      proc2 = lambda { |thread| 'Another name' }
+      config = CommontableConfig.new(:commontable_name_proc => proc)
+      (config.commontable_name_proc == proc).must_equal true
+      config = CommontableConfig.new(:commontable_name_proc => proc2)
+      (config.commontable_name_proc == proc2).must_equal true
     end
   end
 end
+

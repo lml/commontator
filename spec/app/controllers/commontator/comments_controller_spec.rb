@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 require 'acts_as_votable'
 
 module Commontator
@@ -531,17 +531,17 @@ module Commontator
     end
 
     it "won't send mail if recipients empty" do
-      if defined?(CommentsController::SubscriptionsMailer)
-        CommentsController::SubscriptionsMailer.__send__(:initialize)
+      if defined?(Subscription::SubscriptionsMailer)
+        Subscription::SubscriptionsMailer.__send__(:initialize)
       else
-        CommentsController::SubscriptionsMailer = MiniTest::Mock.new
+        Subscription::SubscriptionsMailer = MiniTest::Mock.new
       end
 
       user2 = DummyUser.create
       user2.can_read = true
 
       email = MiniTest::Mock.new.expect(:deliver, nil)
-      CommentsController::SubscriptionsMailer.expect(:comment_created, email, [Comment, [user2]])
+      Subscription::SubscriptionsMailer.expect(:comment_created, email, [Comment, [user2]])
 
       @user.can_read = true
       sign_in @user
@@ -550,15 +550,15 @@ module Commontator
       post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
       assigns(:comment).errors.must_be_empty
 
-      proc { CommentsController::SubscriptionsMailer.verify }.must_raise(MockExpectationError)
+      proc { Subscription::SubscriptionsMailer.verify }.must_raise(MockExpectationError)
       proc { email.verify }.must_raise(MockExpectationError)
     end
     
     it 'must send mail if recipients not empty' do
-      if defined?(CommentsController::SubscriptionsMailer)
-        CommentsController::SubscriptionsMailer.__send__(:initialize)
+      if defined?(Subscription::SubscriptionsMailer)
+        Subscription::SubscriptionsMailer.__send__(:initialize)
       else
-        CommentsController::SubscriptionsMailer = MiniTest::Mock.new
+        Subscription::SubscriptionsMailer = MiniTest::Mock.new
       end
 
       user2 = DummyUser.create
@@ -566,7 +566,7 @@ module Commontator
       @thread.subscribe(user2)
 
       email = MiniTest::Mock.new.expect(:deliver, nil)
-      CommentsController::SubscriptionsMailer.expect(:comment_created, email, [Comment, [user2]])
+      Subscription::SubscriptionsMailer.expect(:comment_created, email, [Comment, [user2]])
 
       @user.can_read = true
       sign_in @user
@@ -575,8 +575,9 @@ module Commontator
       post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
       assigns(:comment).errors.must_be_empty
 
-      CommentsController::SubscriptionsMailer.verify
+      Subscription::SubscriptionsMailer.verify
       email.verify
     end
   end
 end
+

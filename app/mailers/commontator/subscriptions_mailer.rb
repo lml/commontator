@@ -40,7 +40,8 @@ module Commontator
 
       @to = t('commontator.email.undisclosed_recipients')
       @bcc = recipients.collect{|s| s.commontator_email(self)}
-      @from = @config.email_from_proc.call(self)
+      @from = @config.email_from_proc.call(@thread)
     end
   end
 end
+

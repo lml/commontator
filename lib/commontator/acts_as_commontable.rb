@@ -19,23 +19,24 @@ module Commontator
           has_many :comments, :class_name => 'Commontator::Comment', :through => :thread
 
           has_many :subscriptions, :class_name => 'Commontator::Subscription', :through => :thread
-          
+
           validates_presence_of :thread
-          
-          alias_method :thread_raw, :thread
-          
+
+          alias_method :relation_thread, :thread
+
           def thread
-            raw = thread_raw
-            return raw unless raw.nil?
-            return Commontator::Thread.find_or_create_by_commontable_type_and_commontable_id(self.class.name, id) \
-              unless id.nil?
-            self.thread = Commontator::Thread.new
-            self.thread.commontable = self
-            self.thread
+            @thread ||= relation_thread
+            if !@thread
+              @thread = Commontator::Thread.new
+              @thread.commontable = self
+            end
+
+            @thread.save if !@thread.persisted? && persisted?
+            @thread
           end
 
           def commontable_name
-            commontable_config.commontable_name_proc.call(self)
+            commontable_config.commontable_name_proc.call(thread)
           end
         end
       end
@@ -46,3 +47,4 @@ module Commontator
 end
 
 ActiveRecord::Base.send :include, Commontator::ActsAsCommontable
+

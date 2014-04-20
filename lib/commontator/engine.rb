@@ -6,3 +6,4 @@ module Commontator
     config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.{rb,yml}')]
   end
 end
+

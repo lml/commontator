@@ -33,12 +33,11 @@ module Commontator
           format.html { redirect_to @thread }
           format.js { render :cancel }
         elsif @comment.save
-          @thread.subscribe(@user) if @thread.config.thread_subscription == :a ||\
-                                      @thread.config.thread_subscription == :b
-          @thread.add_unread_except_for(@user)
-          recipients = @thread.subscribers.reject{|s| s == @user}
-          SubscriptionsMailer.comment_created(@comment, recipients).deliver \
-            unless recipients.empty?
+          sub = @thread.config.thread_subscription.to_sym
+          @thread.subscribe(@user) if sub == :a || sub == :b
+          Subscription.comment_created(@comment)
+
+          @per_page = params[:per_page] || @thread.config.comments_per_page
 
           format.html { redirect_to @thread }
           format.js
@@ -150,3 +149,4 @@ module Commontator
     end
   end
 end
+

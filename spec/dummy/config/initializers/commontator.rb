@@ -7,4 +7,7 @@ Commontator.configure do |config|
   config.thread_moderator_proc = lambda { |thread, user| user.is_admin || user.can_edit }
 
   config.comment_voting = :ld
+
+  config.thread_subscription = :m
 end
+

@@ -3,8 +3,6 @@
    # user
 %>
 
-<% subscription = thread.subscription_for(user) %>
-
 <% if thread.can_be_read_by?(user) %>
   <%= stylesheet_link_tag "commontator/application.css", :media => "all" %>
 
@@ -16,10 +14,11 @@
                              :page => @commontator_page,
                              :per_page => @commontator_per_page} %>
     <% else %>
-      <%= link_to "#{t 'commontator.thread.actions.show'} (#{subscription ?
-                  (subscription.unread.to_s + '/' + thread.comments.count.to_s) :
-                  thread.comments.count.to_s})", commontator.thread_path(thread),
+      <% subscription = thread.subscription_for(user) %>
+      <%= link_to "#{t 'commontator.thread.actions.show'} (#{(subscription.unread_comments.count.to_s + '/') \
+                    if subscription}#{thread.filtered_comments.count.to_s})", commontator.thread_path(thread),
                   :remote => true %>
     <% end %>
   </div>
 <% end %>
+

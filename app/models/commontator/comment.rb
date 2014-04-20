@@ -76,20 +76,14 @@ module Commontator
     # Access Control #
     ##################
 
-    def can_be_read_by?(user)
-      return true if thread.can_be_edited_by?(user)
-      (!is_deleted? || !thread.config.hide_deleted_comments) &&\
-      thread.can_be_read_by?(user)
-    end
-
     def can_be_created_by?(user)
       user == creator && user.is_commontator &&\
       !thread.is_closed? && thread.can_be_read_by?(user)
     end
 
     def can_be_edited_by?(user)
-      return true if thread.config.moderators_can_edit_comments &&\
-                     thread.can_be_edited_by?(user)
+      return true if thread.can_be_edited_by?(user) &&\
+                     thread.config.moderator_permissions.to_sym == :e
       comment_edit = thread.config.comment_editing.to_sym
       !thread.is_closed? && !is_deleted? && user == creator &&\
       comment_edit != :n && (is_latest? || comment_edit == :a) &&\
@@ -97,7 +91,10 @@ module Commontator
     end
 
     def can_be_deleted_by?(user)
-      return true if thread.can_be_edited_by?(user)
+      mod_perm = thread.config.moderator_permissions.to_sym
+      return true if thread.can_be_edited_by?(user) &&\
+                     (mod_perm == :e ||\
+                       mod_perm == :d)
       comment_del = thread.config.comment_deletion.to_sym
       !thread.is_closed? && (!is_deleted? || editor == user) &&\
       user == creator && comment_del != :n &&\
@@ -107,7 +104,7 @@ module Commontator
 
     def can_be_voted_on?
       !thread.is_closed? && !is_deleted? &&\
-      thread.config.comment_voting != :n && is_votable?
+      thread.config.comment_voting.to_sym != :n && is_votable?
     end
 
     def can_be_voted_on_by?(user)
@@ -116,3 +113,4 @@ module Commontator
     end
   end
 end
+

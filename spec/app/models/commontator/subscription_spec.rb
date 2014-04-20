@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 
 module Commontator
   describe Subscription do
@@ -7,22 +7,32 @@ module Commontator
       @subscription = Subscription.new
       @subscription.thread = @thread
       @subscription.subscriber = @user
+      @subscription.save!
     end
     
     it 'must count unread comments' do
-      @subscription.unread.must_equal 0
+      @subscription.unread_comments.count.must_equal 0
       
-      @subscription.add_unread
+      comment = Comment.new
+      comment.thread = @thread
+      comment.creator = @user
+      comment.body = 'Something'
+      comment.save!
       
-      @subscription.unread.must_equal 1
+      @subscription.reload.unread_comments.count.must_equal 1
       
-      @subscription.add_unread
+      comment = Comment.new
+      comment.thread = @thread
+      comment.creator = @user
+      comment.body = 'Something else'
+      comment.save!
       
-      @subscription.unread.must_equal 2
+      @subscription.reload.unread_comments.count.must_equal 2
       
-      @subscription.mark_as_read
+      @subscription.touch
       
-      @subscription.unread.must_equal 0
+      @subscription.reload.unread_comments.count.must_equal 0
     end
   end
 end
+

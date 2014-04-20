@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 
 module Commontator
   describe ControllerIncludes do
@@ -13,3 +13,4 @@ module Commontator
     end
   end
 end
+

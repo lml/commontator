@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 
 module Commontator
   describe Commontator do
@@ -23,3 +23,4 @@ module Commontator
     end
   end
 end
+

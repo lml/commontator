@@ -37,6 +37,17 @@ Commontator.configure do |config|
   # Default: lambda { |user| I18n.t('commontator.anonymous') } (all users are anonymous)
   config.user_name_proc = lambda { |user| I18n.t('commontator.anonymous') }
 
+  # user_link_proc
+  # Type: Proc
+  # Arguments: a user (acts_as_commontator),
+  #            the app_routes (ActionDispatch::Routing::RoutesProxy)
+  # Returns: a path to the user's `show` page (String)
+  # If anything non-blank is returned, the user's name in comments
+  # comments will become a hyperlink pointing to this path
+  # The main application's routes can be accessed through the app_routes object
+  # Default: lambda { |user, app_routes| '' } (no link)
+  config.user_link_proc = lambda { |user, app_routes| '' }
+
   # user_avatar_proc
   # Type: Proc
   # Arguments: a user (acts_as_commontator), a view (ActionView::Base)
@@ -68,36 +79,27 @@ Commontator.configure do |config|
   # Default: lambda { |user, mailer| user.email }
   config.user_email_proc = lambda { |user, mailer| user.email }
 
-  # user_link_proc
-  # Type: Proc
-  # Arguments: a user (acts_as_commontator),
-  #            the app_routes (ActionDispatch::Routing::RoutesProxy)
-  # Returns: a path to the user's `show` page (String)
-  # If anything non-blank is returned, the user's name in comments
-  # comments will become a hyperlink pointing to this path
-  # The main application's routes can be accessed through the app_routes object
-  # Default: lambda { |user, app_routes| '' } (no link)
-  config.user_link_proc = lambda { |user, app_routes| '' }
-
 
 
   # Thread/Commontable (acts_as_commontable) Configuration
 
-  # email_from_proc
-  # Type: Proc
-  # Arguments: a mailer (ActionMailer::Base)
-  # Returns: the address emails are sent "from" (String)
-  # Important: Change this to at least match your domain name
-  # Default: lambda { |mailer|
-  #          "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
-  config.email_from_proc = lambda { |mailer|
-    "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
+  # comment_filter
+  # Type: Arel node (Arel::Nodes::Node) or nil
+  # Arel that filters visible comments
+  # If specified, visible comments will be filtered according to this Arel node
+  # A value of nil will cause no filtering to be done
+  # Moderators can manually override this filter for themselves
+  # Example: Commontator::Comment.arel_table[:deleted_at].eq(nil) (hides deleted comments)
+  #          This is not recommended, as it can cause confusion over deleted comments
+  #          If using pagination, it can also cause comments to change pages
+  # Default: nil (no filtering - all comments are visible)
+  config.comment_filter = nil
 
   # thread_read_proc
   # Type: Proc
   # Arguments: a thread (Commontator::Thread), a user (acts_as_commontator)
   # Returns: a Boolean, true iif the user should be allowed to read that thread
-  # Note: can be called with a user object that is false or nil (if they are not logged in)
+  # Note: can be called with a user object that is nil (if they are not logged in)
   # Default: lambda { |thread, user| true } (anyone can read any thread)
   config.thread_read_proc = lambda { |thread, user| true }
 
@@ -109,45 +111,65 @@ Commontator.configure do |config|
   # Default: lambda { |thread, user| false } (no moderators)
   config.thread_moderator_proc = lambda { |thread, user| false }
 
-  # thread_subscription
+  # comment_editing
   # Type: Symbol
-  # Whether users can subscribe to threads to receive activity email notifications
+  # Whether users can edit their own comments
   # Valid options:
-  #   :n (no subscriptions)
-  #   :a (automatically subscribe when you comment; cannot do it manually)
-  #   :m (manual subscriptions only)
-  #   :b (both automatic, when commenting, and manual)
-  # Default: :m
-  config.thread_subscription = :m
+  #   :a (always)
+  #   :l (only if it's the latest comment)
+  #   :n (never)
+  # Default: :l
+  config.comment_editing = :l
+
+  # comment_deletion
+  # Type: Symbol
+  # Whether users can delete their own comments
+  # Valid options:
+  #   :a (always)
+  #   :l (only if it's the latest comment)
+  #   :n (never)
+  # Note: For moderators, see the next option
+  # Default: :l
+  config.comment_deletion = :l
+
+  # moderator_permissions
+  # Type: Symbol
+  # What permissions moderators have
+  # Valid options:
+  #   :e (delete and edit comments and close threads)
+  #   :d (delete comments and close threads)
+  #   :c (close threads only)
+  # Default: :d
+  config.moderator_permissions = :d
 
   # comment_voting
   # Type: Symbol
   # Whether users can vote on other users' comments
   # Valid options:
-  #   :n (no voting)
-  #   :l (likes - requires acts_as_votable gem)
+  #   :n  (no voting)
+  #   :l  (likes - requires acts_as_votable gem)
   #   :ld (likes/dislikes - requires acts_as_votable gem)
   # Not yet implemented:
-  #   :s (star ratings)
-  #   :r (reputation system)
+  #   :s  (star ratings)
+  #   :r  (reputation system)
   # Default: :n
   config.comment_voting = :n
 
   # vote_count_proc
   # Type: Proc
-  # Arguments: pos (Fixnum), neg (Fixnum)
+  # Arguments: a thread (Commontator::Thread), pos (Fixnum), neg (Fixnum)
   # Returns: vote count to be displayed (String)
   # pos is the number of likes, or the rating, or the reputation
   # neg is the number of dislikes, if applicable, or 0 otherwise
-  # Default: lambda { |pos, neg| "%+d" % (pos - neg) }
-  config.vote_count_proc = lambda { |pos, neg| "%+d" % (pos - neg) }
+  # Default: lambda { |thread, pos, neg| "%+d" % (pos - neg) }
+  config.vote_count_proc = lambda { |thread, pos, neg| "%+d" % (pos - neg) }
 
   # comment_order
   # Type: Symbol
   # What order to use for comments
   # Valid options:
-  #   :e (earliest comment first)
-  #   :l (latest comment first)
+  #   :e  (earliest comment first)
+  #   :l  (latest comment first)
   #   :ve (highest voted first; earliest first if tied)
   #   :vl (highest voted first; latest first if tied)
   # Notes:
@@ -168,71 +190,49 @@ Commontator.configure do |config|
   # Default: nil (no pagination)
   config.comments_per_page = nil
 
-  # comment_editing
+  # thread_subscription
   # Type: Symbol
-  # Whether users can edit their own comments
+  # Whether users can subscribe to threads to receive activity email notifications
   # Valid options:
-  #   :a (always)
-  #   :l (only if it's the latest comment)
-  #   :n (never)
-  # Default: :l
-  config.comment_editing = :l
+  #   :n (no subscriptions)
+  #   :a (automatically subscribe when you comment; cannot do it manually)
+  #   :m (manual subscriptions only)
+  #   :b (both automatic, when commenting, and manual)
+  # Default: :n
+  config.thread_subscription = :n
 
-  # comment_deletion
-  # Type: Symbol
-  # Whether users can delete their own comments
-  # Valid options:
-  #   :a (always)
-  #   :l (only if it's the latest comment)
-  #   :n (never)
-  # Note: moderators can always delete any comment
-  # Default: :l
-  config.comment_deletion = :l
-
-  # moderators_can_edit_comments
-  # Type: Boolean
-  # Whether moderators can edit other users' comments
-  # Default: false
-  config.moderators_can_edit_comments = false
-
-  # hide_deleted_comments
-  # Type: Boolean
-  # Whether to hide deleted comments completely or show a placeholder
-  # "deleted by" message that indicates when a comment was deleted
-  # moderators will always see the comment with the placeholder message
-  # the actual content will be hidden from all users with either option
-  # Default: false (show placeholder message)
-  config.hide_deleted_comments = false
-
-  # hide_closed_threads
-  # Type: Boolean
-  # Whether to hide closed threads from normal users
-  # moderators can always read closed threads
-  # Default: false (normal users can still read closed threads)
-  config.hide_closed_threads = false
+  # email_from_proc
+  # Type: Proc
+  # Arguments: a thread (Commontator::Thread)
+  # Returns: the address emails are sent "from" (String)
+  # Important: If using subscriptions, change this to at least match your domain name
+  # Default: lambda { |thread|
+  #          "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
+  config.email_from_proc = lambda { |thread|
+    "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
 
   # commontable_name_proc
   # Type: Proc
-  # Arguments: a commontable (acts_as_commontable)
+  # Arguments: a thread (Commontator::Thread)
   # Returns: a name that refers to the commontable object (String)
   # If you have multiple commontable models, you can also pass this
   # configuration value as an argument to acts_as_commontable for each one
-  # Default: lambda { |commontable|
-  #                   "#{commontable.class.name} ##{commontable.id}" }
-  config.commontable_name_proc = lambda { |commontable|
-    "#{commontable.class.name} ##{commontable.id}" }
+  # Default: lambda { |thread|
+  #                   "#{thread.commontable.class.name} ##{thread.commontable.id}" }
+  config.commontable_name_proc = lambda { |thread|
+    "#{thread.commontable.class.name} ##{thread.commontable.id}" }
 
   # commontable_url_proc
   # Type: Proc
-  # Arguments: a commontable (acts_as_commontable),
+  # Arguments: a thread (Commontator::Thread),
   #            the app_routes (ActionDispatch::Routing::RoutesProxy)
-  # Returns: a String containing the url of the view that
-  #          calls commontator_thread for that object
+  # Returns: a String containing the url of the view that displays the given thread
   # This usually is the commontable's "show" page
   # The main application's routes can be accessed through the app_routes object
   # Default: lambda { |commontable, app_routes|
   #            app_routes.polymorphic_url(commontable) }
   # (defaults to the commontable's show url)
-  config.commontable_url_proc = lambda { |commontable, app_routes|
-    app_routes.polymorphic_url(commontable) }
+  config.commontable_url_proc = lambda { |thread, app_routes|
+    app_routes.polymorphic_url(thread.commontable) }
 end
+

@@ -7,3 +7,4 @@ class DummyUser < ActiveRecord::Base
     'user@example.com'
   end
 end
+

@@ -6,12 +6,16 @@ module Commontator
     validates_presence_of :subscriber, :thread
     validates_uniqueness_of :thread_id, :scope => [:subscriber_type, :subscriber_id]
 
-    def mark_as_read
-      update_attribute(:unread, 0)
+    def self.comment_created(comment)
+      recipients = comment.thread.subscribers.reject{|s| s == comment.creator}
+      SubscriptionsMailer.comment_created(comment, recipients).deliver \
+        unless recipients.empty?
     end
 
-    def add_unread
-      update_attribute(:unread, unread + 1)
+    def unread_comments
+      created_at = Comment.arel_table[:created_at]
+      thread.filtered_comments.where(created_at.gt(updated_at))
     end
   end
 end
+

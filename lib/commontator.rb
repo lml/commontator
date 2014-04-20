@@ -13,31 +13,33 @@ module Commontator
   # Can be set in initializer or passed as an option to acts_as_commontator
   COMMONTATOR_ATTRIBUTES = [
     :user_name_proc,
+    :user_link_proc,
     :user_avatar_proc,
-    :user_email_proc,
-    :user_link_proc
+    :user_email_proc
   ]
   
   # Can be set in initializer or passed as an option to acts_as_commontable
   COMMONTABLE_ATTRIBUTES = [
-    :email_from_proc,
+    :comment_filter,
     :thread_read_proc,
     :thread_moderator_proc,
-    :thread_subscription,
+    :comment_editing,
+    :comment_deletion,
+    :moderator_permissions,
     :comment_voting,
     :vote_count_proc,
     :comment_order,
     :comments_per_page,
-    :comment_editing,
-    :comment_deletion,
-    :moderators_can_edit_comments,
-    :hide_deleted_comments,
-    :hide_closed_threads,
+    :thread_subscription,
+    :email_from_proc,
     :commontable_name_proc,
     :commontable_url_proc
   ]
   
   DEPRECATED_ATTRIBUTES = [
+    [:moderators_can_edit_comments, :moderator_permissions],
+    [:hide_deleted_comments, :comment_filter],
+    [:hide_closed_threads, :thread_read_proc],
     [:wp_link_renderer_proc],
     [:voting_text_proc, :vote_count_proc],
     [:user_name_clickable, :user_link_proc],
@@ -51,11 +53,11 @@ module Commontator
     [:can_vote_on_comments, :comment_voting],
     [:combine_upvotes_and_downvotes, :vote_count_proc],
     [:comments_order, :comment_order],
-    [:closed_threads_are_readable, :hide_closed_threads],
-    [:deleted_comments_are_visible, :hide_deleted_comments],
+    [:closed_threads_are_readable, :thread_read_proc],
+    [:deleted_comments_are_visible, :comment_filter],
     [:can_read_thread_proc, :thread_read_proc],
     [:can_edit_thread_proc, :thread_moderator_proc],
-    [:admin_can_edit_comments, :moderators_can_edit_comments],
+    [:admin_can_edit_comments, :moderator_permissions],
     [:subscription_email_enable_proc, :user_email_proc],
     [:comment_name, 'config/locales'],
     [:comment_create_verb_present, 'config/locales'],
@@ -101,3 +103,4 @@ end
 
 require 'commontator/acts_as_commontator'
 require 'commontator/acts_as_commontable'
+

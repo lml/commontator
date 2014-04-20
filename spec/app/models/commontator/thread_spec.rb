@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'spec_helper'
 
 module Commontator
   describe Thread do
@@ -8,8 +8,8 @@ module Commontator
 
     it 'must have a config' do
       @thread.config.must_be_instance_of CommontableConfig
-      @thread.commontable = nil
-      @thread.config.must_equal Commontator
+      @thread.update_attribute(:commontable_id, nil)
+      Thread.find(@thread.id).config.must_equal Commontator
     end
     
     it 'must order all comments' do
@@ -65,42 +65,23 @@ module Commontator
       @thread.is_closed?.must_equal false
     end
     
-    it 'must know if an user is subscribed' do
+    it 'must mark comments as read' do
       @thread.subscribe(@user)
-      user2 = DummyUser.create
+
+      subscription = @thread.subscription_for(@user)
+      subscription.unread_comments.count.must_equal 0
+
+      comment = Comment.new
+      comment.thread = @thread
+      comment.creator = @user
+      comment.body = 'Something'
+      comment.save!
       
-      @thread.subscribe(user2)
+      subscription.reload.unread_comments.count.must_equal 1
       
-      @thread.is_subscribed?(@user).must_equal true
-      @thread.is_subscribed?(user2).must_equal true
-      @thread.is_subscribed?(DummyUser.create).must_equal false
+      @thread.mark_as_read_for(@user)
       
-      @thread.unsubscribe(@user)
-      
-      @thread.is_subscribed?(@user).must_equal false
-      @thread.is_subscribed?(user2).must_equal true
-      @thread.is_subscribed?(DummyUser.create).must_equal false
-    end
-    
-    it 'must add unread comments and mark comments as read' do
-      @thread.subscribe(@user)
-      user2 = DummyUser.create
-      @thread.subscribe(user2)
-      
-      @thread.subscription_for(@user).unread.must_equal 0
-      @thread.subscription_for(user2).unread.must_equal 0
-      
-      @thread.add_unread_except_for(@user)
-      @thread.add_unread_except_for(user2)
-      @thread.add_unread_except_for(@user)
-      
-      @thread.subscription_for(@user).unread.must_equal 1
-      @thread.subscription_for(user2).unread.must_equal 2
-      
-      @thread.mark_as_read_for(user2)
-      
-      @thread.subscription_for(@user).unread.must_equal 1
-      @thread.subscription_for(user2).unread.must_equal 0
+      subscription.reload.unread_comments.count.must_equal 0
     end
     
     it 'must be able to clear comments' do
@@ -109,19 +90,23 @@ module Commontator
       comment.creator = @user
       comment.body = 'Something'
       comment.save!
-      
+ 
+      @thread.close(@user)
+
       @thread.commontable.must_equal @commontable
-      @thread.comments.must_include comment
-      @thread.is_closed?.must_equal false
-      @commontable.thread.must_equal @thread
-      
-      @thread.clear(@user)
-      
-      @thread.commontable.must_be_nil
       @thread.comments.must_include comment
       @thread.is_closed?.must_equal true
       @thread.closer.must_equal @user
-      @commontable.reload
+
+      @commontable = DummyModel.find(@commontable.id)
+      @commontable.thread.must_equal @thread
+
+      @thread.clear
+      
+      @thread.commontable.must_be_nil
+      @thread.comments.must_include comment
+
+      @commontable = DummyModel.find(@commontable.id)
       @commontable.thread.wont_be_nil
       @commontable.thread.wont_equal @thread
       @commontable.thread.comments.wont_include comment
@@ -133,3 +118,4 @@ module Commontator
     end
   end
 end
+

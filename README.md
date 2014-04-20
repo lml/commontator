@@ -211,3 +211,4 @@ $ bundle exec rake
 
 This gem is distributed under the terms of the MIT license.
 See the MIT-LICENSE file for details.
+
