@@ -207,7 +207,7 @@ Commontator.configure do |config|
   # Returns: the address emails are sent "from" (String)
   # Important: If using subscriptions, change this to at least match your domain name
   # Default: lambda { |thread|
-  #          "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
+  #                   "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
   config.email_from_proc = lambda { |thread|
     "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
 

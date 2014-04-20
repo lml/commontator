@@ -4,9 +4,10 @@
 %>
 
 <% creator = comment.creator
-   name = creator.commontator_name
-   link = creator.commontator_link(main_app)
-   avatar = creator.commontator_avatar(self) %>
+   name = Commontator.commontator_name(creator) || ''
+   link = Commontator.commontator_link(creator) || ''
+   avatar = Commontator.commontator_avatar(creator, self) || ''
+%>
 
 <div id="comment_<%= comment.id.to_s %>_div" class="comment">
   <div id="comment_<%= comment.id.to_s %>_top_div" class="comment_div">

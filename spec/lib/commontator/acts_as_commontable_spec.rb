@@ -20,7 +20,7 @@ module Commontator
       dummy.must_respond_to :comments
       dummy.must_respond_to :subscriptions
       dummy.must_respond_to :commontable_config
-      dummy.must_respond_to :commontable_name
+      dummy.must_respond_to :relation_thread
       dummy.commontable_config.must_be_instance_of CommontableConfig
     end
   end

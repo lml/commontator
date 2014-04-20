@@ -9,15 +9,16 @@ module Commontator
     end
 
     def commontator_gravatar_image_tag(user, border = 1, options = {})
+      email = Commontator.commontator_email(user) || ''
+      name = Commontator.commontator_name(user) || ''
+
       base = request.ssl? ? "s://secure" : "://www"
-      hash = Digest::MD5.hexdigest(user.commontator_email)
+      hash = Digest::MD5.hexdigest(email)
       url = "http#{base}.gravatar.com/avatar/#{hash}?#{options.to_query}"
       
-      name = user.commontator_name
-      
       image_tag(url, { :alt => name,
-                :title => name,
-                :border => border })
+                       :title => name,
+                       :border => border })
     end
   end
 end

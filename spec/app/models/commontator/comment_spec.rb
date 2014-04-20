@@ -48,20 +48,26 @@ module Commontator
     it 'must make proper timestamps' do
       @comment.save!
 
-      editor_name = @user.commontator_config.user_name_proc.call(@user)
-      @comment.created_timestamp.must_equal I18n.t('commontator.comment.status.created_at', :created_at => I18n.l(@comment.created_at,
-                                          :format => :commontator))
-      @comment.updated_timestamp.must_equal ''
+      @comment.created_timestamp.must_equal I18n.t('commontator.comment.status.created_at',
+                                                   :created_at => I18n.l(@comment.created_at,
+                                                                         :format => :commontator))
+      @comment.updated_timestamp.must_equal I18n.t('commontator.comment.status.updated_at',
+                                                   :editor_name => @user.name,
+                                                   :updated_at => I18n.l(@comment.updated_at,
+                                                                         :format => :commontator))
 
+      user2 = DummyUser.create
       @comment.body = 'Something else'
-      @comment.editor = @user
+      @comment.editor = user2
       @comment.save!
 
-      @comment.created_timestamp.must_equal I18n.t('commontator.comment.status.created_at', :created_at => I18n.l(@comment.created_at,
-                                          :format => :commontator))
-      @comment.updated_timestamp.must_equal I18n.t('commontator.comment.status.updated_at', :editor_name => editor_name,
-                     :updated_at => I18n.l(@comment.updated_at,
-                                          :format => :commontator))
+      @comment.created_timestamp.must_equal I18n.t('commontator.comment.status.created_at',
+                                                   :created_at => I18n.l(@comment.created_at,
+                                                                         :format => :commontator))
+      @comment.updated_timestamp.must_equal I18n.t('commontator.comment.status.updated_at',
+                                                   :editor_name => user2.name,
+                                                   :updated_at => I18n.l(@comment.updated_at,
+                                                                         :format => :commontator))
     end
   end
 end

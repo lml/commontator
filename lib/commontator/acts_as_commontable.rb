@@ -34,10 +34,6 @@ module Commontator
             @thread.save if !@thread.persisted? && persisted?
             @thread
           end
-
-          def commontable_name
-            commontable_config.commontable_name_proc.call(thread)
-          end
         end
       end
       

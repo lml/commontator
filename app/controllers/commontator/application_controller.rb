@@ -1,8 +1,8 @@
 module Commontator
   class ApplicationController < ActionController::Base
-    before_filter :get_user, :ensure_user
-    
-    cattr_accessor :commontable_url
+    cattr_reader :app_routes
+
+    before_filter :get_user, :ensure_user, :set_app_routes
     
     rescue_from SecurityTransgression, :with => lambda { head(:forbidden) }
     
@@ -27,9 +27,8 @@ module Commontator
       security_transgression_unless @thread.can_be_read_by? @user
     end
 
-    def set_commontable_url
-      self.commontable_url = @thread.config.commontable_url_proc.call(
-                               @thread, main_app)
+    def set_app_routes
+      @@app_routes ||= main_app
     end
   end
 end

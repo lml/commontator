@@ -99,6 +99,42 @@ module Commontator
     yield self
     warn "\n[COMMONTATOR] We recommend that you backup the config/initializers/commontator.rb file, rename or remove it, run rake commontator:install:initializers to copy the new default one, then configure it to your liking.\n" if @deprecated_method_called
   end
+
+  def self.commontator_config(user)
+    (user && user.is_commontator) ? user.commontator_config : self
+  end
+
+  def self.commontable_config(user)
+    (user && user.is_commontable) ? user.commontable_config : self
+  end
+
+  def self.app_routes
+    Commontator::ApplicationController.app_routes
+  end
+
+  def self.commontator_name(user)
+    commontator_config(user).user_name_proc.call(user)
+  end
+
+  def self.commontator_link(user, routing_proxy = app_routes)
+    commontator_config(user).user_link_proc.call(user, routing_proxy)
+  end
+
+  def self.commontator_email(user, mailer = nil)
+    commontator_config(user).user_email_proc.call(user, mailer)
+  end
+
+  def self.commontator_avatar(user, view)
+    commontator_config(user).user_avatar_proc.call(user, view)
+  end
+
+  def self.commontable_name(commontable)
+    commontable_config(commontable).commontable_name_proc.call(commontable)
+  end
+
+  def self.commontable_url(commontable, routing_proxy = app_routes)
+    commontable_config(commontable).commontable_url_proc.call(commontable, routing_proxy)
+  end
 end
 
 require 'commontator/acts_as_commontator'

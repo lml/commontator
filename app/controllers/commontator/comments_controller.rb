@@ -2,7 +2,6 @@ module Commontator
   class CommentsController < Commontator::ApplicationController
     before_filter :get_thread, :only => [:new, :create]
     before_filter :get_comment_and_thread, :except => [:new, :create]
-    before_filter :set_commontable_url, :only => :create
 
     # GET /threads/1/comments/new
     def new

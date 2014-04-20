@@ -18,22 +18,6 @@ module Commontator
           has_many :comments, :as => :creator, :class_name => 'Commontator::Comment'
 
           has_many :subscriptions, :as => :subscriber, :class_name => 'Commontator::Subscription', :dependent => :destroy
-
-          def commontator_name
-            commontator_config.user_name_proc.call(self)
-          end
-
-          def commontator_email(mailer = nil)
-            commontator_config.user_email_proc.call(self, mailer)
-          end
-          
-          def commontator_link(main_app)
-            commontator_config.user_link_proc.call(self, main_app)
-          end
-          
-          def commontator_avatar(view_context)
-            commontator_config.user_avatar_proc.call(self, view_context)
-          end
         end
       end
       

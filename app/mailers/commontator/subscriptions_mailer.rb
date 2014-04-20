@@ -19,29 +19,26 @@ module Commontator
       @thread = @comment.thread
       @creator = @comment.creator
 
-      @commontable = @thread.commontable
-      @config = @thread.config
+      @creator_name = Commontator.commontator_name(@creator)
 
-      @creator_name = @creator.commontator_name
+      @commontable_name = Commontator.commontable_name(@thread)
 
-      @commontable_name = @commontable.commontable_name
-
-      @commontable_url = ApplicationController.commontable_url
+      @commontable_url = Commontator.commontable_url(@thread)
 
       params = Hash.new
       params[:comment] = @comment
       params[:thread] = @thread
       params[:creator] = @creator
-      params[:commontable] = @commontable
-      params[:config] = @config
       params[:creator_name] = @creator_name
       params[:commontable_name] = @commontable_name
       params[:commontable_url] = @commontable_url
 
       @to = t('commontator.email.undisclosed_recipients')
-      @bcc = recipients.collect{|s| s.commontator_email(self)}
-      @from = @config.email_from_proc.call(@thread)
+      @bcc = recipients.collect{|s| Commontator.commontator_email(s, self)}
+      @from = @thread.config.email_from_proc.call(@thread)
     end
+
+    
   end
 end
 
