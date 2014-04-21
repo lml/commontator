@@ -1,7 +1,7 @@
 <%= render :partial => 'commontator/threads/show',
            :locals => {:thread => @thread,
                        :user => @user,
-                       :page => @thread.total_pages(@per_page),
+                       :page => @thread.new_comment_page(@per_page),
                        :per_page => @per_page} %>
 
 $("#thread_<%= @thread.id %>_new_comment_div").hide();

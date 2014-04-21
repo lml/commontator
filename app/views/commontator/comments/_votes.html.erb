@@ -37,7 +37,7 @@
 
   <span id="comment_<%= comment.id %>_vote_count_span" class="comment_vote_count">
     <% config = comment.thread.config %>
-    <%= config.voting_text_proc.call(config.comment_voting,
+    <%= config.vote_count_proc.call(comment.thread,
           comment.upvotes.size, comment.downvotes.size) %>
   </span>
 

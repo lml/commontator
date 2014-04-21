@@ -48,11 +48,12 @@
 
 <span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
   <%= t "commontator.thread.status.#{thread.is_closed? ? 'closed' : 'open'}",
-        :closer_name => Commontator.commontator_name(closer) %>
+        :closer_name => Commontator.commontator_name(thread.closer) %>
 </span>
 
 <% if thread.config.comment_order == :l %>
-  <%= render :partial => 'commontator/threads/reply', :locals => {:thread => thread, :user => user} %>
+  <%= render :partial => 'commontator/threads/reply',
+             :locals => {:thread => thread, :user => user, :per_page => per_page} %>
 <% end %>
 
 <div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
@@ -64,17 +65,31 @@
 
 <% if thread.will_paginate? && !show_all %>
   <div id="thread_<%= thread.id.to_s %>_pagination_div" class="thread_pagination">
-    <%= will_paginate comments,
-                      :renderer => Commontator::LinkRenderer,
-                      :routes_proxy => commontator,
-                      :remote => true,
-                      :params => {:controller => 'commontator/threads',
-                                  :action => 'show',
-                                  :id => thread.id} %>
+    <div id="thread_<%= thread.id.to_s %>_page_entries_info_div" class="thread_page_entries_info">
+      <%= page_entries_info comments,
+                        :params => {:controller => 'commontator/threads',
+                                    :action => 'show',
+                                    :id => thread.id,
+                                    :page => page,
+                                    :per_page => per_page} %>.
+    </div>
+
+    <div id="thread_<%= thread.id.to_s %>_will_paginate_div" class="thread_will_paginate">
+      <%= will_paginate comments,
+                        :renderer => Commontator::LinkRenderer,
+                        :routes_proxy => commontator,
+                        :remote => true,
+                        :params => {:controller => 'commontator/threads',
+                                    :action => 'show',
+                                    :id => thread.id,
+                                    :page => page,
+                                    :per_page => per_page} %>
+    </div>
   </div>
 <% end %>
 
 <% if thread.config.comment_order != :l %>
-  <%= render :partial => 'commontator/threads/reply', :locals => {:thread => thread, :user => user} %>
+  <%= render :partial => 'commontator/threads/reply',
+             :locals => {:thread => thread, :user => user, :per_page => per_page} %>
 <% end %>
 

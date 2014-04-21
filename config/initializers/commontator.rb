@@ -76,8 +76,8 @@ Commontator.configure do |config|
   # to Gravatar, so you should always return the user's email address (if using Gravatar)
   # If the mailer argument is not nil, then Commontator intends to send an email to
   # the address returned; you can prevent it from being sent by returning a blank String
-  # Default: lambda { |user, mailer| user.email }
-  config.user_email_proc = lambda { |user, mailer| user.email }
+  # Default: lambda { |user, mailer| user.try(:email) || '' }
+  config.user_email_proc = lambda { |user, mailer| user.try(:email) || '' }
 
 
 

@@ -3,7 +3,7 @@
    # user
 %>
 
-<% is_subscribed = thread.is_subscribed?(user) %>
+<% is_subscribed = !!thread.subscription_for(user) %>
 <% sub_string = is_subscribed ? "unsubscribe" : "subscribe" %>
 <%= link_to t("commontator.subscription.actions.#{sub_string}"),
             commontator.polymorphic_path([sub_string, thread]),

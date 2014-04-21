@@ -2,6 +2,7 @@
    # comment
    #
    # Optionally, they can also supply the following variables:
+   per_page ||= nil
    thread ||= nil
    no_remote ||= false
 %>
@@ -22,6 +23,8 @@
 
 <%= form_for([commontator, thread, comment],
              :remote => !no_remote) do |f| %>
+
+  <%= hidden_field_tag :per_page, per_page %>
   
   <div class="comment_form_field">
     <%= f.text_area :body, :rows => '7' %>

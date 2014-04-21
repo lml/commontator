@@ -8,10 +8,9 @@ class InstallCommontator < ActiveRecord::Migration
       t.integer  'thread_id', :null => false
       t.text     'body', :null => false
       t.datetime 'deleted_at'
-      
-      t.integer  'cached_votes_total', :default => 0
-      t.integer  'cached_votes_up', :default => 0
-      t.integer  'cached_votes_down', :default => 0
+
+      t.integer :cached_votes_up, :default => 0
+      t.integer :cached_votes_down, :default => 0
 
       t.timestamps
     end
@@ -19,9 +18,8 @@ class InstallCommontator < ActiveRecord::Migration
     add_index :commontator_comments, [:creator_id, :creator_type, :thread_id], :name => 'index_commontator_comments_on_c_id_and_c_type_and_t_id'
     add_index :commontator_comments, :thread_id
 
-    add_index :commontator_comments, :cached_votes_total
-    add_index :commontator_comments, :cached_votes_up
-    add_index :commontator_comments, :cached_votes_down
+    add_index  :commontator_comments, :cached_votes_up
+    add_index  :commontator_comments, :cached_votes_down
     
     create_table 'commontator_subscriptions' do |t|
       t.string   'subscriber_type', :null => false

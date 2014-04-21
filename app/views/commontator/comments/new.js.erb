@@ -2,7 +2,8 @@ $("#thread_<%= @thread.id %>_new_comment_div").html("<%= escape_javascript(
   render :partial => 'form',
          :locals => {
                        :comment => @comment,
-                       :thread => @thread
+                       :thread => @thread,
+                       :per_page => @per_page
                     }) %>");
                     
 $("#thread_<%= @thread.id %>_new_comment_div").fadeIn()[0].scrollIntoView();

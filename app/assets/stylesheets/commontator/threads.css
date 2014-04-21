@@ -25,14 +25,19 @@
 
 /* Modified from:
 http://www.strangerstudios.com/sandbox/pagination/diggstyle.php */
-.thread_pagination {
+.thread_page_entries_info {
+	margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.thread_will_paginate {
 	margin-top: 10px;
   margin-bottom: 10px;
 }
 
 .thread_pagination a {
 	padding: 2px 5px 2px 5px;
-	margin: 2px;
+	margin-right: 4px;
 	border: 1px solid #999;
 	
 	text-decoration: none;
@@ -48,7 +53,7 @@ http://www.strangerstudios.com/sandbox/pagination/diggstyle.php */
 
 .thread_pagination em {
 	padding: 2px 5px 2px 5px;
-	margin: 2px;
+	margin-right: 4px;
   border: 1px solid #555;
 
   font-weight: bold;
@@ -58,7 +63,7 @@ http://www.strangerstudios.com/sandbox/pagination/diggstyle.php */
 
 .thread_pagination span {
   padding: 2px 5px 2px 5px;
-  margin: 2px;
+	margin-right: 4px;
   border: 1px solid #EEE;
 
   color: #DDD;

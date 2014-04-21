@@ -41,6 +41,11 @@ module Commontator
       votes.where(:voter_type => user.class.name, :voter_id => user.id).first
     end
 
+    def update_cached_votes(vote_scope = nil)
+      self.update_column(:cached_votes_up, count_votes_up(true))
+      self.update_column(:cached_votes_down, count_votes_down(true))
+    end
+
     def is_deleted?
       !deleted_at.blank?
     end

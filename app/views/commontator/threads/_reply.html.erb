@@ -1,6 +1,7 @@
 <% # Clients of this partial must supply the following variables:
    # thread
    # user
+   # per_page
 %>
 
 <% if thread.is_closed? %>
@@ -12,7 +13,7 @@
 
   <span id="thread_<%= thread.id %>_new_comment_link_span" class="thread_new_comment_link">
     <%= link_to t('commontator.comment.actions.new'),
-        commontator.new_thread_comment_path(thread), :remote => true %>
+        commontator.new_thread_comment_path(thread, :per_page => per_page), :remote => true %>
   </span>
 <% end %>
 

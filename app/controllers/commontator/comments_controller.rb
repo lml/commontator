@@ -11,6 +11,8 @@ module Commontator
 
       security_transgression_unless @comment.can_be_created_by?(@user)
 
+      @per_page = params[:per_page] || @thread.config.comments_per_page
+
       respond_to do |format|
         format.html { redirect_to @thread }
         format.js

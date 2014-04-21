@@ -34,9 +34,15 @@ en:
       commontator/thread: 
         commontable: Commontable
     models: 
-      commontator/comment: Comment
-      commontator/subscription: Subscription
-      commontator/thread: Discussion
+      commontator/comment: 
+        one: comment
+        other: comments
+      commontator/subscription: 
+        one: subscription
+        other: subscriptions
+      commontator/thread: 
+        one: thread
+        other: threads
   commontator: 
     anonymous: Anonymous
     comment: 

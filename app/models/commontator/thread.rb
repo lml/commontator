@@ -31,8 +31,8 @@ module Commontator
       comments.where(cf)
     end
 
-    def ordered_comments(override = false)
-      vc = override ? comments : filtered_comments
+    def ordered_comments(unfiltered = false)
+      vc = unfiltered ? comments : filtered_comments
       case config.comment_order.to_sym
       when :l then vc.order('id DESC')
       when :ve then vc.order('cached_votes_down - cached_votes_up')
@@ -47,9 +47,24 @@ module Commontator
       oc.paginate(:page => page, :per_page => per_page)
     end
 
-    def total_pages(per_page = config.comments_per_page)
-      return 1 if per_page.blank?
-      (filtered_comments.count/(per_page.to_f)).ceil
+    def new_comment_page(per_page = config.comments_per_page)
+      return 1 if per_page.nil? || per_page.to_i <= 0
+      comment_index = \
+        case config.comment_order.to_sym
+        when :l
+          1 # First comment
+        when :ve
+          comment_arel = Comment.arel_table
+          # Last comment with rating = 0
+          filtered_comments.where((comment_arel[:cached_votes_up] - comment_arel[:cached_votes_down]).gteq 0).count
+        when :vl
+          comment_arel = Comment.arel_table
+          # First comment with rating = 0
+          filtered_comments.where((comment_arel[:cached_votes_up] - comment_arel[:cached_votes_down]).gt 0).count + 1
+        else
+          filtered_comments.count # Last comment
+        end
+      (comment_index.to_f/per_page.to_i).ceil
     end
 
     def is_closed?
