@@ -124,7 +124,7 @@ gem 'acts_as_votable'
 And enabling the relevant option in commontator's initializer:
 
 ```rb
-config.comment_voting = :ld # See initializer for available options
+config.comment_voting = :ld # See the initializer for available options
 ```
 
 ## Browser Support
