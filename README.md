@@ -124,11 +124,8 @@ gem 'acts_as_votable'
 And enabling the relevant option in commontator's initializer:
 
 ```rb
-config.can_vote_on_comments = true
+config.comment_voting = :ld # See initializer for available options
 ```
-
-Note that `acts_as_votable` is currently incompatible with the `protected_attributes`
-gem if `config.active_record.whitelist_attributes` is true.
 
 ## Browser Support
 
@@ -174,14 +171,13 @@ config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.{rb,yml}')]
 
 ## Development Environment Setup
 
-1. Browse to commontator's spec/dummy folder
-2. Use bundler to install all dependencies:
+1. Use bundler to install all dependencies:
 
   ```sh
   $ bundle install
   ```
 
-3. Load the schema:
+2. Load the schema:
 
   ```sh
   $ rake db:schema:load
