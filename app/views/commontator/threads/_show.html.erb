@@ -7,8 +7,8 @@
    show_all ||= false
 %>
 
-<% can_subscribe = thread.can_subscribe?(user) %>
-<% can_edit = thread.can_be_edited_by?(user) %>
+<% can_subscribe = thread.can_subscribe?(user)
+   can_edit = thread.can_be_edited_by?(user) %>
 
 <span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
   <% if can_subscribe %>
@@ -48,7 +48,7 @@
 
 <span id="thread_<%= thread.id.to_s %>_header_span" class="thread_header">
   <%= t "commontator.thread.status.#{thread.is_closed? ? 'closed' : 'open'}",
-        :closer_name => Commontator.commontator_name(thread.closer) %>
+        :closer_name => (thread.is_closed? ? Commontator.commontator_name(thread.closer) : '') %>
 </span>
 
 <% if thread.config.comment_order == :l %>
