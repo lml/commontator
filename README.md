@@ -1,5 +1,7 @@
 # Commontator
 
+[![Build Status](https://travis-ci.org/lml/commontator.svg?branch=master)](https://travis-ci.org/lml/commontator)
+
 Commontator is a Rails engine for comments. It is compatible with Rails 3.1+ and Rails 4.
 Being an engine means it is fully functional as soon as you install and
 configure the gem, providing models, views and controllers of its own.
