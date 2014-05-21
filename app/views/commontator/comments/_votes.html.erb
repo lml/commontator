@@ -38,7 +38,7 @@
   <span id="comment_<%= comment.id %>_vote_count_span" class="comment_vote_count">
     <% config = comment.thread.config %>
     <%= config.vote_count_proc.call(comment.thread,
-          comment.upvotes.size, comment.downvotes.size) %>
+          comment.get_upvotes.size, comment.get_downvotes.size) %>
   </span>
 
   <% if comment_voting == :ld %>

@@ -38,7 +38,7 @@ module Commontator
 
     def get_vote_by(user)
       return nil unless is_votable? && user && user.is_commontator
-      votes.where(:voter_type => user.class.name, :voter_id => user.id).first
+      votes_for.where(:voter_type => user.class.name, :voter_id => user.id).first
     end
 
     def update_cached_votes(vote_scope = nil)
