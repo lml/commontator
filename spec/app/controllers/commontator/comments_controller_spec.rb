@@ -391,24 +391,24 @@ module Commontator
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.must_be_empty
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.must_be_empty
+      @comment.get_downvotes.must_be_empty
       
       sign_in @user
       @user.can_read = true
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.must_be_empty
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.must_be_empty
+      @comment.get_downvotes.must_be_empty
       
       user2 = DummyUser.create
       sign_in user2
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.must_be_empty
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.must_be_empty
+      @comment.get_downvotes.must_be_empty
     end
     
     it 'must upvote if authorized' do
@@ -418,44 +418,44 @@ module Commontator
       
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.count.must_equal 1
-      assigns(:comment).downvotes.must_be_empty
+      assigns(:comment).get_upvotes.count.must_equal 1
+      assigns(:comment).get_downvotes.must_be_empty
       
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.count.must_equal 1
-      assigns(:comment).downvotes.must_be_empty
+      assigns(:comment).get_upvotes.count.must_equal 1
+      assigns(:comment).get_downvotes.must_be_empty
       
       @comment.downvote_from(user2).must_equal true
       
       put :upvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.count.must_equal 1
-      assigns(:comment).downvotes.must_be_empty
+      assigns(:comment).get_upvotes.count.must_equal 1
+      assigns(:comment).get_downvotes.must_be_empty
     end
     
     it "won't downvote unless authorized" do
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.must_be_empty
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.must_be_empty
+      @comment.get_downvotes.must_be_empty
       
       sign_in @user
       @user.can_read = true
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.must_be_empty
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.must_be_empty
+      @comment.get_downvotes.must_be_empty
       
       user2 = DummyUser.create
       sign_in user2
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.must_be_empty
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.must_be_empty
+      @comment.get_downvotes.must_be_empty
     end
     
     it 'must downvote if authorized' do
@@ -465,20 +465,20 @@ module Commontator
       
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.count.must_equal 1
+      assigns(:comment).get_upvotes.must_be_empty
+      assigns(:comment).get_downvotes.count.must_equal 1
       
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.count.must_equal 1
+      assigns(:comment).get_upvotes.must_be_empty
+      assigns(:comment).get_downvotes.count.must_equal 1
       
       @comment.upvote_from(user2).must_equal true
       
       put :downvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.count.must_equal 1
+      assigns(:comment).get_upvotes.must_be_empty
+      assigns(:comment).get_downvotes.count.must_equal 1
     end
     
     it "won't unvote unless authorized" do
@@ -487,24 +487,24 @@ module Commontator
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.count.must_equal 1
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.count.must_equal 1
+      @comment.get_downvotes.must_be_empty
       
       sign_in @user
       @user.can_read = true
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.count.must_equal 1
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.count.must_equal 1
+      @comment.get_downvotes.must_be_empty
       
       user2 = DummyUser.create
       sign_in user2
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_response 403
       @comment.reload
-      @comment.upvotes.count.must_equal 1
-      @comment.downvotes.must_be_empty
+      @comment.get_upvotes.count.must_equal 1
+      @comment.get_downvotes.must_be_empty
     end
     
     it 'must unvote if authorized' do
@@ -515,19 +515,19 @@ module Commontator
       @comment.upvote_from(user2).must_equal true
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      assigns(:comment).get_upvotes.must_be_empty
+      assigns(:comment).get_downvotes.must_be_empty
       
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      assigns(:comment).get_upvotes.must_be_empty
+      assigns(:comment).get_downvotes.must_be_empty
       
       @comment.downvote_from(user2).must_equal true
       put :unvote, :id => @comment.id, :use_route => :commontator
       assert_redirected_to @thread
-      assigns(:comment).upvotes.must_be_empty
-      assigns(:comment).downvotes.must_be_empty
+      assigns(:comment).get_upvotes.must_be_empty
+      assigns(:comment).get_downvotes.must_be_empty
     end
 
     it "won't send mail if recipients empty" do
