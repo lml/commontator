@@ -22,4 +22,3 @@ module Commontator
 end
 
 ActionController::Base.send :include, Commontator::ControllerIncludes
-
