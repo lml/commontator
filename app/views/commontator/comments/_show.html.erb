@@ -5,7 +5,7 @@
 
 <% creator = comment.creator
    name = Commontator.commontator_name(creator) || ''
-   link = Commontator.commontator_link(creator) || ''
+   link = Commontator.commontator_link(creator, main_app) || ''
    avatar = Commontator.commontator_avatar(creator, self) || ''
 %>
 

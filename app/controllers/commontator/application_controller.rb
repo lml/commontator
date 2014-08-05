@@ -1,8 +1,6 @@
 module Commontator
   class ApplicationController < ActionController::Base
-    cattr_reader :app_routes
-
-    before_filter :get_user, :ensure_user, :set_app_routes
+    before_filter :get_user, :ensure_user
     
     rescue_from SecurityTransgression, :with => lambda { head(:forbidden) }
     
@@ -25,10 +23,6 @@ module Commontator
         Commontator::Thread.find(params[:id]) : \
         Commontator::Thread.find(params[:thread_id])
       security_transgression_unless @thread.can_be_read_by? @user
-    end
-
-    def set_app_routes
-      @@app_routes ||= main_app
     end
   end
 end

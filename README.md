@@ -18,7 +18,7 @@ There are 4 steps you must follow to install commontator:
   Add this line to your application's Gemfile:
 
   ```rb
-  gem 'commontator'
+  gem 'commontator', '~> 4.7.1'
   ```
 
   And then execute:
@@ -116,6 +116,15 @@ Follow the steps below to add commontator to your models and views:
   It is up to you to ensure that this method is only called if the user is authorized to read the thread.
 
 That's it! Commontator is now ready for use.
+
+## Emails
+
+If sending emails, remember to add your host URL's to your environment files
+(test.rb, development.rb and production.rb):
+
+```rb
+config.action_mailer.default_url_options = { :host => "www.example.com" }
+```
 
 ## Voting
 

@@ -108,15 +108,11 @@ module Commontator
     (user && user.is_commontable) ? user.commontable_config : self
   end
 
-  def self.app_routes
-    Commontator::ApplicationController.app_routes
-  end
-
   def self.commontator_name(user)
     commontator_config(user).user_name_proc.call(user)
   end
 
-  def self.commontator_link(user, routing_proxy = app_routes)
+  def self.commontator_link(user, routing_proxy)
     commontator_config(user).user_link_proc.call(user, routing_proxy)
   end
 
@@ -132,7 +128,7 @@ module Commontator
     commontable_config(commontable).commontable_name_proc.call(commontable)
   end
 
-  def self.commontable_url(commontable, routing_proxy = app_routes)
+  def self.commontable_url(commontable, routing_proxy)
     commontable_config(commontable).commontable_url_proc.call(commontable, routing_proxy)
   end
 end
