@@ -1,6 +1,8 @@
 # Commontator
 
+[![Gem Version](https://badge.fury.io/rb/commontator.svg)](http://badge.fury.io/rb/commontator)
 [![Build Status](https://travis-ci.org/lml/commontator.svg?branch=master)](https://travis-ci.org/lml/commontator)
+[![Code Climate](https://codeclimate.com/github/lml/commontator/badges/gpa.svg)](https://codeclimate.com/github/lml/commontator)
 
 Commontator is a Rails engine for comments. It is compatible with Rails 3.1+ and Rails 4.
 Being an engine means it is fully functional as soon as you install and
@@ -16,7 +18,7 @@ There are 4 steps you must follow to install commontator:
   Add this line to your application's Gemfile:
 
   ```rb
-  gem 'commontator', '~> 4.7.0'
+  gem 'commontator'
   ```
 
   And then execute:
