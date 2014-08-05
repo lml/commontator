@@ -1,4 +1,5 @@
 #!/usr/bin/env rake
+
 begin
   require 'bundler/setup'
 rescue LoadError
@@ -13,11 +14,9 @@ Bundler::GemHelper.install_tasks
 require 'rake/testtask'
 
 Rake::TestTask.new(:spec => 'app:db:test:prepare') do |t|
-  t.libs << 'lib'
   t.libs << 'spec'
   t.pattern = 'spec/**/*_spec.rb'
   t.verbose = false
 end
 
 task :default => :spec
-
