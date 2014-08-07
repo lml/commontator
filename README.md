@@ -18,7 +18,7 @@ There are 4 steps you must follow to install commontator:
   Add this line to your application's Gemfile:
 
   ```rb
-  gem 'commontator', '~> 4.7.1'
+  gem 'commontator', '~> 4.7.2'
   ```
 
   And then execute:
