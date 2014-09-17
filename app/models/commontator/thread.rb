@@ -34,9 +34,10 @@ module Commontator
     def ordered_comments(unfiltered = false)
       vc = unfiltered ? comments : filtered_comments
       case config.comment_order.to_sym
-      when :l then vc.order('id DESC')
-      when :ve then vc.order('cached_votes_down - cached_votes_up')
-      when :vl then vc.order('cached_votes_down - cached_votes_up', 'id DESC')
+      when :l then vc.order('created_at DESC')
+      when :e then vc.order('created_at ASC')
+      when :ve then vc.order('cached_votes_down - cached_votes_up', 'created_at ASC')
+      when :vl then vc.order('cached_votes_down - cached_votes_up', 'created_at DESC')
       else vc
       end
     end
