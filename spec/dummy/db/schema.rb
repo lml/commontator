@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 3) do
   add_index "commontator_comments", ["cached_votes_down"], name: "index_commontator_comments_on_cached_votes_down"
   add_index "commontator_comments", ["cached_votes_up"], name: "index_commontator_comments_on_cached_votes_up"
   add_index "commontator_comments", ["creator_id", "creator_type", "thread_id"], name: "index_commontator_comments_on_c_id_and_c_type_and_t_id"
-  add_index "commontator_comments", ["thread_id"], name: "index_commontator_comments_on_thread_id"
+  add_index "commontator_comments", ["thread_id", "created_at"], name: "index_commontator_comments_on_thread_id_and_created_at"
 
   create_table "commontator_subscriptions", force: true do |t|
     t.string   "subscriber_type", null: false

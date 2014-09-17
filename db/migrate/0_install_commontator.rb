@@ -16,7 +16,7 @@ class InstallCommontator < ActiveRecord::Migration
     end
 
     add_index :commontator_comments, [:creator_id, :creator_type, :thread_id], :name => 'index_commontator_comments_on_c_id_and_c_type_and_t_id'
-    add_index :commontator_comments, :thread_id
+    add_index :commontator_comments, [:thread_id, :created_at]
 
     add_index  :commontator_comments, :cached_votes_up
     add_index  :commontator_comments, :cached_votes_down
