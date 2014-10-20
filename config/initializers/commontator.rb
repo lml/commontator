@@ -182,6 +182,16 @@ Commontator.configure do |config|
   # Default: :e
   config.comment_order = :e
 
+  # new_comment_style
+  # Type: Symbol
+  # How to display the "new comment" form
+  # Valid options:
+  #   :t (always present in the thread's page)
+  #   :l (link to the form; opens in the same page using JS)
+  #   :n (link to the form; opens in a new window)
+  # Default: :l
+  config.new_comment_style = :l
+
   # comments_per_page
   # Type: Fixnum or nil
   # Number of comments to display in each page

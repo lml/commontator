@@ -4,8 +4,8 @@ module Commontator
       user = Commontator.current_user_proc.call(self)
       
       render(:partial => 'commontator/shared/thread',
-             :locals => {:thread => commontable.thread,
-                         :user => user}).html_safe
+             :locals => { :thread => commontable.thread,
+                          :user => user }).html_safe
     end
 
     def commontator_gravatar_image_tag(user, border = 1, options = {})

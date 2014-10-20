@@ -5,6 +5,6 @@
 
 <% comments.each do |comment| %>
   <%= render :partial => 'commontator/comments/show',
-             :locals => {:comment => comment,
-                         :user => user} %>
+             :locals => { :comment => comment,
+                          :user => user } %>
 <% end %>

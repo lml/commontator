@@ -1,12 +1,20 @@
 <%= render :partial => 'commontator/threads/show',
-           :locals => {:thread => @thread,
-                       :user => @user,
-                       :page => @thread.new_comment_page(@per_page),
-                       :per_page => @per_page} %>
+           :locals => { :thread => @thread,
+                        :user => @user,
+                        :page => @thread.new_comment_page(@per_page),
+                        :per_page => @per_page } %>
 
-$("#thread_<%= @thread.id %>_new_comment_div").hide();
+<% if @thread.config.new_comment_style == :t %>
+  $("#thread_<%= @thread.id %>_new_comment_form_div").html("<%= escape_javascript(
+    render :partial => 'form',
+           :locals => { :comment => Comment.new,
+                        :thread => @thread,
+                        :per_page => @per_page }) %>");
+<% else %>
+  $("#thread_<%= @thread.id %>_new_comment_form_div").hide();
 
-$("#thread_<%= @thread.id %>_new_comment_link_span").fadeIn();
+  $("#thread_<%= @thread.id %>_new_comment_link_div").fadeIn();
+<% end %>
 
 $("#comment_<%= @comment.id.to_s %>_div").hide().fadeIn()[0].scrollIntoView();
 

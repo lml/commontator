@@ -546,7 +546,7 @@ module Commontator
       @user.can_read = true
       sign_in @user
 
-      attributes = {:body => 'Something else'}
+      attributes = { :body => 'Something else' }
       post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
       assigns(:comment).errors.must_be_empty
 
@@ -571,7 +571,7 @@ module Commontator
       @user.can_read = true
       sign_in @user
 
-      attributes = {:body => 'Something else'}
+      attributes = { :body => 'Something else' }
       post :create, :thread_id => @thread.id, :comment => attributes, :use_route => :commontator
       assigns(:comment).errors.must_be_empty
 

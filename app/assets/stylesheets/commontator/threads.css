@@ -2,6 +2,10 @@
   display: block !important;
 }
 
+.thread .hidden {
+  display: none;
+}
+
 .thread_actions {
   float: right;
 }
@@ -12,14 +16,6 @@
   font-style: normal;
   margin-top: 5px;
   margin-bottom: 5px;
-  display: block;
-}
-
-.thread_new_comment {
-  display: none;
-}
-
-.thread_new_comment_link {
   display: block;
 }
 
