@@ -1,8 +1,7 @@
 module Commontator
   class ThreadsController < Commontator::ApplicationController
     skip_before_filter :ensure_user, :only => :show
-
-    before_filter :get_thread
+    before_filter :set_thread
 
     # GET /threads/1
     def show

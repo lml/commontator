@@ -19,6 +19,7 @@ Commontator.configure do |config|
   # Arguments: a view (ActionView::Base)
   # Returns: a String that is appended to Commontator JS views
   # Can be used, for example, to display/clear Rails error messages
+  # or to reapply JQuery UI styles after Ajax calls
   # Objects visible in view templates can be accessed
   # through the view object (for example, view.flash)
   # However, the view does not include the main application's helpers
@@ -188,6 +189,7 @@ Commontator.configure do |config|
   # Valid options:
   #   :t (always present in the thread's page)
   #   :l (link to the form; opens in the same page using JS)
+  # Not yet implemented:
   #   :n (link to the form; opens in a new window)
   # Default: :l
   config.new_comment_style = :l

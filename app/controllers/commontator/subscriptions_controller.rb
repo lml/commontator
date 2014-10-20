@@ -1,6 +1,6 @@
 module Commontator
   class SubscriptionsController < Commontator::ApplicationController
-    before_filter :get_thread
+    before_filter :set_thread
 
     # PUT /threads/1/subscribe
     def subscribe

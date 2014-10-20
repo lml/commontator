@@ -3,7 +3,7 @@
    # user
    # per_page
 
-   display_new_comment_form = thread.config.new_comment_style == :t %>
+   hidden_class = @new_comment.nil? ? ' hidden' : '' %>
 
 <div id="thread_<%= thread.id %>_reply" class="thread_reply">
   <% if thread.is_closed? %>
@@ -12,16 +12,16 @@
     <p><%= t 'commontator.require_login' %>.</p>
   <% else %>
     <div id="thread_<%= thread.id %>_new_comment_form_div" class="thread_new_comment_form<%=
-    ' hidden' unless display_new_comment_form %>">
-      <% if display_new_comment_form %>
-        <%= render :partial => 'form',
-                   :locals => { :comment => Comment.new,
+    hidden_class %>">
+      <% unless @new_comment.nil? %>
+        <%= render :partial => 'commontator/comments/form',
+                   :locals => { :comment => @new_comment,
                                 :thread => thread,
                                 :per_page => per_page } %>
       <% end %>
     </div>
 
-    <% unless display_new_comment_form %>
+    <% if @new_comment.nil? %>
       <div id="thread_<%= thread.id %>_new_comment_link_div" class="thread_new_comment_link">
         <%= link_to t('commontator.comment.actions.new'),
             commontator.new_thread_comment_path(thread, :per_page => per_page),

@@ -2,9 +2,10 @@ module Commontator
   module SharedHelper
     def commontator_thread(commontable)
       user = Commontator.current_user_proc.call(self)
+      thread = commontable.thread
       
       render(:partial => 'commontator/shared/thread',
-             :locals => { :thread => commontable.thread,
+             :locals => { :thread => thread,
                           :user => user }).html_safe
     end
 

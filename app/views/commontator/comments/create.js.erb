@@ -4,10 +4,10 @@
                         :page => @thread.new_comment_page(@per_page),
                         :per_page => @per_page } %>
 
-<% if @thread.config.new_comment_style == :t %>
+<% unless @new_comment.nil? %>
   $("#thread_<%= @thread.id %>_new_comment_form_div").html("<%= escape_javascript(
     render :partial => 'form',
-           :locals => { :comment => Comment.new,
+           :locals => { :comment => @new_comment,
                         :thread => @thread,
                         :per_page => @per_page }) %>");
 <% else %>
