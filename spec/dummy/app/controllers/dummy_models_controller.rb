@@ -27,4 +27,3 @@ class DummyModelsController < ActionController::Base
     @dummy_model = DummyModel.find(params[:id])
   end
 end
-

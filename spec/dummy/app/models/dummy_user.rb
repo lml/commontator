@@ -11,4 +11,3 @@ class DummyUser < ActiveRecord::Base
     "Dummy User ##{id}"
   end
 end
-

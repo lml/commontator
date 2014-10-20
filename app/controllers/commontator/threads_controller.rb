@@ -46,4 +46,3 @@ module Commontator
     end
   end
 end
-

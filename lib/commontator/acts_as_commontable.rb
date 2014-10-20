@@ -43,4 +43,3 @@ module Commontator
 end
 
 ActiveRecord::Base.send :include, Commontator::ActsAsCommontable
-

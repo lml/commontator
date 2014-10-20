@@ -13,4 +13,3 @@ module ApplicationHelper
     @@user = nil
   end
 end
-

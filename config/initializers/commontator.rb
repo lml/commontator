@@ -235,4 +235,3 @@ Commontator.configure do |config|
   config.commontable_url_proc = lambda { |thread, app_routes|
     app_routes.polymorphic_url(thread.commontable) }
 end
-

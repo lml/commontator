@@ -25,4 +25,3 @@ class ActsAsVotableMigration < ActiveRecord::Migration
     drop_table :votes
   end
 end
-

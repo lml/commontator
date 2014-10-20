@@ -5,4 +5,3 @@ class CreateDummyModels < ActiveRecord::Migration
     end
   end
 end
-
