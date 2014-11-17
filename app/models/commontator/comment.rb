@@ -4,8 +4,6 @@ module Commontator
     belongs_to :editor, :polymorphic => true
     belongs_to :thread
 
-    has_one :commontable, :through => :thread
-
     validates_presence_of :creator, :on => :create
     validates_presence_of :editor, :on => :update
     validates_presence_of :thread

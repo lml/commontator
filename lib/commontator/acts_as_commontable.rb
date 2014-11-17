@@ -15,25 +15,12 @@ module Commontator
           self.commontable_config = Commontator::CommontableConfig.new(options)
           self.is_commontable = true
 
-          has_one :thread, :as => :commontable, :class_name => 'Commontator::Thread'
-          has_many :comments, :class_name => 'Commontator::Comment', :through => :thread
-
-          has_many :subscriptions, :class_name => 'Commontator::Subscription', :through => :thread
+          has_one :thread, :as => :commontable,
+                           :class_name => 'Commontator::Thread'
 
           validates_presence_of :thread
 
-          alias_method :relation_thread, :thread
-
-          def thread
-            @thread ||= relation_thread
-            if !@thread
-              @thread = Commontator::Thread.new
-              @thread.commontable = self
-            end
-
-            @thread.save if !@thread.persisted? && persisted?
-            @thread
-          end
+          before_validation :build_thread, :unless => :thread
         end
       end
       
