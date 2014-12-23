@@ -35,7 +35,7 @@ module Commontator
     end
 
     def get_vote_by(user)
-      return nil unless is_votable? && user && user.is_commontator
+      return nil unless is_votable? && !user.nil? && user.is_commontator
       votes_for.where(:voter_type => user.class.name, :voter_id => user.id).first
     end
 
@@ -78,7 +78,7 @@ module Commontator
     ##################
 
     def can_be_created_by?(user)
-      user == creator && user.is_commontator &&\
+      user == creator && !user.nil? && user.is_commontator &&\
       !thread.is_closed? && thread.can_be_read_by?(user)
     end
 
