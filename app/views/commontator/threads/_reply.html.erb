@@ -3,7 +3,7 @@
    # user
    # per_page
 
-   hidden_class = @new_comment.nil? ? ' hidden' : '' %>
+   hidden_class = @new_comment.nil? ? ' commontator_hidden' : '' %>
 
 <div id="thread_<%= thread.id %>_reply" class="thread_reply">
   <% if thread.is_closed? %>
