@@ -17,16 +17,16 @@
             :method => :put,
             :remote => true do %>
         <%= image_submit_tag "commontator/upvote.png",
-              :onmouseover => "this.src='/assets/commontator/upvote_hover.png'",
-              :onmouseout => "this.src='/assets/commontator/upvote.png'" %>
+              :onmouseover => "this.src='#{image_path("commontator/upvote_hover.png")}'",
+              :onmouseout => "this.src='#{image_path("commontator/upvote.png")}'" %>
       <% end %>
     <% elsif can_vote %>
       <%= form_tag commontator.unvote_comment_path(comment),
             :method => :put,
             :remote => true do %>
         <%= image_submit_tag "commontator/upvote_active.png",
-              :onmouseover => "this.src='/assets/commontator/upvote.png'",
-              :onmouseout => "this.src='/assets/commontator/upvote_active.png'"
+              :onmouseover => "this.src='#{image_path("commontator/upvote.png")}'",
+              :onmouseout => "this.src='#{image_path("commontator/upvote_active.png")}'"
         %>
       <% end %>
     <% else %>
@@ -48,16 +48,16 @@
             :method => :put,
             :remote => true do %>
         <%= image_submit_tag "commontator/downvote.png",
-              :onmouseover => "this.src='/assets/commontator/downvote_hover.png'",
-              :onmouseout => "this.src='/assets/commontator/downvote.png'" %>
+              :onmouseover => "this.src='#{image_path("commontator/downvote_hover.png")}'",
+              :onmouseout => "this.src='#{image_path("commontator/downvote.png")}'" %>
       <% end %>
     <% elsif can_vote %>
       <%= form_tag commontator.unvote_comment_path(comment),
             :method => :put,
             :remote => true do %>
         <%= image_submit_tag "commontator/downvote_active.png",
-              :onmouseover => "this.src='/assets/commontator/downvote.png'",
-              :onmouseout => "this.src='/assets/commontator/downvote_active.png'"
+              :onmouseover => "this.src='#{image_path("commontator/downvote.png")}'",
+              :onmouseout => "this.src='#{image_path("commontator/downvote_active.png")}'"
         %>
       <% end %>
     <% else %>
