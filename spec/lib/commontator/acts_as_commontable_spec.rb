@@ -1,24 +1,25 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module Commontator
-  describe ActsAsCommontable do
+  RSpec.describe ActsAsCommontable, type: :lib do
     it 'must add methods to ActiveRecord and subclasses' do
-      ActiveRecord::Base.must_respond_to :acts_as_commontable
-      ActiveRecord::Base.must_respond_to :is_commontable
-      ActiveRecord::Base.is_commontable.must_equal false
-      DummyModel.must_respond_to :acts_as_commontable
-      DummyModel.must_respond_to :is_commontable
-      DummyModel.is_commontable.must_equal true
-      DummyUser.must_respond_to :acts_as_commontable
-      DummyUser.must_respond_to :is_commontable
-      DummyUser.is_commontable.must_equal false
+      expect(ActiveRecord::Base).to respond_to(:acts_as_commontable)
+      expect(ActiveRecord::Base).to respond_to(:is_commontable)
+      expect(ActiveRecord::Base.is_commontable).to eq false
+      expect(DummyModel).to respond_to(:acts_as_commontable)
+      expect(DummyModel).to respond_to(:is_commontable)
+      expect(DummyModel.is_commontable).to eq true
+      expect(DummyUser).to respond_to(:acts_as_commontable)
+      expect(DummyUser).to respond_to(:is_commontable)
+      expect(DummyUser.is_commontable).to eq false
     end
-    
+
     it 'must modify models that act_as_commontable' do
       dummy = DummyModel.create
-      dummy.must_respond_to :thread
-      dummy.must_respond_to :commontable_config
-      dummy.commontable_config.must_be_instance_of CommontableConfig
+      expect(dummy).to respond_to(:thread)
+      expect(dummy).to respond_to(:commontable_config)
+      expect(dummy.commontable_config).to be_a(CommontableConfig)
     end
   end
 end
+

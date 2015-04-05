@@ -8,8 +8,10 @@ module Commontator
 
     def self.comment_created(comment)
       recipients = comment.thread.subscribers.reject{|s| s == comment.creator}
-      SubscriptionsMailer.comment_created(comment, recipients).deliver \
-        unless recipients.empty?
+      return if recipients.empty?
+
+      mail = SubscriptionsMailer.comment_created(comment, recipients)
+      mail.respond_to?(:deliver_later) ? mail.deliver_later : mail.deliver
     end
 
     def unread_comments

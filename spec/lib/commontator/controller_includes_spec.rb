@@ -1,15 +1,18 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module Commontator
-  describe ControllerIncludes do
+  RSpec.describe ControllerIncludes, type: :lib do
     it 'must add commontator_thread_show to ActionController instances' do
-      ActionController::Base.new.respond_to?(:commontator_thread_show, true).must_equal true
-      DummyModelsController.new.respond_to?(:commontator_thread_show, true).must_equal true
+      expect(ActionController::Base.new.respond_to?(:commontator_thread_show,
+                                                    true)).to eq true
+      expect(DummyModelsController.new.respond_to?(:commontator_thread_show,
+                                                   true)).to eq true
     end
-    
+
     it 'must add shared helper to ActionController and subclasses' do
-      ActionController::Base.helpers.must_respond_to :commontator_thread
-      DummyModelsController.helpers.must_respond_to :commontator_thread
+      expect(ActionController::Base.helpers).to respond_to(:commontator_thread)
+      expect(DummyModelsController.helpers).to respond_to(:commontator_thread)
     end
   end
 end
+
