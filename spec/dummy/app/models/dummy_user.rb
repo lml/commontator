@@ -1,6 +1,6 @@
 class DummyUser < ActiveRecord::Base
   acts_as_commontator
-  
+
   attr_accessor :is_admin, :can_edit, :can_read
 
   def email
@@ -11,3 +11,4 @@ class DummyUser < ActiveRecord::Base
     "Dummy User ##{id}"
   end
 end
+

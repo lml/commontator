@@ -1,28 +1,29 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module Commontator
-  describe CommontatorConfig do
+  RSpec.describe CommontatorConfig, type: :lib do
     it 'must respond to commontator attributes' do
       config = CommontatorConfig.new
       COMMONTATOR_ATTRIBUTES.each do |attribute|
-        config.must_respond_to attribute
+        expect(config).to respond_to(attribute)
       end
     end
-    
+
     it "won't respond to engine or commontable attributes" do
       config = CommontatorConfig.new
       (ENGINE_ATTRIBUTES + COMMONTABLE_ATTRIBUTES).each do |attribute|
-        config.wont_respond_to attribute
+        expect(config).not_to respond_to(attribute)
       end
     end
-    
+
     it 'must be configurable' do
       proc = lambda { |user| 'Some name' }
       proc2 = lambda { |user| 'Another name' }
       config = CommontatorConfig.new(:user_name_proc => proc)
-      (config.user_name_proc == proc).must_equal true
+      expect(config.user_name_proc).to eq proc
       config = CommontatorConfig.new(:user_name_proc => proc2)
-      (config.user_name_proc == proc2).must_equal true
+      expect(config.user_name_proc).to eq proc2
     end
   end
 end
+

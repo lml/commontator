@@ -5,3 +5,4 @@ class CreateDummyUsers < ActiveRecord::Migration
     end
   end
 end
+

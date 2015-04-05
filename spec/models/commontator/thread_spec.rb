@@ -1,15 +1,15 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module Commontator
-  describe Thread do
-    before do
+  RSpec.describe Thread, type: :model do
+    before(:each) do
       setup_model_spec
     end
 
     it 'must have a config' do
-      @thread.config.must_be_instance_of CommontableConfig
+      expect(@thread.config).to be_a(CommontableConfig)
       @thread.update_attribute(:commontable_id, nil)
-      Thread.find(@thread.id).config.must_equal Commontator
+      expect(Thread.find(@thread.id).config).to eq Commontator
     end
     
     it 'must order all comments' do
@@ -23,98 +23,100 @@ module Commontator
       comment2.creator = @user
       comment2.body = 'Something else'
       comment2.save!
-      
+
       comments = @thread.comments
       ordered_comments = @thread.ordered_comments
-      
-      comments.each { |c| ordered_comments.must_include c }
-      ordered_comments.each { |oc| comments.must_include oc }
+
+      comments.each { |c| expect(ordered_comments).to include(c) }
+      ordered_comments.each { |oc| expect(comments).to include(oc) }
     end
-    
+
     it 'must list all subscribers' do
       @thread.subscribe(@user)
       @thread.subscribe(DummyUser.create)
-      
-      @thread.subscriptions.each { |sp| \
-        @thread.subscribers.must_include sp.subscriber }
+
+      @thread.subscriptions.each do |sp|
+        expect(@thread.subscribers).to include(sp.subscriber)
+      end
     end
-    
+
     it 'must find the subscription for each user' do
       @thread.subscribe(@user)
       user2 = DummyUser.create
       @thread.subscribe(user2)
-      
+
       subscription = @thread.subscription_for(@user)
-      subscription.thread.must_equal @thread
-      subscription.subscriber.must_equal @user
+      expect(subscription.thread).to eq @thread
+      expect(subscription.subscriber).to eq @user
       subscription = @thread.subscription_for(user2)
-      subscription.thread.must_equal @thread
-      subscription.subscriber.must_equal user2
+      expect(subscription.thread).to eq @thread
+      expect(subscription.subscriber).to eq user2
     end
-    
+
     it 'must know if it is closed' do
-      @thread.is_closed?.must_equal false
-      
+      expect(@thread.is_closed?).to eq false
+
       @thread.close(@user)
-      
-      @thread.is_closed?.must_equal true
-      @thread.closer.must_equal @user
-      
+
+      expect(@thread.is_closed?).to eq true
+      expect(@thread.closer).to eq @user
+
       @thread.reopen
-      
-      @thread.is_closed?.must_equal false
+
+      expect(@thread.is_closed?).to eq false
     end
-    
+
     it 'must mark comments as read' do
       @thread.subscribe(@user)
 
       subscription = @thread.subscription_for(@user)
-      subscription.unread_comments.count.must_equal 0
+      expect(subscription.unread_comments.count).to eq 0
 
       comment = Comment.new
       comment.thread = @thread
       comment.creator = @user
       comment.body = 'Something'
       comment.save!
-      
-      subscription.reload.unread_comments.count.must_equal 1
-      
+
+      expect(subscription.reload.unread_comments.count).to eq 1
+
       @thread.mark_as_read_for(@user)
-      
-      subscription.reload.unread_comments.count.must_equal 0
+
+      expect(subscription.reload.unread_comments.count).to eq 0
     end
-    
+
     it 'must be able to clear comments' do
       comment = Comment.new
       comment.thread = @thread
       comment.creator = @user
       comment.body = 'Something'
       comment.save!
- 
+
       @thread.close(@user)
 
-      @thread.commontable.must_equal @commontable
-      @thread.comments.must_include comment
-      @thread.is_closed?.must_equal true
-      @thread.closer.must_equal @user
+      expect(@thread.commontable).to eq @commontable
+      expect(@thread.comments).to include(comment)
+      expect(@thread.is_closed?).to eq true
+      expect(@thread.closer).to eq @user
 
       @commontable = DummyModel.find(@commontable.id)
-      @commontable.thread.must_equal @thread
+      expect(@commontable.thread).to eq @thread
 
       @thread.clear
-      
-      @thread.commontable.must_be_nil
-      @thread.comments.must_include comment
+
+      expect(@thread.commontable).to be_nil
+      expect(@thread.comments).to include(comment)
 
       @commontable = DummyModel.find(@commontable.id)
-      @commontable.thread.wont_be_nil
-      @commontable.thread.wont_equal @thread
-      @commontable.thread.comments.wont_include comment
+      expect(@commontable.thread).not_to be_nil
+      expect(@commontable.thread).not_to eq @thread
+      expect(@commontable.thread.comments).not_to include(comment)
     end
 
     it 'must return nil subscription for nil or false subscriber' do
-      @thread.subscription_for(nil).must_equal nil
-      @thread.subscription_for(false).must_equal nil
+      expect(@thread.subscription_for(nil)).to eq nil
+      expect(@thread.subscription_for(false)).to eq nil
     end
   end
 end
+

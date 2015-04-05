@@ -1,16 +1,21 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module Commontator
-  describe SharedHelper do
+  RSpec.describe SharedHelper, type: :lib do
+    before(:each) do
+      setup_controller_spec
+    end
+
     it 'must show commontator thread' do
+      @user.can_read = true
+      sign_in @user
+
       controller = DummyModelsController.new
-      # Workaround for https://github.com/rails/rails/issues/11662
-      controller.define_singleton_method(:params) do
-        {}
-      end
-      thread_link = controller.view_context.commontator_thread(DummyModel.create)
-      thread_link.wont_be_nil
-      thread_link.wont_be_empty
+
+      thread_link = controller.view_context
+                              .commontator_thread(DummyModel.create)
+      expect(thread_link).not_to be_blank
     end
   end
 end
+

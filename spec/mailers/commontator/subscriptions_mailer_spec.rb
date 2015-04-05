@@ -1,8 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module Commontator
-  describe SubscriptionsMailer do
-    before do
+  RSpec.describe SubscriptionsMailer, type: :mailer do
+    before(:each) do
       setup_mailer_spec
       @user2 = DummyUser.create
       @thread.subscribe(@user)
@@ -14,17 +14,17 @@ module Commontator
       @comment.save!
       @recipients = @thread.subscribers.reject{|s| s == @user}
     end
-    
+
     it 'must create deliverable mail' do
       mail = SubscriptionsMailer.comment_created(@comment, @recipients)
-      mail.must_be_instance_of Mail::Message
-      mail.to.must_equal I18n.t('commontator.email.undisclosed_recipients')
-      mail.cc.must_be_nil
-      mail.bcc.size.must_equal 1
-      mail.bcc.must_include @user2.email
-      mail.subject.wont_be_empty
-      mail.body.wont_be_empty
-      mail.deliver.must_equal mail
+      expect(mail.to).to eq I18n.t('commontator.email.undisclosed_recipients')
+      expect(mail.cc).to be_nil
+      expect(mail.bcc.size).to eq 1
+      expect(mail.bcc).to include(@user2.email)
+      expect(mail.subject).not_to be_empty
+      expect(mail.body).not_to be_empty
+      expect(mail.deliver_now).to eq mail
     end
   end
 end
+

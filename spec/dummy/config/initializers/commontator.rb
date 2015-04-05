@@ -12,3 +12,4 @@ Commontator.configure do |config|
 
   config.thread_subscription = :m
 end
+
