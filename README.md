@@ -3,6 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/commontator.svg)](http://badge.fury.io/rb/commontator)
 [![Build Status](https://travis-ci.org/lml/commontator.svg?branch=master)](https://travis-ci.org/lml/commontator)
 [![Code Climate](https://codeclimate.com/github/lml/commontator/badges/gpa.svg)](https://codeclimate.com/github/lml/commontator)
+[![Code Coverage](https://codeclimate.com/github/lml/commontator/badges/coverage.svg)](https://codeclimate.com/github/lml/commontator)
 
 Commontator is a Rails engine for comments. It is compatible with Rails 3.1+ and Rails 4.
 Being an engine means it is fully functional as soon as you install and
@@ -76,13 +77,13 @@ Follow the steps below to add commontator to your models and views:
   ```rb
   acts_as_commontator
   ```
-    
+
   Add this line to any models you want to be able to comment on (i.e. models that have comment threads):
 
   ```rb
   acts_as_commontable
   ```
-    
+
 2. Views
 
   In the following instructions, `@commontable` is an instance of a model that `acts_as_commontable`.
@@ -104,7 +105,7 @@ Follow the steps below to add commontator to your models and views:
   By default, the `commontator_thread` method only provides a link to the desired comment thread.
   Sometimes it may be desirable to have the thread display right away when the corresponding page is loaded.
   In that case, just add the following method call to the controller action that displays the page in question:
-  
+
   ```rb
   commontator_thread_show(commontable)
   ```
