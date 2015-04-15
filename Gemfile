@@ -15,3 +15,5 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+gem 'codeclimate-test-reporter', require: false
+gem 'simplecov',                 require: false
