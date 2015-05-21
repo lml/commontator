@@ -127,6 +127,8 @@ If sending emails, remember to add your host URL's to your environment files
 config.action_mailer.default_url_options = { :host => "www.example.com" }
 ```
 
+Supported mailing services: Mailgun.
+
 ## Voting
 
 You can allow users to vote on each others' comments by adding the `acts_as_votable` gem to your gemfile:
