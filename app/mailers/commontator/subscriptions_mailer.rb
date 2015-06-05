@@ -50,7 +50,7 @@ module Commontator
 
     def mailgun_recipient_variables(recipients)
       recipient_emails(recipients).each_with_object({}) do |user_email, memo|
-        memo[user_email] = { label: user_email }
+        memo[user_email] = {}
       end
     end
 

@@ -29,7 +29,7 @@ module Commontator
 
     context 'uses Mailgun' do
       let(:recipient_variables) do
-        @recipients.each_with_object({}) { |user, memo| memo[user.email] = { label: user.email } }
+        @recipients.each_with_object({}) { |user, memo| memo[user.email] = {} }
       end
       before { allow(Rails.application.config.action_mailer).to receive(:delivery_method).and_return(:mailgun) }
 
