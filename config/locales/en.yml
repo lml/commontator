@@ -88,7 +88,8 @@ en:
         confirm_close: "Are you sure you want to close this discussion?"
         reopen: "Reopen Discussion"
         show: "Show Comments"
-      errors: 
+        hide: "Hide Comments"
+      errors:
         already_closed: "This discussion has already been closed."
         not_closed: "This discussion is not closed."
       status: 
