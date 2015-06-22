@@ -1,0 +1,7 @@
+$("#thread_<%= @thread.id %>_div").html(
+        "<%= escape_javascript(
+    render(:partial => 'commontator/shared/thread',
+           :locals => { :thread => @thread,
+                        :user => @user })) %>");
+
+<%= javascript_proc %>
