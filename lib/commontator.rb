@@ -135,8 +135,8 @@ module Commontator
     commontable_config(commontable).commontable_name_proc.call(commontable)
   end
 
-  def self.commontable_url(commontable, routing_proxy)
-    commontable_config(commontable).commontable_url_proc.call(commontable, routing_proxy)
+  def self.commontable_url(comment, routing_proxy)
+    commontable_config(comment.thread).commontable_url_proc.call(comment, routing_proxy)
   end
 end
 
