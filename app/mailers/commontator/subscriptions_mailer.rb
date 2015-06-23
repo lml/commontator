@@ -23,7 +23,7 @@ module Commontator
 
       @commontable_name = Commontator.commontable_name(@thread)
 
-      @commontable_url = Commontator.commontable_url(@thread, main_app)
+      @commontable_url = Commontator.commontable_url(@comment, main_app)
 
       params = Hash.new
       params[:comment] = @comment
