@@ -11,5 +11,11 @@ Commontator.configure do |config|
   config.comment_voting = :ld
 
   config.thread_subscription = :m
+
+  config.mentions_enabled = true
+
+  config.user_mentions_proc = lambda do |user, search_phrase|
+    user.class.where('cast(id as text) LIKE ?', "#{search_phrase}%")
+  end
 end
 

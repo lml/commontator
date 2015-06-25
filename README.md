@@ -141,6 +141,31 @@ And enabling the relevant option in commontator's initializer:
 config.comment_voting = :ld # See the initializer for available options
 ```
 
+## Mentions
+
+You can allow users to mention other users in the comments. Mentioned user is being subscribed 
+to the thread and receives email notification.
+
+Add following to your application.js file:
+
+```js
+//= require commontator/application
+```
+
+Enable mentions in commontator's initializer:
+
+```rb
+config.mentions_enabled = true
+```
+
+and define search proc, which is based on current_user:
+ 
+```rb
+config.user_mentions_proc = lambda { |user, search_phrase| ... }
+```
+
+Finally, use '@' with at least two other characters to mention someone in new / edited comment.  
+
 ## Browser Support
 
 Commontator should work properly on any of the major browsers.

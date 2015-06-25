@@ -246,4 +246,26 @@ Commontator.configure do |config|
   # (defaults to the commontable's show url)
   config.commontable_url_proc = lambda { |thread, app_routes|
     app_routes.polymorphic_url(thread.commontable) }
+
+  # mentions_enabled
+  # Type: Boolean
+  # Whether users can use mentions to subscribe other users to the topic
+  # Valid options:
+  #   false  (no mentions)
+  #   true (mentions enabled)
+  # Default: false
+  config.mentions_enabled = false
+
+  # user_mentions_proc
+  # Type: Proc
+  # Arguments:
+  #   a user (acts_as_commontator)
+  #   search_phrase inputted by user
+  # Returns: an ActiveRecord Relation object
+  # Important note: for blank search_phrase it should return all
+  #                 available for mentioning users
+  # Default: lambda { |user, search_phrase|
+  #            user.class.where('email LIKE ?', "#{search_phrase}%") }
+  config.user_mentions_proc = lambda { |user, search_phrase|
+    user.class.where('email LIKE ?', "#{search_phrase}%") }
 end

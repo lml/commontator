@@ -7,7 +7,8 @@ module Commontator
   # Can be set in initializer only
   ENGINE_ATTRIBUTES = [
     :current_user_proc,
-    :javascript_proc
+    :javascript_proc,
+    :mentions_enabled
   ]
 
   # Can be set in initializer or passed as an option to acts_as_commontator
@@ -15,7 +16,8 @@ module Commontator
     :user_name_proc,
     :user_link_proc,
     :user_avatar_proc,
-    :user_email_proc
+    :user_email_proc,
+    :user_mentions_proc
   ]
   
   # Can be set in initializer or passed as an option to acts_as_commontable
@@ -123,6 +125,10 @@ module Commontator
 
   def self.commontator_avatar(user, view)
     commontator_config(user).user_avatar_proc.call(user, view)
+  end
+
+  def self.commontator_mentions(user, search_phrase)
+    commontator_config(user).user_mentions_proc.call(user, search_phrase)
   end
 
   def self.commontable_name(commontable)

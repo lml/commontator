@@ -12,6 +12,8 @@ Commontator::Engine.routes.draw do
     end
     
     member do
+      get 'mentions'
+
       put 'close'
       put 'reopen'
       

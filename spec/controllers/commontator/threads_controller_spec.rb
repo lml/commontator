@@ -125,6 +125,37 @@ module Commontator
       expect(assigns(:thread).errors).to be_empty
       expect(assigns(:thread).is_closed?).to eq false
     end
+    
+    context 'list mentions' do
+      let(:search_phrase) { nil }
+      let(:call_request) { get :mentions, id: @thread.id, format: :json, q: search_phrase }
+      before { sign_in @user }
+
+      context 'returns nothing when not authorized' do
+        before { call_request }
+        it { expect(response.body).to be_blank }
+      end
+
+      context 'returns available users for mentioning' do
+        let!(:other_user) { DummyUser.create }
+        let(:mention_ids) { JSON.parse(response.body).map{|mention| mention['id']} }
+        before { @user.can_read = true }
+
+        context 'search query is blank' do
+          let(:search_phrase) { nil }
+          before { call_request }
+
+          it { expect(mention_ids).to match_array([1,2]) }
+        end
+        
+        context 'search query is present' do
+          let(:search_phrase) { '2' }
+          before { call_request }
+
+          it { expect(mention_ids).to match_array([2]) }
+        end
+      end
+    end
   end
 end
 

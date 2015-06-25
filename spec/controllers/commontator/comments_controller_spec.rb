@@ -561,6 +561,27 @@ module Commontator
       }.to change{ ActionMailer::Base.deliveries.count }.by(1)
       expect(assigns(:comment).errors).to be_empty
     end
+
+    context 'subscribes other users via mentions' do
+      let!(:user_to_subscribe) { DummyUser.create }
+      let!(:other_user) { DummyUser.create }
+      let(:attributes) { { body: 'some comment' } }
+      let(:call_request) { post :create, thread_id: @thread.id, comment: attributes, mentioned_ids: [2] }
+      before do
+        sign_in @user
+        @user.can_read = true
+      end
+
+      it { expect{ call_request }.to change{ Subscription.count }.by(1) }
+      it { expect{ call_request }.to change{ ActionMailer::Base.deliveries.count }.by(1) }
+
+      context 'request called' do
+        before { call_request }
+
+        it { expect(@thread.subscription_for(user_to_subscribe)).to be_present }
+        it { expect(@thread.subscription_for(other_user)).to be_nil }
+      end
+    end
   end
 end
 
