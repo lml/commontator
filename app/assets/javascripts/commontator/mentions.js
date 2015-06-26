@@ -6,6 +6,7 @@ Commontator.initMentions = function() {
         $form = $textarea.parents('form');
         threadId = $textarea.parents('.thread').attr('id').match(/[\d]+/)[0];
         $textarea.addClass('mentions-added');
+        currentValue = $textarea.val();
         $textarea.mentionsInput({
             elastic: false,
             showAvatars: false,
@@ -16,6 +17,7 @@ Commontator.initMentions = function() {
                 });
             }
         });
+        $textarea.val(currentValue);
         $textarea.on('focusout', function(){
             $textarea.mentionsInput('getMentions', function(mentions){
                 $form.find('input[name="mentioned_ids[]"]').remove();
