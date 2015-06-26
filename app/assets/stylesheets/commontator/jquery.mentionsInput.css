@@ -5,16 +5,9 @@
 }
 
 .mentions-input-box textarea {
-  width: 100%;
-  display: block;
-  height: 18px;
-  padding: 9px;
-  border: 1px solid #dcdcdc;
-  border-radius:3px;
   overflow: hidden;
   background: transparent;
   position: relative;
-  outline: 0;
   resize: none;
 
   -webkit-box-sizing: border-box;
