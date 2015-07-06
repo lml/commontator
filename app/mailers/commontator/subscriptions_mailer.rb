@@ -2,14 +2,15 @@ module Commontator
   class SubscriptionsMailer < ActionMailer::Base
     def comment_created(comment, recipients)
       setup_variables(comment, recipients)
+      message = mail :to => @to,
+                     :bcc => @bcc,
+                     :from => @from,
+                     :subject => t('commontator.email.comment_created.subject',
+                                   :creator_name => @creator_name,
+                                   :commontable_name => @commontable_name,
+                                   :commontable_url => @commontable_url)
 
-      mail :to => @to,
-           :bcc => @bcc,
-           :from => @from,
-           :subject => t('commontator.email.comment_created.subject',
-                         :creator_name => @creator_name,
-                         :commontable_name => @commontable_name,
-                         :commontable_url => @commontable_url)
+      message.mailgun_recipient_variables = mailgun_recipient_variables(recipients) if uses_mailgun?
     end
 
     protected
@@ -33,11 +34,28 @@ module Commontator
       params[:commontable_name] = @commontable_name
       params[:commontable_url] = @commontable_url
 
-      @to = t('commontator.email.undisclosed_recipients')
-      @bcc = recipients.collect{|s| Commontator.commontator_email(s, self)}
+      if uses_mailgun?
+        @to = recipient_emails(recipients)
+      else
+        @to = t('commontator.email.undisclosed_recipients')
+        @bcc = recipient_emails(recipients)
+      end
+
       @from = @thread.config.email_from_proc.call(@thread)
     end
 
-    
+    def recipient_emails(recipients)
+      recipients.collect{ |s| Commontator.commontator_email(s, self) }
+    end
+
+    def mailgun_recipient_variables(recipients)
+      recipient_emails(recipients).each_with_object({}) do |user_email, memo|
+        memo[user_email] = {}
+      end
+    end
+
+    def uses_mailgun?
+      Rails.application.config.action_mailer.delivery_method == :mailgun
+    end
   end
 end
