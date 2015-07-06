@@ -12,6 +12,7 @@ Commontator::Engine.routes.draw do
     end
     
     member do
+      get 'hide'
       put 'close'
       put 'reopen'
       
