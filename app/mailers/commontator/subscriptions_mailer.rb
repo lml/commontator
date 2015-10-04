@@ -8,7 +8,7 @@ module Commontator
                      :subject => t('commontator.email.comment_created.subject',
                                    :creator_name => @creator_name,
                                    :commontable_name => @commontable_name,
-                                   :commontable_url => @commontable_url)
+                                   :comment_url => @comment_url)
 
       message.mailgun_recipient_variables = mailgun_recipient_variables(recipients) if uses_mailgun?
     end
@@ -24,7 +24,7 @@ module Commontator
 
       @commontable_name = Commontator.commontable_name(@thread)
 
-      @commontable_url = Commontator.commontable_url(@comment, main_app)
+      @comment_url = Commontator.comment_url(@comment, main_app)
 
       params = Hash.new
       params[:comment] = @comment
@@ -32,7 +32,7 @@ module Commontator
       params[:creator] = @creator
       params[:creator_name] = @creator_name
       params[:commontable_name] = @commontable_name
-      params[:commontable_url] = @commontable_url
+      params[:comment_url] = @comment_url
 
       if uses_mailgun?
         @to = recipient_emails(recipients)

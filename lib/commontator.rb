@@ -36,7 +36,7 @@ module Commontator
     :thread_subscription,
     :email_from_proc,
     :commontable_name_proc,
-    :commontable_url_proc
+    :comment_url_proc
   ]
   
   DEPRECATED_ATTRIBUTES = [
@@ -77,7 +77,8 @@ module Commontator
     [:user_email_method, :user_email_proc],
     [:user_name_method, :user_name_proc],
     [:commontable_name, :commontable_name_proc],
-    [:commontable_id_method]
+    [:commontable_id_method],
+    [:commontable_url_proc, :comment_url_proc]
   ]
   
   (ENGINE_ATTRIBUTES + COMMONTATOR_ATTRIBUTES + \
@@ -107,8 +108,8 @@ module Commontator
     (user && user.is_commontator) ? user.commontator_config : self
   end
 
-  def self.commontable_config(user)
-    (user && user.is_commontable) ? user.commontable_config : self
+  def self.commontable_config(obj)
+    (obj && obj.is_commontable) ? obj.commontable_config : self
   end
 
   def self.commontator_name(user)
@@ -135,8 +136,8 @@ module Commontator
     commontable_config(commontable).commontable_name_proc.call(commontable)
   end
 
-  def self.commontable_url(comment, routing_proxy)
-    commontable_config(comment.thread).commontable_url_proc.call(comment, routing_proxy)
+  def self.comment_url(comment, routing_proxy)
+    commontable_config(comment.thread.commontable).comment_url_proc.call(comment, routing_proxy)
   end
 end
 

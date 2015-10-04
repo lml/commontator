@@ -47,7 +47,7 @@ zh:
       comment_created: 
         body: "%{creator_name}留言於%{commontable_name}"
         subject: "%{creator_name}於%{commontable_name}發佈了一則留言"
-      thread_link_html: "<a href=\"%{commontable_url}\">點此處</a>看%{commontable_name}的所有留言"
+      thread_link_html: "<a href=\"%{comment_url}\">點此處</a>看%{commontable_name}的所有留言"
       undisclosed_recipients: "收件者"
     require_login: "你需要先登入"
     subscription: 

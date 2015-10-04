@@ -47,7 +47,7 @@ ru:
       comment_created: 
         body: "%{creator_name} комментировал %{commontable_name}:"
         subject: "%{creator_name} оставил комментарий к %{commontable_name}"
-      thread_link_html: "<a href=\"%{commontable_url}\">Нажмите здесь</a> чтобы посмотреть все комментарии к %{commontable_name}."
+      thread_link_html: "<a href=\"%{comment_url}\">Нажмите здесь</a> чтобы посмотреть все комментарии к %{commontable_name}."
       undisclosed_recipients: "Не указан получатель"
     require_login: "Вы должны залогиниться прежде чем оставить комментарий."
     subscription: 
