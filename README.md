@@ -160,17 +160,19 @@ Enable mentions in commontator's initializer:
 config.mentions_enabled = true
 ```
 
-and define search proc, which is based on current_user:
+and define the user_mentions_proc, which receives the current user
+and the search query inputted by that user and should return a relation
+containing the users that can be mentioned and match the query string:
  
 ```rb
-config.user_mentions_proc = lambda { |current_user, search_phrase| ... }
+config.user_mentions_proc = lambda { |current_user, query| ... }
 ```
 
 Please be aware that with mentions enabled, any registered user
 can use the `user_mentions_proc` to search for other users.
-Make sure to properly escape SQL in this proc and to not expose sensitive user data to searches.
+Make sure to properly escape SQL in this proc and to not allow searches on sensitive fields.
 
-Finally, use '@' with at least two other characters to mention someone in a new / edited comment.
+Finally, use '@' with at least three other characters to mention someone in a new/edited comment.
 
 ## Browser Support
 
