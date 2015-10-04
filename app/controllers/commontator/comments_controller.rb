@@ -26,6 +26,7 @@ module Commontator
       @comment.creator = @user
       @comment.body = params[:comment].nil? ? nil : params[:comment][:body]
       security_transgression_unless @comment.can_be_created_by?(@user)
+      subscribe_mentioned if Commontator.mentions_enabled
       
       respond_to do |format|
         if  !params[:cancel].nil?
@@ -146,6 +147,12 @@ module Commontator
       @comment = Comment.find(params[:id])
       @thread = @comment.thread
       commontator_set_new_comment(@thread, @user)
+    end
+
+    def subscribe_mentioned
+      Commontator.commontator_mentions(@user, '').where(id: params[:mentioned_ids]).each do |user|
+        @thread.subscribe(user)
+      end
     end
   end
 end

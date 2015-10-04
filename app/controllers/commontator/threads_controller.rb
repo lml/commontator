@@ -43,5 +43,23 @@ module Commontator
         format.js { render :show }
       end
     end
+
+    # PUT /threads/1/mentions
+    def mentions
+      fail 'Mentions are disabled' unless Commontator.mentions_enabled
+      security_transgression_unless @thread.can_be_read_by?(@user)
+
+      respond_to do |format|
+        format.json { render(json: serialized_mentions, root: false) }
+      end
+    end
+
+    private
+
+    def serialized_mentions
+      Commontator.commontator_mentions(@user, params[:q]).map do |user|
+        { id: user.id, name: Commontator.commontator_name(user), type: 'user' }
+      end
+    end
   end
 end
