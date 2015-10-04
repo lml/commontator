@@ -1,3 +1,3 @@
-//= require commontator/underscore
-//= require commontator/jquery.mentionsInput
+//= require underscore/underscore
+//= require mentionsInput/jquery.mentionsInput
 //= require commontator/mentions

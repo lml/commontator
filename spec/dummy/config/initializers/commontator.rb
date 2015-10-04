@@ -14,8 +14,7 @@ Commontator.configure do |config|
 
   config.mentions_enabled = true
 
-  config.user_mentions_proc = lambda do |user, search_phrase|
-    user.class.where('cast(id as text) LIKE ?', "#{search_phrase}%")
-  end
+  config.user_mentions_proc = lambda { |current_user, query|
+    'DummyUser'.include?(query) ? DummyUser.all : DummyUser.none }
 end
 

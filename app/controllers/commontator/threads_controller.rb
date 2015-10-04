@@ -44,22 +44,25 @@ module Commontator
       end
     end
 
-    # PUT /threads/1/mentions
+    # GET /threads/1/mentions.json
     def mentions
-      fail 'Mentions are disabled' unless Commontator.mentions_enabled
-      security_transgression_unless @thread.can_be_read_by?(@user)
+      security_transgression_unless @thread.can_be_read_by?(@user) && Commontator.mentions_enabled
+      query = params[:q].to_s
 
-      respond_to do |format|
-        format.json { render(json: serialized_mentions, root: false) }
+      if query.size < 3
+        render json: { errors: ['Query string is too short (minimum 3 characters)'] },
+               status: :unprocessable_entity
+      else
+        render json: serialized_mentions(query)
       end
     end
 
-    private
+    protected
 
-    def serialized_mentions
-      Commontator.commontator_mentions(@user, params[:q]).map do |user|
+    def serialized_mentions(query)
+      { mentions: Commontator.commontator_mentions(@user, query).map do |user|
         { id: user.id, name: Commontator.commontator_name(user), type: 'user' }
-      end
+      end }
     end
   end
 end

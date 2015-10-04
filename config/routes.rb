@@ -12,7 +12,7 @@ Commontator::Engine.routes.draw do
     end
     
     member do
-      get 'mentions'
+      get 'mentions' if Commontator.mentions_enabled
 
       put 'close'
       put 'reopen'
