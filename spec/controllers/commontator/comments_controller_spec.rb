@@ -576,18 +576,35 @@ module Commontator
         sign_in @user
       end
 
-      it 'subscribes the mentioned user' do
-        expect{ call_request }.to change{ Subscription.count }.by(1)
-        expect(@thread.subscription_for(user_to_subscribe)).to be_present
+      context 'mentions are disabled' do
+        before(:all) { Commontator.mentions_enabled = false }
+        after(:all)  { Commontator.mentions_enabled = true }
+
+        it 'does not subscribe any users' do
+          expect{ call_request }.not_to change{ Subscription.count }
+          expect(@thread.subscription_for(user_to_subscribe)).to be_nil
+          expect(@thread.subscription_for(other_user)).to be_nil
+        end
+
+        it 'does not send subscription emails' do
+          expect{ call_request }.not_to change{ ActionMailer::Base.deliveries.count }
+        end
       end
 
-      it 'does not subscribe unmentioned users' do
-        call_request
-        expect(@thread.subscription_for(other_user)).to be_nil
-      end
+      context 'mentions are enabled' do
+        it 'subscribes the mentioned user' do
+          expect{ call_request }.to change{ Subscription.count }.by(1)
+          expect(@thread.subscription_for(user_to_subscribe)).to be_present
+        end
 
-      it 'sends a subscription email' do
-        expect{ call_request }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+        it 'does not subscribe unmentioned users' do
+          call_request
+          expect(@thread.subscription_for(other_user)).to be_nil
+        end
+
+        it 'sends a subscription email' do
+          expect{ call_request }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+        end
       end
     end
   end
