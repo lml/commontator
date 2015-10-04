@@ -126,33 +126,90 @@ module Commontator
       expect(assigns(:thread).is_closed?).to eq false
     end
     
-    context 'list mentions' do
+    context '#mentions' do
       let(:search_phrase) { nil }
-      let(:call_request) { get :mentions, id: @thread.id, format: :json, q: search_phrase }
-      before { sign_in @user }
+      let(:call_request)  { get :mentions, id: @thread.id, format: :json, q: search_phrase }
 
-      context 'returns nothing when not authorized' do
-        before { call_request }
-        it { expect(response.body).to be_blank }
+      let!(:other_user)   { DummyUser.create }
+
+      context 'mentions disabled' do
+        before(:all) { Commontator.mentions_enabled = false }
+        after(:all)  { Commontator.mentions_enabled = true }
+
+        it 'returns 403 Forbidden' do
+          call_request
+          expect(response).to have_http_status(:forbidden)
+        end
       end
 
-      context 'returns available users for mentioning' do
-        let!(:other_user) { DummyUser.create }
-        let(:mention_ids) { JSON.parse(response.body).map{|mention| mention['id']} }
-        before { @user.can_read = true }
-
-        context 'search query is blank' do
-          let(:search_phrase) { nil }
-          before { call_request }
-
-          it { expect(mention_ids).to match_array([1,2]) }
+      context 'mentions enabled' do
+        context 'anonymous user' do
+          it 'returns 403 Forbidden' do
+            call_request
+            expect(response).to have_http_status(:forbidden)
+          end
         end
-        
-        context 'search query is present' do
-          let(:search_phrase) { '2' }
-          before { call_request }
 
-          it { expect(mention_ids).to match_array([2]) }
+        context 'unauthorized user' do
+          before { sign_in @user }
+
+          it 'returns 403 Forbidden' do
+            call_request
+            expect(response).to have_http_status(:forbidden)
+          end
+        end
+
+        context 'authorized user' do
+          before do
+            @user.can_read = true
+            sign_in @user
+          end
+
+          context 'query is blank' do
+            it 'returns a JSON error message' do
+              call_request
+              expect(response).to have_http_status(:unprocessable_entity)
+              expect(JSON.parse(response.body)['errors']).to(
+                include('Query string is too short (minimum 3 characters)')
+              )
+            end
+          end
+
+          context 'query is too short' do
+            let(:search_phrase) { 'Us' }
+
+            it 'returns a JSON error message' do
+              call_request
+              expect(response).to have_http_status(:unprocessable_entity)
+              expect(JSON.parse(response.body)['errors']).to(
+                include('Query string is too short (minimum 3 characters)')
+              )
+            end
+          end
+
+          context 'query is 3 characters or more' do
+            let(:search_phrase) { 'User' }
+
+            let(:valid_result) { [@user] }
+            let(:valid_response) do
+              { 'mentions' => valid_result.map do |user|
+                { 'id' => user.id, 'name' => user.name, 'type' => 'user' }
+              end }
+            end
+
+            it 'calls the user_mentions_proc and returns the result' do
+              expect(Commontator.user_mentions_proc).to(
+                receive(:call).with(@user, search_phrase).and_return(valid_result)
+              )
+
+              call_request
+              expect(response).to have_http_status(:success)
+
+              response_body = JSON.parse(response.body)
+              expect(response_body['errors']).to be_nil
+              expect(response_body).to eq valid_response
+            end
+          end
         end
       end
     end

@@ -562,24 +562,32 @@ module Commontator
       expect(assigns(:comment).errors).to be_empty
     end
 
-    context 'subscribes other users via mentions' do
+    context 'user is mentioned in the comment' do
       let!(:user_to_subscribe) { DummyUser.create }
-      let!(:other_user) { DummyUser.create }
-      let(:attributes) { { body: 'some comment' } }
-      let(:call_request) { post :create, thread_id: @thread.id, comment: attributes, mentioned_ids: [2] }
+      let!(:other_user)        { DummyUser.create }
+
+      let(:attributes)         { { body: 'some comment' } }
+      let(:call_request)       { post :create, thread_id: @thread.id,
+                                               comment: attributes,
+                                               mentioned_ids: [user_to_subscribe.id] }
+
       before do
-        sign_in @user
         @user.can_read = true
+        sign_in @user
       end
 
-      it { expect{ call_request }.to change{ Subscription.count }.by(1) }
-      it { expect{ call_request }.to change{ ActionMailer::Base.deliveries.count }.by(1) }
+      it 'subscribes the mentioned user' do
+        expect{ call_request }.to change{ Subscription.count }.by(1)
+        expect(@thread.subscription_for(user_to_subscribe)).to be_present
+      end
 
-      context 'request called' do
-        before { call_request }
+      it 'does not subscribe unmentioned users' do
+        call_request
+        expect(@thread.subscription_for(other_user)).to be_nil
+      end
 
-        it { expect(@thread.subscription_for(user_to_subscribe)).to be_present }
-        it { expect(@thread.subscription_for(other_user)).to be_nil }
+      it 'sends a subscription email' do
+        expect{ call_request }.to change{ ActionMailer::Base.deliveries.count }.by(1)
       end
     end
   end

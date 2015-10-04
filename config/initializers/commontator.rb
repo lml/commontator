@@ -242,30 +242,38 @@ Commontator.configure do |config|
   # This usually is the commontable's "show" page
   # The main application's routes can be accessed through the app_routes object
   # Default: lambda { |commontable, app_routes|
-  #            app_routes.polymorphic_url(commontable) }
+  #                   app_routes.polymorphic_url(commontable) }
   # (defaults to the commontable's show url)
   config.commontable_url_proc = lambda { |thread, app_routes|
     app_routes.polymorphic_url(thread.commontable) }
 
   # mentions_enabled
   # Type: Boolean
-  # Whether users can use mentions to subscribe other users to the topic
+  # Whether users can mention other users to subscribe them to the thread
   # Valid options:
-  #   false  (no mentions)
-  #   true (mentions enabled)
+  #   false (no mentions)
+  #   true  (mentions enabled)
   # Default: false
   config.mentions_enabled = false
 
   # user_mentions_proc
   # Type: Proc
   # Arguments:
-  #   a user (acts_as_commontator)
-  #   search_phrase inputted by user
+  #   the current user (acts_as_commontator)
+  #   the search query inputted by user (String)
   # Returns: an ActiveRecord Relation object
-  # Important note: for blank search_phrase it should return all
-  #                 available for mentioning users
-  # Default: lambda { |user, search_phrase|
-  #            user.class.where('email LIKE ?', "#{search_phrase}%") }
-  config.user_mentions_proc = lambda { |user, search_phrase|
-    user.class.where('email LIKE ?', "#{search_phrase}%") }
+  # Important notes:
+  #
+  #  - The proc will be called internally with an empty search string.
+  #    In that case, it MUST return all users that can be mentioned.
+  #
+  #  - With mentions enabled, any registered user in your app is able
+  #    to call this proc with any search query >= 3 characters.
+  #    Make sure to handle SQL escaping properly and that the
+  #    attribute being searched does not contain sensitive information.
+  #
+  # Default: lambda { |current_user, query|
+  #                   current_user.class.where('username LIKE ?', "#{query}%") }
+  config.user_mentions_proc = lambda { |current_user, query|
+    current_user.class.where('username LIKE ?', "#{query}%") }
 end

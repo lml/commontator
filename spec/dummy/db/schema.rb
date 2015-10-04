@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 3) do
 
-  create_table "commontator_comments", force: true do |t|
+  create_table "commontator_comments", force: :cascade do |t|
     t.string   "creator_type"
     t.integer  "creator_id"
     t.string   "editor_type"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 3) do
   add_index "commontator_comments", ["creator_id", "creator_type", "thread_id"], name: "index_commontator_comments_on_c_id_and_c_type_and_t_id"
   add_index "commontator_comments", ["thread_id", "created_at"], name: "index_commontator_comments_on_thread_id_and_created_at"
 
-  create_table "commontator_subscriptions", force: true do |t|
+  create_table "commontator_subscriptions", force: :cascade do |t|
     t.string   "subscriber_type", null: false
     t.integer  "subscriber_id",   null: false
     t.integer  "thread_id",       null: false
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 3) do
   add_index "commontator_subscriptions", ["subscriber_id", "subscriber_type", "thread_id"], name: "index_commontator_subscriptions_on_s_id_and_s_type_and_t_id", unique: true
   add_index "commontator_subscriptions", ["thread_id"], name: "index_commontator_subscriptions_on_thread_id"
 
-  create_table "commontator_threads", force: true do |t|
+  create_table "commontator_threads", force: :cascade do |t|
     t.string   "commontable_type"
     t.integer  "commontable_id"
     t.datetime "closed_at"
@@ -55,17 +55,17 @@ ActiveRecord::Schema.define(version: 3) do
 
   add_index "commontator_threads", ["commontable_id", "commontable_type"], name: "index_commontator_threads_on_c_id_and_c_type", unique: true
 
-  create_table "dummy_models", force: true do |t|
+  create_table "dummy_models", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "dummy_users", force: true do |t|
+  create_table "dummy_users", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "votes", force: true do |t|
+  create_table "votes", force: :cascade do |t|
     t.integer  "votable_id"
     t.string   "votable_type"
     t.integer  "voter_id"

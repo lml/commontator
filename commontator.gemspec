@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.summary     = "Allows users to comment on any model in your application."
   s.description = "A Rails engine for comments."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
+  s.files = Dir["{app,config,db,lib,vendor}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", ">= 3.1"
@@ -24,4 +24,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "acts_as_votable"
   s.add_development_dependency "mailgun_rails"
+  s.add_development_dependency "byebug"
 end
