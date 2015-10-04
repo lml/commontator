@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - "1.9.3-p545"
+  - "2.2.3"
 install:
   - bundle install --without production
   - bundle exec rake db:setup
