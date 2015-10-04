@@ -11,16 +11,6 @@
    can_edit = thread.can_be_edited_by?(user) %>
 
 <span id="thread_<%= thread.id.to_s %>_actions_span" class="thread_actions">
-  <span id="thread_<%= thread.id.to_s %>_hide_span" class="thread_hide">
-    <%= link_to t('commontator.thread.actions.hide'),
-                commontator.hide_thread_path(thread),
-                :id => "thread_#{thread.id.to_s}_hide_link",
-                :class => "thread_hide_link",
-                :remote => true %>
-  </span>
-
-  &nbsp;
-
   <% if can_subscribe %>
     <span id="thread_<%= thread.id.to_s %>_subscription_span" class="thread_subscription">
       <%= render :partial => 'commontator/subscriptions/link',

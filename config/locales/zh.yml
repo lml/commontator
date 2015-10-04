@@ -66,6 +66,7 @@ zh:
         confirm_close: "你確定要關閉此討論嗎？?"
         reopen: "回復討論"
         show: "打開留言"
+        hide: "关闭留言"
       errors: 
         already_closed: "此討論已經被關閉"
         not_closed: "此討論尚未被關閉"

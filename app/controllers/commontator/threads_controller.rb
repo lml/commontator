@@ -13,13 +13,6 @@ module Commontator
         format.js
       end
     end
-
-    # GET /threads/1/hide
-    def hide
-      respond_to do |format|
-        format.js
-      end
-    end
     
     # PUT /threads/1/close
     def close
