@@ -234,18 +234,19 @@ Commontator.configure do |config|
   config.commontable_name_proc = lambda { |thread|
     "#{thread.commontable.class.name} ##{thread.commontable.id}" }
 
-  # commontable_url_proc
+  # comment_url_proc
   # Type: Proc
-  # Arguments: a thread (Commontator::Thread),
+  # Arguments: a comment (Commontator::Comment),
   #            the app_routes (ActionDispatch::Routing::RoutesProxy)
-  # Returns: a String containing the url of the view that displays the given thread
+  # Returns: a String containing the url of the view that displays the given comment
   # This usually is the commontable's "show" page
   # The main application's routes can be accessed through the app_routes object
-  # Default: lambda { |commontable, app_routes|
-  #                   app_routes.polymorphic_url(commontable) }
-  # (defaults to the commontable's show url)
-  config.commontable_url_proc = lambda { |thread, app_routes|
-    app_routes.polymorphic_url(thread.commontable) }
+  # Default: lambda { |comment, app_routes|
+  #                   app_routes.polymorphic_url(comment.thread.commontable,
+  #                                              anchor: "comment_#{comment.id}_div") }
+  # (defaults to the commontable's show url with an anchor pointing to the comment's div)
+  config.comment_url_proc = lambda { |comment, app_routes|
+    app_routes.polymorphic_url(comment.thread.commontable, anchor: "comment_#{comment.id}_div") }
 
   # mentions_enabled
   # Type: Boolean
