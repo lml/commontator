@@ -14,7 +14,6 @@ Commontator::Engine.routes.draw do
     member do
       get 'mentions' if Commontator.mentions_enabled
 
-      get 'hide'
       put 'close'
       put 'reopen'
       
