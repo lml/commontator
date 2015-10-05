@@ -58,13 +58,22 @@ There are 4 steps you must follow to install commontator:
 
 4. Routes
 
-  Add this line to your Rails application's routes file:
+  Add this line to your Rails application's `routes.rb` file:
 
   ```rb
   mount Commontator::Engine => '/commontator'
   ```
 
   You can change the mount path if you would like a different one.
+
+5. Stylesheets
+
+  In order to display comment threads properly,
+  you must add the following to your `application.css`:
+
+  ```css
+  *= require commontator/application
+  ```
 
 ## Usage
 
@@ -148,19 +157,19 @@ config.comment_voting = :ld # See the initializer for available options
 You can allow users to mention other users in the comments.
 Mentioned users are automatically subscribed to the thread and receive email notifications.
 
-Add the following to your application.js file:
+First add the following to your application.js file:
 
 ```js
 //= require commontator/application
 ```
 
-Enable mentions in commontator's initializer:
+Then enable mentions in commontator's initializer:
 
 ```rb
 config.mentions_enabled = true
 ```
 
-and define the user_mentions_proc, which receives the current user
+Finally configure the user_mentions_proc, which receives the current user
 and the search query inputted by that user and should return a relation
 containing the users that can be mentioned and match the query string:
  
@@ -172,7 +181,7 @@ Please be aware that with mentions enabled, any registered user
 can use the `user_mentions_proc` to search for other users.
 Make sure to properly escape SQL in this proc and to not allow searches on sensitive fields.
 
-Finally, use '@' with at least three other characters to mention someone in a new/edited comment.
+Use '@' with at least three other characters to mention someone in a new/edited comment.
 
 ## Browser Support
 
