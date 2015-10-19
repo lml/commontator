@@ -136,7 +136,7 @@ If sending emails, remember to add your host URL's to your environment files
 config.action_mailer.default_url_options = { :host => "www.example.com" }
 ```
 
-Supported mailing services: Mailgun.
+Batch sending through Mailgun is also supported.
 
 ## Voting
 
