@@ -183,6 +183,9 @@ Make sure to properly escape SQL in this proc and to not allow searches on sensi
 
 Use '@' with at least three other characters to mention someone in a new/edited comment.
 
+The mentions script assumes that commontator is mounted at `/commontator`,
+so make sure that is indeed the case if you plan to use mentions.
+
 ## Browser Support
 
 Commontator should work properly on any of the major browsers.
