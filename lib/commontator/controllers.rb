@@ -2,7 +2,7 @@ require 'commontator/shared_helper'
 require 'commontator/security_transgression'
 
 module Commontator
-  module ControllerIncludes
+  module Controllers
     def self.included(base)
       base.helper Commontator::SharedHelper
     end
@@ -30,4 +30,4 @@ module Commontator
   end
 end
 
-ActionController::Base.send :include, Commontator::ControllerIncludes
+ActionController::Base.send :include, Commontator::Controllers

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module Commontator
-  RSpec.describe ControllerIncludes, type: :lib do
+  RSpec.describe Controllers, type: :lib do
     it 'must add commontator_thread_show to ActionController instances' do
       expect(ActionController::Base.new.respond_to?(:commontator_thread_show,
                                                     true)).to eq true

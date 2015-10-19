@@ -1,5 +1,5 @@
 require 'commontator/engine'
-require 'commontator/controller_includes'
+require 'commontator/controllers'
 
 module Commontator
   # Attributes

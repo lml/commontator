@@ -116,7 +116,7 @@ Follow the steps below to add commontator to your models and views:
   In that case, just add the following method call to the controller action that displays the page in question:
 
   ```rb
-  commontator_thread_show(commontable)
+  commontator_thread_show(@commontable)
   ```
 
   Note that the call to `commontator_thread` in the view is still necessary in either case.
