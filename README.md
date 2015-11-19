@@ -139,7 +139,7 @@ Batch sending through Mailgun is also supported and automatically detected.
 
 You may need to customize the mailer views with `rake commontator:copy:views` though only `app/views/commontator/subscriptions_mailer/` may be necessary. These in turn may require that you customize the localizations as well (see below for more details on that).
 
-Somedtimes you may need to add users automatically upon some event. For example, you may wish to automatically "subscribe" a (commontator) `user` to a (commontable) `event` so they get messages sent to the event automatically after joining the event. To do this you call `event.thread.subscribe(user)` when adding that `user` to that `event`.
+Sometimes you may need to add users automatically upon some event. For example, you may wish to automatically "subscribe" a (commontator) `user` to a (commontable) `event` so they get messages sent to the event automatically after joining the event. To do this you call `event.thread.subscribe(user)` when adding that `user` to that `event`.
 
 ## Voting
 
@@ -175,7 +175,7 @@ config.mentions_enabled = true
 Finally configure the user_mentions_proc, which receives the current user
 and the search query inputted by that user and should return a relation
 containing the users that can be mentioned and match the query string:
- 
+
 ```rb
 config.user_mentions_proc = lambda { |current_user, query| ... }
 ```
