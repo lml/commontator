@@ -129,14 +129,17 @@ That's it! Commontator is now ready for use.
 
 ## Emails
 
-If sending emails, remember to add your host URL's to your environment files
-(test.rb, development.rb and production.rb):
+When you enable subscriptions, emails are sent automatically by Commontator. If sending emails, remember to add your host URL's to your environment files (test.rb, development.rb and production.rb):
 
 ```rb
 config.action_mailer.default_url_options = { :host => "www.example.com" }
 ```
 
-Batch sending through Mailgun is also supported.
+Batch sending through Mailgun is also supported and automatically detected.
+
+You may need to customize the mailer views with `rake commontator:copy:views` though only `app/views/commontator/subscriptions_mailer/` may be necessary. These in turn may require that you customize the localizations as well (see below for more details on that).
+
+Somedtimes you may need to add users automatically upon some event. For example, you may wish to automatically "subscribe" a (commontator) `user` to a (commontable) `event` so they get messages sent to the event automatically after joining the event. To do this you call `event.thread.subscribe(user)` when adding that `user` to that `event`.
 
 ## Voting
 
