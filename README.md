@@ -172,12 +172,13 @@ Then enable mentions in commontator's initializer:
 config.mentions_enabled = true
 ```
 
-Finally configure the user_mentions_proc, which receives the current user
-and the search query inputted by that user and should return a relation
-containing the users that can be mentioned and match the query string:
+Finally configure the user_mentions_proc, which receives the current user,
+the current thread, and the search query inputted by that user and should
+return a relation containing the users that can be mentioned and match the
+query string:
 
 ```rb
-config.user_mentions_proc = lambda { |current_user, query| ... }
+config.user_mentions_proc = lambda { |current_user, thread, query| ... }
 ```
 
 Please be aware that with mentions enabled, any registered user
