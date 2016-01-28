@@ -24,8 +24,7 @@ Commontator.configure do |config|
   # through the view object (for example, view.flash)
   # However, the view does not include the main application's helpers
   # Default: lambda { |view| '$("#error_explanation").remove();' }
-  config.javascript_proc = lambda { |view|
-                                    '$("#error_explanation").remove();' }
+  config.javascript_proc = lambda { |view| '$("#error_explanation").remove();' }
 
 
 
@@ -99,7 +98,7 @@ Commontator.configure do |config|
   # thread_read_proc
   # Type: Proc
   # Arguments: a thread (Commontator::Thread), a user (acts_as_commontator)
-  # Returns: a Boolean, true iif the user should be allowed to read that thread
+  # Returns: a Boolean, true if and only if the user should be allowed to read that thread
   # Note: can be called with a user object that is nil (if they are not logged in)
   # Default: lambda { |thread, user| true } (anyone can read any thread)
   config.thread_read_proc = lambda { |thread, user| true }
@@ -107,7 +106,7 @@ Commontator.configure do |config|
   # thread_moderator_proc
   # Type: Proc
   # Arguments: a thread (Commontator::Thread), a user (acts_as_commontator)
-  # Returns: a Boolean, true iif the user is a moderator for that thread
+  # Returns: a Boolean, true if and only if the user is a moderator for that thread
   # If you want global moderators, make this proc true for them regardless of thread
   # Default: lambda { |thread, user| false } (no moderators)
   config.thread_moderator_proc = lambda { |thread, user| false }
