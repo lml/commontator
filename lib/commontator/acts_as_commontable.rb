@@ -7,7 +7,7 @@ module Commontator
       base.is_commontable = false
       base.extend(ClassMethods)
     end
-    
+
     module ClassMethods
       def acts_as_commontable(options = {})
         class_eval do
@@ -29,10 +29,11 @@ module Commontator
             @thread
           end
 
-          alias_method_chain :thread, :commontator
+          alias_method :thread_without_commontator, :thread
+          alias_method :thread, :thread_with_commontator
         end
       end
-      
+
       alias_method :acts_as_commentable, :acts_as_commontable
     end
   end
