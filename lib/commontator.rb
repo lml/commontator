@@ -128,8 +128,8 @@ module Commontator
     commontator_config(user).user_avatar_proc.call(user, view)
   end
 
-  def self.commontator_mentions(user, search_phrase)
-    commontator_config(user).user_mentions_proc.call(user, search_phrase)
+  def self.commontator_mentions(user, thread, search_phrase)
+    commontator_config(user).user_mentions_proc.call(user, thread, search_phrase)
   end
 
   def self.commontable_name(commontable)

@@ -14,7 +14,7 @@ Commontator.configure do |config|
 
   config.mentions_enabled = true
 
-  config.user_mentions_proc = lambda { |current_user, query|
+  config.user_mentions_proc = lambda { |current_user, thread, query|
     'DummyUser'.include?(query) ? DummyUser.all : DummyUser.none }
 end
 

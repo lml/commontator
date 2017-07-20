@@ -60,7 +60,7 @@ module Commontator
     protected
 
     def serialized_mentions(query)
-      { mentions: Commontator.commontator_mentions(@user, query).map do |user|
+      { mentions: Commontator.commontator_mentions(@user, @thread, query).map do |user|
         { id: user.id, name: Commontator.commontator_name(user), type: 'user' }
       end }
     end

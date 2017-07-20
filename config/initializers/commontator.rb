@@ -260,6 +260,7 @@ Commontator.configure do |config|
   # Type: Proc
   # Arguments:
   #   the current user (acts_as_commontator)
+  #   the current thread (Commontator::Thread)
   #   the search query inputted by user (String)
   # Returns: an ActiveRecord Relation object
   # Important notes:
@@ -274,6 +275,6 @@ Commontator.configure do |config|
   #
   # Default: lambda { |current_user, query|
   #                   current_user.class.where('username LIKE ?', "#{query}%") }
-  config.user_mentions_proc = lambda { |current_user, query|
+  config.user_mentions_proc = lambda { |current_user, thread, query|
     current_user.class.where('username LIKE ?', "#{query}%") }
 end
