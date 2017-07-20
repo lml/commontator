@@ -1,5 +1,5 @@
 class DummyModelsController < ApplicationController
-  before_filter :get_dummy
+  before_action :get_dummy
 
   def show
     commontator_thread_show(@dummy_model)
