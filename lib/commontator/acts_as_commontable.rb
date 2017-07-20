@@ -20,17 +20,18 @@ module Commontator
 
           validates_presence_of :thread
 
-          def thread_with_commontator
-            @thread ||= thread_without_commontator
-            return @thread unless @thread.nil?
+          prepend ThreadWithCommontator
+        end
+      end
 
-            @thread = build_thread
-            @thread.save if persisted?
-            @thread
-          end
+      module ThreadWithCommontator
+        def thread
+          @thread ||= super
+          return @thread unless @thread.nil?
 
-          alias_method :thread_without_commontator, :thread
-          alias_method :thread, :thread_with_commontator
+          @thread = build_thread
+          @thread.save if persisted?
+          @thread
         end
       end
 

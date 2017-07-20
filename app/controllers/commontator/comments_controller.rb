@@ -151,7 +151,7 @@ module Commontator
     end
 
     def subscribe_mentioned
-      Commontator.commontator_mentions(@user, '').where(id: params[:mentioned_ids]).each do |user|
+      Commontator.commontator_mentions(@user, @thread, '').where(id: params[:mentioned_ids]).each do |user|
         @thread.subscribe(user)
       end
     end

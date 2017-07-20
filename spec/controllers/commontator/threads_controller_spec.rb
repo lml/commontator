@@ -199,7 +199,7 @@ module Commontator
 
             it 'calls the user_mentions_proc and returns the result' do
               expect(Commontator.user_mentions_proc).to(
-                receive(:call).with(@user, search_phrase).and_return(valid_result)
+                receive(:call).with(@user, @thread, search_phrase).and_return(valid_result)
               )
 
               call_request

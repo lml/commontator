@@ -1,7 +1,7 @@
 module Commontator
   class Thread < ActiveRecord::Base
-    belongs_to :closer, :polymorphic => true
-    belongs_to :commontable, :polymorphic => true
+    belongs_to :closer, :polymorphic => true, :optional => true
+    belongs_to :commontable, :polymorphic => true, :optional => true
 
     has_many :comments, :dependent => :destroy
     has_many :subscriptions, :dependent => :destroy
