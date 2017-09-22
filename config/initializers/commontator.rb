@@ -2,7 +2,6 @@
 # All settings are initially set to their default values
 
 # Note: Do not "return" from a Proc, use "next" instead if necessary
-#       "return" in a lambda is OK
 Commontator.configure do |config|
   # Engine Configuration
 
@@ -11,8 +10,8 @@ Commontator.configure do |config|
   # Arguments: the current controller (ActionController::Base)
   # Returns: the current user (acts_as_commontator)
   # The default works for Devise and similar authentication plugins
-  # Default: lambda { |controller| controller.current_user }
-  config.current_user_proc = lambda { |controller| controller.current_user }
+  # Default: ->(controller) { controller.current_user }
+  config.current_user_proc = ->(controller) { controller.current_user }
 
   # javascript_proc
   # Type: Proc
@@ -23,8 +22,8 @@ Commontator.configure do |config|
   # Objects visible in view templates can be accessed
   # through the view object (for example, view.flash)
   # However, the view does not include the main application's helpers
-  # Default: lambda { |view| '$("#error_explanation").remove();' }
-  config.javascript_proc = lambda { |view| '$("#error_explanation").remove();' }
+  # Default: ->(view) { '$("#error_explanation").remove();' }
+  config.javascript_proc = ->(view) { '$("#error_explanation").remove();' }
 
 
 
@@ -34,8 +33,8 @@ Commontator.configure do |config|
   # Type: Proc
   # Arguments: a user (acts_as_commontator)
   # Returns: the user's name (String)
-  # Default: lambda { |user| I18n.t('commontator.anonymous') } (all users are anonymous)
-  config.user_name_proc = lambda { |user| I18n.t('commontator.anonymous') }
+  # Default: ->(user) { I18n.t('commontator.anonymous') } (all users are anonymous)
+  config.user_name_proc = ->(user) { I18n.t('commontator.anonymous') }
 
   # user_link_proc
   # Type: Proc
@@ -45,8 +44,8 @@ Commontator.configure do |config|
   # If anything non-blank is returned, the user's name in comments
   # comments will become a hyperlink pointing to this path
   # The main application's routes can be accessed through the app_routes object
-  # Default: lambda { |user, app_routes| '' } (no link)
-  config.user_link_proc = lambda { |user, app_routes| '' }
+  # Default: ->(user, app_routes) { '' } (no link)
+  config.user_link_proc = ->(user, app_routes) { '' }
 
   # user_avatar_proc
   # Type: Proc
@@ -60,12 +59,12 @@ Commontator.configure do |config|
   #       allows de-anonymization attacks against their email addresses
   #       If you absolutely want to keep users' email addresses or identities secret,
   #       do not use Gravatar or similar services
-  # Default: lambda { |user, view|
-  #            view.commontator_gravatar_image_tag(
-  #              user, 1, :s => 60, :d => 'mm') }
-  config.user_avatar_proc = lambda { |user, view|
-                                     view.commontator_gravatar_image_tag(
-                                       user, 1, :s => 60, :d => 'mm') }
+  # Default: ->(user, view) {
+  #   view.commontator_gravatar_image_tag(user, 1, s: 60, d: 'mm')
+  # }
+  config.user_avatar_proc = ->(user, view) {
+    view.commontator_gravatar_image_tag(user, 1, s: 60, d: 'mm')
+  }
 
   # user_email_proc
   # Type: Proc
@@ -76,8 +75,8 @@ Commontator.configure do |config|
   # to Gravatar, so you should always return the user's email address (if using Gravatar)
   # If the mailer argument is not nil, then Commontator intends to send an email to
   # the address returned; you can prevent it from being sent by returning a blank String
-  # Default: lambda { |user, mailer| user.try(:email) || '' }
-  config.user_email_proc = lambda { |user, mailer| user.try(:email) || '' }
+  # Default: ->(user, mailer) { user.try(:email) || '' }
+  config.user_email_proc = ->(user, mailer) { user.try(:email) || '' }
 
 
 
@@ -100,16 +99,16 @@ Commontator.configure do |config|
   # Arguments: a thread (Commontator::Thread), a user (acts_as_commontator)
   # Returns: a Boolean, true if and only if the user should be allowed to read that thread
   # Note: can be called with a user object that is nil (if they are not logged in)
-  # Default: lambda { |thread, user| true } (anyone can read any thread)
-  config.thread_read_proc = lambda { |thread, user| true }
+  # Default: ->(thread, user) { true } (anyone can read any thread)
+  config.thread_read_proc = ->(thread, user) { true }
 
   # thread_moderator_proc
   # Type: Proc
   # Arguments: a thread (Commontator::Thread), a user (acts_as_commontator)
   # Returns: a Boolean, true if and only if the user is a moderator for that thread
   # If you want global moderators, make this proc true for them regardless of thread
-  # Default: lambda { |thread, user| false } (no moderators)
-  config.thread_moderator_proc = lambda { |thread, user| false }
+  # Default: ->(thread, user) { false } (no moderators)
+  config.thread_moderator_proc = ->(thread, user) { false }
 
   # comment_editing
   # Type: Symbol
@@ -161,8 +160,8 @@ Commontator.configure do |config|
   # Returns: vote count to be displayed (String)
   # pos is the number of likes, or the rating, or the reputation
   # neg is the number of dislikes, if applicable, or 0 otherwise
-  # Default: lambda { |thread, pos, neg| "%+d" % (pos - neg) }
-  config.vote_count_proc = lambda { |thread, pos, neg| "%+d" % (pos - neg) }
+  # Default: ->(thread, pos, neg) { "%+d" % (pos - neg) }
+  config.vote_count_proc = ->(thread, pos, neg) { "%+d" % (pos - neg) }
 
   # comment_order
   # Type: Symbol
@@ -217,10 +216,12 @@ Commontator.configure do |config|
   # Arguments: a thread (Commontator::Thread)
   # Returns: the address emails are sent "from" (String)
   # Important: If using subscriptions, change this to at least match your domain name
-  # Default: lambda { |thread|
-  #                   "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
-  config.email_from_proc = lambda { |thread|
-    "no-reply@#{Rails.application.class.parent.to_s.downcase}.com" }
+  # Default: ->(thread) {
+  #   "no-reply@#{Rails.application.class.parent.to_s.downcase}.com"
+  # }
+  config.email_from_proc = ->(thread) {
+    "no-reply@#{Rails.application.class.parent.to_s.downcase}.com"
+  }
 
   # commontable_name_proc
   # Type: Proc
@@ -228,9 +229,9 @@ Commontator.configure do |config|
   # Returns: a name that refers to the commontable object (String)
   # If you have multiple commontable models, you can also pass this
   # configuration value as an argument to acts_as_commontable for each one
-  # Default: lambda { |thread|
+  # Default: ->(thread) {
   #                   "#{thread.commontable.class.name} ##{thread.commontable.id}" }
-  config.commontable_name_proc = lambda { |thread|
+  config.commontable_name_proc = ->(thread) {
     "#{thread.commontable.class.name} ##{thread.commontable.id}" }
 
   # comment_url_proc
@@ -240,12 +241,13 @@ Commontator.configure do |config|
   # Returns: a String containing the url of the view that displays the given comment
   # This usually is the commontable's "show" page
   # The main application's routes can be accessed through the app_routes object
-  # Default: lambda { |comment, app_routes|
-  #                   app_routes.polymorphic_url(comment.thread.commontable,
-  #                                              anchor: "comment_#{comment.id}_div") }
+  # Default: ->(comment, app_routes) {
+  #   app_routes.polymorphic_url(comment.thread.commontable, anchor: "comment_#{comment.id}_div")
+  # }
   # (defaults to the commontable's show url with an anchor pointing to the comment's div)
-  config.comment_url_proc = lambda { |comment, app_routes|
-    app_routes.polymorphic_url(comment.thread.commontable, anchor: "comment_#{comment.id}_div") }
+  config.comment_url_proc = ->(comment, app_routes) {
+    app_routes.polymorphic_url(comment.thread.commontable, anchor: "comment_#{comment.id}_div")
+  }
 
   # mentions_enabled
   # Type: Boolean
@@ -273,8 +275,10 @@ Commontator.configure do |config|
   #    Make sure to handle SQL escaping properly and that the
   #    attribute being searched does not contain sensitive information.
   #
-  # Default: lambda { |current_user, query|
-  #                   current_user.class.where('username LIKE ?', "#{query}%") }
-  config.user_mentions_proc = lambda { |current_user, thread, query|
-    current_user.class.where('username LIKE ?', "#{query}%") }
+  # Default: ->(current_user, query) {
+  #   current_user.class.where('username LIKE ?', "#{query}%")
+  # }
+  config.user_mentions_proc = ->(current_user, thread, query) {
+    current_user.class.where('username LIKE ?', "#{query}%")
+  }
 end

@@ -15,11 +15,11 @@ module Commontator
           self.commontator_config = Commontator::CommontatorConfig.new(options)
           self.is_commontator = true
 
-          has_many :comments,      :as => :creator,
-                                   :class_name => 'Commontator::Comment'
-          has_many :subscriptions, :as => :subscriber,
-                                   :class_name => 'Commontator::Subscription',
-                                   :dependent => :destroy
+          has_many :comments,      as: :creator,
+                                   class_name: 'Commontator::Comment'
+          has_many :subscriptions, as: :subscriber,
+                                   class_name: 'Commontator::Subscription',
+                                   dependent: :destroy
         end
       end
       

@@ -132,7 +132,7 @@ That's it! Commontator is now ready for use.
 When you enable subscriptions, emails are sent automatically by Commontator. If sending emails, remember to add your host URL's to your environment files (test.rb, development.rb and production.rb):
 
 ```rb
-config.action_mailer.default_url_options = { :host => "www.example.com" }
+config.action_mailer.default_url_options = { host: "www.example.com" }
 ```
 
 Batch sending through Mailgun is also supported and automatically detected.
@@ -178,7 +178,7 @@ return a relation containing the users that can be mentioned and match the
 query string:
 
 ```rb
-config.user_mentions_proc = lambda { |current_user, thread, query| ... }
+config.user_mentions_proc = ->(current_user, thread, query) { ... }
 ```
 
 Please be aware that with mentions enabled, any registered user

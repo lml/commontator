@@ -1,6 +1,6 @@
 module Commontator
   class ThreadsController < Commontator::ApplicationController
-    skip_before_action :ensure_user, :only => :show
+    skip_before_action :ensure_user, only: :show
     before_action :set_thread
 
     # GET /threads/1

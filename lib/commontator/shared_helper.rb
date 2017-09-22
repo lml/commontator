@@ -4,9 +4,9 @@ module Commontator
       user = Commontator.current_user_proc.call(self)
       thread = commontable.thread
       
-      render(:partial => 'commontator/shared/thread',
-             :locals => { :thread => thread,
-                          :user => user }).html_safe
+      render(partial: 'commontator/shared/thread',
+             locals: { thread: thread,
+                          user: user }).html_safe
     end
 
     def commontator_gravatar_image_tag(user, border = 1, options = {})
@@ -17,9 +17,9 @@ module Commontator
       hash = Digest::MD5.hexdigest(email)
       url = "http#{base}.gravatar.com/avatar/#{hash}?#{options.to_query}"
       
-      image_tag(url, { :alt => name,
-                       :title => name,
-                       :border => border })
+      image_tag(url, { alt: name,
+                       title: name,
+                       border: border })
     end
   end
 end

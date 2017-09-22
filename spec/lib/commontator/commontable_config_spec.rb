@@ -17,13 +17,12 @@ module Commontator
     end
 
     it 'must be configurable' do
-      proc = lambda { |thread| 'Some name' }
-      proc2 = lambda { |thread| 'Another name' }
-      config = CommontableConfig.new(:commontable_name_proc => proc)
+      proc = ->(thread) { 'Some name' }
+      proc2 = ->(thread) { 'Another name' }
+      config = CommontableConfig.new(commontable_name_proc: proc)
       expect(config.commontable_name_proc).to eq proc
-      config = CommontableConfig.new(:commontable_name_proc => proc2)
+      config = CommontableConfig.new(commontable_name_proc: proc2)
       expect(config.commontable_name_proc).to eq proc2
     end
   end
 end
-

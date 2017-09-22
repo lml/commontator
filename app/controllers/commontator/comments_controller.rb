@@ -1,7 +1,7 @@
 module Commontator
   class CommentsController < Commontator::ApplicationController
-    before_action :set_thread, :only => [:new, :create]
-    before_action :set_comment_and_thread, :except => [:new, :create]
+    before_action :set_thread, only: [:new, :create]
+    before_action :set_comment_and_thread, except: [:new, :create]
 
     # GET /threads/1/comments/new
     def new
@@ -134,7 +134,7 @@ module Commontator
     def unvote
       security_transgression_unless @comment.can_be_voted_on_by?(@user)
 
-      @comment.unvote :voter => @user
+      @comment.unvote voter: @user
 
       respond_to do |format|
         format.html { redirect_to @thread }

@@ -16,11 +16,11 @@ module Commontator
     end
 
     it "won't get new unless authorized" do
-      get :new, :thread_id => @thread.id
+      get :new, params: { thread_id: @thread.id }
       expect(response).to have_http_status(:forbidden)
 
       sign_in @user
-      get :new, :thread_id => @thread.id
+      get :new, params: { thread_id: @thread.id }
       expect(response).to have_http_status(:forbidden)
     end
 
@@ -28,19 +28,19 @@ module Commontator
       sign_in @user
 
       @user.can_read = true
-      get :new, :thread_id => @thread.id
+      get :new, params: { thread_id: @thread.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
 
       @user.can_read = false
       @user.can_edit = true
-      get :new, :thread_id => @thread.id
+      get :new, params: { thread_id: @thread.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
 
       @user.can_edit = false
       @user.is_admin = true
-      get :new, :thread_id => @thread.id
+      get :new, params: { thread_id: @thread.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
     end
@@ -49,18 +49,18 @@ module Commontator
       attributes = Hash.new
       attributes[:body] = 'Something else'
 
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(response).to have_http_status(:forbidden)
 
       sign_in @user
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(response).to have_http_status(:forbidden)
 
       @user.can_read = true
       @user.can_edit = true
       @user.is_admin = true
       expect(@thread.close).to eq true
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(response).to have_http_status(:forbidden)
     end
 
@@ -70,7 +70,7 @@ module Commontator
 
       attributes[:body] = 'Something else'
       @user.can_read = true
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).body).to eq 'Something else'
@@ -81,7 +81,7 @@ module Commontator
       attributes[:body] = 'Another thing'
       @user.can_read = false
       @user.can_edit = true
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).body).to eq 'Another thing'
@@ -92,7 +92,7 @@ module Commontator
       attributes[:body] = 'And this too'
       @user.can_edit = false
       @user.is_admin = true
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).body).to eq 'And this too'
@@ -107,12 +107,12 @@ module Commontator
       attributes = Hash.new
 
       attributes[:body] = 'Something'
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       assert_redirected_to @thread
       expect(assigns(:comment).errors).not_to be_empty
 
       attributes[:body] = 'Something else'
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).body).to eq 'Something else'
@@ -121,17 +121,17 @@ module Commontator
       expect(assigns(:comment).thread).to eq @thread
 
       attributes[:body] = 'Something else'
-      post :create, :thread_id => @thread.id, :comment => attributes
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).not_to be_empty
     end
 
     it "won't edit unless authorized" do
-      get :edit, :id => @comment.id
+      get :edit, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
 
       sign_in @user
-      get :edit, :id => @comment.id
+      get :edit, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
 
       user2 = DummyUser.create
@@ -139,7 +139,7 @@ module Commontator
       user2.can_edit = true
       user2.is_admin = true
       sign_in user2
-      get :edit, :id => @comment.id
+      get :edit, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
 
       @user.can_read = true
@@ -151,7 +151,7 @@ module Commontator
       comment2.creator = @user
       comment2.body = 'Something else'
       comment2.save!
-      get :edit, :id => @comment.id
+      get :edit, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
     end
 
@@ -159,19 +159,19 @@ module Commontator
       sign_in @user
 
       @user.can_read = true
-      get :edit, :id => @comment.id
+      get :edit, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
 
       @user.can_read = false
       @user.can_edit = true
-      get :edit, :id => @comment.id
+      get :edit, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
 
       @user.can_edit = false
       @user.is_admin = true
-      get :edit, :id => @comment.id
+      get :edit, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
     end
@@ -180,14 +180,14 @@ module Commontator
       attributes = Hash.new
       attributes[:body] = 'Something else'
 
-      put :update, :id => @comment.id, :comment => attributes
+      put :update, params: { id: @comment.id, comment: attributes }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.body).to eq 'Something'
       expect(@comment.editor).to be_nil
 
       sign_in @user
-      put :update, :id => @comment.id, :comment => attributes
+      put :update, params: { id: @comment.id, comment: attributes }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.body).to eq 'Something'
@@ -198,7 +198,7 @@ module Commontator
       user2.can_edit = true
       user2.is_admin = true
       sign_in user2
-      put :update, :id => @comment.id, :comment => attributes
+      put :update, params: { id: @comment.id, comment: attributes }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.body).to eq 'Something'
@@ -213,7 +213,7 @@ module Commontator
       comment2.creator = @user
       comment2.body = 'Something else'
       comment2.save!
-      put :update, :id => @comment.id, :comment => attributes
+      put :update, params: { id: @comment.id, comment: attributes }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.body).to eq 'Something'
@@ -226,42 +226,42 @@ module Commontator
       attributes[:body] = 'Something else'
 
       @user.can_read = true
-      put :update, :id => @comment.id, :comment => attributes
+      put :update, params: { id: @comment.id, comment: attributes }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).editor).to eq @user
 
       @user.can_read = false
       @user.can_edit = true
-      put :update, :id => @comment.id, :comment => attributes
+      put :update, params: { id: @comment.id, comment: attributes }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).editor).to eq @user
 
       @user.can_edit = false
       @user.is_admin = true
-      put :update, :id => @comment.id, :comment => attributes
+      put :update, params: { id: @comment.id, comment: attributes }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).editor).to eq @user
     end
 
     it "won't delete unless authorized and not deleted" do
-      put :delete, :id => @comment.id
+      put :delete, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.is_deleted?).to eq false
 
       sign_in @user
 
-      put :delete, :id => @comment.id
+      put :delete, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.is_deleted?).to eq false
 
       @user.can_read = true
       expect(@comment.delete_by(@user)).to eq true
-      put :delete, :id => @comment.id
+      put :delete, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).not_to be_empty
 
@@ -271,7 +271,7 @@ module Commontator
       comment2.body = 'Something else'
       comment2.save!
       expect(@comment.undelete_by(@user)).to eq true
-      put :delete, :id => @comment.id
+      put :delete, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.is_deleted?).to eq false
@@ -281,7 +281,7 @@ module Commontator
       sign_in @user
 
       @user.can_read = true
-      put :delete, :id => @comment.id
+      put :delete, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).is_deleted?).to eq true
@@ -297,7 +297,7 @@ module Commontator
 
       expect(assigns(:comment).undelete_by(@user)).to eq true
       user2.can_edit = true
-      put :delete, :id => @comment.id
+      put :delete, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).is_deleted?).to eq true
@@ -306,7 +306,7 @@ module Commontator
       expect(assigns(:comment).undelete_by(@user)).to eq true
       user2.can_edit = false
       user2.is_admin = true
-      put :delete, :id => @comment.id
+      put :delete, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).is_deleted?).to eq true
@@ -315,21 +315,21 @@ module Commontator
 
     it "won't undelete unless authorized and deleted" do
       expect(@comment.delete_by(@user)).to eq true
-      put :undelete, :id => @comment.id
+      put :undelete, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.is_deleted?).to eq true
 
       sign_in @user
 
-      put :undelete, :id => @comment.id
+      put :undelete, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.is_deleted?).to eq true
 
       @user.can_read = true
       expect(@comment.undelete_by(@user)).to eq true
-      put :undelete, :id => @comment.id
+      put :undelete, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).not_to be_empty
 
@@ -338,7 +338,7 @@ module Commontator
       user2.can_edit = true
       user2.is_admin = true
       expect(@comment.delete_by(user2)).to eq true
-      put :undelete, :id => @comment.id
+      put :undelete, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.is_deleted?).to eq true
@@ -350,7 +350,7 @@ module Commontator
       comment2.save!
       expect(@comment.undelete_by(@user)).to eq true
       expect(@comment.delete_by(@user)).to eq true
-      put :undelete, :id => @comment.id
+      put :undelete, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.is_deleted?).to eq true
@@ -361,7 +361,7 @@ module Commontator
 
       expect(@comment.delete_by(@user)).to eq true
       @user.can_read = true
-      put :undelete, :id => @comment.id
+      put :undelete, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).is_deleted?).to eq false
@@ -376,7 +376,7 @@ module Commontator
 
       expect(assigns(:comment).delete_by(@user)).to eq true
       user2.can_edit = true
-      put :undelete, :id => @comment.id
+      put :undelete, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).is_deleted?).to eq false
@@ -384,14 +384,14 @@ module Commontator
       expect(assigns(:comment).delete_by(@user)).to eq true
       user2.can_edit = false
       user2.is_admin = true
-      put :undelete, :id => @comment.id
+      put :undelete, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).errors).to be_empty
       expect(assigns(:comment).is_deleted?).to eq false
     end
 
     it "won't upvote unless authorized" do
-      put :upvote, :id => @comment.id
+      put :upvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes).to be_empty
@@ -399,7 +399,7 @@ module Commontator
 
       sign_in @user
       @user.can_read = true
-      put :upvote, :id => @comment.id
+      put :upvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes).to be_empty
@@ -407,7 +407,7 @@ module Commontator
 
       user2 = DummyUser.create
       sign_in user2
-      put :upvote, :id => @comment.id
+      put :upvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes).to be_empty
@@ -419,26 +419,26 @@ module Commontator
       user2.can_read = true
       sign_in user2
 
-      put :upvote, :id => @comment.id
+      put :upvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).get_upvotes.count).to eq 1
       expect(assigns(:comment).get_downvotes).to be_empty
 
-      put :upvote, :id => @comment.id
+      put :upvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).get_upvotes.count).to eq 1
       expect(assigns(:comment).get_downvotes).to be_empty
 
       expect(@comment.downvote_from(user2)).to eq true
 
-      put :upvote, :id => @comment.id
+      put :upvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).get_upvotes.count).to eq 1
       expect(assigns(:comment).get_downvotes).to be_empty
     end
 
     it "won't downvote unless authorized" do
-      put :downvote, :id => @comment.id
+      put :downvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes).to be_empty
@@ -446,7 +446,7 @@ module Commontator
 
       sign_in @user
       @user.can_read = true
-      put :downvote, :id => @comment.id
+      put :downvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes).to be_empty
@@ -454,7 +454,7 @@ module Commontator
 
       user2 = DummyUser.create
       sign_in user2
-      put :downvote, :id => @comment.id
+      put :downvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes).to be_empty
@@ -466,19 +466,19 @@ module Commontator
       user2.can_read = true
       sign_in user2
 
-      put :downvote, :id => @comment.id
+      put :downvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(@comment.get_upvotes).to be_empty
       expect(@comment.get_downvotes.count).to eq 1
 
-      put :downvote, :id => @comment.id
+      put :downvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(@comment.get_upvotes).to be_empty
       expect(@comment.get_downvotes.count).to eq 1
 
       expect(@comment.upvote_from(user2)).to eq true
 
-      put :downvote, :id => @comment.id
+      put :downvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(@comment.get_upvotes).to be_empty
       expect(@comment.get_downvotes.count).to eq 1
@@ -487,7 +487,7 @@ module Commontator
     it "won't unvote unless authorized" do
       expect(@comment.upvote_from(@user)).to eq true
 
-      put :unvote, :id => @comment.id
+      put :unvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes.count).to eq 1
@@ -495,7 +495,7 @@ module Commontator
 
       sign_in @user
       @user.can_read = true
-      put :unvote, :id => @comment.id
+      put :unvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes.count).to eq 1
@@ -503,7 +503,7 @@ module Commontator
 
       user2 = DummyUser.create
       sign_in user2
-      put :unvote, :id => @comment.id
+      put :unvote, params: { id: @comment.id }
       expect(response).to have_http_status(:forbidden)
       @comment.reload
       expect(@comment.get_upvotes.count).to eq 1
@@ -516,18 +516,18 @@ module Commontator
       sign_in user2
 
       expect(@comment.upvote_from(user2)).to eq true
-      put :unvote, :id => @comment.id
+      put :unvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).get_upvotes).to be_empty
       expect(assigns(:comment).get_downvotes).to be_empty
 
-      put :unvote, :id => @comment.id
+      put :unvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).get_upvotes).to be_empty
       expect(assigns(:comment).get_downvotes).to be_empty
 
       expect(@comment.downvote_from(user2)).to eq true
-      put :unvote, :id => @comment.id
+      put :unvote, params: { id: @comment.id }
       expect(response).to redirect_to @thread
       expect(assigns(:comment).get_upvotes).to be_empty
       expect(assigns(:comment).get_downvotes).to be_empty
@@ -540,10 +540,9 @@ module Commontator
       @user.can_read = true
       sign_in @user
 
-      attributes = { :body => 'Something else' }
-      expect {
-        post :create, :thread_id => @thread.id, :comment => attributes
-      }.not_to change{ ActionMailer::Base.deliveries.count }
+      attributes = { body: 'Something else' }
+      expect_any_instance_of(ActionMailer::MessageDelivery).not_to receive(:deliver_later)
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(assigns(:comment).errors).to be_empty
     end
 
@@ -555,10 +554,9 @@ module Commontator
       @user.can_read = true
       sign_in @user
 
-      attributes = { :body => 'Something else' }
-      expect {
-        post :create, :thread_id => @thread.id, :comment => attributes
-      }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+      attributes = { body: 'Something else' }
+      expect_any_instance_of(ActionMailer::MessageDelivery).to receive(:deliver_later)
+      post :create, params: { thread_id: @thread.id, comment: attributes }
       expect(assigns(:comment).errors).to be_empty
     end
 
@@ -567,9 +565,11 @@ module Commontator
       let!(:other_user)        { DummyUser.create }
 
       let(:attributes)         { { body: 'some comment' } }
-      let(:call_request)       { post :create, thread_id: @thread.id,
-                                               comment: attributes,
-                                               mentioned_ids: [user_to_subscribe.id] }
+      let(:call_request)       do
+        post :create, params: { thread_id: @thread.id,
+                                comment: attributes,
+                                mentioned_ids: [user_to_subscribe.id] }
+      end
 
       before do
         @user.can_read = true
@@ -587,7 +587,8 @@ module Commontator
         end
 
         it 'does not send subscription emails' do
-          expect{ call_request }.not_to change{ ActionMailer::Base.deliveries.count }
+          expect_any_instance_of(ActionMailer::MessageDelivery).not_to receive(:deliver_later)
+          call_request
         end
       end
 
@@ -603,10 +604,10 @@ module Commontator
         end
 
         it 'sends a subscription email' do
-          expect{ call_request }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+          expect_any_instance_of(ActionMailer::MessageDelivery).to receive(:deliver_later)
+          call_request
         end
       end
     end
   end
 end
-

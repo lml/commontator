@@ -4,7 +4,7 @@
 %>
 
 <% comments.includes(:creator, :editor).each do |comment| %>
-  <%= render :partial => 'commontator/comments/show',
-             :locals => { :comment => comment,
-                          :user => user } %>
+  <%= render partial: 'commontator/comments/show',
+             locals: { comment: comment,
+                          user: user } %>
 <% end %>
