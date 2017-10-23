@@ -10,7 +10,7 @@ namespace :commontator do
         if File.exists?(File.expand_path(File.basename(file), 'config/initializers'))
           print "NOTE: Initializer #{File.basename(file)} from commontator has been skipped. Initializer with the same name already exists.\n"
         else
-          cp file, 'config/initializers', :verbose => false
+          cp file, 'config/initializers', verbose: false
           print "Copied initializer #{File.basename(file)} from commontator\n"
         end
       end
@@ -23,7 +23,7 @@ namespace :commontator do
       desc "Copy #{name} from commontator to application"
       task name.to_sym do
         namespace = path.start_with?('app') ? '/commontator' : ''
-        cp_r File.expand_path("../../../#{path}#{namespace}", __FILE__), path, :verbose => false
+        cp_r File.expand_path("../../../#{path}#{namespace}", __FILE__), path, verbose: false
         print "Copied #{name} from commontator\n"
       end
     end

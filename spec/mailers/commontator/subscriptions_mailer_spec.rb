@@ -18,7 +18,7 @@ module Commontator
 
     it 'must create deliverable mail' do
       mail = described_class.comment_created(@comment, @recipients)
-      expect(mail.to).to eq I18n.t('commontator.email.undisclosed_recipients')
+      expect(mail.to).to be_nil
       expect(mail.cc).to be_nil
       expect(mail.bcc.size).to eq 1
       expect(mail.bcc).to include(@user2.email)
@@ -38,7 +38,7 @@ module Commontator
         expect(mail.to.size).to eq 1
         expect(mail.to).to include(@user2.email)
         expect(mail.cc).to be_nil
-        expect(mail.bcc.size).to eq 0
+        expect(mail.bcc).to be_nil
         expect(mail.subject).not_to be_empty
         expect(mail.body).not_to be_empty
         expect(mail.deliver_now).to eq mail
@@ -47,4 +47,3 @@ module Commontator
     end
   end
 end
-

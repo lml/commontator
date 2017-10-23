@@ -50,14 +50,14 @@ module Commontator
 
       expect(@comment.created_timestamp).to eq(
         I18n.t('commontator.comment.status.created_at',
-               :created_at => I18n.l(@comment.created_at,
-                                     :format => :commontator))
+               created_at: I18n.l(@comment.created_at,
+                                     format: :commontator))
       )
       expect(@comment.updated_timestamp).to eq(
         I18n.t('commontator.comment.status.updated_at',
-               :editor_name => @user.name,
-               :updated_at => I18n.l(@comment.updated_at,
-                                     :format => :commontator))
+               editor_name: @user.name,
+               updated_at: I18n.l(@comment.updated_at,
+                                     format: :commontator))
       )
 
       user2 = DummyUser.create
@@ -67,14 +67,14 @@ module Commontator
 
       expect(@comment.created_timestamp).to eq(
         I18n.t('commontator.comment.status.created_at',
-               :created_at => I18n.l(@comment.created_at,
-                                     :format => :commontator))
+               created_at: I18n.l(@comment.created_at,
+                                     format: :commontator))
       )
       expect(@comment.updated_timestamp).to eq(
         I18n.t('commontator.comment.status.updated_at',
-               :editor_name => user2.name,
-               :updated_at => I18n.l(@comment.updated_at,
-                                     :format => :commontator))
+               editor_name: user2.name,
+               updated_at: I18n.l(@comment.updated_at,
+                                     format: :commontator))
       )
     end
   end

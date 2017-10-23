@@ -1,15 +1,15 @@
 module Commontator
   class Thread < ActiveRecord::Base
-    belongs_to :closer, :polymorphic => true, :optional => true
-    belongs_to :commontable, :polymorphic => true, :optional => true
+    belongs_to :closer, polymorphic: true, optional: true
+    belongs_to :commontable, polymorphic: true, optional: true
 
-    has_many :comments, :dependent => :destroy
-    has_many :subscriptions, :dependent => :destroy
+    has_many :comments, dependent: :destroy
+    has_many :subscriptions, dependent: :destroy
 
-    validates_presence_of :commontable, :unless => :is_closed?
+    validates_presence_of :commontable, unless: :is_closed?
     validates_uniqueness_of :commontable_id,
-                            :scope => :commontable_type,
-                            :allow_nil => true
+                            scope: :commontable_type,
+                            allow_nil: true
 
     def config
       @config ||= commontable.try(:commontable_config) || Commontator
@@ -45,7 +45,7 @@ module Commontator
     def paginated_comments(page = 1, per_page = config.comments_per_page)
       oc = ordered_comments
       return oc unless will_paginate?
-      oc.paginate(:page => page, :per_page => per_page)
+      oc.paginate(page: page, per_page: per_page)
     end
 
     def new_comment_page(per_page = config.comments_per_page)
@@ -91,7 +91,7 @@ module Commontator
 
     def subscription_for(subscriber)
       return nil if !subscriber || !subscriber.is_commontator
-      subscriber.subscriptions.where(:thread_id => self.id).first
+      subscriber.subscriptions.where(thread_id: self.id).first
     end
 
     def subscribe(subscriber)

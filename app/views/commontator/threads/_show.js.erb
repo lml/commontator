@@ -9,10 +9,10 @@
 
 $("#thread_<%= thread.id %>_div").html(
   "<%= escape_javascript(
-    render :partial => 'commontator/threads/show',
-           :formats => [:html],
-           :locals => { :thread => thread,
-                        :user => user,
-                        :page => page,
-                        :per_page => per_page,
-                        :show_all => show_all }) %>");
+    render partial: 'commontator/threads/show',
+           formats: [:html],
+           locals: { thread: thread,
+                        user: user,
+                        page: page,
+                        per_page: per_page,
+                        show_all: show_all }) %>");

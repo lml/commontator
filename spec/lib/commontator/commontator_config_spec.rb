@@ -17,13 +17,12 @@ module Commontator
     end
 
     it 'must be configurable' do
-      proc = lambda { |user| 'Some name' }
-      proc2 = lambda { |user| 'Another name' }
-      config = CommontatorConfig.new(:user_name_proc => proc)
+      proc = ->(user) { 'Some name' }
+      proc2 = ->(user) { 'Another name' }
+      config = CommontatorConfig.new(user_name_proc: proc)
       expect(config.user_name_proc).to eq proc
-      config = CommontatorConfig.new(:user_name_proc => proc2)
+      config = CommontatorConfig.new(user_name_proc: proc2)
       expect(config.user_name_proc).to eq proc2
     end
   end
 end
-

@@ -10,8 +10,8 @@ module Commontator
     end
 
     it 'must be configurable' do
-      l1 = lambda { |controller| controller.current_user }
-      l2 = lambda { |controller| controller.current_user }
+      l1 = ->(controller) { controller.current_user }
+      l2 = ->(controller) { controller.current_user }
       Commontator.configure do |config|
         config.current_user_proc = l1
       end
@@ -23,4 +23,3 @@ module Commontator
     end
   end
 end
-

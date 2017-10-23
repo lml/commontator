@@ -2,7 +2,7 @@ module Commontator
   class ApplicationController < ActionController::Base
     before_action :set_user, :ensure_user
 
-    rescue_from SecurityTransgression, :with => lambda { head(:forbidden) }
+    rescue_from SecurityTransgression, with: -> { head(:forbidden) }
 
     protected
 

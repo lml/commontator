@@ -15,8 +15,8 @@ module Commontator
           self.commontable_config = Commontator::CommontableConfig.new(options)
           self.is_commontable = true
 
-          has_one :thread, :as => :commontable,
-                           :class_name => 'Commontator::Thread'
+          has_one :thread, as: :commontable,
+                           class_name: 'Commontator::Thread'
 
           validates_presence_of :thread
 

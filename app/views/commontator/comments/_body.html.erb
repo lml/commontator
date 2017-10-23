@@ -4,5 +4,5 @@
 
 <%= simple_format comment.is_deleted? ? \
       t('commontator.comment.status.deleted_by',
-        :deleter_name => Commontator.commontator_name(comment.editor)) : \
+        deleter_name: Commontator.commontator_name(comment.editor)) : \
       comment.body %>

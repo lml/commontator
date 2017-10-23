@@ -1,6 +1,6 @@
 Commontator::Engine.routes.draw do
-  resources :threads, :only => [:show] do
-    resources :comments, :except => [:index, :destroy], :shallow => true do
+  resources :threads, only: [:show] do
+    resources :comments, except: [:index, :destroy], shallow: true do
       member do
         put 'delete'
         put 'undelete'
@@ -17,8 +17,8 @@ Commontator::Engine.routes.draw do
       put 'close'
       put 'reopen'
       
-      put 'subscribe', :to => 'subscriptions#subscribe'
-      put 'unsubscribe', :to => 'subscriptions#unsubscribe'
+      put 'subscribe', to: 'subscriptions#subscribe'
+      put 'unsubscribe', to: 'subscriptions#unsubscribe'
     end
   end
 end

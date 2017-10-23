@@ -9,9 +9,9 @@
 <% if can_edit %>
   <%= link_to t('commontator.comment.actions.edit'),
               commontator.edit_comment_path(comment),
-              :id => "comment_#{comment.id.to_s}_edit_link",
-              :class => "comment_edit_link",
-              :remote => true %>
+              id: "comment_#{comment.id.to_s}_edit_link",
+              class: "comment_edit_link",
+              remote: true %>
 <% end %>
 
 &nbsp;
@@ -21,9 +21,9 @@
   <% del_string = is_deleted ? 'undelete' : 'delete' %>
   <%= link_to t("commontator.comment.actions.#{del_string}"),
               commontator.polymorphic_path([del_string, comment]),
-              :confirm => (!is_deleted ? t('commontator.comment.actions.confirm_delete') : nil),
-              :method => :put,
-              :id => "comment_#{comment.id.to_s}_#{del_string}_link",
-              :class => "comment_#{del_string}_link",
-              :remote => true %>
+              confirm: (!is_deleted ? t('commontator.comment.actions.confirm_delete') : nil),
+              method: :put,
+              id: "comment_#{comment.id.to_s}_#{del_string}_link",
+              class: "comment_#{del_string}_link",
+              remote: true %>
 <% end %>
