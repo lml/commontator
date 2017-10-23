@@ -48,7 +48,6 @@ pt-BR:
         body: "%{creator_name} comentou em %{commontable_name}:"
         subject: "%{creator_name} postou um comentário em %{commontable_name}"
       thread_link_html: "<a href=\"%{comment_url}\">Clique aqui</a> para ver todos os comentários em %{commontable_name}."
-      undisclosed_recipients: "Undisclosed Recipients"
     require_login: "Você deve fazer login para postar um comentário."
     subscription:
       actions:

@@ -70,7 +70,6 @@ de:
         body: "%{creator_name} kommentierte zu %{commontable_name}:"
         subject: "%{creator_name} veröffentlichte einen Kommentar zu %{commontable_name}"
       thread_link_html: "<a href=\"%{comment_url}\">Hier klicken</a> um alle Kommentare zu %{commontable_name} zu sehen."
-      undisclosed_recipients: "Undisclosed Recipients"
     require_login: "Sie müssen sich anmelden bevor sie einen Kommentar veröffentlichen können."
     subscription:
       actions:

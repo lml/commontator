@@ -1,30 +1,30 @@
-ru: 
-  activerecord: 
-    attributes: 
-      commontator/comment: 
+ru:
+  activerecord:
+    attributes:
+      commontator/comment:
         body: Комментарий
         creator: Создал
         editor: Редактировал
         thread: Обсуждение
-      commontator/subscription: 
+      commontator/subscription:
         subscriber: Подписчик
         thread: Обсуждение
-      commontator/thread: 
+      commontator/thread:
         commontable: Комментируем
-    models: 
-      commontator/comment: 
+    models:
+      commontator/comment:
         one: комментарий
         other: комментарии
-      commontator/subscription: 
+      commontator/subscription:
         one: подписка
         other: подписки
-      commontator/thread: 
+      commontator/thread:
         one: обсуждение
         other: обсуждения
-  commontator: 
+  commontator:
     anonymous: Аноним
-    comment: 
-      actions: 
+    comment:
+      actions:
         cancel: Отменить
         confirm_delete: "Вы уверены, что хотите удалить комментарий?"
         create: "Оставить Комментарий"
@@ -33,33 +33,32 @@ ru:
         new: "Новый Комментарий"
         undelete: Восстановить
         update: "Изменить Комментарий"
-      errors: 
+      errors:
         already_deleted: "Этот комментарий был удален."
         create: "Комментарий нельзя оставить потому что"
         double_posted: "этот комментарий уже есть."
         not_deleted: "Этот комментарий не удален."
         update: "Этот комментарий нельзя изменить потому что"
-      status: 
+      status:
         created_at: "Создан %{created_at}."
         deleted_by: "Комментарий был удален %{deleter_name}."
         updated_at: "Редактировал %{editor_name}, %{updated_at}."
-    email: 
-      comment_created: 
+    email:
+      comment_created:
         body: "%{creator_name} комментировал %{commontable_name}:"
         subject: "%{creator_name} оставил комментарий к %{commontable_name}"
       thread_link_html: "<a href=\"%{comment_url}\">Нажмите здесь</a> чтобы посмотреть все комментарии к %{commontable_name}."
-      undisclosed_recipients: "Не указан получатель"
     require_login: "Вы должны залогиниться прежде чем оставить комментарий."
-    subscription: 
-      actions: 
+    subscription:
+      actions:
         confirm_unsubscribe: "Вы уверены, что хотите отписать от обсуждения?"
         subscribe: Подписаться
         unsubscribe: Отписаться
-      errors: 
+      errors:
         already_subscribed: "Вы уже подписаны на это обсуждение."
         not_subscribed: "Вы не подписаны на это обсуждение."
-    thread: 
-      actions: 
+    thread:
+      actions:
         show_all: "Показать все комментарии"
         filter: "Фильтровать комментарии"
         close: "Закрыть обсуждение"
@@ -70,10 +69,10 @@ ru:
       errors:
         already_closed: "Это обсуждение было закрыто."
         not_closed: "Это обсуждение не закрыто."
-      status: 
+      status:
         cannot_post: "Новый комментарии нельзя разместить в данный момент."
         closed: "Комментарии (Закрыты %{closer_name})"
         open: Комментарии
-  time: 
-    formats: 
+  time:
+    formats:
       commontator: "%b %d %Y в %I:%M%p %Z"
