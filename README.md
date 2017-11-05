@@ -92,7 +92,7 @@ Follow the steps below to add commontator to your models and views:
   ```rb
   acts_as_commontable
   ```
-  if you want the thread and all its commets removed when your commontable model is destroyed pass
+  if you want the thread and all its comments removed when your commontable model is destroyed pass
   :destroy to `acts_as_commontable`:
 
   ```rb
