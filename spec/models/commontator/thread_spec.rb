@@ -113,6 +113,43 @@ module Commontator
       expect(@commontable.thread.comments).not_to include(comment)
     end
 
+    it 'must preserve the thread and comments by default when commontable is gone' do
+      comment = Comment.new
+      comment.thread = @thread
+      comment.creator = @user
+      comment.body = 'Undead'
+      comment.save!
+      comment.reload
+
+      expect(Thread.find(@thread.id)).to eq @thread
+      expect(Comment.find(comment.id)).to eq comment
+
+      @commontable.destroy!
+
+      expect(Thread.find(@thread.id)).to eq @thread
+      expect(Comment.find(comment.id)).to eq comment
+    end
+
+    it 'must delete the thread and comments when commontable has dependent :destroy' do
+      commontable = DummyDependentModel.create
+      thread = commontable.thread
+
+      comment = Comment.new
+      comment.thread = thread
+      comment.creator = @user
+      comment.body = 'Undead'
+      comment.save!
+      comment.reload
+
+      expect(Thread.find(thread.id)).to eq thread
+      expect(Comment.find(comment.id)).to eq comment
+
+      commontable.destroy!
+
+      expect{Thread.find(thread.id)}.to raise_exception(ActiveRecord::RecordNotFound)
+      expect{Comment.find(comment.id)}.to raise_exception(ActiveRecord::RecordNotFound)
+    end
+
     it 'must return nil subscription for nil or false subscriber' do
       expect(@thread.subscription_for(nil)).to eq nil
       expect(@thread.subscription_for(false)).to eq nil

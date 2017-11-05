@@ -9,14 +9,15 @@ module Commontator
     end
 
     module ClassMethods
-      def acts_as_commontable(options = {})
+      def acts_as_commontable(options = {}, dependent = nil)
         class_eval do
           cattr_accessor :commontable_config
           self.commontable_config = Commontator::CommontableConfig.new(options)
           self.is_commontable = true
 
           has_one :thread, as: :commontable,
-                           class_name: 'Commontator::Thread'
+                           class_name: 'Commontator::Thread',
+                           dependent: dependent
 
           validates_presence_of :thread
 

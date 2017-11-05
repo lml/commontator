@@ -51,6 +51,11 @@ ActiveRecord::Schema.define(version: 3) do
     t.index ["commontable_id", "commontable_type"], name: "index_commontator_threads_on_c_id_and_c_type", unique: true
   end
 
+  create_table "dummy_dependent_models", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "dummy_models", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
