@@ -12,11 +12,13 @@ module Commontator
       def acts_as_commontable(options = {})
         class_eval do
           cattr_accessor :commontable_config
+          association_options = options.extract!(:dependent)
           self.commontable_config = Commontator::CommontableConfig.new(options)
           self.is_commontable = true
 
           has_one :thread, as: :commontable,
-                           class_name: 'Commontator::Thread'
+                           class_name: 'Commontator::Thread',
+                           dependent: association_options[:dependent]
 
           validates_presence_of :thread
 

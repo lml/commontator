@@ -92,6 +92,15 @@ Follow the steps below to add commontator to your models and views:
   ```rb
   acts_as_commontable
   ```
+  if you want the thread and all its comments removed when your commontable model is destroyed pass
+  :destroy as the :dependent option to`acts_as_commontable`:
+
+  ```rb
+  acts_as_commontable dependent: :destroy
+  ```
+
+  instead of `:destroy` you may use any other supported `:dependent` option from rails `has_one`
+  association.
 
 2. Views
 
