@@ -5,7 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/lml/commontator/badges/gpa.svg)](https://codeclimate.com/github/lml/commontator)
 [![Code Coverage](https://codeclimate.com/github/lml/commontator/badges/coverage.svg)](https://codeclimate.com/github/lml/commontator)
 
-Commontator is a Rails engine for comments. It is compatible with Rails 3.1+ and Rails 4.
+Commontator is a Rails engine for comments. It is compatible with Rails 3.1+, 4 and 5.
 Being an engine means it is fully functional as soon as you install and
 configure the gem, providing models, views and controllers of its own.
 At the same time, almost anything about it can be configured or customized to suit your needs.
