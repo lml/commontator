@@ -39,10 +39,8 @@
       <%= comment.created_timestamp %>
     </span>
     <br/>
-    <span id="comment_<%= comment.id.to_s %>_updated_timestamp_span" class="comment_timestamp">
-    <% if comment.is_modified? %>
+    <span id="comment_<%= comment.id.to_s %>_updated_timestamp_span" class="comment_timestamp" style="<%= 'display: none;' unless comment.is_modified? %>">
       <%= comment.updated_timestamp %>
-    <% end %>
     </span>
   </div>
 </div>
