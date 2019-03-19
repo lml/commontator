@@ -36,12 +36,12 @@
   </div>
   <div id="comment_<%= comment.id.to_s %>_bottom_div" class="comment_div">
     <span id="comment_<%= comment.id.to_s %>_created_timestamp_span" class="comment_timestamp">
-      <%= comment.created_timestamp %>
+      <%= created_timestamp comment %>
     </span>
     <br/>
     <span id="comment_<%= comment.id.to_s %>_updated_timestamp_span" class="comment_timestamp">
     <% if comment.is_modified? %>
-      <%= comment.updated_timestamp %>
+      <%= updated_timestamp comment %>
     <% end %>
     </span>
   </div>

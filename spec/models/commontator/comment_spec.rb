@@ -44,39 +44,6 @@ module Commontator
 
       expect(@comment.is_deleted?).to eq false
     end
-
-    it 'must make proper timestamps' do
-      @comment.save!
-
-      expect(@comment.created_timestamp).to eq(
-        I18n.t('commontator.comment.status.created_at',
-               created_at: I18n.l(@comment.created_at,
-                                     format: :commontator))
-      )
-      expect(@comment.updated_timestamp).to eq(
-        I18n.t('commontator.comment.status.updated_at',
-               editor_name: @user.name,
-               updated_at: I18n.l(@comment.updated_at,
-                                     format: :commontator))
-      )
-
-      user2 = DummyUser.create
-      @comment.body = 'Something else'
-      @comment.editor = user2
-      @comment.save!
-
-      expect(@comment.created_timestamp).to eq(
-        I18n.t('commontator.comment.status.created_at',
-               created_at: I18n.l(@comment.created_at,
-                                     format: :commontator))
-      )
-      expect(@comment.updated_timestamp).to eq(
-        I18n.t('commontator.comment.status.updated_at',
-               editor_name: user2.name,
-               updated_at: I18n.l(@comment.updated_at,
-                                     format: :commontator))
-      )
-    end
   end
 end
 

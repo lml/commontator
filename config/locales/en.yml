@@ -62,9 +62,9 @@ en:
         not_deleted: "This comment is not deleted."
         update: "This comment could not be modified because:"
       status:
-        created_at: "Posted on %{created_at}."
+        created_at: "Posted %{created_at}."
         deleted_by: "Comment deleted by %{deleter_name}."
-        updated_at: "Last modified by %{editor_name} on %{updated_at}."
+        updated_at: "Last modified by %{editor_name} %{updated_at}."
     email:
       comment_created:
         body: "%{creator_name} commented on %{commontable_name}:"
