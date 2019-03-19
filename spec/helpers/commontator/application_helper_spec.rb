@@ -18,15 +18,13 @@ module Commontator
       @comment.save!
 
       expect(created_timestamp @comment).to eq(
-        I18n.t('commontator.comment.status.created_at',
-               :created_at => local_time_ago(@comment.created_at,
-                                             :format => :commontator))
+        I18n.t('commontator.comment.status.created_at_html',
+               :created_at => local_time_ago(@comment.created_at))
       )
       expect(updated_timestamp @comment).to eq(
-        I18n.t('commontator.comment.status.updated_at',
+        I18n.t('commontator.comment.status.updated_at_html',
                :editor_name => @user.name,
-               :updated_at => local_time_ago(@comment.updated_at,
-                                             :format => :commontator))
+               :updated_at => local_time_ago(@comment.updated_at))
       )
 
       user2 = DummyUser.create
@@ -35,15 +33,13 @@ module Commontator
       @comment.save!
 
       expect(created_timestamp @comment).to eq(
-        I18n.t('commontator.comment.status.created_at',
-               :created_at => local_time_ago(@comment.created_at,
-                                             :format => :commontator))
+        I18n.t('commontator.comment.status.created_at_html',
+               :created_at => local_time_ago(@comment.created_at))
       )
       expect(updated_timestamp @comment).to eq(
-        I18n.t('commontator.comment.status.updated_at',
+        I18n.t('commontator.comment.status.updated_at_html',
                :editor_name => user2.name,
-               :updated_at => local_time_ago(@comment.updated_at,
-                                             :format => :commontator))
+               :updated_at => local_time_ago(@comment.updated_at))
       )
     end
   end
