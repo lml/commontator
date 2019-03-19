@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 5.0"
   s.add_dependency "jquery-rails"
+  s.add_dependency "local_time"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

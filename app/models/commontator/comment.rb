@@ -62,17 +62,6 @@ module Commontator
       self.save
     end
 
-    def created_timestamp
-      I18n.t 'commontator.comment.status.created_at',
-             created_at: I18n.l(created_at, format: :commontator)
-    end
-
-    def updated_timestamp
-      I18n.t 'commontator.comment.status.updated_at',
-             editor_name: Commontator.commontator_name(editor || creator),
-             updated_at: I18n.l(updated_at, format: :commontator)
-    end
-
     ##################
     # Access Control #
     ##################
