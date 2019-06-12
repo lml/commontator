@@ -1,6 +1,7 @@
 *~
 *.gem
 .bundle/
+.byebug_history
 .DS_Store
 coverage/
 Gemfile.lock

@@ -1,4 +1,4 @@
-<% # Clients of this partial must supply the following variables:
+<% # Controllers that use this partial must supply the following variables:
    # comment
    # user
 %>
@@ -16,8 +16,7 @@
     </span>
     <span id="comment_<%= comment.id.to_s %>_actions_span" class="comment_actions">
       <%= render partial: 'commontator/comments/actions',
-                 locals: { comment: comment,
-                              user: user } %>
+                 locals: { comment: comment, user: user } %>
     </span>
   </div>
   <div id="comment_<%= comment.id.to_s %>_middle_div" class="comment_div">
@@ -26,8 +25,7 @@
     </span>
     <span id="comment_<%= comment.id.to_s %>_votes_span" class="comment_votes">
       <%= render partial: 'commontator/comments/votes',
-                 locals: { comment: comment,
-                              user: user } %>
+                 locals: { comment: comment, user: user } %>
     </span>
     <div id="comment_<%= comment.id.to_s %>_body_div" class="comment_body">
       <%= render partial: 'commontator/comments/body',

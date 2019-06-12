@@ -1,8 +1,5 @@
 # Load the Rails application.
-require File.expand_path('../application', __FILE__)
-
-require 'dummy_controllers'
+require_relative 'application'
 
 # Initialize the Rails application.
-Dummy::Application.initialize!
-
+Rails.application.initialize!

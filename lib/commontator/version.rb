@@ -1,3 +1,1 @@
-module Commontator
-  VERSION = "5.1.0"
-end
+COMMONTATOR_VERSION = '6.0.0'

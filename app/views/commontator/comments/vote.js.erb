@@ -1,6 +1,5 @@
 $("#comment_<%= @comment.id %>_votes_span").html("<%= escape_javascript(
-  render partial: 'votes',
-         locals: { comment: @comment,
-                      user: @user }) %>");
+  render partial: 'votes', locals: { comment: @comment, user: @user }
+) %>");
 
 <%= javascript_proc %>

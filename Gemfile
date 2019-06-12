@@ -14,6 +14,12 @@ gem 'jquery-rails'
 # your gem to rubygems.org.
 
 # To use debugger
-# gem 'debugger'
+gem 'byebug'
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '~> 1.4.0', require: false
+gem 'listen'
+
+# Code coverage
 gem 'codeclimate-test-reporter', require: false
 gem 'simplecov',                 require: false

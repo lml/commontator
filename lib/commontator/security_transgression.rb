@@ -1,4 +1,2 @@
-module Commontator
-  class SecurityTransgression < StandardError
-  end
+class Commontator::SecurityTransgression < StandardError
 end

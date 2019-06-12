@@ -6,9 +6,9 @@ require "commontator/version"
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "commontator"
-  s.version     = Commontator::VERSION
+  s.version     = COMMONTATOR_VERSION
   s.authors     = ["Dante Soares"]
-  s.email       = ["dms3@rice.edu"]
+  s.email       = ["dante.m.soares@rice.edu"]
   s.homepage    = "http://github.com/lml/commontator"
   s.license     = 'MIT'
   s.summary     = "Allows users to comment on any model in your application."
@@ -20,10 +20,9 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", ">= 5.0"
   s.add_dependency "jquery-rails"
 
-  s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "rails-controller-testing"
   s.add_development_dependency "acts_as_votable"
   s.add_development_dependency "mailgun_rails"
-  s.add_development_dependency "byebug"
+  s.add_development_dependency "sqlite3"
 end

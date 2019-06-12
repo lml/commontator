@@ -1,7 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
-require 'spec_helper'
-require File.expand_path("../dummy/config/environment", __FILE__)
+
+require_relative 'spec_helper'
+require_relative 'dummy/config/environment'
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rails-controller-testing'
@@ -51,10 +52,6 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 end
 
-Commontator::ApplicationController.class_eval do
-  include ApplicationHelper
-end
-
 def setup_model_spec
   @user = DummyUser.create
   @commontable = DummyModel.create
@@ -62,8 +59,6 @@ def setup_model_spec
 end
 
 def setup_controller_spec
-  class_eval {include ApplicationHelper}
-  sign_out
   setup_model_spec
 end
 
