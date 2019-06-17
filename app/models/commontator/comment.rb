@@ -6,6 +6,9 @@ class Commontator::Comment < ActiveRecord::Base
 
   has_many :children, class_name: name, inverse_of: :parent
 
+  serialize :ancestor_ids, JSON
+  serialize :descendant_ids, JSON
+
   validates :editor, presence: true, on: :update
   validates :body, presence: true, uniqueness: {
     scope: [ :creator_type, :creator_id, :thread_id, :deleted_at ],
@@ -35,7 +38,7 @@ class Commontator::Comment < ActiveRecord::Base
 
   def get_vote_by(user)
     return nil unless is_votable? && !user.nil? && user.is_commontator
-    votes_for.where(voter_type: user.class.name, voter_id: user.id).first
+    votes_for.find_by(voter_type: user.class.name, voter_id: user.id)
   end
 
   def update_cached_votes(vote_scope = nil)

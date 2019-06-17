@@ -1,4 +1,20 @@
-sudo: false
+branches:
+  only: master
+dist: xenial
 language: ruby
-rvm: 2.6.1
+addons:
+  postgresql: 10
+services:
+  - mysql
+  - postgresql
+env:
+  matrix:
+    - COMMONTATOR_DATABASE_ADAPTER=sqlite3
+    - COMMONTATOR_DATABASE_ADAPTER=mysql2
+      COMMONTATOR_DATABASE_USERNAME=root
+      COMMONTATOR_DATABASE_PASSWORD=
+    - COMMONTATOR_DATABASE_ADAPTER=postgresql
+      COMMONTATOR_DATABASE_USERNAME=postgres
+rvm: 2.6.3
 cache: bundler
+before_script: bundle exec rake db:setup --trace

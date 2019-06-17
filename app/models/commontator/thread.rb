@@ -99,7 +99,7 @@ class Commontator::Thread < ActiveRecord::Base
   def subscription_for(subscriber)
     return nil if !subscriber || !subscriber.is_commontator
 
-    subscriber.subscriptions.where(thread_id: self.id).first
+    subscriber.subscriptions.find_by(thread_id: self.id)
   end
 
   def subscribe(subscriber)

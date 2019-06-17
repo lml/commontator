@@ -3,24 +3,28 @@
 #
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
+<% commontator_database_adapter = ENV.fetch('COMMONTATOR_DATABASE_ADAPTER', 'sqlite3') %>
+
+default: &default
+  adapter: <%= commontator_database_adapter %>
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
+  host: localhost
+  username: <%= ENV.fetch('COMMONTATOR_DATABASE_USERNAME', 'commontator') %>
+  password: <%= ENV.fetch('COMMONTATOR_DATABASE_PASSWORD', 'commontator') %>
+
 development:
-  adapter: sqlite3
-  database: db/development.sqlite3
-  pool: 5
-  timeout: 5000
+  <<: *default
+  database: <%= ENV.fetch(
+    'COMMONTATOR_DEV_DATABASE',
+    commontator_database_adapter == 'sqlite3' ? 'db/development.sqlite3' : 'commontator_dev'
+  ) %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  adapter: sqlite3
-  database: db/test.sqlite3
-  pool: 5
-  timeout: 5000
-
-production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
-
+  <<: *default
+  database: <%= ENV.fetch(
+    'COMMONTATOR_TEST_DATABASE',
+    commontator_database_adapter == 'sqlite3' ? 'db/test.sqlite3' : 'commontator_test'
+  ) %>
