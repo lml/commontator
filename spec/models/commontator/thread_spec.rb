@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe Commontator::Thread, type: :model do
   before { setup_model_spec }
 
-  it 'must have a config' do
+  it 'has a config' do
     expect(@thread.config).to be_a(Commontator::CommontableConfig)
     @thread.update_attribute(:commontable_id, nil)
     expect(Commontator::Thread.find(@thread.id).config).to eq Commontator
   end
 
-  it 'must order all comments' do
+  it 'orders all comments' do
     comment = Commontator::Comment.new
     comment.thread = @thread
     comment.creator = @user
@@ -28,7 +28,7 @@ RSpec.describe Commontator::Thread, type: :model do
     ordered_comments.each { |oc| expect(comments).to include(oc) }
   end
 
-  it 'must list all subscribers' do
+  it 'lists all subscribers' do
     @thread.subscribe(@user)
     @thread.subscribe(DummyUser.create)
 
@@ -37,7 +37,7 @@ RSpec.describe Commontator::Thread, type: :model do
     end
   end
 
-  it 'must find the subscription for each user' do
+  it 'finds the subscription for each user' do
     @thread.subscribe(@user)
     user2 = DummyUser.create
     @thread.subscribe(user2)
@@ -50,7 +50,7 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(subscription.subscriber).to eq user2
   end
 
-  it 'must know if it is closed' do
+  it 'knows if it is closed' do
     expect(@thread.is_closed?).to eq false
 
     @thread.close(@user)
@@ -63,7 +63,7 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(@thread.is_closed?).to eq false
   end
 
-  it 'must mark comments as read' do
+  it 'marks comments as read' do
     @thread.subscribe(@user)
 
     subscription = @thread.subscription_for(@user)
@@ -77,12 +77,14 @@ RSpec.describe Commontator::Thread, type: :model do
 
     expect(subscription.reload.unread_comments.count).to eq 1
 
+    # Wait until 1 second after the comment was created
+    sleep([1 - (Time.current - comment.created_at), 0].max)
     @thread.mark_as_read_for(@user)
 
     expect(subscription.reload.unread_comments.count).to eq 0
   end
 
-  it 'must be able to clear comments' do
+  it 'clears comments' do
     comment = Commontator::Comment.new
     comment.thread = @thread
     comment.creator = @user
@@ -110,7 +112,7 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(@commontable.thread.comments).not_to include(comment)
   end
 
-  it 'must preserve the thread and comments by default when commontable is gone' do
+  it 'preserves the thread and comments by default when the commontable is gone' do
     comment = Commontator::Comment.new
     comment.thread = @thread
     comment.creator = @user
@@ -127,7 +129,7 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(Commontator::Comment.find(comment.id)).to eq comment
   end
 
-  it 'must delete the thread and comments when commontable has dependent :destroy' do
+  it 'deletes the thread and comments when commontable has dependent :destroy' do
     commontable = DummyDependentModel.create
     thread = commontable.thread
 
@@ -149,7 +151,7 @@ RSpec.describe Commontator::Thread, type: :model do
     end.to raise_exception(ActiveRecord::RecordNotFound)
   end
 
-  it 'must return nil subscription for nil or false subscriber' do
+  it 'returns nil subscription for nil or false subscriber' do
     expect(@thread.subscription_for(nil)).to eq nil
     expect(@thread.subscription_for(false)).to eq nil
   end

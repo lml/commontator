@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Commontator::ActsAsCommontable, type: :lib do
-  it 'must add methods to ActiveRecord and subclasses' do
+  it 'adds methods to ActiveRecord and subclasses' do
     expect(ActiveRecord::Base).to respond_to(:acts_as_commontable)
     expect(ActiveRecord::Base).to respond_to(:is_commontable)
     expect(ActiveRecord::Base.is_commontable).to eq false
@@ -13,7 +13,7 @@ RSpec.describe Commontator::ActsAsCommontable, type: :lib do
     expect(DummyUser.is_commontable).to eq false
   end
 
-  it 'must modify models that act_as_commontable' do
+  it 'modifies models that act_as_commontable' do
     dummy = DummyModel.create
     expect(dummy).to respond_to(:thread)
     expect(dummy).to respond_to(:commontable_config)

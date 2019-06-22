@@ -4,7 +4,7 @@ RSpec.describe Commontator::SharedHelper, type: :lib do
   let(:controller) { DummyModelsController.new }
   before { setup_controller_spec }
 
-  it 'must show commontator thread' do
+  it 'shows commontator thread' do
     @user.can_read = true
     controller.current_user = @user
 

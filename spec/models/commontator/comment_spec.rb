@@ -10,13 +10,13 @@ RSpec.describe Commontator::Comment, type: :model do
     @comment.body = 'Something'
   end
 
-  it 'must be votable if acts_as_votable is installed' do
+  it 'is votable if acts_as_votable is installed' do
     expect(described_class).to respond_to(:acts_as_votable)
     expect(@comment.is_votable?).to eq true
     expect(@comment.acts_as_votable_called).to eq true
   end
 
-  it 'must know if it has been modified' do
+  it 'knows if it has been modified' do
     @comment.save!
 
     expect(@comment.is_modified?).to eq false
@@ -28,7 +28,7 @@ RSpec.describe Commontator::Comment, type: :model do
     expect(@comment.is_modified?).to eq true
   end
 
-  it 'must know if it has been deleted' do
+  it 'knows if it has been deleted' do
     user = DummyUser.new
 
     expect(@comment.is_deleted?).to eq false
@@ -44,7 +44,7 @@ RSpec.describe Commontator::Comment, type: :model do
     expect(@comment.is_deleted?).to eq false
   end
 
-  it 'must make proper timestamps' do
+  it 'makes proper timestamps' do
     @comment.save!
 
     expect(@comment.created_timestamp).to eq(

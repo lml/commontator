@@ -15,7 +15,7 @@ RSpec.describe Commontator::SubscriptionsMailer, type: :mailer do
     @recipients = @thread.subscribers.reject { |sub| sub == @user }
   end
 
-  it 'must create deliverable mail' do
+  it 'creates deliverable mail' do
     mail = described_class.comment_created(@comment, @recipients)
     expect(mail.to).to be_nil
     expect(mail.cc).to be_nil
@@ -26,7 +26,7 @@ RSpec.describe Commontator::SubscriptionsMailer, type: :mailer do
     expect(mail.deliver_now).to eq mail
   end
 
-  context 'uses Mailgun' do
+  context 'with Mailgun' do
     let(:recipient_variables) do
       @recipients.each_with_object({}) { |user, memo| memo[user.email] = {} }
     end
@@ -36,7 +36,7 @@ RSpec.describe Commontator::SubscriptionsMailer, type: :mailer do
       )
     end
 
-    it 'must create deliverable mail' do
+    it 'creates deliverable mail' do
       mail = described_class.comment_created(@comment, @recipients)
       expect(mail.to.size).to eq 1
       expect(mail.to).to include(@user2.email)

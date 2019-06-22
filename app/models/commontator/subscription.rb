@@ -5,7 +5,7 @@ class Commontator::Subscription < ActiveRecord::Base
   validates :thread, presence: true, uniqueness: { scope: [ :subscriber_type, :subscriber_id ] }
 
   def self.comment_created(comment)
-    recipients = comment.thread.subscribers.reject {|sub| sub == comment.creator}
+    recipients = comment.thread.subscribers.reject { |sub| sub == comment.creator }
     return if recipients.empty?
 
     mail = Commontator::SubscriptionsMailer.comment_created(comment, recipients)
@@ -14,6 +14,6 @@ class Commontator::Subscription < ActiveRecord::Base
 
   def unread_comments
     created_at = Commontator::Comment.arel_table[:created_at]
-    thread.filtered_comments.where(created_at.gt(updated_at))
+    thread.filtered_comments.where(created_at.gteq(updated_at))
   end
 end

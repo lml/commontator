@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Commontator, type: :lib do
-  it 'must respond to all attributes' do
+  it 'responds to all attributes' do
     (
       Commontator::Config::ENGINE_ATTRIBUTES +
       Commontator::Config::COMMONTATOR_ATTRIBUTES +
@@ -11,7 +11,7 @@ RSpec.describe Commontator, type: :lib do
     end
   end
 
-  it 'must be configurable' do
+  it 'is configurable' do
     l1 = ->(controller) { controller.current_user }
     l2 = ->(controller) { controller.current_user }
     Commontator.configure do |config|
