@@ -13,7 +13,7 @@ RSpec.describe Commontator::Comment, type: :model do
   it 'must be votable if acts_as_votable is installed' do
     expect(described_class).to respond_to(:acts_as_votable)
     expect(@comment.is_votable?).to eq true
-    expect(@comment.acts_as_votable_initialized).to eq true
+    expect(@comment.acts_as_votable_called).to eq true
   end
 
   it 'must know if it has been modified' do

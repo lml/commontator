@@ -155,7 +155,8 @@ Sometimes you may need to add users automatically upon some event. For example, 
 You can allow users to vote on each others' comments by adding the `acts_as_votable` gem to your gemfile:
 
 ```rb
-gem 'acts_as_votable'
+gem 'acts_as_votable' # Put this before commontator
+gem 'commontator'
 ```
 
 And enabling the relevant option in commontator's initializer:

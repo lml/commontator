@@ -15,11 +15,21 @@ class Commontator::Comment < ActiveRecord::Base
     message: I18n.t('commontator.comment.errors.double_posted')
   }
 
+  cattr_accessor :acts_as_votable_called
+  self.acts_as_votable_called = false
+
   protected
 
-  cattr_accessor :acts_as_votable_initialized
+  def self.acts_as_votable_if_present
+    return false unless respond_to?(:acts_as_votable)
+
+    acts_as_votable
+    self.acts_as_votable_called = true
+  end
 
   public
+
+  acts_as_votable_if_present
 
   def is_modified?
     !editor.nil?
@@ -29,11 +39,11 @@ class Commontator::Comment < ActiveRecord::Base
     thread.comments.last == self
   end
 
+  # FIXME
   def is_votable?
-    return true if acts_as_votable_initialized
-    return false unless self.class.respond_to?(:acts_as_votable)
-    self.class.acts_as_votable
-    self.class.acts_as_votable_initialized = true
+    return true if acts_as_votable_called
+
+    self.class.acts_as_votable_if_present
   end
 
   def get_vote_by(user)
