@@ -21,19 +21,22 @@
   </div>
 <% end %>
 
-<%= form_for([commontator, thread, comment],
-             remote: !no_remote) do |f| %>
+<%= form_for([commontator, thread, comment], remote: !no_remote) do |form| %>
 
   <%= hidden_field_tag :per_page, per_page %>
-  
+
+  <%= form.hidden_field :parent_id %>
+
+  <%= t('commontator.comment.replying') unless comment.parent.nil? %>
+
   <div class="comment_form_field">
-    <%= f.text_area :body, rows: '7' %>
-    <%= javascript_tag('Commontator.initMentions()') if Commontator.mentions_enabled %>
+    <%= form.text_area :body, rows: '7' %>
+    <%= javascript_tag('Commontator.initMentions();') if config.mentions_enabled %>
   </div>
-  
+
   <div class="comment_form_actions">
-    <%= f.submit t("commontator.comment.actions.#{comment.id.blank? ? 'create' : 'update'}") %>
-    <%= f.submit t('commontator.comment.actions.cancel'), name: 'cancel' %>
+    <%= form.submit t("commontator.comment.actions.#{comment.id.blank? ? 'create' : 'update'}") %>
+    <%= form.submit t('commontator.comment.actions.cancel'), name: 'cancel' %>
   </div>
-  
+
 <% end %>

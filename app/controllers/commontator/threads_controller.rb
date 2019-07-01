@@ -45,7 +45,7 @@ class Commontator::ThreadsController < Commontator::ApplicationController
 
   # GET /threads/1/mentions.json
   def mentions
-    security_transgression_unless @thread.can_be_read_by?(@user) && Commontator.mentions_enabled
+    security_transgression_unless @thread.can_be_read_by?(@user) && @thread.config.mentions_enabled
     query = params[:q].to_s
 
     if query.size < 3
@@ -59,8 +59,10 @@ class Commontator::ThreadsController < Commontator::ApplicationController
   protected
 
   def serialized_mentions(query)
-    { mentions: Commontator.commontator_mentions(@user, @thread, query).map do |user|
-      { id: user.id, name: Commontator.commontator_name(user), type: 'user' }
-    end }
+    {
+      mentions: Commontator.commontator_mentions(@user, @thread, query).map do |user|
+        { id: user.id, name: Commontator.commontator_name(user), type: 'user' }
+      end
+    }
   end
 end

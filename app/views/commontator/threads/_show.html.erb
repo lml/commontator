@@ -49,7 +49,6 @@
                     id: "thread_#{thread.id.to_s}_#{filter_string}_link",
                     class: "thread_#{filter_string}_link",
                     remote: true %>
-
         &nbsp;
       <% end %>
 
@@ -74,22 +73,21 @@
   <% end %>
 
   <div id="thread_<%= thread.id.to_s %>_comment_list_div" class="thread_comment_list">
-    <% comments = show_all ? thread.ordered_comments(true) : \
-                             thread.paginated_comments(page, per_page) %>
+    <% comments = thread.paginated_comments(page, per_page, show_all) %>
+
     <%= render partial: 'commontator/comments/list',
-               locals: { comments: comments,
-                            user: user } %>
+               locals: { comments: comments, user: user, per_page: per_page } %>
   </div>
 
-  <% if thread.will_paginate? && !show_all %>
+  <% if thread.will_paginate? %>
     <div id="thread_<%= thread.id.to_s %>_pagination_div" class="thread_pagination">
       <div id="thread_<%= thread.id.to_s %>_page_entries_info_div" class="thread_page_entries_info">
         <%= page_entries_info comments,
                               params: { controller: 'commontator/threads',
-                                           action: 'show',
-                                           id: thread.id,
-                                           page: page,
-                                           per_page: per_page } %>.
+                                        action: 'show',
+                                        id: thread.id,
+                                        page: page,
+                                        per_page: per_page } %>.
       </div>
 
       <div id="thread_<%= thread.id.to_s %>_will_paginate_div" class="thread_will_paginate">
@@ -98,10 +96,10 @@
                           routes_proxy: commontator,
                           remote: true,
                           params: { controller: 'commontator/threads',
-                                       action: 'show',
-                                       id: thread.id,
-                                       page: page,
-                                       per_page: per_page } %>
+                                    action: 'show',
+                                    id: thread.id,
+                                    page: page,
+                                    per_page: per_page } %>
       </div>
     </div>
   <% end %>
@@ -113,6 +111,5 @@
 </span>
 
 <script type="text/javascript">
-  <%= render partial: 'commontator/threads/hide_show_links.js',
-             locals: { thread: thread } %>
+  <%= render partial: 'commontator/threads/hide_show_links.js', locals: { thread: thread } %>
 </script>

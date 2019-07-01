@@ -1,8 +1,8 @@
 <%= render partial: 'commontator/threads/show',
            locals: { thread: @thread,
-                        user: @user,
-                        page: @thread.new_comment_page(@per_page),
-                        per_page: @per_page } %>
+                     user: @user,
+                     page: @thread.new_comment_page(@per_page),
+                     per_page: @per_page } %>
 
 <% unless @new_comment.nil? %>
   $("#thread_<%= @thread.id %>_new_comment_form_div").html("<%= escape_javascript(

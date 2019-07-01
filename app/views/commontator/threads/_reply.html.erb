@@ -1,9 +1,11 @@
-<% # Controllers that use this partial must supply the following variables:
-   # thread
-   # user
-   # per_page
+<%
+  # Controllers that use this partial must supply the following variables:
+  # thread
+  # user
+  # per_page
 
-   hidden_class = @new_comment.nil? ? ' commontator_hidden' : '' %>
+  hidden_class = @new_comment.nil? ? ' commontator_hidden' : ''
+%>
 
 <div id="thread_<%= thread.id %>_reply" class="thread_reply">
   <% if thread.is_closed? %>
@@ -15,9 +17,7 @@
     hidden_class %>">
       <% unless @new_comment.nil? %>
         <%= render partial: 'commontator/comments/form',
-                   locals: { comment: @new_comment,
-                                thread: thread,
-                                per_page: per_page } %>
+                   locals: { comment: @new_comment, thread: thread, per_page: per_page } %>
       <% end %>
     </div>
 

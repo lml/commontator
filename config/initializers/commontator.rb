@@ -26,7 +26,6 @@ Commontator.configure do |config|
   config.javascript_proc = ->(view) { '$("#error_explanation").remove();' }
 
 
-
   # User (acts_as_commontator) Configuration
 
   # user_name_proc
@@ -79,6 +78,29 @@ Commontator.configure do |config|
   # Default: ->(user, mailer) { user.try(:email) || '' }
   config.user_email_proc = ->(user, mailer) { user.try(:email) || '' }
 
+  # user_mentions_proc
+  # Type: Proc
+  # Arguments:
+  #   the current user (acts_as_commontator)
+  #   the current thread (Commontator::Thread)
+  #   the search query inputted by user (String)
+  # Returns: an ActiveRecord Relation object
+  # Important notes:
+  #
+  #  - This proc is only used if you enable mentions (see config below)
+  #
+  #  - The proc will be called internally with an empty search string.
+  #    In that case, it MUST return all users that can be mentioned.
+  #
+  #  - With mentions enabled, any registered user in your app is able
+  #    to call this proc with any search query >= 3 characters.
+  #    Make sure to handle SQL escaping properly and that the
+  #    attribute being searched does not contain sensitive information.
+  #
+  # Default: ->(current_user, query) { current_user.class.where('username LIKE ?', "#{query}%") }
+  config.user_mentions_proc = ->(current_user, thread, query) do
+    current_user.class.where('username LIKE ?', "#{query}%")
+  end
 
 
   # Thread/Commontable (acts_as_commontable) Configuration
@@ -157,7 +179,7 @@ Commontator.configure do |config|
 
   # vote_count_proc
   # Type: Proc
-  # Arguments: a thread (Commontator::Thread), pos (Fixnum), neg (Fixnum)
+  # Arguments: a thread (Commontator::Thread), pos (Integer), neg (Integer)
   # Returns: vote count to be displayed (String)
   # pos is the number of likes, or the rating, or the reputation
   # neg is the number of dislikes, if applicable, or 0 otherwise
@@ -206,7 +228,7 @@ Commontator.configure do |config|
   config.comment_reply_style = :n
 
   # comments_per_page
-  # Type: Fixnum or nil
+  # Type: Integer or nil
   # Number of comments to display in each page
   # Set to nil to disable pagination
   # Any other value requires the will_paginate gem
@@ -272,28 +294,4 @@ Commontator.configure do |config|
   #   true  (mentions enabled)
   # Default: false
   config.mentions_enabled = false
-
-  # user_mentions_proc
-  # Type: Proc
-  # Arguments:
-  #   the current user (acts_as_commontator)
-  #   the current thread (Commontator::Thread)
-  #   the search query inputted by user (String)
-  # Returns: an ActiveRecord Relation object
-  # Important notes:
-  #
-  #  - The proc will be called internally with an empty search string.
-  #    In that case, it MUST return all users that can be mentioned.
-  #
-  #  - With mentions enabled, any registered user in your app is able
-  #    to call this proc with any search query >= 3 characters.
-  #    Make sure to handle SQL escaping properly and that the
-  #    attribute being searched does not contain sensitive information.
-  #
-  # Default: ->(current_user, query) {
-  #   current_user.class.where('username LIKE ?', "#{query}%")
-  # }
-  config.user_mentions_proc = ->(current_user, thread, query) do
-    current_user.class.where('username LIKE ?', "#{query}%")
-  end
 end

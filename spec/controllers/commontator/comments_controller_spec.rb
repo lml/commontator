@@ -125,8 +125,8 @@ RSpec.describe Commontator::CommentsController, type: :controller do
             end
 
             context 'mentions are disabled' do
-              before(:all) { Commontator.mentions_enabled = false }
-              after(:all)  { Commontator.mentions_enabled = true }
+              before { @thread.config.mentions_enabled = false }
+              after  { @thread.config.mentions_enabled = true }
 
               it 'does not subscribe any users' do
                 expect{ call_request }.not_to change { Commontator::Subscription.count }
@@ -537,11 +537,11 @@ RSpec.describe Commontator::CommentsController, type: :controller do
   { anonymous: nil, :'same user' => @user, unauthorized: DummyUser.create }.each do |ctx, user|
     context ctx.to_s do
       before do
+        expect(Commontator::Comment.is_votable?).to eq true
+
         @user.can_read = true
 
         controller.current_user = user
-
-        expect(@comment.is_votable?).to eq true
       end
 
       context 'PUT #upvote' do

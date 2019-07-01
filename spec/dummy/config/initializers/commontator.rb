@@ -6,7 +6,11 @@ Commontator.configure do |config|
     user = context.current_user
     return user unless user.nil? && Rails.env.development?
 
-    DummyUser.order(:created_at).first.tap { |user| user.can_read = true }
+    DummyUser.order(:created_at).first.tap do |user|
+      user.can_read = true
+      user.can_edit = true
+      user.is_admin = true
+    end
   end
 
   config.user_name_proc = ->(user) { user.try(:name) || 'Anonymous' }
@@ -17,11 +21,15 @@ Commontator.configure do |config|
 
   config.comment_voting = :ld
 
+  config.comment_reply_style = :q
+
+  config.comments_per_page = 10
+
   config.thread_subscription = :m
 
   config.mentions_enabled = true
 
-  config.user_mentions_proc = ->(current_user, thread, query) {
+  config.user_mentions_proc = ->(current_user, thread, query) do
     'DummyUser'.include?(query) ? DummyUser.all : DummyUser.none
-  }
+  end
 end

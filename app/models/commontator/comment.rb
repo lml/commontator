@@ -18,6 +18,7 @@ class Commontator::Comment < ActiveRecord::Base
   cattr_accessor :will_paginate
   self.will_paginate = begin
     require 'will_paginate'
+
     true
   rescue LoadError
     false
@@ -27,9 +28,18 @@ class Commontator::Comment < ActiveRecord::Base
   self.is_votable = begin
     require 'acts_as_votable'
     acts_as_votable
+
     true
   rescue LoadError
     false
+  end
+
+  def self.will_paginate?
+    will_paginate
+  end
+
+  def self.is_votable?
+    is_votable
   end
 
   def is_modified?
@@ -40,16 +50,8 @@ class Commontator::Comment < ActiveRecord::Base
     thread.comments.last == self
   end
 
-  def will_paginate?
-    will_paginate
-  end
-
-  def is_votable?
-    is_votable
-  end
-
   def get_vote_by(user)
-    return nil unless is_votable? && !user.nil? && user.is_commontator
+    return nil unless self.class.is_votable? && !user.nil? && user.is_commontator
 
     votes_for.find_by(voter_type: user.class.name, voter_id: user.id)
   end
@@ -118,7 +120,8 @@ class Commontator::Comment < ActiveRecord::Base
   end
 
   def can_be_voted_on?
-    !thread.is_closed? && !is_deleted? && thread.config.comment_voting.to_sym != :n && is_votable?
+    !thread.is_closed? && !is_deleted? &&
+    thread.config.comment_voting.to_sym != :n && self.class.is_votable?
   end
 
   def can_be_voted_on_by?(user)

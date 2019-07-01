@@ -171,8 +171,8 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
       end
 
       context 'mentions disabled' do
-        before(:all) { Commontator.mentions_enabled = false }
-        after(:all)  { Commontator.mentions_enabled = true }
+        before { @thread.config.mentions_enabled = false }
+        after  { @thread.config.mentions_enabled = true }
 
         it 'returns 403 Forbidden' do
           call_request

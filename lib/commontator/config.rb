@@ -4,8 +4,7 @@ module Commontator::Config
   # Can be set in initializer only
   ENGINE_ATTRIBUTES = [
     :current_user_proc,
-    :javascript_proc,
-    :mentions_enabled
+    :javascript_proc
   ]
 
   # Can be set in initializer or passed as an option to acts_as_commontator
@@ -34,7 +33,8 @@ module Commontator::Config
     :email_from_proc,
     :commontable_name_proc,
     :comment_url_proc,
-    :comment_reply_style
+    :comment_reply_style,
+    :mentions_enabled
   ]
 
   DEPRECATED_ATTRIBUTES = [
@@ -100,8 +100,10 @@ module Commontator::Config
   module ClassMethods
     def configure
       self.show_deprecation_warning = false
+
       yield self
-      warn "\n[COMMONTATOR] We recommend that you backup the config/initializers/commontator.rb file, rename or remove it, run rake commontator:install:initializers to copy the new default one, then configure it to your liking.\n" if show_deprecation_warning
+
+      warn("\n[COMMONTATOR] We recommend that you backup the config/initializers/commontator.rb file, rename or remove it, run rake commontator:install:initializers to copy the new default one, then configure it to your liking.\n") if show_deprecation_warning
     end
 
     def commontator_config(user)

@@ -17,7 +17,7 @@ class Commontator::Thread < ActiveRecord::Base
   end
 
   def is_filtered?
-    will_paginate? || config.comment_filter
+    !config.comment_filter.nil?
   end
 
   def filtered_comments
@@ -27,8 +27,8 @@ class Commontator::Thread < ActiveRecord::Base
     comments.where(cf)
   end
 
-  def ordered_comments(unfiltered = false)
-    vc = unfiltered ? comments : filtered_comments
+  def ordered_comments(show_all = false)
+    vc = show_all ? comments : filtered_comments
     cc = Commontator::Comment.arel_table
     case config.comment_order.to_sym
     when :l
@@ -44,8 +44,8 @@ class Commontator::Thread < ActiveRecord::Base
     end
   end
 
-  def paginated_comments(page = 1, per_page = config.comments_per_page)
-    oc = ordered_comments
+  def paginated_comments(page = 1, per_page = config.comments_per_page, show_all = false)
+    oc = ordered_comments(show_all)
     return oc unless will_paginate?
 
     oc.paginate(page: page, per_page: per_page)

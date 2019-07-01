@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root to: 'dummy_models#show', id: 1
+  root controller: :dummy_models, action: :show, id: 1
 
-  resources :dummy_models, only: :show do
-    get :hide, on: :member
-  end
+  resources :dummy_models, only: :show
 
-  mount Commontator::Engine => '/commontator'
+  mount Commontator::Engine => :commontator
 end

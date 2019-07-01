@@ -7,6 +7,13 @@ class Commontator::CommentsController < Commontator::ApplicationController
     @comment = Commontator::Comment.new
     @comment.thread = @thread
     @comment.creator = @user
+    parent_id = params.dig(:comment, :parent_id)
+    unless parent_id.blank?
+      parent = Commontator::Comment.find parent_id
+      @comment.parent = parent
+      @comment.body = "<blockquote><div>#{Commontator.commontator_name(parent.creator)
+        }</div>\n#{parent.body}\n</blockquote>" if @thread.config.comment_reply_style == :q
+    end
     security_transgression_unless @comment.can_be_created_by?(@user)
 
     @per_page = params[:per_page] || @thread.config.comments_per_page
@@ -23,12 +30,14 @@ class Commontator::CommentsController < Commontator::ApplicationController
     @comment = Commontator::Comment.new
     @comment.thread = @thread
     @comment.creator = @user
-    @comment.body = params[:comment].nil? ? nil : params[:comment][:body]
+    @comment.body = params.dig(:comment, :body)
+    parent_id = params.dig(:comment, :parent_id)
+    @comment.parent = Commontator::Comment.find(parent_id) unless parent_id.blank?
     security_transgression_unless @comment.can_be_created_by?(@user)
-    subscribe_mentioned if Commontator.mentions_enabled
+    subscribe_mentioned if @thread.config.mentions_enabled
 
     respond_to do |format|
-      if  !params[:cancel].nil?
+      if  !params[:cancel].blank?
         format.html { redirect_to @thread }
         format.js { render :cancel }
       elsif @comment.save
@@ -60,12 +69,12 @@ class Commontator::CommentsController < Commontator::ApplicationController
   # PUT /comments/1
   def update
     security_transgression_unless @comment.can_be_edited_by?(@user)
-    @comment.body = params[:comment].nil? ? nil : params[:comment][:body]
+    @comment.body = params.dig(:comment, :body)
     @comment.editor = @user
-    subscribe_mentioned if Commontator.mentions_enabled
+    subscribe_mentioned if @thread.config.mentions_enabled
 
     respond_to do |format|
-      if !params[:cancel].nil?
+      if !params[:cancel].blank?
         format.html { redirect_to @thread }
         format.js { render :cancel }
       elsif @comment.save
