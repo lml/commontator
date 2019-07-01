@@ -1,4 +1,4 @@
-require 'commontator/config'
+require_relative 'config'
 
 class Commontator::CommontableConfig
   Commontator::Config::COMMONTABLE_ATTRIBUTES.each do |attribute|

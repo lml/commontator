@@ -1,5 +1,5 @@
-require 'commontator/shared_helper'
-require 'commontator/security_transgression'
+require_relative 'shared_helper'
+require_relative 'security_transgression'
 
 module Commontator::Controllers
   def self.included(base)

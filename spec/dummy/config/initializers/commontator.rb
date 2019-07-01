@@ -2,6 +2,13 @@
 Commontator.configure do |config|
   config.javascript_proc = ->(view) { '// Some javascript' }
 
+  config.current_user_proc = ->(context) do
+    user = context.current_user
+    return user unless user.nil? && Rails.env.development?
+
+    DummyUser.order(:created_at).first.tap { |user| user.can_read = true }
+  end
+
   config.user_name_proc = ->(user) { user.try(:name) || 'Anonymous' }
 
   config.thread_read_proc = ->(thread, user) { user && user.can_read }

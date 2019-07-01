@@ -14,4 +14,3 @@
 //= require jquery_ujs
 //= require commontator/application
 //= require_tree .
-

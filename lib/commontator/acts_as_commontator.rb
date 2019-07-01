@@ -1,4 +1,4 @@
-require 'commontator/commontator_config'
+require_relative 'commontator_config'
 
 module Commontator::ActsAsCommontator
   def self.included(base)

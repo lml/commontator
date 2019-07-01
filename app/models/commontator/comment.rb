@@ -15,21 +15,22 @@ class Commontator::Comment < ActiveRecord::Base
     message: I18n.t('commontator.comment.errors.double_posted')
   }
 
-  cattr_accessor :acts_as_votable_called
-  self.acts_as_votable_called = false
-
-  protected
-
-  def self.acts_as_votable_if_present
-    return false unless respond_to?(:acts_as_votable)
-
-    acts_as_votable
-    self.acts_as_votable_called = true
+  cattr_accessor :will_paginate
+  self.will_paginate = begin
+    require 'will_paginate'
+    true
+  rescue LoadError
+    false
   end
 
-  public
-
-  acts_as_votable_if_present
+  cattr_accessor :is_votable
+  self.is_votable = begin
+    require 'acts_as_votable'
+    acts_as_votable
+    true
+  rescue LoadError
+    false
+  end
 
   def is_modified?
     !editor.nil?
@@ -39,15 +40,17 @@ class Commontator::Comment < ActiveRecord::Base
     thread.comments.last == self
   end
 
-  # FIXME
-  def is_votable?
-    return true if acts_as_votable_called
+  def will_paginate?
+    will_paginate
+  end
 
-    self.class.acts_as_votable_if_present
+  def is_votable?
+    is_votable
   end
 
   def get_vote_by(user)
     return nil unless is_votable? && !user.nil? && user.is_commontator
+
     votes_for.find_by(voter_type: user.class.name, voter_id: user.id)
   end
 
@@ -62,6 +65,7 @@ class Commontator::Comment < ActiveRecord::Base
 
   def delete_by(user)
     return false if is_deleted?
+
     self.deleted_at = Time.now
     self.editor = user
     self.save
@@ -69,6 +73,7 @@ class Commontator::Comment < ActiveRecord::Base
 
   def undelete_by(user)
     return false unless is_deleted?
+
     self.deleted_at = nil
     self.editor = user
     self.save
@@ -90,38 +95,34 @@ class Commontator::Comment < ActiveRecord::Base
   ##################
 
   def can_be_created_by?(user)
-    user == creator && !user.nil? && user.is_commontator &&\
+    user == creator && !user.nil? && user.is_commontator &&
     !thread.is_closed? && thread.can_be_read_by?(user)
   end
 
   def can_be_edited_by?(user)
-    return true if thread.can_be_edited_by?(user) &&\
+    return true if thread.can_be_edited_by?(user) &&
                    thread.config.moderator_permissions.to_sym == :e
+
     comment_edit = thread.config.comment_editing.to_sym
-    !thread.is_closed? && !is_deleted? && user == creator &&\
-    comment_edit != :n && (is_latest? || comment_edit == :a) &&\
-    thread.can_be_read_by?(user)
+    !thread.is_closed? && !is_deleted? && user == creator && comment_edit != :n &&
+    (is_latest? || comment_edit == :a) && thread.can_be_read_by?(user)
   end
 
   def can_be_deleted_by?(user)
     mod_perm = thread.config.moderator_permissions.to_sym
-    return true if thread.can_be_edited_by?(user) &&\
-                   (mod_perm == :e ||\
-                     mod_perm == :d)
+    return true if thread.can_be_edited_by?(user) && (mod_perm == :e || mod_perm == :d)
+
     comment_del = thread.config.comment_deletion.to_sym
-    !thread.is_closed? && (!is_deleted? || editor == user) &&\
-    user == creator && comment_del != :n &&\
-    (is_latest? || comment_del == :a) &&\
-    thread.can_be_read_by?(user)
+    !thread.is_closed? && (!is_deleted? || editor == user) && user == creator &&
+    comment_del != :n && (is_latest? || comment_del == :a) && thread.can_be_read_by?(user)
   end
 
   def can_be_voted_on?
-    !thread.is_closed? && !is_deleted? &&\
-    thread.config.comment_voting.to_sym != :n && is_votable?
+    !thread.is_closed? && !is_deleted? && thread.config.comment_voting.to_sym != :n && is_votable?
   end
 
   def can_be_voted_on_by?(user)
-    !user.nil? && user.is_commontator && user != creator &&\
+    !user.nil? && user.is_commontator && user != creator &&
     thread.can_be_read_by?(user) && can_be_voted_on?
   end
 end

@@ -13,9 +13,7 @@ class Commontator::Thread < ActiveRecord::Base
   end
 
   def will_paginate?
-    return false if config.comments_per_page.nil? || !comments.respond_to?(:paginate)
-    require 'commontator/link_renderer'
-    true
+    !config.comments_per_page.nil? && Commontator::Comment.will_paginate?
   end
 
   def is_filtered?
@@ -25,6 +23,7 @@ class Commontator::Thread < ActiveRecord::Base
   def filtered_comments
     cf = config.comment_filter
     return comments if cf.nil?
+
     comments.where(cf)
   end
 
@@ -93,7 +92,7 @@ class Commontator::Thread < ActiveRecord::Base
   end
 
   def subscribers
-    subscriptions.collect{|s| s.subscriber}
+    subscriptions.map(&:subscriber)
   end
 
   def subscription_for(subscriber)
@@ -151,20 +150,19 @@ class Commontator::Thread < ActiveRecord::Base
   # Reader capabilities (user can be nil or false)
   def can_be_read_by?(user)
     return true if can_be_edited_by?(user)
-    !commontable.nil? &&\
-    config.thread_read_proc.call(self, user)
+
+    !commontable.nil? && config.thread_read_proc.call(self, user)
   end
 
   # Thread moderator capabilities
   def can_be_edited_by?(user)
-    !commontable.nil? && !user.nil? && user.is_commontator &&\
+    !commontable.nil? && !user.nil? && user.is_commontator &&
     config.thread_moderator_proc.call(self, user)
   end
 
   def can_subscribe?(user)
     thread_sub = config.thread_subscription.to_sym
-    !is_closed? && !user.nil? && user.is_commontator &&\
-    (thread_sub == :m || thread_sub == :b) &&\
-    can_be_read_by?(user)
+    !is_closed? && !user.nil? && user.is_commontator &&
+    (thread_sub == :m || thread_sub == :b) && can_be_read_by?(user)
   end
 end

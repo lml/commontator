@@ -33,7 +33,8 @@ module Commontator::Config
     :thread_subscription,
     :email_from_proc,
     :commontable_name_proc,
-    :comment_url_proc
+    :comment_url_proc,
+    :comment_reply_style
   ]
 
   DEPRECATED_ATTRIBUTES = [
@@ -90,9 +91,7 @@ module Commontator::Config
         warn "\n[COMMONTATOR] Deprecation: `config.#{deprecated.to_s}` is deprecated and has been disabled. #{replacement_string}\n"
       end
 
-      base.define_singleton_method("#{deprecated.to_s}=") do |obj|
-        base.send(deprecated)
-      end
+      base.define_singleton_method("#{deprecated.to_s}=") { |obj| base.send(deprecated) }
     end
 
     base.extend ClassMethods
