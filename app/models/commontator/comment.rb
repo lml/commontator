@@ -6,14 +6,16 @@ class Commontator::Comment < ActiveRecord::Base
 
   has_many :children, class_name: name, inverse_of: :parent
 
-  serialize :ancestor_ids, JSON
-  serialize :descendant_ids, JSON
+  serialize :ancestor_ids, Commontator::JsonArrayCoder
+  serialize :descendant_ids, Commontator::JsonArrayCoder
 
   validates :editor, presence: true, on: :update
   validates :body, presence: true, uniqueness: {
     scope: [ :creator_type, :creator_id, :thread_id, :deleted_at ],
     message: I18n.t('commontator.comment.errors.double_posted')
   }
+
+  before_create :set_ancestor_and_descendant_ids
 
   cattr_accessor :will_paginate
   self.will_paginate = begin
@@ -127,5 +129,16 @@ class Commontator::Comment < ActiveRecord::Base
   def can_be_voted_on_by?(user)
     !user.nil? && user.is_commontator && user != creator &&
     thread.can_be_read_by?(user) && can_be_voted_on?
+  end
+
+  protected
+
+  def set_ancestor_and_descendant_ids
+    return if parent.nil?
+
+    self.ancestor_ids = [ parent.id ] + parent.ancestor_ids
+    self.class.where(id: ancestor_ids).order(:id).update_all(
+      "descendant_ids = REPLACE(REPLACE(COALESCE(descendant_ids, '[]'), ']', ',#{id}]'), '[,', '[')"
+    )
   end
 end

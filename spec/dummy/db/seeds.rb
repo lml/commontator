@@ -1,0 +1,2 @@
+DummyUser.create!
+DummyModel.create!

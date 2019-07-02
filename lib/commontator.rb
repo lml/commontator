@@ -4,6 +4,7 @@ module Commontator
   # These requires need the Commontator module to function properly
   require 'commontator/engine'
   require 'commontator/config'
+  require 'commontator/json_array_coder'
   require 'commontator/controllers'
   require 'commontator/acts_as_commontator'
   require 'commontator/acts_as_commontable'
