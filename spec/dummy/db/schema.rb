@@ -13,11 +13,11 @@
 ActiveRecord::Schema.define(version: 13) do
 
   create_table "commontator_comments", force: :cascade do |t|
-    t.string "creator_type"
-    t.integer "creator_id"
+    t.integer "thread_id", null: false
+    t.string "creator_type", null: false
+    t.integer "creator_id", null: false
     t.string "editor_type"
     t.integer "editor_id"
-    t.integer "thread_id", null: false
     t.text "body", null: false
     t.datetime "deleted_at"
     t.integer "cached_votes_up", default: 0
@@ -30,14 +30,15 @@ ActiveRecord::Schema.define(version: 13) do
     t.index ["cached_votes_down"], name: "index_commontator_comments_on_cached_votes_down"
     t.index ["cached_votes_up"], name: "index_commontator_comments_on_cached_votes_up"
     t.index ["creator_id", "creator_type", "thread_id"], name: "index_commontator_comments_on_c_id_and_c_type_and_t_id"
+    t.index ["editor_type", "editor_id"], name: "index_commontator_comments_on_editor_type_and_editor_id"
     t.index ["parent_id"], name: "index_commontator_comments_on_parent_id"
     t.index ["thread_id", "created_at"], name: "index_commontator_comments_on_thread_id_and_created_at"
   end
 
   create_table "commontator_subscriptions", force: :cascade do |t|
+    t.integer "thread_id", null: false
     t.string "subscriber_type", null: false
     t.integer "subscriber_id", null: false
-    t.integer "thread_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["subscriber_id", "subscriber_type", "thread_id"], name: "index_commontator_subscriptions_on_s_id_and_s_type_and_t_id", unique: true
@@ -47,12 +48,13 @@ ActiveRecord::Schema.define(version: 13) do
   create_table "commontator_threads", force: :cascade do |t|
     t.string "commontable_type"
     t.integer "commontable_id"
-    t.datetime "closed_at"
     t.string "closer_type"
     t.integer "closer_id"
+    t.datetime "closed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["commontable_id", "commontable_type"], name: "index_commontator_threads_on_c_id_and_c_type", unique: true
+    t.index ["closer_type", "closer_id"], name: "index_commontator_threads_on_closer_type_and_closer_id"
+    t.index ["commontable_type", "commontable_id"], name: "index_commontator_threads_on_c_id_and_c_type", unique: true
   end
 
   create_table "dummy_dependent_models", force: :cascade do |t|

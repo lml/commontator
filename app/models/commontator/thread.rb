@@ -73,7 +73,7 @@ class Commontator::Thread < ActiveRecord::Base
   end
 
   def is_closed?
-    !closed_at.blank?
+    !closed_at.nil?
   end
 
   def close(user = nil)
@@ -127,7 +127,7 @@ class Commontator::Thread < ActiveRecord::Base
   # Creates a new empty thread and assigns it to the commontable
   # The old thread is kept in the database for archival purposes
   def clear
-    return if commontable.blank? || !is_closed?
+    return if commontable.nil? || !is_closed?
 
     new_thread = Commontator::Thread.new
     new_thread.commontable = commontable
@@ -136,10 +136,7 @@ class Commontator::Thread < ActiveRecord::Base
       self.commontable = nil
       save!
       new_thread.save!
-      subscriptions.each do |s|
-        s.thread = new_thread
-        s.save!
-      end
+      Commontator::Subscription.where(thread: self).update_all(thread_id: new_thread.id)
     end
   end
 
