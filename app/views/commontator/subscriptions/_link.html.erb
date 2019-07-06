@@ -1,6 +1,7 @@
-<% # Controllers that use this partial must supply the following variables:
-   # thread
-   # user
+<%#
+  Views that use this partial must supply the following variables:
+  thread
+  user
 %>
 
 <% is_subscribed = !!thread.subscription_for(user) %>
@@ -10,6 +11,6 @@
             confirm: is_subscribed ? t('commontator.subscription.actions.confirm_unsubscribe') :
                                      nil,
             method: :put,
-            id: "thread_#{thread.id.to_s}_#{sub_string}_link",
-            class: "thread_#{sub_string}_link",
+            id: "thread-#{thread.id}-#{sub_string}-link",
+            class: "thread-#{sub_string}-link",
             remote: true %>

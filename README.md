@@ -56,6 +56,11 @@ There are 4 steps you must follow to install commontator:
   Make sure to check that your configuration file is up to date every time you update the gem, as available options can change with each minor version.
   If you have deprecated options in your initializer, Commontator will issue warnings (usually printed to your console).
 
+  Commontator relies on Rails's `sanitize` helper method to sanitize user input before display.
+  The default allowed tags and attributes are very permissive, basically
+  only blocking tags, attributes and attribute values that could be used for XSS.
+  [Read more about configuring the Rails sanitize helper.](https://edgeapi.rubyonrails.org/classes/ActionView/Helpers/SanitizeHelper.html).
+
 4. Routes
 
   Add this line to your Rails application's `routes.rb` file:
@@ -130,9 +135,7 @@ Follow the steps below to add commontator to your models and views:
 
   Note that the call to `commontator_thread` in the view is still necessary in either case.
 
-  The `commontator_thread_show` method checks the current user's read permission on the thread and will raise a
-  Commontator::SecurityTransgression exception if the user is not allowed to read it, according to the options in the initializer.
-  It is up to you to ensure that this method is only called if the user is authorized to read the thread.
+  The `commontator_thread_show` method checks the current user's read permission on the thread and will display the thread if the user is allowed to read it, according to the options in the initializer.
 
 That's it! Commontator is now ready for use.
 
@@ -141,7 +144,7 @@ That's it! Commontator is now ready for use.
 When you enable subscriptions, emails are sent automatically by Commontator. If sending emails, remember to add your host URL's to your environment files (test.rb, development.rb and production.rb):
 
 ```rb
-config.action_mailer.default_url_options = { host: "www.example.com" }
+config.action_mailer.default_url_options = { host: "https://www.example.com" }
 ```
 
 Batch sending through Mailgun is also supported and automatically detected.
@@ -228,7 +231,7 @@ You are now free to modify them and have any changes made manifest in your appli
 If copying commontator's locales, please note that by default Rails will not autoload locales in subfolders of `config/locales` (like ours) unless you add the following to your application's configuration file:
 
 ```rb
-config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.{rb,yml}')]
+config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.yml')]
 ```
 
 ## Contributing

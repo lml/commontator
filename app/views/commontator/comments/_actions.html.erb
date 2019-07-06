@@ -1,6 +1,7 @@
-<% # Controllers that use this partial must supply the following variables:
-   # comment
-   # user
+<%#
+  Views that use this partial must supply the following variables:
+  comment
+  user
 %>
 
 <% can_edit = comment.can_be_edited_by?(user)
@@ -9,8 +10,8 @@
 <% if can_edit %>
   <%= link_to t('commontator.comment.actions.edit'),
               commontator.edit_comment_path(comment),
-              id: "comment_#{comment.id.to_s}_edit_link",
-              class: "comment_edit_link",
+              id: "comment-#{comment.id}-edit-link",
+              class: "comment-edit-link",
               remote: true %>
 <% end %>
 
@@ -23,7 +24,7 @@
               commontator.polymorphic_path([del_string, comment]),
               confirm: (!is_deleted ? t('commontator.comment.actions.confirm_delete') : nil),
               method: :put,
-              id: "comment_#{comment.id.to_s}_#{del_string}_link",
-              class: "comment_#{del_string}_link",
+              id: "comment-#{comment.id}-#{del_string}-link",
+              class: "comment-#{del_string}-link",
               remote: true %>
 <% end %>

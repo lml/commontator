@@ -1,0 +1,135 @@
+.comment, .comment-body blockquote {
+  border: none;
+  border-top: 1px solid;
+  border-left: 1px solid;
+
+  font-size: 12px;
+  font-weight: normal;
+  color: #000;
+}
+
+.comment {
+  clear: both;
+
+  margin: 15px 0;
+
+  border-color: #DDD;
+
+  padding: 0;
+
+  font-style: normal;
+}
+
+.comment-div {
+	clear: both;
+
+  margin: 5px 7px;
+}
+
+.comment-actions {
+  float: right;
+}
+
+.comment-avatar {
+  float: left;
+
+  margin-right: 7px;
+}
+
+.comment-votes {
+  float: right;
+
+  margin-left: 7px;
+
+  text-align: center;
+}
+
+.comment-votes input, .comment-votes img {
+  margin: 0;
+  border: none;
+  padding: 0;
+
+  background-color: transparent;
+}
+
+.comment-votes form {
+  margin: 0;
+}
+
+.comment-upvote, .comment-downvote {
+  display: block;
+
+  height: 18px;
+
+  margin: 5px 0;
+}
+
+.comment-like {
+  float: left;
+}
+
+.comment-like + .comment-vote-count {
+  float: right;
+}
+
+.comment-body {
+  overflow: hidden;
+}
+
+.comment-body * {
+	margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.comment-body .edit-comment * {
+	margin: initial;
+  border: initial;
+  padding: initial;
+}
+
+.comment-body blockquote {
+  border-color: #CCC;
+  padding: 5px 7px;
+
+  background-color: #EEE;
+
+  font-style: italic;
+}
+
+.comment-timestamp {
+  color: #666;
+}
+
+.comment-error-explanation {
+  margin-bottom: 10px;
+}
+
+.comment-error-explanation h3 {
+  margin-top: 5px;
+}
+
+.comment-error-explanation ul {
+  list-style-position: inside;
+}
+
+.comment-form-actions {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.comment-form-field .mentions-input-box .mentions {
+  left: -8px;
+  top: -8px;
+
+  font-family: monospace;
+  font-size: 13.3333px;
+}
+
+.comment-form-field textarea {
+  width: 100%;
+
+  padding: 0;
+
+  overflow: auto;
+}

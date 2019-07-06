@@ -99,7 +99,7 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(@thread.closer).to eq @user
 
     @commontable = DummyModel.find(@commontable.id)
-    expect(@commontable.thread).to eq @thread
+    expect(@commontable.commontator_thread).to eq @thread
 
     @thread.clear
 
@@ -107,9 +107,9 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(@thread.comments).to include(comment)
 
     @commontable = DummyModel.find(@commontable.id)
-    expect(@commontable.thread).not_to be_nil
-    expect(@commontable.thread).not_to eq @thread
-    expect(@commontable.thread.comments).not_to include(comment)
+    expect(@commontable.commontator_thread).not_to be_nil
+    expect(@commontable.commontator_thread).not_to eq @thread
+    expect(@commontable.commontator_thread.comments).not_to include(comment)
   end
 
   it 'preserves the thread and comments by default when the commontable is gone' do
@@ -131,7 +131,7 @@ RSpec.describe Commontator::Thread, type: :model do
 
   it 'deletes the thread and comments when commontable has dependent :destroy' do
     commontable = DummyDependentModel.create
-    thread = commontable.thread
+    thread = commontable.commontator_thread
 
     comment = Commontator::Comment.new
     comment.thread = thread

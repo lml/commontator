@@ -15,24 +15,24 @@ module Commontator::ActsAsCommontable
         self.commontable_config = Commontator::CommontableConfig.new(options)
         self.is_commontable = true
 
-        has_one :thread, as: :commontable,
-                         class_name: 'Commontator::Thread',
-                         dependent: association_options[:dependent]
+        has_one :commontator_thread, as: :commontable,
+                                     class_name: 'Commontator::Thread',
+                                     dependent: association_options[:dependent]
 
-        validates :thread, presence: true
+        validates :commontator_thread, presence: true
 
         prepend ThreadWithCommontator
       end
     end
 
     module ThreadWithCommontator
-      def thread
-        @thread ||= super
-        return @thread unless @thread.nil?
+      def commontator_thread
+        @commontator_thread ||= super
+        return @commontator_thread unless @commontator_thread.nil?
 
-        @thread = build_thread
-        @thread.save if persisted?
-        @thread
+        @commontator_thread = build_commontator_thread.tap do |thread|
+          thread.save if persisted?
+        end
       end
     end
 

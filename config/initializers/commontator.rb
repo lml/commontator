@@ -16,14 +16,13 @@ Commontator.configure do |config|
   # javascript_proc
   # Type: Proc
   # Arguments: a view (ActionView::Base)
-  # Returns: a String that is appended to Commontator JS views
-  # Can be used, for example, to display/clear Rails error messages
-  # or to reapply JQuery UI styles after Ajax calls
+  # Returns: a String that is appended to all Commontator JS views
+  # Can be used, for example, to reapply JQuery UI styles after Ajax calls
   # Objects visible in view templates can be accessed
   # through the view object (for example, view.flash)
   # However, the view does not include the main application's helpers
-  # Default: ->(view) { '$("#error_explanation").remove();' }
-  config.javascript_proc = ->(view) { '$("#error_explanation").remove();' }
+  # Default: ->(view) { '' }
+  config.javascript_proc = ->(view) { '' }
 
 
   # User (acts_as_commontator) Configuration
@@ -279,11 +278,11 @@ Commontator.configure do |config|
   # This usually is the commontable's "show" page
   # The main application's routes can be accessed through the app_routes object
   # Default: ->(comment, app_routes) do
-  #   app_routes.polymorphic_url(comment.thread.commontable, anchor: "comment_#{comment.id}_div")
+  #   app_routes.polymorphic_url(comment.thread.commontable, anchor: "comment-#{comment.id}-div")
   # end
   # (defaults to the commontable's show url with an anchor pointing to the comment's div)
   config.comment_url_proc = ->(comment, app_routes) do
-    app_routes.polymorphic_url(comment.thread.commontable, anchor: "comment_#{comment.id}_div")
+    app_routes.polymorphic_url(comment.thread.commontable, anchor: "comment-#{comment.id}-div")
   end
 
   # mentions_enabled

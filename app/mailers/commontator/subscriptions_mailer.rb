@@ -1,4 +1,6 @@
 class Commontator::SubscriptionsMailer < ActionMailer::Base
+  helper Commontator::SharedHelper
+
   def comment_created(comment, recipients)
     setup_variables(comment, recipients)
 

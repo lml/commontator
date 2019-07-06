@@ -7,7 +7,7 @@
 %>
 
 <% if thread.config.comment_reply_style != :n && !thread.is_closed? && user %>
-  <div id="comment_<%= comment.id %>_reply_link_div" class="comment_reply_link">
+  <div id="comment-<%= comment.id %>-reply-link-div" class="comment-reply-link">
     <%=
       link_to t('commontator.comment.actions.reply'), commontator.new_thread_comment_path(
         thread, comment: { parent_id: comment.id }, per_page: per_page

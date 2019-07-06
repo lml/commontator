@@ -23,19 +23,19 @@ RSpec.describe Commontator::CommentsController, type: :controller do
     context 'GET #new' do
       it 'works' do
         get :new, params: { thread_id: @thread.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
 
         @user.can_read = false
         @user.can_edit = true
         get :new, params: { thread_id: @thread.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
 
         @user.can_edit = false
         @user.is_admin = true
         get :new, params: { thread_id: @thread.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         context 'not double posting' do
           it 'works' do
             post :create, params: { thread_id: @thread.id, comment: { body: 'Something else' } }
-            expect(response).to redirect_to @thread
+            expect(response).to redirect_to(@commontable_path)
             expect(assigns(:comment).errors).to be_empty
             expect(assigns(:comment).body).to eq 'Something else'
             expect(assigns(:comment).creator).to eq @user
@@ -55,7 +55,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
             @user.can_read = false
             @user.can_edit = true
             post :create, params: { thread_id: @thread.id, comment: { body: 'Another thing' } }
-            expect(response).to redirect_to @thread
+            expect(response).to redirect_to(@commontable_path)
             expect(assigns(:comment).errors).to be_empty
             expect(assigns(:comment).body).to eq 'Another thing'
             expect(assigns(:comment).creator).to eq @user
@@ -65,7 +65,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
             @user.can_edit = false
             @user.is_admin = true
             post :create, params: { thread_id: @thread.id, comment: { body: 'And this too' } }
-            expect(response).to redirect_to @thread
+            expect(response).to redirect_to(@commontable_path)
             expect(assigns(:comment).errors).to be_empty
             expect(assigns(:comment).body).to eq 'And this too'
             expect(assigns(:comment).creator).to eq @user
@@ -145,11 +145,11 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         context 'double posting' do
           it 'redirects to the thread and returns an error message' do
             post :create, params: { thread_id: @thread.id, comment: { body: 'Something' } }
-            assert_redirected_to @thread
+            expect(response).to redirect_to(@commontable_path)
             expect(assigns(:comment).errors).not_to be_empty
 
             post :create, params: { thread_id: @thread.id, comment: { body: 'Something else' } }
-            expect(response).to redirect_to @thread
+            expect(response).to redirect_to(@commontable_path)
             expect(assigns(:comment).errors).to be_empty
             expect(assigns(:comment).body).to eq 'Something else'
             expect(assigns(:comment).creator).to eq @user
@@ -157,7 +157,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
             expect(assigns(:comment).thread).to eq @thread
 
             post :create, params: { thread_id: @thread.id, comment: { body: 'Something else' } }
-            expect(response).to redirect_to @thread
+            expect(response).to redirect_to(@commontable_path)
             expect(assigns(:comment).errors).not_to be_empty
           end
         end
@@ -178,19 +178,19 @@ RSpec.describe Commontator::CommentsController, type: :controller do
     context 'GET #edit' do
       it 'works' do
         get :edit, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
 
         @user.can_read = false
         @user.can_edit = true
         get :edit, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
 
         @user.can_edit = false
         @user.is_admin = true
         get :edit, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
       end
     end
@@ -198,21 +198,21 @@ RSpec.describe Commontator::CommentsController, type: :controller do
     context 'PUT #update' do
       it 'works' do
         put :update, params: { id: @comment.id, comment: { body: 'Something else' } }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).editor).to eq @user
 
         @user.can_read = false
         @user.can_edit = true
         put :update, params: { id: @comment.id, comment: { body: 'Something else' } }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).editor).to eq @user
 
         @user.can_edit = false
         @user.is_admin = true
         put :update, params: { id: @comment.id, comment: { body: 'Something else' } }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).editor).to eq @user
       end
@@ -221,7 +221,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
     context 'DELETE #destroy' do
       it 'works if not deleted' do
         put :delete, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).is_deleted?).to eq true
         expect(assigns(:comment).editor).to eq @user
@@ -237,7 +237,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         expect(assigns(:comment).undelete_by(@user)).to eq true
         user2.can_edit = true
         put :delete, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).is_deleted?).to eq true
         expect(assigns(:comment).editor).to eq user2
@@ -246,7 +246,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         user2.can_edit = false
         user2.is_admin = true
         put :delete, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).is_deleted?).to eq true
         expect(assigns(:comment).editor).to eq user2
@@ -257,7 +257,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
       it 'works if deleted' do
         expect(@comment.delete_by(@user)).to eq true
         put :undelete, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).is_deleted?).to eq false
 
@@ -272,7 +272,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         expect(assigns(:comment).delete_by(@user)).to eq true
         user2.can_edit = true
         put :undelete, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).is_deleted?).to eq false
 
@@ -280,7 +280,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         user2.can_edit = false
         user2.is_admin = true
         put :undelete, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).errors).to be_empty
         expect(assigns(:comment).is_deleted?).to eq false
       end
@@ -293,19 +293,19 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         controller.current_user = user2
 
         put :upvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).get_upvotes.count).to eq 1
         expect(assigns(:comment).get_downvotes).to be_empty
 
         put :upvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).get_upvotes.count).to eq 1
         expect(assigns(:comment).get_downvotes).to be_empty
 
         expect(@comment.downvote_from(user2)).to eq true
 
         put :upvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).get_upvotes.count).to eq 1
         expect(assigns(:comment).get_downvotes).to be_empty
       end
@@ -318,19 +318,19 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         controller.current_user = user2
 
         put :downvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(@comment.get_upvotes).to be_empty
         expect(@comment.get_downvotes.count).to eq 1
 
         put :downvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(@comment.get_upvotes).to be_empty
         expect(@comment.get_downvotes.count).to eq 1
 
         expect(@comment.upvote_from(user2)).to eq true
 
         put :downvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(@comment.get_upvotes).to be_empty
         expect(@comment.get_downvotes.count).to eq 1
       end
@@ -344,18 +344,18 @@ RSpec.describe Commontator::CommentsController, type: :controller do
 
         expect(@comment.upvote_from(user2)).to eq true
         put :unvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).get_upvotes).to be_empty
         expect(assigns(:comment).get_downvotes).to be_empty
 
         put :unvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).get_upvotes).to be_empty
         expect(assigns(:comment).get_downvotes).to be_empty
 
         expect(@comment.downvote_from(user2)).to eq true
         put :unvote, params: { id: @comment.id }
-        expect(response).to redirect_to @thread
+        expect(response).to redirect_to(@commontable_path)
         expect(assigns(:comment).get_upvotes).to be_empty
         expect(assigns(:comment).get_downvotes).to be_empty
       end
@@ -471,7 +471,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           @user.can_read = true
           expect(@comment.delete_by(@user)).to eq true
           put :delete, params: { id: @comment.id }
-          expect(response).to redirect_to @thread
+          expect(response).to redirect_to(@commontable_path)
           expect(assigns(:comment).errors).not_to be_empty
 
           comment2 = Commontator::Comment.new
@@ -505,7 +505,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           @user.can_read = true
           expect(@comment.undelete_by(@user)).to eq true
           put :undelete, params: { id: @comment.id }
-          expect(response).to redirect_to @thread
+          expect(response).to redirect_to(@commontable_path)
           expect(assigns(:comment).errors).not_to be_empty
 
           user2 = DummyUser.create

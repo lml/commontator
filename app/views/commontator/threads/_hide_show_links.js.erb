@@ -1,17 +1,18 @@
-<% # Controllers that use this partial must supply the following variables:
-   # thread
+<%#
+  Views that use this partial must supply the following variables:
+  thread
 %>
 
-$("#thread_<%= thread.id %>_hide_link").click(function() {
-  $("#thread_<%= thread.id %>_span").hide();
+$("#thread-<%= thread.id %>-hide-link").click(function() {
+  $("#thread-<%= thread.id %>-span").hide();
 
-  $("#thread_<%= thread.id %>_show_span").fadeIn()[0].scrollIntoView();
+  $("#thread-<%= thread.id %>-show-span").fadeIn()[0].scrollIntoView();
 });
 
-$("#thread_<%= thread.id %>_show_link").click(function() {
-  $("#thread_<%= thread.id %>_span").fadeIn()[0].scrollIntoView();
+$("#thread-<%= thread.id %>-show-link").click(function() {
+  $("#thread-<%= thread.id %>-span").fadeIn()[0].scrollIntoView();
 
-  $("#thread_<%= thread.id %>_show_span").hide();
+  $("#thread-<%= thread.id %>-show-span").hide();
 });
 
-$("#thread_<%= thread.id %>_hide_span").show();
+$("#thread-<%= thread.id %>-hide-span").show();

@@ -110,8 +110,8 @@ class Commontator::Comment < ActiveRecord::Base
                    thread.config.moderator_permissions.to_sym == :e
 
     comment_edit = thread.config.comment_editing.to_sym
-    !thread.is_closed? && !is_deleted? && user == creator && comment_edit != :n &&
-    (is_latest? || comment_edit == :a) && thread.can_be_read_by?(user)
+    !thread.is_closed? && !is_deleted? && user == creator && (editor.nil? || user == editor) &&
+    comment_edit != :n && (is_latest? || comment_edit == :a) && thread.can_be_read_by?(user)
   end
 
   def can_be_deleted_by?(user)
@@ -119,7 +119,7 @@ class Commontator::Comment < ActiveRecord::Base
     return true if thread.can_be_edited_by?(user) && (mod_perm == :e || mod_perm == :d)
 
     comment_del = thread.config.comment_deletion.to_sym
-    !thread.is_closed? && (!is_deleted? || editor == user) && user == creator &&
+    !thread.is_closed? && user == creator && (!is_deleted? || editor == user) &&
     comment_del != :n && (is_latest? || comment_del == :a) && thread.can_be_read_by?(user)
   end
 

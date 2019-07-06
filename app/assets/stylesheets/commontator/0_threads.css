@@ -1,0 +1,61 @@
+.thread-header-div {
+  display: block;
+
+  overflow: hidden;
+}
+
+.thread-actions {
+  float: right;
+
+  margin-left: 10px;
+}
+
+.thread-header-span {
+  font-size: 16px;
+  font-weight: bold;
+  font-style: normal;
+}
+
+.thread-comment-list {
+  background-color: #FFF;
+}
+
+/* Modified from: http://www.strangerstudios.com/sandbox/pagination/diggstyle.php */
+.thread-page-entries-info, .thread-will-paginate {
+	margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.thread-pagination a {
+	margin-right: 4px;
+	padding: 2px 5px 2px 5px;
+	border: 1px solid #999;
+
+	color: #666;
+	text-decoration: none;
+}
+
+.thread-pagination a:hover, .thread-pagination a:active {
+	border: 1px solid #555;
+
+	color: #000;
+}
+
+.thread-pagination em {
+	margin-right: 4px;
+  border: 1px solid #555;
+	padding: 2px 5px 2px 5px;
+
+  background-color: #555;
+
+  font-weight: bold;
+  color: #FFF;
+}
+
+.thread-pagination span {
+	margin-right: 4px;
+  border: 1px solid #EEE;
+  padding: 2px 5px 2px 5px;
+
+  color: #DDD;
+}

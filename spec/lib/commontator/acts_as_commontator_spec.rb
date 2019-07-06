@@ -15,8 +15,8 @@ RSpec.describe Commontator::ActsAsCommontator, type: :lib do
 
   it 'modifies models that act_as_commontator' do
     user = DummyUser.create
-    expect(user).to respond_to(:comments)
-    expect(user).to respond_to(:subscriptions)
+    expect(user).to respond_to(:commontator_comments)
+    expect(user).to respond_to(:commontator_subscriptions)
     expect(user).to respond_to(:commontator_config)
     expect(user.commontator_config).to be_a(Commontator::CommontatorConfig)
   end

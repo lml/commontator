@@ -15,7 +15,7 @@ RSpec.describe Commontator::ActsAsCommontable, type: :lib do
 
   it 'modifies models that act_as_commontable' do
     dummy = DummyModel.create
-    expect(dummy).to respond_to(:thread)
+    expect(dummy).to respond_to(:commontator_thread)
     expect(dummy).to respond_to(:commontable_config)
     expect(dummy.commontable_config).to be_a(Commontator::CommontableConfig)
   end

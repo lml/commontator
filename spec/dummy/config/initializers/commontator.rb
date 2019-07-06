@@ -15,6 +15,10 @@ Commontator.configure do |config|
 
   config.user_name_proc = ->(user) { user.try(:name) || 'Anonymous' }
 
+  config.user_avatar_proc = ->(user, view) do
+    view.commontator_gravatar_image_tag(user, 1, s: 60, d: 'mm')
+  end
+
   config.thread_read_proc = ->(thread, user) { user && user.can_read }
 
   config.thread_moderator_proc = ->(thread, user) { user.is_admin || user.can_edit }

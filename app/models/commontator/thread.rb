@@ -1,6 +1,6 @@
 class Commontator::Thread < ActiveRecord::Base
   belongs_to :closer, polymorphic: true, optional: true
-  belongs_to :commontable, polymorphic: true, optional: true, inverse_of: :thread
+  belongs_to :commontable, polymorphic: true, optional: true, inverse_of: :commontator_thread
 
   has_many :comments, dependent: :destroy, inverse_of: :thread
   has_many :subscriptions, dependent: :destroy, inverse_of: :thread
@@ -98,7 +98,7 @@ class Commontator::Thread < ActiveRecord::Base
   def subscription_for(subscriber)
     return nil if !subscriber || !subscriber.is_commontator
 
-    subscriber.subscriptions.find_by(thread_id: self.id)
+    subscriber.commontator_subscriptions.find_by(thread_id: self.id)
   end
 
   def subscribe(subscriber)

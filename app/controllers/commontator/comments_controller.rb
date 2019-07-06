@@ -1,151 +1,152 @@
 class Commontator::CommentsController < Commontator::ApplicationController
-  before_action :set_thread, only: [:new, :create]
-  before_action :set_comment_and_thread, except: [:new, :create]
+  before_action :set_thread, :commontator_set_thread_variables, only: [ :new, :create ]
+  before_action :set_comment_and_thread, except: [ :new, :create ]
 
   # GET /threads/1/comments/new
   def new
-    @comment = Commontator::Comment.new
-    @comment.thread = @thread
-    @comment.creator = @user
+    @comment = Commontator::Comment.new(thread: @commontator_thread, creator: @commontator_user)
     parent_id = params.dig(:comment, :parent_id)
     unless parent_id.blank?
       parent = Commontator::Comment.find parent_id
       @comment.parent = parent
-      @comment.body = "<blockquote><div>#{Commontator.commontator_name(parent.creator)
-        }</div>\n#{parent.body}\n</blockquote>" if @thread.config.comment_reply_style == :q
+      @comment.body = "<blockquote><span class=\"author\">#{
+        Commontator.commontator_name(parent.creator)
+      }</span>\n#{
+        parent.body
+      }\n</blockquote>\n" if @commontator_thread.config.comment_reply_style == :q
     end
-    security_transgression_unless @comment.can_be_created_by?(@user)
-
-    @per_page = params[:per_page] || @thread.config.comments_per_page
+    security_transgression_unless @comment.can_be_created_by?(@commontator_user)
 
     respond_to do |format|
-      format.html { redirect_to @thread }
+      format.html { redirect_to commontable_url }
       format.js
     end
-
   end
 
   # POST /threads/1/comments
   def create
-    @comment = Commontator::Comment.new
-    @comment.thread = @thread
-    @comment.creator = @user
-    @comment.body = params.dig(:comment, :body)
+    @comment = Commontator::Comment.new(
+      thread: @commontator_thread, creator: @commontator_user, body: params.dig(:comment, :body)
+    )
     parent_id = params.dig(:comment, :parent_id)
     @comment.parent = Commontator::Comment.find(parent_id) unless parent_id.blank?
-    security_transgression_unless @comment.can_be_created_by?(@user)
-    subscribe_mentioned if @thread.config.mentions_enabled
+    security_transgression_unless @comment.can_be_created_by?(@commontator_user)
 
     respond_to do |format|
-      if  !params[:cancel].blank?
-        format.html { redirect_to @thread }
-        format.js { render :cancel }
-      elsif @comment.save
-        sub = @thread.config.thread_subscription.to_sym
-        @thread.subscribe(@user) if sub == :a || sub == :b
-        Commontator::Subscription.comment_created(@comment)
+      if params[:cancel].blank?
+        if @comment.save
+          sub = @commontator_thread.config.thread_subscription.to_sym
+          @commontator_thread.subscribe(@commontator_user) if sub == :a || sub == :b
+          subscribe_mentioned if @commontator_thread.config.mentions_enabled
+          Commontator::Subscription.comment_created(@comment)
 
-        @per_page = params[:per_page] || @thread.config.comments_per_page
-
-        format.html { redirect_to @thread }
-        format.js
+          format.js
+        else
+          format.js { render :new }
+        end
       else
-        format.html { redirect_to @thread }
-        format.js { render :new }
+        format.js { render :cancel }
       end
+
+      format.html { redirect_to commontable_url }
     end
   end
 
   # GET /comments/1/edit
   def edit
-    security_transgression_unless @comment.can_be_edited_by?(@user)
+    @comment.editor = @commontator_user
+    security_transgression_unless @comment.can_be_edited_by?(@commontator_user)
 
     respond_to do |format|
-      format.html { redirect_to @thread }
+      format.html { redirect_to commontable_url }
       format.js
     end
   end
 
   # PUT /comments/1
   def update
-    security_transgression_unless @comment.can_be_edited_by?(@user)
+    @comment.editor = @commontator_user
     @comment.body = params.dig(:comment, :body)
-    @comment.editor = @user
-    subscribe_mentioned if @thread.config.mentions_enabled
+    security_transgression_unless @comment.can_be_edited_by?(@commontator_user)
 
     respond_to do |format|
-      if !params[:cancel].blank?
-        format.html { redirect_to @thread }
-        format.js { render :cancel }
-      elsif @comment.save
-        format.html { redirect_to @thread }
-        format.js
+      if params[:cancel].blank?
+        if @comment.save
+          subscribe_mentioned if @commontator_thread.config.mentions_enabled
+
+          format.js
+        else
+          format.js { render :edit }
+        end
       else
-        format.html { redirect_to @thread }
-        format.js { render :edit }
+        @comment.restore_attributes
+
+        format.js { render :cancel }
       end
+
+      format.html { redirect_to commontable_url }
     end
   end
 
   # PUT /comments/1/delete
   def delete
-    security_transgression_unless @comment.can_be_deleted_by?(@user)
+    security_transgression_unless @comment.can_be_deleted_by?(@commontator_user)
 
     @comment.errors.add(:base, t('commontator.comment.errors.already_deleted')) \
-      unless @comment.delete_by(@user)
+      unless @comment.delete_by(@commontator_user)
 
     respond_to do |format|
-      format.html { redirect_to @thread }
+      format.html { redirect_to commontable_url }
       format.js { render :delete }
     end
   end
 
   # PUT /comments/1/undelete
   def undelete
-    security_transgression_unless @comment.can_be_deleted_by?(@user)
+    security_transgression_unless @comment.can_be_deleted_by?(@commontator_user)
 
     @comment.errors.add(:base, t('commontator.comment.errors.not_deleted')) \
-      unless @comment.undelete_by(@user)
+      unless @comment.undelete_by(@commontator_user)
 
     respond_to do |format|
-      format.html { redirect_to @thread }
+      format.html { redirect_to commontable_url }
       format.js { render :delete }
     end
   end
 
   # PUT /comments/1/upvote
   def upvote
-    security_transgression_unless @comment.can_be_voted_on_by?(@user)
+    security_transgression_unless @comment.can_be_voted_on_by?(@commontator_user)
 
-    @comment.upvote_from @user
+    @comment.upvote_from @commontator_user
 
     respond_to do |format|
-      format.html { redirect_to @thread }
+      format.html { redirect_to commontable_url }
       format.js { render :vote }
     end
   end
 
   # PUT /comments/1/downvote
   def downvote
-    security_transgression_unless @comment.can_be_voted_on_by?(@user) &&\
+    security_transgression_unless @comment.can_be_voted_on_by?(@commontator_user) &&\
       @comment.thread.config.comment_voting.to_sym == :ld
 
-    @comment.downvote_from @user
+    @comment.downvote_from @commontator_user
 
     respond_to do |format|
-      format.html { redirect_to @thread }
+      format.html { redirect_to commontable_url }
       format.js { render :vote }
     end
   end
 
   # PUT /comments/1/unvote
   def unvote
-    security_transgression_unless @comment.can_be_voted_on_by?(@user)
+    security_transgression_unless @comment.can_be_voted_on_by?(@commontator_user)
 
-    @comment.unvote voter: @user
+    @comment.unvote voter: @commontator_user
 
     respond_to do |format|
-      format.html { redirect_to @thread }
+      format.html { redirect_to commontable_url }
       format.js { render :vote }
     end
   end
@@ -154,14 +155,14 @@ class Commontator::CommentsController < Commontator::ApplicationController
 
   def set_comment_and_thread
     @comment = Commontator::Comment.find(params[:id])
-    @thread = @comment.thread
-    commontator_set_new_comment(@thread, @user)
+    @commontator_thread = @comment.thread
+    commontator_set_new_comment
   end
 
   def subscribe_mentioned
-    Commontator.commontator_mentions(@user, @thread, '')
+    Commontator.commontator_mentions(@commontator_user, @commontator_thread, '')
                .where(id: params[:mentioned_ids]).each do |user|
-      @thread.subscribe(user)
+      @commontator_thread.subscribe(user)
     end
   end
 end

@@ -1,5 +1,9 @@
 /*
- *= require_self
  *= require mentionsInput/jquery.mentionsInput
+ *= require_self
  *= require_tree .
  */
+
+.commontator-hidden {
+  display: none;
+}

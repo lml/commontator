@@ -3,28 +3,28 @@ class Commontator::SubscriptionsController < Commontator::ApplicationController
 
   # PUT /threads/1/subscribe
   def subscribe
-    security_transgression_unless @thread.can_subscribe?(@user)
+    security_transgression_unless @commontator_thread.can_subscribe?(@commontator_user)
 
-    @thread.errors.add(:base, t('commontator.subscription.errors.already_subscribed')) \
-      unless @thread.subscribe(@user)
+    @commontator_thread.errors.add(:base, t('commontator.subscription.errors.already_subscribed')) \
+      unless @commontator_thread.subscribe(@commontator_user)
 
     respond_to do |format|
-      format.html { redirect_to @thread }
-      format.js { render :subscribe }
+      format.html { redirect_to commontable_url }
+      format.js   { render :subscribe }
     end
 
   end
 
   # PUT /threads/1/unsubscribe
   def unsubscribe
-    security_transgression_unless @thread.can_subscribe?(@user)
+    security_transgression_unless @commontator_thread.can_subscribe?(@commontator_user)
 
-    @thread.errors.add(:base, t('commontator.subscription.errors.not_subscribed')) \
-      unless @thread.unsubscribe(@user)
+    @commontator_thread.errors.add(:base, t('commontator.subscription.errors.not_subscribed')) \
+      unless @commontator_thread.unsubscribe(@commontator_user)
 
     respond_to do |format|
-      format.html { redirect_to @thread }
-      format.js { render :subscribe }
+      format.html { redirect_to commontable_url }
+      format.js   { render :subscribe }
     end
   end
 end

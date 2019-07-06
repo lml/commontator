@@ -1,7 +1,8 @@
-<% # Controllers that use this partial must supply the following variables:
-   # comments
-   # user
-   # per_page
+<%#
+  Controllers that use this partial must supply the following variables:
+  comments
+  user
+  per_page
 %>
 
 <% comments.includes(:creator, :editor).each do |comment| %>

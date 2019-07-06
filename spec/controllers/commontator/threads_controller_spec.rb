@@ -13,20 +13,18 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
 
     context 'GET #show' do
       it 'works' do
-        commontable_path = Rails.application.routes.url_helpers.dummy_model_path(@commontable)
-
         get :show, params: { id: @thread.id }
-        expect(response).to redirect_to(commontable_path)
+        expect(response).to redirect_to(@commontable_path)
 
         @user.can_read = false
         @user.can_edit = true
         get :show, params: { id: @thread.id }
-        expect(response).to redirect_to(commontable_path)
+        expect(response).to redirect_to(@commontable_path)
 
         @user.can_edit = false
         @user.is_admin = true
         get :show, params: { id: @thread.id }
-        expect(response).to redirect_to(commontable_path)
+        expect(response).to redirect_to(@commontable_path)
       end
     end
 
@@ -35,19 +33,19 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         it 'works' do
           @user.can_edit = true
           put :close, params: { id: @thread.id }
-          expect(response).to redirect_to(@thread)
-          expect(assigns(:thread).errors).to be_empty
-          expect(assigns(:thread).is_closed?).to eq true
-          expect(assigns(:thread).closer).to eq @user
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:commontator_thread).errors).to be_empty
+          expect(assigns(:commontator_thread).is_closed?).to eq true
+          expect(assigns(:commontator_thread).closer).to eq @user
 
-          expect(assigns(:thread).reopen).to eq true
+          expect(assigns(:commontator_thread).reopen).to eq true
           @user.can_edit = false
           @user.is_admin = true
           put :close, params: { id: @thread.id }
-          expect(response).to redirect_to(@thread)
-          expect(assigns(:thread).errors).to be_empty
-          expect(assigns(:thread).is_closed?).to eq true
-          expect(assigns(:thread).closer).to eq @user
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:commontator_thread).errors).to be_empty
+          expect(assigns(:commontator_thread).is_closed?).to eq true
+          expect(assigns(:commontator_thread).closer).to eq @user
         end
       end
 
@@ -55,18 +53,18 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         it 'redirects to the thread and returns an error message' do
           @user.can_edit = true
           put :reopen, params: { id: @thread.id }
-          expect(response).to redirect_to(@thread)
-          expect(assigns(:thread).errors).not_to be_empty
-          expect(assigns(:thread).is_closed?).to eq false
-          expect(assigns(:thread).closer).to be_nil
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:commontator_thread).errors).not_to be_empty
+          expect(assigns(:commontator_thread).is_closed?).to eq false
+          expect(assigns(:commontator_thread).closer).to be_nil
 
           @user.can_edit = false
           @user.is_admin = true
           put :reopen, params: { id: @thread.id }
-          expect(response).to redirect_to(@thread)
-          expect(assigns(:thread).errors).not_to be_empty
-          expect(assigns(:thread).is_closed?).to eq false
-          expect(assigns(:thread).closer).to be_nil
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:commontator_thread).errors).not_to be_empty
+          expect(assigns(:commontator_thread).is_closed?).to eq false
+          expect(assigns(:commontator_thread).closer).to be_nil
         end
       end
     end
@@ -78,17 +76,17 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         it 'works' do
           @user.can_edit = true
           put :reopen, params: { id: @thread.id }
-          expect(response).to redirect_to(@thread)
-          expect(assigns(:thread).errors).to be_empty
-          expect(assigns(:thread).is_closed?).to eq false
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:commontator_thread).errors).to be_empty
+          expect(assigns(:commontator_thread).is_closed?).to eq false
 
-          expect(assigns(:thread).close).to eq true
+          expect(assigns(:commontator_thread).close).to eq true
           @user.can_edit = false
           @user.is_admin = true
           put :reopen, params: { id: @thread.id }
-          expect(response).to redirect_to(@thread)
-          expect(assigns(:thread).errors).to be_empty
-          expect(assigns(:thread).is_closed?).to eq false
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:commontator_thread).errors).to be_empty
+          expect(assigns(:commontator_thread).is_closed?).to eq false
         end
       end
 
@@ -96,18 +94,18 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         it 'redirects to the thread and returns an error message' do
           @user.can_edit = true
           put :close, params: { id: @thread.id }
-          expect(response).to redirect_to(@thread)
-          expect(assigns(:thread).errors).not_to be_empty
-          expect(assigns(:thread).is_closed?).to eq true
-          expect(assigns(:thread).closer).to be_nil
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:commontator_thread).errors).not_to be_empty
+          expect(assigns(:commontator_thread).is_closed?).to eq true
+          expect(assigns(:commontator_thread).closer).to be_nil
 
           @user.can_edit = false
           @user.is_admin = true
           put :close, params: { id: @thread.id }
-          expect(response).to redirect_to(@thread)
-          expect(assigns(:thread).errors).not_to be_empty
-          expect(assigns(:thread).is_closed?).to eq true
-          expect(assigns(:thread).closer).to be_nil
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:commontator_thread).errors).not_to be_empty
+          expect(assigns(:commontator_thread).is_closed?).to eq true
+          expect(assigns(:commontator_thread).closer).to be_nil
         end
       end
     end
@@ -216,8 +214,8 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         @user.can_edit = true
         expect(@thread.close).to eq true
         put :close, params: { id: @thread.id }
-        expect(response).to redirect_to(@thread)
-        expect(assigns(:thread).errors).not_to be_empty
+        expect(response).to redirect_to(@commontable_path)
+        expect(assigns(:commontator_thread).errors).not_to be_empty
       end
     end
 
@@ -244,8 +242,8 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         expect(@thread.reopen).to eq true
         @user.can_edit = true
         put :reopen, params: { id: @thread.id }
-        expect(response).to redirect_to(@thread)
-        expect(assigns(:thread).errors).not_to be_empty
+        expect(response).to redirect_to(@commontable_path)
+        expect(assigns(:commontator_thread).errors).not_to be_empty
       end
     end
 
