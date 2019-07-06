@@ -1,4 +1,5 @@
 require_relative 'commontable_config'
+require_relative 'build_thread'
 
 module Commontator::ActsAsCommontable
   def self.included(base)
@@ -10,29 +11,21 @@ module Commontator::ActsAsCommontable
   module ClassMethods
     def acts_as_commontable(options = {})
       class_exec do
-        cattr_accessor :commontable_config
         association_options = options.extract!(:dependent)
-        self.commontable_config = Commontator::CommontableConfig.new(options)
-        self.is_commontable = true
+        association_options[:dependent] ||= :nullify
 
-        has_one :commontator_thread, as: :commontable,
-                                     class_name: 'Commontator::Thread',
-                                     dependent: association_options[:dependent]
+        cattr_accessor :commontable_config
+        self.commontable_config = Commontator::CommontableConfig.new(options)
+
+        has_one :commontator_thread, association_options.merge(
+          as: :commontable, class_name: 'Commontator::Thread'
+        )
 
         validates :commontator_thread, presence: true
 
-        prepend ThreadWithCommontator
-      end
-    end
+        prepend Commontator::BuildThread
 
-    module ThreadWithCommontator
-      def commontator_thread
-        @commontator_thread ||= super
-        return @commontator_thread unless @commontator_thread.nil?
-
-        @commontator_thread = build_commontator_thread.tap do |thread|
-          thread.save if persisted?
-        end
+        self.is_commontable = true
       end
     end
 
