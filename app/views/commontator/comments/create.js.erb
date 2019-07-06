@@ -9,7 +9,7 @@
 %>
 
 <% unless @commontator_new_comment.nil? %>
-  $("#thread-<%= @commontator_thread.id %>-new-comment-form-div").html("<%= escape_javascript(
+  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment").html("<%= escape_javascript(
     render partial: 'form', locals: {
       comment: @commontator_new_comment,
       thread: @commontator_thread,
@@ -17,11 +17,11 @@
     }
   ) %>");
 <% else %>
-  $("#thread-<%= @commontator_thread.id %>-new-comment-form-div").hide();
+  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment").hide();
 
-  $("#thread-<%= @commontator_thread.id %>-new-comment-link-div").fadeIn();
+  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment-link").fadeIn();
 <% end %>
 
-$("#comment-<%= @comment.id %>-div").hide().fadeIn()[0].scrollIntoView();
+$("#commontator-comment-<%= @comment.id %>").hide().fadeIn()[0].scrollIntoView();
 
 <%= javascript_proc %>

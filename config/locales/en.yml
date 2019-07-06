@@ -73,7 +73,6 @@ en:
     require_login: "You must login before you can post a comment."
     subscription:
       actions:
-        confirm_unsubscribe: "Are you sure you want to unsubscribe from this discussion?"
         subscribe: Subscribe
         unsubscribe: Unsubscribe
       errors:

@@ -73,7 +73,6 @@ de:
     require_login: "Sie müssen sich anmelden bevor sie einen Kommentar veröffentlichen können."
     subscription:
       actions:
-        confirm_unsubscribe: "Sind Sie sicher, dass sie keine Nachrichten mehr zur Diskussion erhalten möchten?"
         subscribe: Subscribe
         unsubscribe: Unsubscribe
       errors:

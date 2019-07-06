@@ -11,7 +11,7 @@
 <% config = comment.thread.config %>
 
 <% if comment.errors.any? %>
-  <div class="comment-error-explanation">
+  <div class="error-explanation">
     <h3><%= t "commontator.comment.errors.#{comment.id.blank? ? 'create' : 'update'}" %></h3>
 
     <ul>
@@ -23,21 +23,23 @@
 <% end %>
 
 <%= form_for([commontator, thread, comment], remote: !no_remote) do |form| %>
-
   <%= hidden_field_tag :per_page, per_page %>
 
   <%= form.hidden_field :parent_id %>
 
   <%= t('commontator.comment.replying') unless comment.parent.nil? %>
 
-  <div class="comment-form-field">
-    <%= form.text_area :body, rows: '7' %>
+  <div class="field">
+    <%=
+      form.text_area :body, rows: '7', id: comment.id.blank? ?
+        "commontator-thread-#{@commontator_thread.id}-new-comment-body" :
+        "commontator-comment-#{comment.id}-edit-body"
+    %>
     <%= javascript_tag('Commontator.initMentions();') if config.mentions_enabled %>
   </div>
 
-  <div class="comment-form-actions">
+  <div class="submit">
     <%= form.submit t("commontator.comment.actions.#{comment.id.blank? ? 'create' : 'update'}") %>
     <%= form.submit t('commontator.comment.actions.cancel'), name: 'cancel' %>
   </div>
-
 <% end %>

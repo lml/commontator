@@ -5,14 +5,14 @@
   per_page
 %>
 
-<div id="thread-<%= thread.id %>-reply" class="thread-reply">
+<div id="commontator-thread-<%= thread.id %>-reply" class="reply">
   <% if thread.is_closed? %>
     <p><%= t 'commontator.thread.status.cannot_post' %></p>
   <% elsif !user %>
     <p><%= t 'commontator.require_login' %>.</p>
   <% else %>
-    <div id="thread-<%= thread.id %>-new-comment-form-div" class="thread-new-comment-form<%=
-    @commontator_new_comment.nil? ? ' commontator-hidden' : '' %>">
+    <div id="commontator-thread-<%= thread.id %>-new-comment" class="new-comment<%=
+    @commontator_new_comment.nil? ? ' hidden' : '' %>">
       <% unless @commontator_new_comment.nil? %>
         <%=
           render partial: 'commontator/comments/form', locals: {
@@ -23,7 +23,7 @@
     </div>
 
     <% if @commontator_new_comment.nil? %>
-      <div id="thread-<%= thread.id %>-new-comment-link-div" class="thread-new-comment-link">
+      <div id="commontator-thread-<%= thread.id %>-new-comment-link" class="new-comment">
         <%= link_to t('commontator.comment.actions.new'),
             commontator.new_thread_comment_path(thread, per_page: per_page),
             remote: true %>

@@ -12,7 +12,7 @@ At the same time, almost anything about it can be configured or customized to su
 
 ## Installation
 
-There are 4 steps you must follow to install commontator:
+There are 4 steps you must follow to install Commontator:
 
 1. Gem
 
@@ -22,7 +22,15 @@ There are 4 steps you must follow to install commontator:
   gem 'commontator'
   ```
 
-  And then execute:
+  You will also need jquery-ujs and a sass compiler, which can be either be installed through
+  the webpacker gem and yarn/npm/bower or through the jquery-rails and sass[c]-rails gems:
+
+  ```rb
+  gem 'jquery-rails'
+  gem 'sassc-rails'
+  ```
+
+  Then execute:
 
   ```sh
   $ bundle install
@@ -30,7 +38,7 @@ There are 4 steps you must follow to install commontator:
 
 2. Initializer and Migration
 
-  Run the following command to copy commontator's initializer and migration to your app:
+  Run the following command to copy Commontator's initializer and migration to your app:
 
   ```sh
   $ rake commontator:install
@@ -52,7 +60,7 @@ There are 4 steps you must follow to install commontator:
 
 3. Configuration
 
-  Change commontator's configurations to suit your needs by editing `config/initializers/commontator.rb`.
+  Change Commontator's configurations to suit your needs by editing `config/initializers/commontator.rb`.
   Make sure to check that your configuration file is up to date every time you update the gem, as available options can change with each minor version.
   If you have deprecated options in your initializer, Commontator will issue warnings (usually printed to your console).
 
@@ -66,15 +74,33 @@ There are 4 steps you must follow to install commontator:
   Add this line to your Rails application's `routes.rb` file:
 
   ```rb
-  mount Commontator::Engine => :commontator
+  mount Commontator::Engine => '/commontator'
   ```
 
   You can change the mount path if you would like a different one.
 
-5. Stylesheets
+5. Javascripts
 
-  In order to display comment threads properly,
-  you must add the following to your `application.css`:
+  Make sure your application.js requires jquery and jquery-ujs:
+
+  ```js
+  //= require jquery
+  // If jquery-ujs was installed through jquery-rails
+  //= require jquery_ujs
+  // If jquery-ujs was installed through webpacker and yarn/npm/bower
+  //= require jquery-ujs
+  ```
+
+  If using Commontator's mentions functionality, also require Commontator's application.js:
+
+  ```js
+  //= require commontator/application
+  ```
+
+6. Stylesheets
+
+  In order to display comment threads properly, you must
+  require Commontator's application.scss in your `application.[s]css`:
 
   ```css
   *= require commontator/application
@@ -82,7 +108,7 @@ There are 4 steps you must follow to install commontator:
 
 ## Usage
 
-Follow the steps below to add commontator to your models and views:
+Follow the steps below to add Commontator to your models and views:
 
 1. Models
 
@@ -161,7 +187,7 @@ You can allow users to vote on each others' comments by adding the `acts_as_vota
 gem 'acts_as_votable'
 ```
 
-And enabling the relevant option in commontator's initializer:
+And enabling the relevant option in Commontator's initializer:
 
 ```rb
 config.comment_voting = :ld # See the initializer for available options
@@ -172,22 +198,17 @@ config.comment_voting = :ld # See the initializer for available options
 You can allow users to mention other users in the comments.
 Mentioned users are automatically subscribed to the thread and receive email notifications.
 
-First add the following to your application.js file:
-
-```js
-//= require commontator/application
-```
-
-Then enable mentions in commontator's initializer:
+First make sure you required Commontator's application.js
+in your `application.js` as explained in the Javascripts section.
+Then enable mentions in Commontator's initializer:
 
 ```rb
 config.mentions_enabled = true
 ```
 
-Finally configure the user_mentions_proc, which receives the current user,
-the current thread, and the search query inputted by that user and should
-return a relation containing the users that can be mentioned and match the
-query string:
+Finally configure the user_mentions_proc, which receives the current user, the current thread,
+and the search query inputted by that user and should return a relation containing the users
+that can be mentioned and match the query string:
 
 ```rb
 config.user_mentions_proc = ->(current_user, thread, query) { ... }
@@ -195,11 +216,11 @@ config.user_mentions_proc = ->(current_user, thread, query) { ... }
 
 Please be aware that with mentions enabled, any registered user
 can use the `user_mentions_proc` to search for other users.
-Make sure to properly escape SQL in this proc and to not allow searches on sensitive fields.
+Make sure to properly escape SQL in this proc and do not allow searches on sensitive fields.
 
 Use '@' with at least three other characters to mention someone in a new/edited comment.
 
-The mentions script assumes that commontator is mounted at `/commontator`,
+The mentions script assumes that Commontator is mounted at `/commontator`,
 so make sure that is indeed the case if you plan to use mentions.
 
 ## Browser Support
@@ -210,25 +231,27 @@ To function properly, this gem requires that visitors to the site have javascrip
 
 ## Customization
 
-Copy commontator's files to your app using any of the following commands:
+Copy Commontator's files to your app using any of the following commands:
 
 ```sh
 $ rake commontator:copy:locales
 
 $ rake commontator:copy:images
+$ rake commontator:copy:javascripts
 $ rake commontator:copy:stylesheets
 
 $ rake commontator:copy:views
-$ rake commontator:copy:mailers
 $ rake commontator:copy:helpers
 
 $ rake commontator:copy:controllers
+$ rake commontator:copy:mailers
+
 $ rake commontator:copy:models
 ```
 
 You are now free to modify them and have any changes made manifest in your application.
 
-If copying commontator's locales, please note that by default Rails will not autoload locales in subfolders of `config/locales` (like ours) unless you add the following to your application's configuration file:
+If copying Commontator's locales, please note that by default Rails will not autoload locales in subfolders of `config/locales` (like ours) unless you add the following to your `application.rb`:
 
 ```rb
 config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.yml')]
@@ -267,7 +290,7 @@ config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.yml')]
 
 ## Testing
 
-To run all existing tests for commontator, simply execute the following from the main folder:
+To run all existing tests for Commontator, simply execute the following from the main folder:
 
 ```sh
 $ rake

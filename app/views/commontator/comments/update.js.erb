@@ -1,8 +1,8 @@
-$("#comment-<%= @comment.id %>-body-div").html("<%= escape_javascript(
+$("#commontator-comment-<%= @comment.id %>-body").html("<%= escape_javascript(
   render partial: 'body', locals: { comment: @comment }
 ) %>");
 
-$("#comment-<%= @comment.id %>-updated-timestamp-span").html("<%= escape_javascript(
+$("#commontator-comment-<%= @comment.id %>-updated-timestamp").html("<%= escape_javascript(
   @comment.updated_timestamp
 ) %>");
 

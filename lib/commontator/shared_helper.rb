@@ -33,7 +33,7 @@ module Commontator::SharedHelper
 
   # Unlike the Rails versions of split_paragraphs and simple_format, Commontator's:
   # - Split paragraphs on any number of newlines optionally adjacent to spaces
-  # - Create all <p> tags (no <br> tags)
+  # - Create all <p> tags (no <br/> tags)
   # - Do not add <p> tags between other html tags
   def commontator_split_paragraphs(text)
     return [] if text.blank?

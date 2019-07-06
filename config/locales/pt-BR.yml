@@ -51,7 +51,6 @@ pt-BR:
     require_login: "Você deve fazer login para postar um comentário."
     subscription:
       actions:
-        confirm_unsubscribe: "Tem certeza que deseja cancelar sua inscrição nessa discussão?"
         subscribe: Inscrever-se
         unsubscribe: Cancelar inscrição
       errors:

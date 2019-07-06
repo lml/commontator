@@ -1,4 +1,4 @@
-$("#thread-<%= @commontator_thread.id %>-new-comment-form-div").html("<%= escape_javascript(
+$("#commontator-thread-<%= @commontator_thread.id %>-new-comment").html("<%= escape_javascript(
   render partial: 'form', locals: {
     comment: @comment,
     thread: @commontator_thread,
@@ -6,10 +6,10 @@ $("#thread-<%= @commontator_thread.id %>-new-comment-form-div").html("<%= escape
   }
 ) %>");
 
-$("#thread-<%= @commontator_thread.id %>-new-comment-form-div").fadeIn()[0].scrollIntoView();
+$("#commontator-thread-<%= @commontator_thread.id %>-new-comment").fadeIn()[0].scrollIntoView();
 
-$("#thread-<%= @commontator_thread.id %>-new-comment-link-div").hide();
+$("#commontator-thread-<%= @commontator_thread.id %>-new-comment-link").hide();
 
-$('#comment-body').focus();
+$('#commontator-thread-<%= @commontator_thread.id %>-new-comment-body').focus();
 
 <%= javascript_proc %>

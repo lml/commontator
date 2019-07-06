@@ -1,9 +1,9 @@
 <% if @comment.nil? || !@comment.persisted? %>
-  $("#thread-<%= @commontator_thread.id %>-new-comment-form-div").hide();
+  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment").hide();
 
-  $("#thread-<%= @commontator_thread.id %>-new-comment-link-div").fadeIn();
+  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment-link").fadeIn();
 <% else %>
-  $("#comment-<%= @comment.id %>-body-div").html("<%= escape_javascript(
+  $("#commontator-comment-<%= @comment.id %>-body").html("<%= escape_javascript(
     render partial: 'body', locals: { comment: @comment }
   ) %>");
 <% end %>

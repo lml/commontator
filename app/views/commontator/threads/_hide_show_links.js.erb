@@ -3,16 +3,16 @@
   thread
 %>
 
-$("#thread-<%= thread.id %>-hide-link").click(function() {
-  $("#thread-<%= thread.id %>-span").hide();
+$("#commontator-thread-<%= thread.id %>-hide-link").click(function() {
+  $("#commontator-thread-<%= thread.id %>-content").hide();
 
-  $("#thread-<%= thread.id %>-show-span").fadeIn()[0].scrollIntoView();
+  $("#commontator-thread-<%= thread.id %>-show").fadeIn()[0].scrollIntoView();
 });
 
-$("#thread-<%= thread.id %>-show-link").click(function() {
-  $("#thread-<%= thread.id %>-span").fadeIn()[0].scrollIntoView();
+$("#commontator-thread-<%= thread.id %>-show-link").click(function() {
+  $("#commontator-thread-<%= thread.id %>-content").fadeIn()[0].scrollIntoView();
 
-  $("#thread-<%= thread.id %>-show-span").hide();
+  $("#commontator-thread-<%= thread.id %>-show").hide();
 });
 
-$("#thread-<%= thread.id %>-hide-span").show();
+$("#commontator-thread-<%= thread.id %>-hide").show();

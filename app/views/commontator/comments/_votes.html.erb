@@ -13,7 +13,7 @@
 
   <% if comment_voting == :ld || comment_voting == :l %>
   <% vtype = (comment_voting == :ld) ? 'upvote' : 'like' %>
-  <span id="comment-<%= comment.id %>-<%= vtype %>-span" class="comment-<%= vtype %>">
+  <span id="commontator-comment-<%= comment.id %>-<%= vtype %>" class="<%= vtype %>">
     <% if can_vote && (vote.blank? || !vote.vote_flag) %>
       <%= form_tag commontator.upvote_comment_path(comment),
             method: :put,
@@ -37,13 +37,13 @@
   </span>
   <% end %>
 
-  <span id="comment-<%= comment.id %>-vote-count-span" class="comment-vote-count">
+  <span id="commontator-comment-<%= comment.id %>-vote-count" class="vote-count">
     <% config = thread.config %>
     <%= config.vote_count_proc.call(thread, comment.get_upvotes.size, comment.get_downvotes.size) %>
   </span>
 
   <% if comment_voting == :ld %>
-  <span id="comment-<%= comment.id %>-downvote-span" class="comment-downvote">
+  <span id="commontator-comment-<%= comment.id %>-downvote" class="downvote">
     <% if can_vote && (vote.blank? || vote.vote_flag) %>
       <%= form_tag commontator.downvote_comment_path(comment),
             method: :put,

@@ -1,4 +1,4 @@
-$("#thread-<%= @commontator_thread.id %>-subscription-span").html("<%= escape_javascript(
+$("#commontator-thread-<%= @commontator_thread.id %>-subscription").html("<%= escape_javascript(
   render partial: 'link', locals: { thread: @commontator_thread, user: @commontator_user }
 ) %>");
 

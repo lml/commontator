@@ -51,7 +51,6 @@ zh:
     require_login: "你需要先登入"
     subscription:
       actions:
-        confirm_unsubscribe: "你確定要去取消訂閱此則討論嗎？"
         subscribe: "訂閱"
         unsubscribe: "取消訂閱"
       errors:

@@ -51,7 +51,6 @@ ru:
     require_login: "Вы должны залогиниться прежде чем оставить комментарий."
     subscription:
       actions:
-        confirm_unsubscribe: "Вы уверены, что хотите отписать от обсуждения?"
         subscribe: Подписаться
         unsubscribe: Отписаться
       errors:
