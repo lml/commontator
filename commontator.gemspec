@@ -14,8 +14,7 @@ Gem::Specification.new do |gem|
   gem.summary     = 'Allows users to comment on any model in your application.'
   gem.description = 'A Rails engine for comments.'
 
-  gem.files = Dir['{app,config,db,lib,vendor}/**/*'] + [ 'MIT-LICENSE', 'Rakefile', 'README.md' ]
-  gem.test_files = Dir['spec/**/*']
+  gem.files = Dir['{app,config,db,lib,vendor}/**/*'] + [ 'MIT-LICENSE', 'README.md' ]
 
   gem.add_dependency 'rails', '>= 5.0'
 
