@@ -27,7 +27,12 @@
 
   <%= form.hidden_field :parent_id %>
 
-  <%= t('commontator.comment.replying') unless comment.parent.nil? %>
+  <% unless comment.parent.nil? %>
+    <div class="replying">
+      <%= t('commontator.comment.replying',
+            creator_name: Commontator.commontator_name(comment.parent.creator)) %>
+    </div>
+  <% end %>
 
   <div class="field">
     <%=

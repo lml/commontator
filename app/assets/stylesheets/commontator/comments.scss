@@ -4,7 +4,6 @@
     border-top: 1px solid;
     border-left: 1px solid;
 
-    font-size: 12px;
     font-weight: normal;
     color: #000;
   }
@@ -23,6 +22,14 @@
   	clear: both;
 
     margin: 5px 7px;
+  }
+
+  .author {
+    font-size: 110%;
+  }
+
+  .actions {
+    font-size: 90%;
   }
 
   .avatar {
@@ -59,6 +66,10 @@
     float: right;
   }
 
+  .vote-count {
+    font-size: 110%;
+  }
+
   .body {
     overflow: hidden;
 
@@ -70,6 +81,10 @@
 
       font-style: italic;
     }
+  }
+
+  .reply, .timestamp {
+    font-size: 90%;
   }
 
   .timestamp {

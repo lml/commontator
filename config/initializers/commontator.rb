@@ -182,8 +182,8 @@ Commontator.configure do |config|
   # Returns: vote count to be displayed (String)
   # pos is the number of likes, or the rating, or the reputation
   # neg is the number of dislikes, if applicable, or 0 otherwise
-  # Default: ->(thread, pos, neg) { "%+d" % (pos - neg) }
-  config.vote_count_proc = ->(thread, pos, neg) { "%+d" % (pos - neg) }
+  # Default: ->(thread, pos, neg) { ('%+d' % (pos - neg)).sub('+0', '0') }
+  config.vote_count_proc = ->(thread, pos, neg) { ('%+d' % (pos - neg)).sub('+0', '0') }
 
   # comment_order
   # Type: Symbol

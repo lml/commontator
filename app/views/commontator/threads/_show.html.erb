@@ -25,16 +25,12 @@
                     id: "commontator-thread-#{thread.id}-hide-link" %>
       </span>
 
-      &nbsp;
-
       <% if can_subscribe %>
         <span id="commontator-thread-<%= thread.id %>-subscription" class="subscription">
           <%= render partial: 'commontator/subscriptions/link',
                      locals: { thread: thread, user: user } %>
         </span>
       <% end %>
-
-      &nbsp;
 
       <% if can_edit %>
         <%
@@ -54,7 +50,6 @@
                       id: "commontator-thread-#{thread.id}-#{filter_class}-link",
                       class: filter_class,
                       remote: true %>
-          &nbsp;
         <% end %>
 
         <%= link_to t("commontator.thread.actions.#{close_string}"),
