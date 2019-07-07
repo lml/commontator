@@ -1,5 +1,4 @@
-#!/usr/bin/env rake
-# http://viget.com/extend/rails-engine-testing-with-rspec-capybara-and-factorygirl
+# https://viget.com/extend/rails-engine-testing-with-rspec-capybara-and-factorygirl
 begin
   require 'bundler/setup'
 rescue LoadError

@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.version     = COMMONTATOR_VERSION
   gem.authors     = [ 'Dante Soares' ]
   gem.email       = [ 'dante.m.soares@rice.edu' ]
-  gem.homepage    = 'http://github.com/lml/commontator'
+  gem.homepage    = 'https://github.com/lml/commontator'
   gem.license     = 'MIT'
   gem.summary     = 'Allows users to comment on any model in your application.'
   gem.description = 'A Rails engine for comments.'

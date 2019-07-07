@@ -1,6 +1,6 @@
 # Commontator
 
-[![Gem Version](https://badge.fury.io/rb/commontator.svg)](http://badge.fury.io/rb/commontator)
+[![Gem Version](https://badge.fury.io/rb/commontator.svg)](https://badge.fury.io/rb/commontator)
 [![Build Status](https://travis-ci.org/lml/commontator.svg?branch=master)](https://travis-ci.org/lml/commontator)
 [![Code Climate](https://codeclimate.com/github/lml/commontator/badges/gpa.svg)](https://codeclimate.com/github/lml/commontator)
 [![Code Coverage](https://codeclimate.com/github/lml/commontator/badges/coverage.svg)](https://codeclimate.com/github/lml/commontator)
@@ -12,7 +12,7 @@ At the same time, almost anything about it can be configured or customized to su
 
 ## Installation
 
-There are 4 steps you must follow to install Commontator:
+Follow the steps below to install Commontator:
 
 1. Gem
 
@@ -36,9 +36,9 @@ There are 4 steps you must follow to install Commontator:
   $ bundle install
   ```
 
-2. Initializer and Migration
+2. Initializer and Migrations
 
-  Run the following command to copy Commontator's initializer and migration to your app:
+  Run the following command to copy Commontator's initializer and migrations to your app:
 
   ```sh
   $ rake commontator:install
@@ -55,7 +55,7 @@ There are 4 steps you must follow to install Commontator:
   And then execute:
 
   ```sh
-  $ rake db:migrate
+  $ rails db:migrate
   ```
 
 3. Configuration
@@ -167,21 +167,23 @@ That's it! Commontator is now ready for use.
 
 ## Emails
 
-When you enable subscriptions, emails are sent automatically by Commontator. If sending emails, remember to add your host URL's to your environment files (test.rb, development.rb and production.rb):
+When you enable subscriptions, emails are sent automatically by Commontator.
+If sending emails, remember to add your host URL's to your environment files
+(test.rb, development.rb and production.rb):
 
 ```rb
 config.action_mailer.default_url_options = { host: "https://www.example.com" }
 ```
 
+Sometimes you may need to subscribe (commontator) users automatically when some event happens.
+You can call `object.commontator_thread.subscribe(user)` to subscribe users programmatically.
 Batch sending through Mailgun is also supported and automatically detected.
-
-You may need to customize the mailer views with `rake commontator:copy:views` though only `app/views/commontator/subscriptions_mailer/` may be necessary. These in turn may require that you customize the localizations as well (see below for more details on that).
-
-Sometimes you may need to add users automatically upon some event. For example, you may wish to automatically "subscribe" a (commontator) `user` to a (commontable) `event` so they get messages sent to the event automatically after joining the event. To do this you call `event.thread.subscribe(user)` when adding that `user` to that `event`.
+Read the Customization section to see how to customize subscription emails.
 
 ## Voting
 
-You can allow users to vote on each others' comments by adding the `acts_as_votable` gem to your Gemfile:
+You can allow users to vote on each others' comments
+by adding the `acts_as_votable` gem to your Gemfile:
 
 ```rb
 gem 'acts_as_votable'
@@ -250,8 +252,12 @@ $ rake commontator:copy:models
 ```
 
 You are now free to modify them and have any changes made manifest in your application.
+You can safely remove files you do not want to customize.
 
-If copying Commontator's locales, please note that by default Rails will not autoload locales in subfolders of `config/locales` (like ours) unless you add the following to your `application.rb`:
+You can customize subscription emails (mailer views) with `rake commontator:copy:views`.
+
+If copying Commontator's locales, please note that by default Rails will not autoload locales in
+subfolders of `config/locales` (like ours) unless you add the following to your `application.rb`:
 
 ```rb
 config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.yml')]
@@ -259,14 +265,14 @@ config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.yml')]
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Write tests for your feature
-4. Implement your new feature
-5. Test your feature (`rake`)
+1. Fork the lml/commontator repo on Github
+2. Create a feature or bugfix branch (`git checkout -b my-new-feature`)
+3. Write tests for the feature/bugfix
+4. Implement the new feature/bugfix
+5. Make sure both new and old tests pass (`rake`)
 6. Commit your changes (`git commit -am 'Added some feature'`)
-7. Push to the branch (`git push origin my-new-feature`)
-8. Create new Pull Request
+7. Push the branch (`git push origin my-new-feature`)
+8. Create a new Pull Request to lml/commontator on Github
 
 ## Development Environment Setup
 
@@ -276,16 +282,10 @@ config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.yml')]
   $ bundle install
   ```
 
-2. Load the schema:
+2. Setup the database:
 
   ```sh
-  $ rake db:schema:load
-  ```
-
-  Or if the above fails:
-
-  ```sh
-  $ bundle exec rake db:schema:load
+  $ rails db:setup
   ```
 
 ## Testing
@@ -294,12 +294,6 @@ To run all existing tests for Commontator, simply execute the following from the
 
 ```sh
 $ rake
-```
-
-Or if the above fails:
-
-```sh
-$ bundle exec rake
 ```
 
 ## License

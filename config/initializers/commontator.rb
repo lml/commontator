@@ -51,7 +51,7 @@ Commontator.configure do |config|
   # Returns: a String containing an HTML <img> tag pointing to the user's avatar image
   # The optional commontator_gravatar_image_tag helper takes a user object,
   # a border size and an options hash for Gravatar, and produces a Gravatar image tag
-  # See available options at http://en.gravatar.com/site/implement/images/)
+  # See available options at https://en.gravatar.com/site/implement/images/)
   # Note: Gravatar has several security implications for your users
   #       It makes your users trackable across different sites and
   #       allows de-anonymization attacks against their email addresses
