@@ -1,17 +1,18 @@
-<% # Clients of this partial must supply the following variables:
-   # thread
+<%#
+  Views that use this partial must supply the following variables:
+  thread
 %>
 
-$("#thread_<%= thread.id %>_hide_link").click(function() {
-  $("#thread_<%= thread.id %>_span").hide();
+$("#commontator-thread-<%= thread.id %>-hide-link").click(function() {
+  $("#commontator-thread-<%= thread.id %>-content").hide();
 
-  $("#thread_<%= thread.id %>_show_span").fadeIn()[0].scrollIntoView();
+  $("#commontator-thread-<%= thread.id %>-show").fadeIn()[0].scrollIntoView();
 });
 
-$("#thread_<%= thread.id %>_show_link").click(function() {
-  $("#thread_<%= thread.id %>_span").fadeIn()[0].scrollIntoView();
+$("#commontator-thread-<%= thread.id %>-show-link").click(function() {
+  $("#commontator-thread-<%= thread.id %>-content").fadeIn()[0].scrollIntoView();
 
-  $("#thread_<%= thread.id %>_show_span").hide();
+  $("#commontator-thread-<%= thread.id %>-show").hide();
 });
 
-$("#thread_<%= thread.id %>_hide_span").show();
+$("#commontator-thread-<%= thread.id %>-hide").show();

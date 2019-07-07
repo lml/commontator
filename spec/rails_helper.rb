@@ -1,7 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
-require 'spec_helper'
-require File.expand_path("../dummy/config/environment", __FILE__)
+
+require_relative 'spec_helper'
+require_relative 'dummy/config/environment'
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rails-controller-testing'
@@ -33,7 +34,9 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  # Fix for https://github.com/brianmario/mysql2/issues/947
+  # Testing for Mysql2: https://stackoverflow.com/a/2536743
+  config.use_transactional_fixtures = ActiveRecord::Base.connection.adapter_name != 'Mysql2'
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -51,20 +54,15 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 end
 
-Commontator::ApplicationController.class_eval do
-  include ApplicationHelper
-end
-
 def setup_model_spec
   @user = DummyUser.create
   @commontable = DummyModel.create
-  @thread = @commontable.thread
+  @thread = @commontable.commontator_thread
 end
 
 def setup_controller_spec
-  class_eval {include ApplicationHelper}
-  sign_out
   setup_model_spec
+  @commontable_path = Rails.application.routes.url_helpers.dummy_model_path(@commontable)
 end
 
 def setup_mailer_spec

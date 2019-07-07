@@ -1,10 +1,11 @@
-<% # Clients of this partial must supply the following variables:
-   # comments
-   # user
+<%#
+  Controllers that use this partial must supply the following variables:
+  comments
+  user
+  per_page
 %>
 
 <% comments.includes(:creator, :editor).each do |comment| %>
   <%= render partial: 'commontator/comments/show',
-             locals: { comment: comment,
-                          user: user } %>
+             locals: { comment: comment, user: user, per_page: per_page } %>
 <% end %>

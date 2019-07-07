@@ -16,8 +16,18 @@
 #
 # This would use the information in config/locales/es.yml.
 #
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
 # To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
+# available at https://guides.rubyonrails.org/i18n.html.
 
 ---
 en:
@@ -48,52 +58,53 @@ en:
     comment:
       actions:
         cancel: Cancel
-        confirm_delete: "Are you sure you want to delete this comment?"
-        create: "Post Comment"
+        confirm_delete: Are you sure you want to delete this comment?
+        create: Post Comment
         delete: Delete
         edit: Edit
-        new: "New Comment"
+        new: New Comment
         undelete: Undelete
-        update: "Modify Comment"
+        update: Modify Comment
+        reply: Reply to Comment.
       errors:
-        already_deleted: "This comment has already been deleted."
+        already_deleted: This comment has already been deleted.
         create: "This comment could not be posted because:"
-        double_posted: "is a duplicate of another comment."
-        not_deleted: "This comment is not deleted."
+        double_posted: is a duplicate of another comment.
+        not_deleted: This comment is not deleted.
         update: "This comment could not be modified because:"
       status:
-        created_at: "Posted on %{created_at}."
-        deleted_by: "Comment deleted by %{deleter_name}."
-        updated_at: "Last modified by %{editor_name} on %{updated_at}."
+        created_at: Posted on %{created_at}.
+        deleted_by: Comment deleted by %{deleter_name}.
+        updated_at: Last modified by %{editor_name} on %{updated_at}.
+      replying: Replying to %{creator_name}
     email:
       comment_created:
         body: "%{creator_name} commented on %{commontable_name}:"
         subject: "%{creator_name} posted a comment on %{commontable_name}"
-      thread_link_html: "<a href=\"%{comment_url}\">Click here</a> to view all comments on %{commontable_name}."
-    require_login: "You must login before you can post a comment."
+      thread_link_html: <a href="%{comment_url}">Click here</a> to view all comments on %{commontable_name}.
+    require_login: You must login before you can post a comment.
     subscription:
       actions:
-        confirm_unsubscribe: "Are you sure you want to unsubscribe from this discussion?"
         subscribe: Subscribe
         unsubscribe: Unsubscribe
       errors:
-        already_subscribed: "You are already subscribed to this discussion."
-        not_subscribed: "You are not subscribed to this discussion."
+        already_subscribed: You are already subscribed to this discussion.
+        not_subscribed: You are not subscribed to this discussion.
     thread:
       actions:
-        show_all: "Show All Comments"
-        filter: "Filter Comments"
-        close: "Close Discussion"
-        confirm_close: "Are you sure you want to close this discussion?"
-        reopen: "Reopen Discussion"
-        show: "Show Comments"
-        hide: "Hide Comments"
+        show_all: Show All Comments
+        filter: Filter Comments
+        close: Close Discussion
+        confirm_close: Are you sure you want to close this discussion?
+        reopen: Reopen Discussion
+        show: Show Comments
+        hide: Hide Comments
       errors:
-        already_closed: "This discussion has already been closed."
-        not_closed: "This discussion is not closed."
+        already_closed: This discussion has already been closed.
+        not_closed: This discussion is not closed.
       status:
-        cannot_post: "New comments cannot be posted at this time."
-        closed: "Comments (Closed by %{closer_name})"
+        cannot_post: New comments cannot be posted at this time.
+        closed: Comments (Closed by %{closer_name})
         open: Comments
   time:
     formats:

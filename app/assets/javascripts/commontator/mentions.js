@@ -1,7 +1,7 @@
 window.Commontator = {};
 Commontator._ = window._.noConflict();
 Commontator.initMentions = function() {
-    $('.comment_form_field textarea:not(.mentions-added)').each(function(_index, textarea){
+    $('.commontator .field textarea:not(.mentions-added)').each(function(_index, textarea){
         $textarea = $(textarea);
         $form = $textarea.parents('form');
         threadId = $textarea.parents('.thread').attr('id').match(/[\d]+/)[0];
@@ -13,7 +13,7 @@ Commontator.initMentions = function() {
             allowRepeat: true,
             minChars: 3,
             onDataRequest:function (mode, query, callback) {
-                $.getJSON('/commontator/threads/'+threadId+'/mentions.json', {q: query}, function(responseData) {
+                $.getJSON('/commontator/threads/' + threadId + '/mentions.json', {q: query}, function(responseData) {
                     callback.call(this, responseData.mentions);
                 });
             }

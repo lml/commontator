@@ -5,10 +5,6 @@ class DummyModelsController < ApplicationController
     commontator_thread_show(@dummy_model)
   end
 
-  def hide
-    render :show
-  end
-
   def url_options
     return Hash.new if request.nil?
     super
@@ -20,4 +16,3 @@ class DummyModelsController < ApplicationController
     @dummy_model = DummyModel.find(params[:id])
   end
 end
-

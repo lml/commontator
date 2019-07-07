@@ -1,16 +1,17 @@
-<% # Clients of this partial must provide the following variables:
-   # comment
-   #
-   # Optionally, they can also supply the following variables:
-   per_page ||= nil
-   thread ||= nil
-   no_remote ||= false
+<%
+  # Views that use this partial must provide the following variables:
+  # comment
+  #
+  # Optionally, they can also supply the following variables:
+  per_page ||= nil
+  thread ||= nil
+  no_remote ||= false
 %>
 
 <% config = comment.thread.config %>
 
 <% if comment.errors.any? %>
-  <div class="comment_error_explanation">
+  <div class="error-explanation">
     <h3><%= t "commontator.comment.errors.#{comment.id.blank? ? 'create' : 'update'}" %></h3>
 
     <ul>
@@ -21,19 +22,29 @@
   </div>
 <% end %>
 
-<%= form_for([commontator, thread, comment],
-             remote: !no_remote) do |f| %>
-
+<%= form_for([commontator, thread, comment], remote: !no_remote) do |form| %>
   <%= hidden_field_tag :per_page, per_page %>
-  
-  <div class="comment_form_field">
-    <%= f.text_area :body, rows: '7' %>
-    <%= javascript_tag('Commontator.initMentions()') if Commontator.mentions_enabled %>
+
+  <%= form.hidden_field :parent_id %>
+
+  <% unless comment.parent.nil? %>
+    <div class="replying">
+      <%= t('commontator.comment.replying',
+            creator_name: Commontator.commontator_name(comment.parent.creator)) %>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%=
+      form.text_area :body, rows: '7', id: comment.id.blank? ?
+        "commontator-thread-#{@commontator_thread.id}-new-comment-body" :
+        "commontator-comment-#{comment.id}-edit-body"
+    %>
+    <%= javascript_tag('Commontator.initMentions();') if config.mentions_enabled %>
   </div>
-  
-  <div class="comment_form_actions">
-    <%= f.submit t("commontator.comment.actions.#{comment.id.blank? ? 'create' : 'update'}") %>
-    <%= f.submit t('commontator.comment.actions.cancel'), name: 'cancel' %>
+
+  <div class="submit">
+    <%= form.submit t("commontator.comment.actions.#{comment.id.blank? ? 'create' : 'update'}") %>
+    <%= form.submit t('commontator.comment.actions.cancel'), name: 'cancel' %>
   </div>
-  
 <% end %>

@@ -1,0 +1,15 @@
+<%
+  # Controllers that use this partial must supply the following variables:
+  # comment
+  # user
+
+  thread = comment.thread
+%>
+
+<% if thread.config.comment_reply_style != :n && !thread.is_closed? && user %>
+  <%=
+    link_to t('commontator.comment.actions.reply'), commontator.new_thread_comment_path(
+      thread, comment: { parent_id: comment.id }, per_page: per_page
+    ), remote: true
+  %>
+<% end %>
