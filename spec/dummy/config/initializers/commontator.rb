@@ -29,7 +29,7 @@ Commontator.configure do |config|
 
   config.comments_per_page = 10
 
-  config.thread_subscription = :m
+  config.thread_subscription = :b
 
   config.mentions_enabled = true
 

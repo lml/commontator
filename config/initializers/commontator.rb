@@ -166,13 +166,11 @@ Commontator.configure do |config|
   # comment_voting
   # Type: Symbol
   # Whether users can vote on other users' comments
+  # Any option other than :n requires the acts_as_votable gem
   # Valid options:
   #   :n  (no voting)
-  #   :l  (likes - requires acts_as_votable gem)
-  #   :ld (likes/dislikes - requires acts_as_votable gem)
-  # Not yet implemented:
-  #   :s  (star ratings)
-  #   :r  (reputation system)
+  #   :l  (likes)
+  #   :ld (likes/dislikes)
   # Default: :n
   config.comment_voting = :n
 
@@ -182,8 +180,12 @@ Commontator.configure do |config|
   # Returns: vote count to be displayed (String)
   # pos is the number of likes, or the rating, or the reputation
   # neg is the number of dislikes, if applicable, or 0 otherwise
-  # Default: ->(thread, pos, neg) { ('%+d' % (pos - neg)).sub('+0', '0') }
-  config.vote_count_proc = ->(thread, pos, neg) { ('%+d' % (pos - neg)).sub('+0', '0') }
+  # Default: ->(thread, pos, neg) do
+  #   ((thread.config.comment_voting == :ld ? '%+d' : '%d') % (pos - neg)).sub('+0', '0')
+  # end
+  config.vote_count_proc = ->(thread, pos, neg) do
+    ((thread.config.comment_voting == :ld ? '%+d' : '%d') % (pos - neg)).sub('+0', '0')
+  end
 
   # comment_order
   # Type: Symbol

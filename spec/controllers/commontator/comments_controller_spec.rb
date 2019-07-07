@@ -107,9 +107,10 @@ RSpec.describe Commontator::CommentsController, type: :controller do
               }
             end
 
-            context 'mentions are enabled' do
-              it 'subscribes the mentioned user' do
-                expect { call_request }.to change { Commontator::Subscription.count }.by(1)
+            context 'mentions enabled' do
+              it 'subscribes mentioned users' do
+                expect(@thread.subscription_for(user_to_subscribe)).to be_nil
+                call_request
                 expect(@thread.subscription_for(user_to_subscribe)).to be_present
               end
 
@@ -124,12 +125,12 @@ RSpec.describe Commontator::CommentsController, type: :controller do
               end
             end
 
-            context 'mentions are disabled' do
+            context 'mentions disabled' do
               before { @thread.config.mentions_enabled = false }
               after  { @thread.config.mentions_enabled = true }
 
-              it 'does not subscribe any users' do
-                expect{ call_request }.not_to change { Commontator::Subscription.count }
+              it 'does not subscribe mentioned or unmentioned users' do
+                call_request
                 expect(@thread.subscription_for(user_to_subscribe)).to be_nil
                 expect(@thread.subscription_for(other_user)).to be_nil
               end

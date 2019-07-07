@@ -60,10 +60,8 @@
 
   .like {
     float: left;
-  }
 
-  .like + .vote-count {
-    float: right;
+    margin: 0 5px;
   }
 
   .vote-count {
