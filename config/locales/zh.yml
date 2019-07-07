@@ -12,6 +12,12 @@ zh: &zh
         thread: 討論
       commontator/thread:
         commontable: 可以留言
+    errors:
+      models:
+        commontator/comment:
+          attributes:
+            body:
+              double_posted: 已經有一筆相同的留言。
     models:
       commontator/comment:
         one: 留言
@@ -38,7 +44,6 @@ zh: &zh
       errors:
         already_deleted: 此留言已經被刪除了
         create: "此留言無法發佈因為:"
-        double_posted: 已經有一筆相同的留言。
         not_deleted: 此留言未被刪除
         update: "此留言無法被修改因為:"
       status:

@@ -46,14 +46,14 @@
 
         <% if thread.is_filtered? %>
           <%= link_to t("commontator.thread.actions.#{filter_string}"),
-                      commontator.thread_url(thread, show_all: (show_all ? nil : true)),
+                      commontator.thread_path(thread, show_all: (show_all ? nil : true)),
                       id: "commontator-thread-#{thread.id}-#{filter_class}-link",
                       class: filter_class,
                       remote: true %>
         <% end %>
 
         <%= link_to t("commontator.thread.actions.#{close_string}"),
-                    commontator.polymorphic_url([close_string, thread]),
+                    commontator.polymorphic_path([close_string, thread]),
                     data: is_closed ? {} :
                                       { confirm: t('commontator.thread.actions.confirm_close') },
                     method: :put,

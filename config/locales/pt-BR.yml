@@ -12,6 +12,12 @@ pt-BR:
         thread: Discussão
       commontator/thread:
         commontable: Comentável
+    errors:
+      models:
+        commontator/comment:
+          attributes:
+            body:
+              double_posted: é um comentário duplicado.
     models:
       commontator/comment:
         one: comentário
@@ -38,7 +44,6 @@ pt-BR:
       errors:
         already_deleted: Este comentário já foi removido.
         create: "Este comentário não pôde ser postado porque:"
-        double_posted: é um comentário duplicado.
         not_deleted: Este comentário não foi removido.
         update: "Este comentário não pôde ser editado porque:"
       status:

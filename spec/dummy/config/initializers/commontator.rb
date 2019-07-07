@@ -6,7 +6,7 @@ Commontator.configure do |config|
     user = context.current_user
     return user unless user.nil? && Rails.env.development?
 
-    DummyUser.order(:created_at).first.tap do |user|
+    DummyUser.order(:created_at).last.tap do |user|
       user.can_read = true
       user.can_edit = true
       user.is_admin = true
@@ -36,4 +36,6 @@ Commontator.configure do |config|
   config.user_mentions_proc = ->(current_user, thread, query) do
     'DummyUser'.include?(query) ? DummyUser.all : DummyUser.none
   end
+
+  config.comment_filter = Commontator::Comment.arel_table[:body].does_not_match('%hidden%')
 end
