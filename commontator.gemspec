@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'jquery-rails'
   gem.add_development_dependency 'sassc-rails'
+  gem.add_development_dependency 'rails-i18n'
   gem.add_development_dependency 'rspec-rails'
   gem.add_development_dependency 'rails-controller-testing'
   gem.add_development_dependency 'listen'
