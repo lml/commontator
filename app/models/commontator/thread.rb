@@ -13,7 +13,7 @@ class Commontator::Thread < ActiveRecord::Base
   end
 
   def will_paginate?
-    !config.comments_per_page.nil? && Commontator::Comment.will_paginate?
+    !config.comments_per_page.nil?
   end
 
   def is_filtered?

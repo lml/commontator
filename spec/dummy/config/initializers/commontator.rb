@@ -27,8 +27,6 @@ Commontator.configure do |config|
 
   config.comment_reply_style = :q
 
-  config.comments_per_page = 10
-
   config.thread_subscription = :b
 
   config.mentions_enabled = true

@@ -18,15 +18,6 @@ class Commontator::Comment < ActiveRecord::Base
   before_save :set_ancestor_ids_and_ancestor_descendant_ids
   before_destroy :remove_ancestor_descendant_ids
 
-  cattr_accessor :will_paginate
-  self.will_paginate = begin
-    require 'will_paginate'
-
-    true
-  rescue LoadError
-    false
-  end
-
   cattr_accessor :is_votable
   self.is_votable = begin
     require 'acts_as_votable'
@@ -35,10 +26,6 @@ class Commontator::Comment < ActiveRecord::Base
     true
   rescue LoadError
     false
-  end
-
-  def self.will_paginate?
-    will_paginate
   end
 
   def self.is_votable?

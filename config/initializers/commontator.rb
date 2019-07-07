@@ -232,9 +232,9 @@ Commontator.configure do |config|
   # Type: Integer or nil
   # Number of comments to display in each page
   # Set to nil to disable pagination
-  # Any other value requires the will_paginate gem
-  # Default: nil (no pagination)
-  config.comments_per_page = nil
+  # Note: nil or large values WILL cause performance and memory issues if there are many comments
+  # Default: 20
+  config.comments_per_page = 20
 
   # thread_subscription
   # Type: Symbol
