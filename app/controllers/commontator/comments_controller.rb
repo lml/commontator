@@ -13,7 +13,7 @@ class Commontator::CommentsController < Commontator::ApplicationController
         Commontator.commontator_name(parent.creator)
       }</span>\n#{
         parent.body
-      }\n</blockquote>\n" if @commontator_thread.config.comment_reply_style == :q
+      }\n</blockquote>\n" if [ :q, :b ].include? @commontator_thread.config.comment_reply_style
     end
     security_transgression_unless @comment.can_be_created_by?(@commontator_user)
 

@@ -79,7 +79,7 @@ class Commontator::Thread < ActiveRecord::Base
     includes = [ :thread, :creator, :editor ]
     comments = comments.includes(includes)
 
-    if config.comment_reply_style == :i
+    if [ :i, :b ].include? config.comment_reply_style
       root_comments = comments.where(parent_id: parent_id).to_a
 
       per_page = config.nested_comments_per_page || 0
@@ -88,7 +88,7 @@ class Commontator::Thread < ActiveRecord::Base
       root_comments.each do |comment|
         descendant_ids = comment.descendant_ids
         num_children_by_parent_id[comment.id] = descendant_ids.size
-        all_descendant_ids += descendant_ids[((page - 1) * per_page)..(page * per_page)]
+        all_descendant_ids += descendant_ids[((page - 1) * per_page)..(page * per_page)] || []
       end
       children_by_parent_id = ordered_comments(show_all)
         .where(id: all_descendant_ids.uniq)

@@ -222,8 +222,8 @@ Commontator.configure do |config|
   # Valid options:
   #   :n (no replies, though users can still manually add <blockquote>s)
   #   :q (copies the comment being replied to into a <blockquote>)
-  # Not yet implemented:
   #   :i (indents each reply under the comment being replied to)
+  #   :b (both <blockquote> the original comment and indent replies)
   # It might be a good idea to add some CSS to hide <blockquote>s when converting from :q to :i
   # Default: :n
   config.comment_reply_style = :n

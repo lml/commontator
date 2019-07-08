@@ -25,7 +25,7 @@ Commontator.configure do |config|
 
   config.comment_voting = :ld
 
-  config.comment_reply_style = :i
+  config.comment_reply_style = :b
 
   config.thread_subscription = :b
 
