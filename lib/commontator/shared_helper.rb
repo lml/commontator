@@ -15,7 +15,6 @@ module Commontator::SharedHelper
       partial: 'commontator/shared/thread', locals: {
         user: @commontator_user,
         thread: @commontator_thread,
-        per_page: @commontator_per_page,
         page: @commontator_page,
         show_all: @commontator_show_all
       }

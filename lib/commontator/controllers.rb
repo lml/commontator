@@ -8,9 +8,6 @@ module Commontator::Controllers
   def commontator_set_thread_variables
     return if @commontator_thread.nil? || !@commontator_thread.can_be_read_by?(@commontator_user)
 
-    @commontator_per_page = params[:per_page]
-    @commontator_per_page = @commontator_thread.config.comments_per_page \
-      if @commontator_per_page.blank?
     @commontator_page = params[:page]
     @commontator_page = 1 if @commontator_page.blank?
     @commontator_show_all = !params[:show_all].blank? &&

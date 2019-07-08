@@ -1,5 +1,5 @@
 class Commontator::CommentsController < Commontator::ApplicationController
-  before_action :set_thread, :commontator_set_thread_variables, only: [ :new, :create ]
+  before_action :set_thread, only: [ :new, :create ]
   before_action :set_comment_and_thread, except: [ :new, :create ]
 
   # GET /threads/1/comments/new
@@ -161,7 +161,8 @@ class Commontator::CommentsController < Commontator::ApplicationController
 
   def subscribe_mentioned
     Commontator.commontator_mentions(@commontator_user, @commontator_thread, '')
-               .where(id: params[:mentioned_ids]).each do |user|
+               .where(id: params[:mentioned_ids])
+               .each do |user|
       @commontator_thread.subscribe(user)
     end
   end

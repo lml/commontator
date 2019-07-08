@@ -27,13 +27,14 @@ module Commontator::Config
     :comment_voting,
     :vote_count_proc,
     :comment_order,
-    :new_comment_style,
-    :comments_per_page,
     :thread_subscription,
     :email_from_proc,
     :commontable_name_proc,
     :comment_url_proc,
+    :new_comment_style,
     :comment_reply_style,
+    :comments_per_page,
+    :nested_comments_per_page,
     :mentions_enabled
   ]
 

@@ -16,6 +16,10 @@ class Commontator::Thread < ActiveRecord::Base
     !config.comments_per_page.nil?
   end
 
+  def is_votable?
+    config.comment_voting.to_sym != :n
+  end
+
   def is_filtered?
     !config.comment_filter.nil?
   end
@@ -44,15 +48,70 @@ class Commontator::Thread < ActiveRecord::Base
     end
   end
 
-  def paginated_comments(page = 1, per_page = config.comments_per_page, show_all = false)
+  def latest_comment(show_all = false)
+    @latest_comment ||= ordered_comments(show_all).last
+  end
+
+  def paginated_comments(page = 1, show_all = false)
     oc = ordered_comments(show_all)
     return oc unless will_paginate?
 
-    oc.paginate(page: page, per_page: per_page)
+    oc.paginate(page: page, per_page: config.comments_per_page)
   end
 
-  def new_comment_page(per_page = config.comments_per_page)
-    return 1 if per_page.nil? || per_page.to_i <= 0
+  def nest_comments(comments, num_children_by_parent_id, children_by_parent_id)
+    comments.map do |comment|
+      # Delete is used to ensure loops don't cause stack overflow
+      [
+        comment,
+        num_children_by_parent_id.delete(comment.id) || 0,
+        nest_comments(
+          children_by_parent_id.delete(comment.id) || [],
+          num_children_by_parent_id,
+          children_by_parent_id
+        )
+      ]
+    end
+  end
+
+  def nested_comments_for(user, comments = nil, parent_id = nil, page = 1, show_all = false)
+    comments ||= paginated_comments(page, show_all)
+    includes = [ :thread, :creator, :editor ]
+    comments = comments.includes(includes)
+
+    if config.comment_reply_style == :i
+      root_comments = comments.where(parent_id: parent_id).to_a
+
+      per_page = config.nested_comments_per_page || 0
+      num_children_by_parent_id = {}
+      all_descendant_ids = []
+      root_comments.each do |comment|
+        descendant_ids = comment.descendant_ids
+        num_children_by_parent_id[comment.id] = descendant_ids.size
+        all_descendant_ids += descendant_ids[((page - 1) * per_page)..(page * per_page)]
+      end
+      children_by_parent_id = ordered_comments(show_all)
+        .where(id: all_descendant_ids.uniq)
+        .order(:created_at)
+        .includes(includes)
+        .group_by(&:parent_id)
+
+      nest_comments(root_comments, num_children_by_parent_id, children_by_parent_id)
+    else
+      comments.map { |comment| [ comment, 0, [] ] }
+    end.tap do |nested_comments|
+      next unless is_votable?
+
+      all_comments = nested_comments.flatten.select { |comm| comm.is_a?(Commontator::Comment) }
+      ActiveRecord::Associations::Preloader.new.preload(
+        all_comments, :votes_for, ActsAsVotable::Vote.where(voter: user)
+      )
+    end
+  end
+
+  def new_comment_page
+    per_page = config.comments_per_page.to_i
+    return 1 if per_page <= 0
 
     comment_index = case config.comment_order.to_sym
     when :l
@@ -69,7 +128,7 @@ class Commontator::Thread < ActiveRecord::Base
       filtered_comments.count # Last comment
     end
 
-    (comment_index.to_f/per_page.to_i).ceil
+    (comment_index.to_f/per_page).ceil
   end
 
   def is_closed?

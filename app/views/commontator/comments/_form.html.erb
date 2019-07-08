@@ -3,7 +3,6 @@
   # comment
   #
   # Optionally, they can also supply the following variables:
-  per_page ||= nil
   thread ||= nil
   no_remote ||= false
 %>
@@ -23,8 +22,6 @@
 <% end %>
 
 <%= form_for([commontator, thread, comment], remote: !no_remote) do |form| %>
-  <%= hidden_field_tag :per_page, per_page %>
-
   <%= form.hidden_field :parent_id %>
 
   <% unless comment.parent.nil? %>

@@ -2,7 +2,6 @@
   Controllers that use this partial must supply the following variables:
   comment
   user
-  per_page
 %>
 
 <% creator = comment.creator
@@ -11,44 +10,41 @@
    avatar = Commontator.commontator_avatar(creator, self) || ''
 %>
 
-<div id="commontator-comment-<%= comment.id %>" class="comment">
-  <div id="commontator-comment-<%= comment.id %>-section-top" class="section top">
-    <span id="commontator-comment-<%= comment.id %>-author" class="author">
-      <%= link.blank? ? name : link_to(name, link) %>
-    </span>
+<div id="commontator-comment-<%= comment.id %>-section-top" class="section top">
+  <span id="commontator-comment-<%= comment.id %>-author" class="author">
+    <%= link.blank? ? name : link_to(name, link) %>
+  </span>
 
-    <span id="commontator-comment-<%= comment.id %>-actions" class="actions">
-      <%= render partial: 'commontator/comments/actions',
-                 locals: { comment: comment, user: user } %>
-    </span>
+  <span id="commontator-comment-<%= comment.id %>-actions" class="actions">
+    <%= render partial: 'commontator/comments/actions',
+               locals: { comment: comment, user: user } %>
+  </span>
+</div>
+
+<div id="commontator-comment-<%= comment.id %>-section-middle" class="section middle">
+  <span id="commontator-comment-<%= comment.id %>-avatar" class="avatar">
+    <%= avatar %>
+  </span>
+
+  <span id="commontator-comment-<%= comment.id %>-votes" class="votes">
+    <%= render partial: 'commontator/comments/votes', locals: { comment: comment, user: user } %>
+  </span>
+
+  <div id="commontator-comment-<%= comment.id %>-body" class="body">
+    <%= render partial: 'commontator/comments/body', locals: { comment: comment } %>
   </div>
+</div>
 
-  <div id="commontator-comment-<%= comment.id %>-section-middle" class="section middle">
-    <span id="commontator-comment-<%= comment.id %>-avatar" class="avatar">
-      <%= avatar %>
-    </span>
+<div id="commontator-comment-<%= comment.id %>-section-bottom" class="section bottom">
+  <span id="commontator-comment-<%= comment.id %>-reply" class="reply">
+    <%= render partial: 'commontator/comments/reply', locals: { comment: comment, user: user } %>
+  </span>
 
-    <span id="commontator-comment-<%= comment.id %>-votes" class="votes">
-      <%= render partial: 'commontator/comments/votes', locals: { comment: comment, user: user } %>
-    </span>
+  <span id="commontator-comment-<%= comment.id %>-created-timestamp" class="timestamp">
+    <%= comment.created_timestamp %>
+  </span>
 
-    <div id="commontator-comment-<%= comment.id %>-body" class="body">
-      <%= render partial: 'commontator/comments/body', locals: { comment: comment } %>
-    </div>
-  </div>
-
-  <div id="commontator-comment-<%= comment.id %>-section-bottom" class="section bottom">
-    <span id="commontator-comment-<%= comment.id %>-reply" class="reply">
-      <%= render partial: 'commontator/comments/reply',
-                 locals: { comment: comment, user: user, per_page: per_page } %>
-    </span>
-
-    <span id="commontator-comment-<%= comment.id %>-created-timestamp" class="timestamp">
-      <%= comment.created_timestamp %>
-    </span>
-
-    <span id="commontator-comment-<%= comment.id %>-updated-timestamp" class="timestamp">
-      <%= comment.updated_timestamp if comment.is_modified? %>
-    </span>
-  </div>
+  <span id="commontator-comment-<%= comment.id %>-updated-timestamp" class="timestamp">
+    <%= comment.updated_timestamp if comment.is_modified? %>
+  </span>
 </div>

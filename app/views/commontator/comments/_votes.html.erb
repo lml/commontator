@@ -39,7 +39,7 @@
 
   <span id="commontator-comment-<%= comment.id %>-vote-count" class="vote-count">
     <% config = thread.config %>
-    <%= config.vote_count_proc.call(thread, comment.get_upvotes.size, comment.get_downvotes.size) %>
+    <%= config.vote_count_proc.call(thread, comment.cached_votes_up, comment.cached_votes_down) %>
   </span>
 
   <% if comment_voting == :ld %>

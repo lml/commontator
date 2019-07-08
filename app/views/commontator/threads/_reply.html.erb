@@ -2,7 +2,6 @@
   Views that use this partial must supply the following variables:
   thread
   user
-  per_page
 %>
 
 <div id="commontator-thread-<%= thread.id %>-reply" class="reply">
@@ -16,7 +15,7 @@
       <% unless @commontator_new_comment.nil? %>
         <%=
           render partial: 'commontator/comments/form', locals: {
-            comment: @commontator_new_comment, thread: thread, per_page: per_page
+            comment: @commontator_new_comment, thread: thread
           }
         %>
       <% end %>
@@ -25,7 +24,7 @@
     <% if @commontator_new_comment.nil? %>
       <div id="commontator-thread-<%= thread.id %>-new-comment-link" class="new-comment">
         <%= link_to t('commontator.comment.actions.new'),
-            commontator.new_thread_comment_path(thread, per_page: per_page),
+            commontator.new_thread_comment_path(thread),
             remote: true %>
       </div>
     <% end %>

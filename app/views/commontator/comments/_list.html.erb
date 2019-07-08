@@ -1,11 +1,18 @@
 <%#
   Controllers that use this partial must supply the following variables:
-  comments
+  nested_comments
   user
-  per_page
 %>
 
-<% comments.includes(:creator, :editor).each do |comment| %>
-  <%= render partial: 'commontator/comments/show',
-             locals: { comment: comment, user: user, per_page: per_page } %>
+<% nested_comments.each do |comment, total, children| %>
+  <div id="commontator-comment-<%= comment.id %>" class="comment">
+    <%= render partial: 'commontator/comments/show', locals: { comment: comment, user: user } %>
+
+    <% unless children.empty? %>
+      <div class="children">
+        <%= render partial: 'commontator/comments/list',
+                   locals: { nested_comments: children, user: user } %>
+      </div>
+    <% end %>
+  </div>
 <% end %>

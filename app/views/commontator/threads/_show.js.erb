@@ -3,12 +3,11 @@
   thread
   user
   page
-  per_page
   show_all
 %>
 
 $("#commontator-thread-<%= thread.id %>").html("<%= escape_javascript(
   render partial: 'commontator/threads/show',
          formats: [ :html ],
-         locals: { thread: thread, user: user, page: page, per_page: per_page, show_all: show_all }
+         locals: { thread: thread, user: user, page: page, show_all: show_all }
 ) %>");

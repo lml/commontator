@@ -236,6 +236,16 @@ Commontator.configure do |config|
   # Default: 20
   config.comments_per_page = 20
 
+  # nested_comments_per_page
+  # Type: Integer
+  # Number of nested comments to display in each page (for each root comment)
+  # Note: large values WILL cause performance and memory issues if there are many nested comments
+  # The maximum number of comments displayed at once with nesting enabled is:
+  # comments_per_page * nested_comments_per_page
+  # Make sure your server can handle loading this many comments at once
+  # Default: 10
+  config.nested_comments_per_page = 10
+
   # thread_subscription
   # Type: Symbol
   # Whether users can subscribe to threads to receive activity email notifications

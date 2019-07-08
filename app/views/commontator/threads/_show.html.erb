@@ -3,7 +3,6 @@
   thread
   user
   page
-  per_page
   show_all
 %>
 
@@ -70,26 +69,36 @@
   </div>
 
   <% if thread.config.comment_order == :l %>
-    <%= render partial: 'commontator/threads/reply',
-               locals: { thread: thread, user: user, per_page: per_page } %>
+    <%= render partial: 'commontator/threads/reply', locals: { thread: thread, user: user } %>
   <% end %>
 
   <div id="commontator-thread-<%= thread.id %>-comment-list" class="comment-list">
-    <% comments = thread.paginated_comments(page, per_page, show_all) %>
+    <%
+      per_page = thread.config.comments_per_page
+      comments = thread.paginated_comments(page, show_all)
+    %>
 
-    <%= render partial: 'commontator/comments/list',
-               locals: { comments: comments, user: user, per_page: per_page } %>
+    <%=
+      render partial: 'commontator/comments/list', locals: {
+        nested_comments: thread.nested_comments_for(user, comments, nil, page, show_all), user: user
+      }
+    %>
   </div>
 
   <% if thread.will_paginate? %>
     <div id="commontator-thread-<%= thread.id %>-pagination" class="pagination">
       <div id="commontator-thread-<%= thread.id %>-page-entries-info" class="page-entries-info">
-        <%= page_entries_info comments,
-                              params: { controller: 'commontator/threads',
-                                        action: 'show',
-                                        id: thread.id,
-                                        page: page,
-                                        per_page: per_page } %>.
+        <%=
+          page_entries_info(
+            comments, params: {
+              controller: 'commontator/threads',
+              action: 'show',
+              id: thread.id,
+              page: page,
+              per_page: per_page
+            }
+          )
+        %>.
       </div>
 
       <div id="commontator-thread-<%= thread.id %>-will-paginate" class="will-paginate">
@@ -107,8 +116,7 @@
   <% end %>
 
   <% if thread.config.comment_order != :l %>
-    <%= render partial: 'commontator/threads/reply',
-               locals: { thread: thread, user: user, per_page: per_page } %>
+    <%= render partial: 'commontator/threads/reply', locals: { thread: thread, user: user } %>
   <% end %>
 </div>
 

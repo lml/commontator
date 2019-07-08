@@ -1,3 +1,4 @@
+require 'will_paginate'
 require 'commontator/version'
 
 module Commontator
