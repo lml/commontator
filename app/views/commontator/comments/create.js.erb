@@ -1,8 +1,8 @@
 <%=
   render partial: 'commontator/threads/show', locals: {
-    thread: @commontator_thread,
     user: @commontator_user,
-    page: @commontator_thread.new_comment_page,
+    thread: @commontator_thread,
+    comment: @comment.parent,
     show_all: @commontator_show_all
   }
 %>

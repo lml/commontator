@@ -1,13 +1,27 @@
-<%#
-  Views that use this partial must supply the following variables:
-  thread
-  user
-  page
-  show_all
+<%
+  # Views that use this partial must supply the following variables:
+  # user
+  # thread
+  # comment
+  # show_all
+  # Additionally, they may override the following variable:
+  page ||= thread.new_comment_page(comment&.id, show_all)
+
+  if comment.nil?
+    target = "thread-#{thread.id}"
+    partial = 'threads'
+    extra_locals = {}
+  else
+    target = "comment-#{comment.id}"
+    partial = 'comments'
+    descendants = thread.paginated_comments(page, comment.id, show_all)
+    extra_locals = { children: thread.nested_comments_for(user, descendants, show_all) }
+  end
 %>
 
-$("#commontator-thread-<%= thread.id %>").html("<%= escape_javascript(
-  render partial: 'commontator/threads/show',
-         formats: [ :html ],
-         locals: { thread: thread, user: user, page: page, show_all: show_all }
+
+$("#commontator-<%= target %>").html("<%= escape_javascript(
+  render partial: "commontator/#{partial}/show", formats: [ :html ], locals: extra_locals.merge(
+    user: user, thread: thread, comment: comment, page: page, show_all: show_all
+  )
 ) %>");

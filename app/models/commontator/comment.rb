@@ -4,7 +4,7 @@ class Commontator::Comment < ActiveRecord::Base
   belongs_to :thread, inverse_of: :comments
   belongs_to :parent, optional: true, class_name: name, inverse_of: :children
 
-  has_many :children, class_name: name, inverse_of: :parent
+  has_many :children, class_name: name, foreign_key: :parent_id, inverse_of: :parent
 
   serialize :ancestor_ids, Commontator::JsonArrayCoder
   serialize :descendant_ids, Commontator::JsonArrayCoder
@@ -37,7 +37,7 @@ class Commontator::Comment < ActiveRecord::Base
   end
 
   def is_latest?
-    thread.latest_comment == self
+    thread.latest_comment(false) == self
   end
 
   def get_vote_by(user)
@@ -70,6 +70,12 @@ class Commontator::Comment < ActiveRecord::Base
     self.deleted_at = nil
     self.editor = user
     self.save
+  end
+
+  def body
+    is_deleted? ? I18n.t(
+      'commontator.comment.status.deleted_by', deleter_name: Commontator.commontator_name(editor)
+    ) : super
   end
 
   def created_timestamp

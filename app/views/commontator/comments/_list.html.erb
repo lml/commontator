@@ -1,18 +1,12 @@
 <%#
   Controllers that use this partial must supply the following variables:
-  nested_comments
   user
+  nested_comments
 %>
 
 <% nested_comments.each do |comment, total, children| %>
   <div id="commontator-comment-<%= comment.id %>" class="comment">
-    <%= render partial: 'commontator/comments/show', locals: { comment: comment, user: user } %>
-
-    <% unless children.empty? %>
-      <div class="children">
-        <%= render partial: 'commontator/comments/list',
-                   locals: { nested_comments: children, user: user } %>
-      </div>
-    <% end %>
+    <%= render partial: 'commontator/comments/show',
+               locals: { user: user, comment: comment, children: children } %>
   </div>
 <% end %>

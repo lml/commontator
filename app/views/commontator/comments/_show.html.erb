@@ -1,13 +1,16 @@
-<%#
-  Controllers that use this partial must supply the following variables:
-  comment
-  user
+<%
+  # Controllers that use this partial must supply the following variables:
+  # user
+  # comment
+  # children
+  # show_all
 %>
 
-<% creator = comment.creator
-   name = Commontator.commontator_name(creator) || ''
-   link = Commontator.commontator_link(creator, main_app) || ''
-   avatar = Commontator.commontator_avatar(creator, self) || ''
+<%
+  creator = comment.creator
+  name = Commontator.commontator_name(creator) || ''
+  link = Commontator.commontator_link(creator, main_app) || ''
+  avatar = Commontator.commontator_avatar(creator, self) || ''
 %>
 
 <div id="commontator-comment-<%= comment.id %>-section-top" class="section top">
@@ -36,9 +39,11 @@
 </div>
 
 <div id="commontator-comment-<%= comment.id %>-section-bottom" class="section bottom">
-  <span id="commontator-comment-<%= comment.id %>-reply" class="reply">
-    <%= render partial: 'commontator/comments/reply', locals: { comment: comment, user: user } %>
-  </span>
+  <% unless comment.is_deleted? %>
+    <span id="commontator-comment-<%= comment.id %>-reply" class="reply">
+      <%= render partial: 'commontator/comments/reply', locals: { comment: comment, user: user } %>
+    </span>
+  <% end %>
 
   <span id="commontator-comment-<%= comment.id %>-created-timestamp" class="timestamp">
     <%= comment.created_timestamp %>
@@ -48,3 +53,10 @@
     <%= comment.updated_timestamp if comment.is_modified? %>
   </span>
 </div>
+
+<% unless children.empty? %>
+  <div class="children">
+    <%= render partial: 'commontator/comments/list',
+               locals: { nested_comments: children, user: user } %>
+  </div>
+<% end %>

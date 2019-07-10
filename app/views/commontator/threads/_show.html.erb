@@ -1,13 +1,14 @@
-<%#
-  Views that use this partial must supply the following variables:
-  thread
-  user
-  page
-  show_all
-%>
+<%
+  # Views that use this partial must supply the following variables:
+  # user
+  # thread
+  # comment
+  # page
+  # show_all
 
-<% can_subscribe = thread.can_subscribe?(user)
-   can_edit = thread.can_be_edited_by?(user) %>
+  can_subscribe = thread.can_subscribe?(user)
+  can_edit = thread.can_be_edited_by?(user)
+%>
 
 <div id="commontator-thread-<%= thread.id %>-show" class="show hidden">
   <%= link_to t('commontator.thread.actions.show'),
@@ -73,14 +74,11 @@
   <% end %>
 
   <div id="commontator-thread-<%= thread.id %>-comment-list" class="comment-list">
-    <%
-      per_page = thread.config.comments_per_page
-      comments = thread.paginated_comments(page, show_all)
-    %>
+    <% comments = thread.paginated_comments(page, nil, show_all) %>
 
     <%=
       render partial: 'commontator/comments/list', locals: {
-        nested_comments: thread.nested_comments_for(user, comments, nil, page, show_all), user: user
+        nested_comments: thread.nested_comments_for(user, comments, show_all), user: user
       }
     %>
   </div>
@@ -95,7 +93,7 @@
               action: 'show',
               id: thread.id,
               page: page,
-              per_page: per_page
+              per_page: thread.config.comments_per_page
             }
           )
         %>.

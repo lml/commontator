@@ -24,15 +24,17 @@ class Commontator::Thread < ActiveRecord::Base
     !config.comment_filter.nil?
   end
 
-  def filtered_comments
+  def filtered_comments(show_all)
+    return comments if show_all
+
     cf = config.comment_filter
     return comments if cf.nil?
 
     comments.where(cf)
   end
 
-  def ordered_comments(show_all = false)
-    vc = show_all ? comments : filtered_comments
+  def ordered_comments(show_all)
+    vc = filtered_comments(show_all)
     cc = Commontator::Comment.arel_table
     case config.comment_order.to_sym
     when :l
@@ -48,15 +50,20 @@ class Commontator::Thread < ActiveRecord::Base
     end
   end
 
-  def latest_comment(show_all = false)
+  def latest_comment(show_all)
     @latest_comment ||= ordered_comments(show_all).last
   end
 
-  def paginated_comments(page = 1, show_all = false)
+  def comments_with_parent_id(parent_id, show_all)
     oc = ordered_comments(show_all)
-    return oc unless will_paginate?
+    [ :i, :b ].include?(config.comment_reply_style) ? oc.where(parent_id: parent_id) : oc
+  end
 
-    oc.paginate(page: page, per_page: config.comments_per_page)
+  def paginated_comments(page = 1, parent_id, show_all)
+    cp = comments_with_parent_id(parent_id, show_all)
+    return cp unless will_paginate?
+
+    cp.paginate(page: page, per_page: config.comments_per_page)
   end
 
   def nest_comments(comments, num_children_by_parent_id, children_by_parent_id)
@@ -74,21 +81,18 @@ class Commontator::Thread < ActiveRecord::Base
     end
   end
 
-  def nested_comments_for(user, comments = nil, parent_id = nil, page = 1, show_all = false)
-    comments ||= paginated_comments(page, show_all)
+  def nested_comments_for(user, comments, show_all)
     includes = [ :thread, :creator, :editor ]
-    comments = comments.includes(includes)
+    comments = comments.includes(includes).to_a
 
     if [ :i, :b ].include? config.comment_reply_style
-      root_comments = comments.where(parent_id: parent_id).to_a
-
-      per_page = config.nested_comments_per_page || 0
+      per_page = config.nested_comments_per_page
       num_children_by_parent_id = {}
       all_descendant_ids = []
-      root_comments.each do |comment|
+      comments.each do |comment|
         descendant_ids = comment.descendant_ids
         num_children_by_parent_id[comment.id] = descendant_ids.size
-        all_descendant_ids += descendant_ids[((page - 1) * per_page)..(page * per_page)] || []
+        all_descendant_ids += descendant_ids[0..per_page] || []
       end
       children_by_parent_id = ordered_comments(show_all)
         .where(id: all_descendant_ids.uniq)
@@ -96,7 +100,7 @@ class Commontator::Thread < ActiveRecord::Base
         .includes(includes)
         .group_by(&:parent_id)
 
-      nest_comments(root_comments, num_children_by_parent_id, children_by_parent_id)
+      nest_comments(comments, num_children_by_parent_id, children_by_parent_id)
     else
       comments.map { |comment| [ comment, 0, [] ] }
     end.tap do |nested_comments|
@@ -109,23 +113,26 @@ class Commontator::Thread < ActiveRecord::Base
     end
   end
 
-  def new_comment_page
+  def new_comment_page(parent_id, show_all)
     per_page = config.comments_per_page.to_i
     return 1 if per_page <= 0
 
+    comment_order = config.comment_order.to_sym
+    return 1 if comment_order == :l
+
+    cp = comments_with_parent_id(parent_id, show_all)
+    cc = Commontator::Comment.arel_table
     comment_index = case config.comment_order.to_sym
     when :l
       1 # First comment
     when :ve
-      cc = Commontator::Comment.arel_table
       # Last comment with rating == 0
-      filtered_comments.where((cc[:cached_votes_up] - cc[:cached_votes_down]).gteq(0)).count
+      cp.where((cc[:cached_votes_up] - cc[:cached_votes_down]).gteq(0)).count
     when :vl
-      cc = Commontator::Comment.arel_table
       # First comment with rating == 0
-      filtered_comments.where((cc[:cached_votes_up] - cc[:cached_votes_down]).gt(0)).count + 1
+      cp.where((cc[:cached_votes_up] - cc[:cached_votes_down]).gt(0)).count + 1
     else
-      filtered_comments.count # Last comment
+      cp.count # Last comment
     end
 
     (comment_index.to_f/per_page).ceil
