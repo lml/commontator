@@ -1,14 +1,14 @@
 <%#
   Views that use this partial must supply the following variables:
-  thread
   user
+  thread
   page
-  per_page
   show_all
 %>
 
+
 $("#commontator-thread-<%= thread.id %>").html("<%= escape_javascript(
-  render partial: 'commontator/threads/show',
-         formats: [ :html ],
-         locals: { thread: thread, user: user, page: page, per_page: per_page, show_all: show_all }
+  render partial: 'commontator/threads/show', formats: [ :html ], locals: {
+    user: user, thread: thread, page: page, show_all: show_all
+  }
 ) %>");

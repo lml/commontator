@@ -38,11 +38,18 @@ en:
         creator: Creator
         editor: Editor
         thread: Discussion
+        parent: Parent Comment
       commontator/subscription:
         subscriber: Subscriber
         thread: Discussion
       commontator/thread:
         commontable: Commontable
+    errors:
+      models:
+        commontator/comment:
+          attributes:
+            body:
+              double_posted: is a duplicate of another comment.
     models:
       commontator/comment:
         one: comment
@@ -69,14 +76,14 @@ en:
       errors:
         already_deleted: This comment has already been deleted.
         create: "This comment could not be posted because:"
-        double_posted: is a duplicate of another comment.
         not_deleted: This comment is not deleted.
         update: "This comment could not be modified because:"
       status:
         created_at: Posted on %{created_at}.
         deleted_by: Comment deleted by %{deleter_name}.
         updated_at: Last modified by %{editor_name} on %{updated_at}.
-      replying: Replying to %{creator_name}
+        replying: Replying to %{creator_name}
+        reply_pages: "Reply pages:"
     email:
       comment_created:
         body: "%{creator_name} commented on %{commontable_name}:"
@@ -106,6 +113,7 @@ en:
         cannot_post: New comments cannot be posted at this time.
         closed: Comments (Closed by %{closer_name})
         open: Comments
+        pages: "Comment pages:"
   time:
     formats:
       commontator: "%b %d %Y at %I:%M%p %Z"

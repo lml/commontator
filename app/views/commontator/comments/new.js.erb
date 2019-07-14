@@ -1,12 +1,6 @@
 $("#commontator-thread-<%= @commontator_thread.id %>-new-comment").html("<%= escape_javascript(
-  render partial: 'form', locals: {
-    comment: @comment,
-    thread: @commontator_thread,
-    per_page: @commontator_per_page
-  }
-) %>");
-
-$("#commontator-thread-<%= @commontator_thread.id %>-new-comment").fadeIn()[0].scrollIntoView();
+  render partial: 'form', locals: { comment: @comment, thread: @commontator_thread }
+) %>").fadeIn()[0].scrollIntoView();
 
 $("#commontator-thread-<%= @commontator_thread.id %>-new-comment-link").hide();
 

@@ -22,7 +22,7 @@ RSpec.describe Commontator::Thread, type: :model do
     comment2.save!
 
     comments = @thread.comments
-    ordered_comments = @thread.ordered_comments
+    ordered_comments = @thread.ordered_comments(true)
 
     comments.each { |c| expect(ordered_comments).to include(c) }
     ordered_comments.each { |oc| expect(comments).to include(oc) }
@@ -67,7 +67,7 @@ RSpec.describe Commontator::Thread, type: :model do
     @thread.subscribe(@user)
 
     subscription = @thread.subscription_for(@user)
-    expect(subscription.unread_comments.count).to eq 0
+    expect(subscription.unread_comments(false).count).to eq 0
 
     comment = Commontator::Comment.new
     comment.thread = @thread
@@ -75,13 +75,13 @@ RSpec.describe Commontator::Thread, type: :model do
     comment.body = 'Something'
     comment.save!
 
-    expect(subscription.reload.unread_comments.count).to eq 1
+    expect(subscription.reload.unread_comments(false).count).to eq 1
 
     # Wait until 1 second after the comment was created
     sleep([1 - (Time.current - comment.created_at), 0].max)
     @thread.mark_as_read_for(@user)
 
-    expect(subscription.reload.unread_comments.count).to eq 0
+    expect(subscription.reload.unread_comments(false).count).to eq 0
   end
 
   it 'clears comments' do

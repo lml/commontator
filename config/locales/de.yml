@@ -7,11 +7,18 @@ de:
         creator: Ersteller
         editor: Bearbeiter
         thread: Diskussion
+        parent: Elternkommentar
       commontator/subscription:
         subscriber: Subscriber
         thread: Diskussion
       commontator/thread:
         commontable: Commontable
+    errors:
+      models:
+        commontator/comment:
+          attributes:
+            body:
+              double_posted: ist ein Duplikat.
     models:
       commontator/comment:
         one: Kommentar
@@ -38,14 +45,14 @@ de:
       errors:
         already_deleted: Dieser Kommentar wurde bereits gelöscht.
         create: "Kommentar kann nicht veröffentlicht werden:"
-        double_posted: Kommentar ist ein Duplikat.
         not_deleted: Dieser Kommentar wurde nicht gelöscht..
         update: "Kommentar kann nicht bearbeitet werden:"
       status:
         created_at: Veröffentlich am %{created_at}.
         deleted_by: Kommentar gelöscht von %{deleter_name}.
         updated_at: Bearbeitet von %{editor_name} am %{updated_at}.
-      replying: "%{creator_name} Antworten"
+        replying: "%{creator_name} Antworten"
+        reply_pages: "Antwortseiten:"
     email:
       comment_created:
         body: "%{creator_name} kommentierte zu %{commontable_name}:"
@@ -75,6 +82,7 @@ de:
         cannot_post: Zurzeit können keine neuen Kommentare verfasst werden.
         closed: Kommentare (geschlossen von %{closer_name})
         open: Kommentare
+        pages: "Kommentarseiten:"
   time:
     formats:
       commontator: "%d. %B %Y um %H:%M %Z"

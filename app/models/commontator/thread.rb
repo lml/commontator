@@ -12,23 +12,25 @@ class Commontator::Thread < ActiveRecord::Base
     @config ||= commontable.try(:commontable_config) || Commontator
   end
 
-  def will_paginate?
-    !config.comments_per_page.nil? && Commontator::Comment.will_paginate?
+  def is_votable?
+    config.comment_voting.to_sym != :n
   end
 
   def is_filtered?
     !config.comment_filter.nil?
   end
 
-  def filtered_comments
+  def filtered_comments(show_all)
+    return comments if show_all
+
     cf = config.comment_filter
     return comments if cf.nil?
 
     comments.where(cf)
   end
 
-  def ordered_comments(show_all = false)
-    vc = show_all ? comments : filtered_comments
+  def ordered_comments(show_all)
+    vc = filtered_comments(show_all)
     cc = Commontator::Comment.arel_table
     case config.comment_order.to_sym
     when :l
@@ -44,32 +46,116 @@ class Commontator::Thread < ActiveRecord::Base
     end
   end
 
-  def paginated_comments(page = 1, per_page = config.comments_per_page, show_all = false)
-    oc = ordered_comments(show_all)
-    return oc unless will_paginate?
-
-    oc.paginate(page: page, per_page: per_page)
+  def latest_comment(show_all)
+    @latest_comment ||= ordered_comments(show_all).last
   end
 
-  def new_comment_page(per_page = config.comments_per_page)
-    return 1 if per_page.nil? || per_page.to_i <= 0
+  def comments_with_parent_id(parent_id, show_all)
+    oc = ordered_comments(show_all)
+    [ :i, :b ].include?(config.comment_reply_style) ? oc.where(parent_id: parent_id) : oc
+  end
 
+  def paginated_comments(page = 1, parent_id, show_all)
+    cp = comments_with_parent_id(parent_id, show_all)
+
+    cp.paginate(page: page, per_page: config.comments_per_page[0])
+  end
+
+  def nest_comments(
+    comments, root_per_page, per_page_by_parent_id, count_by_parent_id, children_by_parent_id
+  )
+    comments.map do |comment|
+      # Delete is used to ensure loops don't cause stack overflow
+      children = children_by_parent_id.delete(comment.id) || []
+      count = count_by_parent_id.delete(comment.id) || 0
+      per_page = per_page_by_parent_id.delete(comment.id) || 0
+      nested_children = nest_comments(
+        children, root_per_page, per_page_by_parent_id, count_by_parent_id, children_by_parent_id
+      )
+
+      [ comment, Commontator::Collection.new(nested_children, count, root_per_page, per_page) ]
+    end
+  end
+
+  def nested_comments_for(user, comments, show_all)
+    includes = [ :thread, :creator, :editor ]
+    total_entries = comments.total_entries
+    root_per_page = config.comments_per_page[0]
+    current_page = comments.current_page.to_i
+    comments = comments.includes(includes).to_a
+    count_by_parent_id = {}
+    per_page_by_parent_id = {}
+    children_by_parent_id = Hash.new { |hash, key| hash[key] = [] }
+
+    if [ :i, :b ].include? config.comment_reply_style
+      all_parent_ids = comments.map(&:id)
+      (config.comments_per_page[1..-1] + [ 0 ]).each_with_index do |per_page, index|
+        ordered_comments(show_all).where(parent_id: all_parent_ids)
+                                  .group(:parent_id)
+                                  .count
+                                  .each do |parent_id, count|
+          count_by_parent_id[parent_id] = count
+          per_page_by_parent_id[parent_id] = per_page
+        end
+
+        next if per_page == 0
+
+        children = all_parent_ids.empty? ? [] : Commontator::Comment.find_by_sql(
+          all_parent_ids.map do |parent_id|
+            Commontator::Comment.select(Arel.star).from(
+              Arel::Nodes::Grouping.new(
+                Arel::Nodes::SqlLiteral.new(
+                  ordered_comments(show_all).where(parent_id: parent_id).limit(per_page).to_sql
+                )
+              )
+            ).to_sql
+          end.reduce { |memo, sql| memo.nil? ? sql : "#{memo} UNION ALL #{sql}" }
+        )
+        children.each { |comment| children_by_parent_id[comment.parent_id] << comment }
+        all_parent_ids = children.map(&:id)
+      end
+    end
+
+    Commontator::Collection.new(
+      nest_comments(
+        comments, root_per_page, per_page_by_parent_id, count_by_parent_id, children_by_parent_id
+      ),
+      total_entries,
+      root_per_page,
+      root_per_page,
+      current_page
+    ).tap do |nested_comments|
+      next unless is_votable?
+
+      ActiveRecord::Associations::Preloader.new.preload(
+        nested_comments.flatten, :votes_for, ActsAsVotable::Vote.where(voter: user)
+      )
+    end
+  end
+
+  def new_comment_page(parent_id, show_all)
+    per_page = config.comments_per_page[0].to_i
+    return 1 if per_page <= 0
+
+    comment_order = config.comment_order.to_sym
+    return 1 if comment_order == :l
+
+    cp = comments_with_parent_id(parent_id, show_all)
+    cc = Commontator::Comment.arel_table
     comment_index = case config.comment_order.to_sym
     when :l
       1 # First comment
     when :ve
-      cc = Commontator::Comment.arel_table
       # Last comment with rating == 0
-      filtered_comments.where((cc[:cached_votes_up] - cc[:cached_votes_down]).gteq(0)).count
+      cp.where((cc[:cached_votes_up] - cc[:cached_votes_down]).gteq(0)).count
     when :vl
-      cc = Commontator::Comment.arel_table
       # First comment with rating == 0
-      filtered_comments.where((cc[:cached_votes_up] - cc[:cached_votes_down]).gt(0)).count + 1
+      cp.where((cc[:cached_votes_up] - cc[:cached_votes_down]).gt(0)).count + 1
     else
-      filtered_comments.count # Last comment
+      cp.count # Last comment
     end
 
-    (comment_index.to_f/per_page.to_i).ceil
+    (comment_index.to_f/per_page).ceil
   end
 
   def is_closed?

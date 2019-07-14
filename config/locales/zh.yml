@@ -7,11 +7,18 @@ zh: &zh
         creator: 留言者
         editor: 編輯
         thread: 討論
+        parent: 家长留言
       commontator/subscription:
         subscriber: 訂閱者
         thread: 討論
       commontator/thread:
         commontable: 可以留言
+    errors:
+      models:
+        commontator/comment:
+          attributes:
+            body:
+              double_posted: 已經有一筆相同的留言。
     models:
       commontator/comment:
         one: 留言
@@ -37,15 +44,15 @@ zh: &zh
         reply: 回复评论
       errors:
         already_deleted: 此留言已經被刪除了
-        create: "此留言無法發佈因為:"
-        double_posted: 已經有一筆相同的留言。
+        create: 此留言無法發佈因為：
         not_deleted: 此留言未被刪除
-        update: "此留言無法被修改因為:"
+        update: 此留言無法被修改因為：
       status:
         created_at: 於%{created_at}發佈
         deleted_by: 被%{deleter_name}刪除
         updated_at: 最在於%{updated_at}被%{editor_name}修改
-      replying: 回复%{creator_name}
+        replying: 回复%{creator_name}
+        reply_pages: 回复页面：
     email:
       comment_created:
         body: "%{creator_name}留言於%{commontable_name}"
@@ -75,6 +82,7 @@ zh: &zh
         cannot_post: 現在還不能發佈
         closed: 留言已經被%{closer_name}關閉
         open: 留言
+        pages: 留言页面：
   time:
     formats:
       commontator: "%Y年%m月%d日 於 %H:%M %Z"

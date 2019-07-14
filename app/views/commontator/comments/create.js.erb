@@ -1,25 +1,30 @@
 <%=
-  render partial: 'commontator/threads/show', locals: {
-    thread: @commontator_thread,
+  if @comment.parent.nil?
+    partial = 'threads'
+    extra_locals = {}
+  else
+    partial = 'comments'
+    extra_locals = { comment: @comment.parent }
+  end
+
+  render partial: "commontator/#{partial}/show", locals: extra_locals.merge(
     user: @commontator_user,
-    per_page: @commontator_per_page,
-    page: @commontator_thread.new_comment_page(@commontator_per_page),
+    thread: @commontator_thread,
+    page: @commontator_page,
     show_all: @commontator_show_all
-  }
+  )
 %>
 
-<% unless @commontator_new_comment.nil? %>
-  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment").html("<%= escape_javascript(
-    render partial: 'form', locals: {
-      comment: @commontator_new_comment,
-      thread: @commontator_thread,
-      per_page: @commontator_per_page
-    }
-  ) %>");
-<% else %>
+<% if @commontator_new_comment.nil? %>
   $("#commontator-thread-<%= @commontator_thread.id %>-new-comment").hide();
 
   $("#commontator-thread-<%= @commontator_thread.id %>-new-comment-link").fadeIn();
+<% else %>
+  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment").html("<%= escape_javascript(
+    render partial: 'form', locals: {
+      comment: @commontator_new_comment, thread: @commontator_thread
+    }
+  ) %>");
 <% end %>
 
 $("#commontator-comment-<%= @comment.id %>").hide().fadeIn()[0].scrollIntoView();

@@ -4,29 +4,13 @@ class Commontator::Comment < ActiveRecord::Base
   belongs_to :thread, inverse_of: :comments
   belongs_to :parent, optional: true, class_name: name, inverse_of: :children
 
-  has_many :children, class_name: name, inverse_of: :parent
-
-  serialize :ancestor_ids, Commontator::JsonArrayCoder
-  serialize :descendant_ids, Commontator::JsonArrayCoder
+  has_many :children, class_name: name, foreign_key: :parent_id, inverse_of: :parent
 
   validates :editor, presence: true, on: :update
   validates :body, presence: true, uniqueness: {
-    scope: [ :creator_type, :creator_id, :thread_id, :deleted_at ],
-    message: I18n.t('commontator.comment.errors.double_posted')
+    scope: [ :creator_type, :creator_id, :thread_id, :deleted_at ], message: :double_posted
   }
   validate :parent_is_not_self, :parent_belongs_to_the_same_thread, if: :parent
-
-  before_save :set_ancestor_ids_and_ancestor_descendant_ids
-  before_destroy :remove_ancestor_descendant_ids
-
-  cattr_accessor :will_paginate
-  self.will_paginate = begin
-    require 'will_paginate'
-
-    true
-  rescue LoadError
-    false
-  end
 
   cattr_accessor :is_votable
   self.is_votable = begin
@@ -38,10 +22,6 @@ class Commontator::Comment < ActiveRecord::Base
     false
   end
 
-  def self.will_paginate?
-    will_paginate
-  end
-
   def self.is_votable?
     is_votable
   end
@@ -51,13 +31,14 @@ class Commontator::Comment < ActiveRecord::Base
   end
 
   def is_latest?
-    thread.comments.last == self
+    thread.latest_comment(false) == self
   end
 
   def get_vote_by(user)
     return nil unless self.class.is_votable? && !user.nil? && user.is_commontator
 
-    votes_for.find_by(voter_type: user.class.name, voter_id: user.id)
+    # Preloaded with a condition in thread#nested_comments_for
+    votes_for.to_a.find { |vote| vote.voter_id == user.id && vote.voter_type == user.class.name }
   end
 
   def update_cached_votes(vote_scope = nil)
@@ -83,6 +64,12 @@ class Commontator::Comment < ActiveRecord::Base
     self.deleted_at = nil
     self.editor = user
     self.save
+  end
+
+  def body
+    is_deleted? ? I18n.t(
+      'commontator.comment.status.deleted_by', deleter_name: Commontator.commontator_name(editor)
+    ) : super
   end
 
   def created_timestamp
@@ -124,8 +111,7 @@ class Commontator::Comment < ActiveRecord::Base
   end
 
   def can_be_voted_on?
-    !thread.is_closed? && !is_deleted? &&
-    thread.config.comment_voting.to_sym != :n && self.class.is_votable?
+    !thread.is_closed? && !is_deleted? && thread.is_votable? && self.class.is_votable?
   end
 
   def can_be_voted_on_by?(user)
@@ -135,6 +121,7 @@ class Commontator::Comment < ActiveRecord::Base
 
   protected
 
+  # These 2 validation messages are not currently translated because end users should never see them
   def parent_is_not_self
     return if parent != self
     errors.add :parent, 'must be a different comment'
@@ -145,89 +132,5 @@ class Commontator::Comment < ActiveRecord::Base
     return if parent.thread_id == thread_id
     errors.add :parent, 'must belong to the same thread'
     throw :abort
-  end
-
-  def remove_ancestor_descendant_ids
-    return if ancestor_ids.empty?
-
-    # Remove id and descendant_ids from ancestors
-    self.class.where(id: ancestor_ids).order(:id).update_all("descendant_ids = #{
-      ([ id ] + descendant_ids).reduce(self.class.arel_table[:descendant_ids]) do |memo, descendant_id|
-        Arel::Nodes::NamedFunction.new('REPLACE', [
-          Arel::Nodes::NamedFunction.new('REPLACE', [
-            Arel::Nodes::NamedFunction.new('REPLACE', [
-              Arel::Nodes::NamedFunction.new('REPLACE', [
-                memo, Arel::Nodes.build_quoted("[#{descendant_id}]"), Arel::Nodes.build_quoted('[]')
-              ]), Arel::Nodes.build_quoted("[#{descendant_id},"), Arel::Nodes.build_quoted('[')
-            ]), Arel::Nodes.build_quoted(",#{descendant_id},"), Arel::Nodes.build_quoted(',')
-          ]), Arel::Nodes.build_quoted(",#{descendant_id}]"), Arel::Nodes.build_quoted(']')
-        ])
-      end.to_sql
-    }")
-
-    association(:parent).reset
-  end
-
-  def set_ancestor_ids_and_ancestor_descendant_ids
-    return if ancestor_ids.first == parent_id
-
-    pa = parent
-
-    remove_ancestor_descendant_ids
-
-    # Remove ancestor_ids from descendants
-    unless ancestor_ids.empty? || descendant_ids.empty?
-      self.class.where(id: descendant_ids).order(:id).update_all("ancestor_ids = #{
-        ancestor_ids.reduce(self.class.arel_table[:ancestor_ids]) do |memo, ancestor_id|
-          Arel::Nodes::NamedFunction.new('REPLACE', [
-            Arel::Nodes::NamedFunction.new('REPLACE', [
-              Arel::Nodes::NamedFunction.new('REPLACE', [
-                Arel::Nodes::NamedFunction.new('REPLACE', [
-                  memo, Arel::Nodes.build_quoted("[#{ancestor_id}]"), Arel::Nodes.build_quoted('[]')
-                ]), Arel::Nodes.build_quoted("[#{ancestor_id},"), Arel::Nodes.build_quoted('[')
-              ]), Arel::Nodes.build_quoted(",#{ancestor_id},"), Arel::Nodes.build_quoted(',')
-            ]), Arel::Nodes.build_quoted(",#{ancestor_id}]"), Arel::Nodes.build_quoted(']')
-          ])
-        end.to_sql
-      }")
-
-      children.reset
-    end
-
-    if pa.nil?
-      self.ancestor_ids = []
-    else
-      self.ancestor_ids = [ pa.id ] + pa.ancestor_ids
-
-      # Add id and descendant_ids to ancestors
-      descendant_ids_str = ([ id ] + descendant_ids).to_json[1..-2]
-      self.class.where(id: ancestor_ids).order(:id).update_all("descendant_ids = #{
-        Arel::Nodes::NamedFunction.new('REPLACE', [
-          Arel::Nodes::NamedFunction.new('REPLACE', [
-            Arel::Nodes::NamedFunction.new('COALESCE', [
-              self.class.arel_table[:descendant_ids], Arel::Nodes.build_quoted('[]')
-            ]), Arel::Nodes.build_quoted(']'), Arel::Nodes.build_quoted(",#{descendant_ids_str}]")
-          ]), Arel::Nodes.build_quoted('[,'), Arel::Nodes.build_quoted('[')
-        ]).to_sql
-      }")
-
-      association(:parent).reset
-
-      # Add ancestor_ids to descendants
-      unless descendant_ids.empty?
-        ancestor_ids_str = ancestor_ids.to_json[1..-2]
-        self.class.where(id: descendant_ids).order(:id).update_all("ancestor_ids = #{
-          Arel::Nodes::NamedFunction.new('REPLACE', [
-            Arel::Nodes::NamedFunction.new('REPLACE', [
-              Arel::Nodes::NamedFunction.new('COALESCE', [
-                self.class.arel_table[:ancestor_ids], Arel::Nodes.build_quoted('[]')
-              ]), Arel::Nodes.build_quoted(']'), Arel::Nodes.build_quoted(",#{ancestor_ids_str}]")
-            ]), Arel::Nodes.build_quoted('[,'), Arel::Nodes.build_quoted('[')
-          ]).to_sql
-        }")
-
-        children.reset
-      end
-    end
   end
 end

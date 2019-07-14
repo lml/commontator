@@ -10,7 +10,7 @@ RSpec.describe Commontator::Subscription, type: :model do
   end
 
   it 'counts unread comments' do
-    expect(@subscription.unread_comments.count).to eq 0
+    expect(@subscription.unread_comments(false).count).to eq 0
 
     comment = Commontator::Comment.new
     comment.thread = @thread
@@ -18,7 +18,7 @@ RSpec.describe Commontator::Subscription, type: :model do
     comment.body = 'Something'
     comment.save!
 
-    expect(@subscription.reload.unread_comments.count).to eq 1
+    expect(@subscription.reload.unread_comments(false).count).to eq 1
 
     comment = Commontator::Comment.new
     comment.thread = @thread
@@ -26,12 +26,12 @@ RSpec.describe Commontator::Subscription, type: :model do
     comment.body = 'Something else'
     comment.save!
 
-    expect(@subscription.reload.unread_comments.count).to eq 2
+    expect(@subscription.reload.unread_comments(false).count).to eq 2
 
     # Wait until 1 second after the comment was created
     sleep([1 - (Time.current - comment.created_at), 0].max)
     @subscription.touch
 
-    expect(@subscription.reload.unread_comments.count).to eq 0
+    expect(@subscription.reload.unread_comments(false).count).to eq 0
   end
 end

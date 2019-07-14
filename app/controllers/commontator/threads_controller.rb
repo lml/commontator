@@ -2,6 +2,7 @@ class Commontator::ThreadsController < Commontator::ApplicationController
   skip_before_action :ensure_user, only: :show
   before_action :set_thread
   before_action :commontator_set_thread_variables, except: :mentions
+  before_action :commontator_set_new_comment, only: [ :show, :reopen ]
 
   # GET /threads/1
   def show

@@ -1,7 +1,10 @@
-require 'will_paginate'
-
 class Commontator::LinkRenderer < WillPaginate::ActionView::LinkRenderer
   protected
+
+  def html_container(html)
+    html = "<span class=\"name\">#{@options[:name]}</span>#{html}" if @options[:name]
+    tag(:div, html, container_attributes)
+  end
 
   def url(page)
     @base_url_params ||= begin
@@ -12,8 +15,7 @@ class Commontator::LinkRenderer < WillPaginate::ActionView::LinkRenderer
     url_params = @base_url_params.dup
     add_current_page_param(url_params, page)
 
-    routes_proxy = @options[:routes_proxy] || @template
-    routes_proxy.url_for(url_params)
+    @template.commontator.url_for(url_params)
   end
 
   private

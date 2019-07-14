@@ -222,19 +222,22 @@ Commontator.configure do |config|
   # Valid options:
   #   :n (no replies, though users can still manually add <blockquote>s)
   #   :q (copies the comment being replied to into a <blockquote>)
-  # Not yet implemented:
   #   :i (indents each reply under the comment being replied to)
+  #   :b (both <blockquote> the original comment and indent replies)
   # It might be a good idea to add some CSS to hide <blockquote>s when converting from :q to :i
   # Default: :n
   config.comment_reply_style = :n
 
   # comments_per_page
-  # Type: Integer or nil
+  # Type: Array
   # Number of comments to display in each page
-  # Set to nil to disable pagination
-  # Any other value requires the will_paginate gem
-  # Default: nil (no pagination)
-  config.comments_per_page = nil
+  # The array represents how many comments to load at each nesting level, with the
+  # first number corresponding to the current level, the second number to the next level, etc
+  # Note: large values WILL cause performance and memory issues with many nested comments
+  # The maximum number of comments loaded at once is for the default setting is:
+  # 20 + 20*5 + 20*5*2 == 320
+  # Default: [ 20, 5, 2 ]
+  config.comments_per_page = [ 20, 5, 2 ]
 
   # thread_subscription
   # Type: Symbol

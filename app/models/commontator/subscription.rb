@@ -12,8 +12,8 @@ class Commontator::Subscription < ActiveRecord::Base
     mail.respond_to?(:deliver_later) ? mail.deliver_later : mail.deliver
   end
 
-  def unread_comments
+  def unread_comments(show_all)
     created_at = Commontator::Comment.arel_table[:created_at]
-    thread.filtered_comments.where(created_at.gteq(updated_at))
+    thread.filtered_comments(show_all).where(created_at.gteq(updated_at))
   end
 end
