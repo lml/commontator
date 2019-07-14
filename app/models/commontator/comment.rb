@@ -171,7 +171,7 @@ class Commontator::Comment < ActiveRecord::Base
     clear_ancestry
 
     # Remove ancestor_ids from descendants
-    unless new_record? || ancestor_ids.empty? || descendant_ids.empty?
+    unless new_record? || descendant_ids.empty? || (level == 0 && ancestor_ids.empty?)
       self.class.where(id: descendant_ids).order(:id).update_all("ancestor_ids = #{
         ancestor_ids.reduce(self.class.arel_table[:ancestor_ids]) do |memo, ancestor_id|
           Arel::Nodes::NamedFunction.new('REPLACE', [
@@ -184,11 +184,12 @@ class Commontator::Comment < ActiveRecord::Base
             ]), Arel::Nodes.build_quoted(",#{ancestor_id}]"), Arel::Nodes.build_quoted(']')
           ])
         end.to_sql
-      }")
+      }, level = level - #{level}")
 
       children.reset
     end
 
+    self.level = pa.nil? ? 0 : pa.level + 1
     self.ancestor_ids = pa.nil? ? [] : [ pa.id ] + pa.ancestor_ids
 
     yield
@@ -220,7 +221,7 @@ class Commontator::Comment < ActiveRecord::Base
             ]), Arel::Nodes.build_quoted(']'), Arel::Nodes.build_quoted(",#{ancestor_ids_str}]")
           ]), Arel::Nodes.build_quoted('[,'), Arel::Nodes.build_quoted('[')
         ]).to_sql
-      }")
+      }, level = level + #{level}")
 
       children.reset
     end

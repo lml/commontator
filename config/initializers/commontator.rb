@@ -229,22 +229,15 @@ Commontator.configure do |config|
   config.comment_reply_style = :n
 
   # comments_per_page
-  # Type: Integer or nil
+  # Type: Array
   # Number of comments to display in each page
-  # Set to nil to disable pagination
-  # Note: nil or large values WILL cause performance and memory issues if there are many comments
-  # Default: 20
-  config.comments_per_page = 20
-
-  # nested_comments_per_page
-  # Type: Integer
-  # Number of nested comments to display in each page (for each root comment)
-  # Note: large values WILL cause performance and memory issues if there are many nested comments
-  # The maximum number of comments displayed at once with nesting enabled is:
-  # comments_per_page * nested_comments_per_page
-  # Make sure your server can handle loading this many comments at once
-  # Default: 10
-  config.nested_comments_per_page = 10
+  # The array represents how many comments to load at each nesting level, with the
+  # first number corresponding to the current level, the second number to the next level, etc
+  # Note: large values WILL cause performance and memory issues with many nested comments
+  # The maximum number of comments loaded at once is for the default setting is:
+  # 20 + 20*5 + 20*5*2 == 320
+  # Default: [ 20, 5, 2 ]
+  config.comments_per_page = [ 20, 5, 2 ]
 
   # thread_subscription
   # Type: Symbol

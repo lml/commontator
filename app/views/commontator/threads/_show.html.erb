@@ -2,12 +2,13 @@
   # Views that use this partial must supply the following variables:
   # user
   # thread
-  # comment
   # page
   # show_all
 
   can_subscribe = thread.can_subscribe?(user)
   can_edit = thread.can_be_edited_by?(user)
+  comments = thread.paginated_comments(page, nil, show_all)
+  nested_comments = thread.nested_comments_for(user, comments, show_all)
 %>
 
 <div id="commontator-thread-<%= thread.id %>-show" class="show hidden">
@@ -74,43 +75,33 @@
   <% end %>
 
   <div id="commontator-thread-<%= thread.id %>-comment-list" class="comment-list">
-    <% comments = thread.paginated_comments(page, nil, show_all) %>
-
     <%=
       render partial: 'commontator/comments/list', locals: {
-        nested_comments: thread.nested_comments_for(user, comments, show_all), user: user
+        user: user, nested_comments: nested_comments
       }
     %>
   </div>
 
-  <% if thread.will_paginate? %>
-    <div id="commontator-thread-<%= thread.id %>-pagination" class="pagination">
-      <div id="commontator-thread-<%= thread.id %>-page-entries-info" class="page-entries-info">
-        <%=
-          page_entries_info(
-            comments, params: {
-              controller: 'commontator/threads',
-              action: 'show',
-              id: thread.id,
-              page: page,
-              per_page: thread.config.comments_per_page
-            }
-          )
-        %>.
-      </div>
-
-      <div id="commontator-thread-<%= thread.id %>-will-paginate" class="will-paginate">
-        <%= will_paginate comments,
-                          renderer: Commontator::LinkRenderer,
-                          routes_proxy: commontator,
-                          remote: true,
-                          params: { controller: 'commontator/threads',
-                                    action: 'show',
-                                    id: thread.id,
-                                    page: page } %>
-      </div>
+  <div id="commontator-thread-<%= thread.id %>-pagination" class="pagination">
+    <div id="commontator-thread-<%= thread.id %>-page-entries-info" class="page-entries-info">
+      <%=
+        page_entries_info(comments) unless [ :i, :b ].include? thread.config.comment_reply_style
+      %>
     </div>
-  <% end %>
+
+    <div id="commontator-thread-<%= thread.id %>-will-paginate" class="will-paginate">
+      <%=
+        name = 'Comments:' if [ :i, :b ].include?(thread.config.comment_reply_style)
+        will_paginate comments,
+                      renderer: Commontator::LinkRenderer,
+                      name: name,
+                      remote: true,
+                      params: { controller: 'commontator/threads',
+                                action: 'show',
+                                id: thread.id }
+      %>
+    </div>
+  </div>
 
   <% if thread.config.comment_order != :l %>
     <%= render partial: 'commontator/threads/reply', locals: { thread: thread, user: user } %>

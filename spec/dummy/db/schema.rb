@@ -25,12 +25,14 @@ ActiveRecord::Schema.define(version: 13) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "parent_id"
+    t.integer "level", default: 0, null: false
     t.text "ancestor_ids"
     t.text "descendant_ids"
     t.index ["cached_votes_down"], name: "index_commontator_comments_on_cached_votes_down"
     t.index ["cached_votes_up"], name: "index_commontator_comments_on_cached_votes_up"
     t.index ["creator_id", "creator_type", "thread_id"], name: "index_commontator_comments_on_c_id_and_c_type_and_t_id"
     t.index ["editor_type", "editor_id"], name: "index_commontator_comments_on_editor_type_and_editor_id"
+    t.index ["id", "level"], name: "index_commontator_comments_on_id_and_level", unique: true
     t.index ["parent_id"], name: "index_commontator_comments_on_parent_id"
     t.index ["thread_id", "created_at"], name: "index_commontator_comments_on_thread_id_and_created_at"
   end

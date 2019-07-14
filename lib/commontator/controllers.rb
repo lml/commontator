@@ -11,8 +11,6 @@ module Commontator::Controllers
     @commontator_page = [params[:page].to_i, 1].max
     @commontator_show_all = !params[:show_all].blank? &&
                             @commontator_thread.can_be_edited_by?(@commontator_user)
-
-    commontator_set_new_comment
   end
 
   def commontator_set_new_comment
@@ -26,6 +24,7 @@ module Commontator::Controllers
     commontator_set_user
     commontator_set_thread(commontable)
     commontator_set_thread_variables
+    commontator_set_new_comment
 
     @commontator_thread_show = true
     @commontator_thread.mark_as_read_for(@commontator_user)

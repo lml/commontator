@@ -1,0 +1,30 @@
+var commontatorOldCommentIds = $("#commontator-comment-<%=
+  @comment.id
+%>-children").children().map(function() {
+  return '#' + $(this).attr('id');
+}).toArray().join(',');
+
+<%=
+  render partial: 'show', locals: {
+    user: @commontator_user,
+    thread: @commontator_thread,
+    comment: @comment,
+    page: @commontator_page,
+    show_all: @commontator_show_all
+  }
+%>
+
+var commontatorOldComments = $(commontatorOldCommentIds);
+var commontatorNewComments = $("#commontator-comment-<%=
+  @comment.id
+%>-children").children().not(commontatorOldComments);
+
+commontatorNewComments.hide().fadeIn();
+
+if (commontatorOldComments.length > 0) {
+  commontatorOldComments[commontatorOldComments.length - 1].scrollIntoView();
+} else {
+  $("#commontator-comment-<%= @comment.id %>")[0].scrollIntoView();
+}
+
+<%= javascript_proc %>

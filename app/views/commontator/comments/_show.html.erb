@@ -2,11 +2,13 @@
   # Controllers that use this partial must supply the following variables:
   # user
   # comment
-  # children
+  # nested_children or page
   # show_all
-%>
+  nested_children ||= begin
+    children = comment.thread.paginated_comments(page, comment.id, show_all)
+    thread.nested_comments_for(user, children, show_all)
+  end
 
-<%
   creator = comment.creator
   name = Commontator.commontator_name(creator) || ''
   link = Commontator.commontator_link(creator, main_app) || ''
@@ -19,8 +21,7 @@
   </span>
 
   <span id="commontator-comment-<%= comment.id %>-actions" class="actions">
-    <%= render partial: 'commontator/comments/actions',
-               locals: { comment: comment, user: user } %>
+    <%= render partial: 'commontator/comments/actions', locals: { comment: comment, user: user } %>
   </span>
 </div>
 
@@ -54,9 +55,19 @@
   </span>
 </div>
 
-<% unless children.empty? %>
-  <div class="children">
-    <%= render partial: 'commontator/comments/list',
-               locals: { nested_comments: children, user: user } %>
+<div id="commontator-comment-<%= comment.id %>-children" class="children">
+  <%= render partial: 'commontator/comments/list',
+             locals: { user: user, nested_comments: nested_children } %>
+</div>
+
+<div id="commontator-comment-<%= comment.id %>-pagination" class="pagination">
+  <div id="commontator-comment-<%= comment.id %>-will-paginate" class="will-paginate">
+    <%= will_paginate nested_children,
+                      renderer: Commontator::LinkRenderer,
+                      name: 'Replies:',
+                      remote: true,
+                      params: { controller: 'commontator/comments',
+                                action: 'show',
+                                id: comment.id } %>
   </div>
-<% end %>
+</div>

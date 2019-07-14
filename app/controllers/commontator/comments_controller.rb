@@ -1,6 +1,16 @@
 class Commontator::CommentsController < Commontator::ApplicationController
   before_action :set_thread, only: [ :new, :create ]
   before_action :set_comment_and_thread, except: [ :new, :create ]
+  before_action :commontator_set_thread_variables, only: :show
+  before_action :commontator_set_new_comment, except: [ :new, :create, :show ]
+
+  # GET /comments/1
+  def show
+    respond_to do |format|
+      format.html { redirect_to commontable_url }
+      format.js
+    end
+  end
 
   # GET /threads/1/comments/new
   def new
@@ -39,6 +49,9 @@ class Commontator::CommentsController < Commontator::ApplicationController
           @commontator_thread.subscribe(@commontator_user) if sub == :a || sub == :b
           subscribe_mentioned if @commontator_thread.config.mentions_enabled
           Commontator::Subscription.comment_created(@comment)
+          @commontator_page = @commontator_thread.new_comment_page(
+            @comment.parent_id, @commontator_show_all
+          )
 
           format.js
         else
@@ -156,7 +169,6 @@ class Commontator::CommentsController < Commontator::ApplicationController
   def set_comment_and_thread
     @comment = Commontator::Comment.find(params[:id])
     @commontator_thread = @comment.thread
-    commontator_set_new_comment
   end
 
   def subscribe_mentioned

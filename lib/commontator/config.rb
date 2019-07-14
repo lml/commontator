@@ -34,7 +34,6 @@ module Commontator::Config
     :new_comment_style,
     :comment_reply_style,
     :comments_per_page,
-    :nested_comments_per_page,
     :mentions_enabled
   ]
 
