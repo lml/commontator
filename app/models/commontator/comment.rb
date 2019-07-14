@@ -6,17 +6,11 @@ class Commontator::Comment < ActiveRecord::Base
 
   has_many :children, class_name: name, foreign_key: :parent_id, inverse_of: :parent
 
-  serialize :ancestor_ids, Commontator::JsonArrayCoder
-  serialize :descendant_ids, Commontator::JsonArrayCoder
-
   validates :editor, presence: true, on: :update
   validates :body, presence: true, uniqueness: {
     scope: [ :creator_type, :creator_id, :thread_id, :deleted_at ], message: :double_posted
   }
   validate :parent_is_not_self, :parent_belongs_to_the_same_thread, if: :parent
-
-  around_save :set_ancestry
-  before_destroy :clear_ancestry
 
   cattr_accessor :is_votable
   self.is_votable = begin
@@ -138,92 +132,5 @@ class Commontator::Comment < ActiveRecord::Base
     return if parent.thread_id == thread_id
     errors.add :parent, 'must belong to the same thread'
     throw :abort
-  end
-
-  def clear_ancestry
-    return if new_record? || ancestor_ids.empty?
-
-    # Remove id and descendant_ids from ancestors
-    self.class.where(id: ancestor_ids).order(:id).update_all("descendant_ids = #{
-      ([ id ] + descendant_ids).reduce(
-        self.class.arel_table[:descendant_ids]
-      ) do |memo, descendant_id|
-        Arel::Nodes::NamedFunction.new('REPLACE', [
-          Arel::Nodes::NamedFunction.new('REPLACE', [
-            Arel::Nodes::NamedFunction.new('REPLACE', [
-              Arel::Nodes::NamedFunction.new('REPLACE', [
-                memo, Arel::Nodes.build_quoted("[#{descendant_id}]"), Arel::Nodes.build_quoted('[]')
-              ]), Arel::Nodes.build_quoted("[#{descendant_id},"), Arel::Nodes.build_quoted('[')
-            ]), Arel::Nodes.build_quoted(",#{descendant_id},"), Arel::Nodes.build_quoted(',')
-          ]), Arel::Nodes.build_quoted(",#{descendant_id}]"), Arel::Nodes.build_quoted(']')
-        ])
-      end.to_sql
-    }")
-
-    association(:parent).reset
-  end
-
-  def set_ancestry
-    return yield if ancestor_ids.first == parent_id
-
-    pa = parent
-
-    clear_ancestry
-
-    # Remove ancestor_ids from descendants
-    unless new_record? || descendant_ids.empty? || (level == 0 && ancestor_ids.empty?)
-      self.class.where(id: descendant_ids).order(:id).update_all("ancestor_ids = #{
-        ancestor_ids.reduce(self.class.arel_table[:ancestor_ids]) do |memo, ancestor_id|
-          Arel::Nodes::NamedFunction.new('REPLACE', [
-            Arel::Nodes::NamedFunction.new('REPLACE', [
-              Arel::Nodes::NamedFunction.new('REPLACE', [
-                Arel::Nodes::NamedFunction.new('REPLACE', [
-                  memo, Arel::Nodes.build_quoted("[#{ancestor_id}]"), Arel::Nodes.build_quoted('[]')
-                ]), Arel::Nodes.build_quoted("[#{ancestor_id},"), Arel::Nodes.build_quoted('[')
-              ]), Arel::Nodes.build_quoted(",#{ancestor_id},"), Arel::Nodes.build_quoted(',')
-            ]), Arel::Nodes.build_quoted(",#{ancestor_id}]"), Arel::Nodes.build_quoted(']')
-          ])
-        end.to_sql
-      }, level = level - #{level}")
-
-      children.reset
-    end
-
-    self.level = pa.nil? ? 0 : pa.level + 1
-    self.ancestor_ids = pa.nil? ? [] : [ pa.id ] + pa.ancestor_ids
-
-    yield
-
-    return if !persisted? || pa.nil?
-
-    # Add id and descendant_ids to ancestors
-    descendant_ids_str = ([ id ] + descendant_ids).to_json[1..-2]
-    self.class.where(id: ancestor_ids).order(:id).update_all("descendant_ids = #{
-      Arel::Nodes::NamedFunction.new('REPLACE', [
-        Arel::Nodes::NamedFunction.new('REPLACE', [
-          Arel::Nodes::NamedFunction.new('COALESCE', [
-            self.class.arel_table[:descendant_ids], Arel::Nodes.build_quoted('[]')
-          ]), Arel::Nodes.build_quoted(']'), Arel::Nodes.build_quoted(",#{descendant_ids_str}]")
-        ]), Arel::Nodes.build_quoted('[,'), Arel::Nodes.build_quoted('[')
-      ]).to_sql
-    }")
-
-    association(:parent).reset
-
-    # Add ancestor_ids to descendants
-    unless descendant_ids.empty?
-      ancestor_ids_str = ancestor_ids.to_json[1..-2]
-      self.class.where(id: descendant_ids).order(:id).update_all("ancestor_ids = #{
-        Arel::Nodes::NamedFunction.new('REPLACE', [
-          Arel::Nodes::NamedFunction.new('REPLACE', [
-            Arel::Nodes::NamedFunction.new('COALESCE', [
-              self.class.arel_table[:ancestor_ids], Arel::Nodes.build_quoted('[]')
-            ]), Arel::Nodes.build_quoted(']'), Arel::Nodes.build_quoted(",#{ancestor_ids_str}]")
-          ]), Arel::Nodes.build_quoted('[,'), Arel::Nodes.build_quoted('[')
-        ]).to_sql
-      }, level = level + #{level}")
-
-      children.reset
-    end
   end
 end

@@ -1,9 +1,11 @@
-$("#commontator-comment-<%= @comment.id %>-body").html("<%= escape_javascript(
-  render partial: 'body', locals: { comment: @comment }
-) %>");
-
-$("#commontator-comment-<%= @comment.id %>-updated-timestamp").html("<%= escape_javascript(
-  @comment.updated_timestamp
-) %>");
+<%=
+  render partial: 'show', locals: {
+    user: @commontator_user,
+    thread: @commontator_thread,
+    comment: @comment,
+    page: @commontator_page,
+    show_all: @commontator_show_all
+  }
+%>
 
 <%= javascript_proc %>

@@ -1,8 +1,7 @@
 class Commontator::CommentsController < Commontator::ApplicationController
   before_action :set_thread, only: [ :new, :create ]
   before_action :set_comment_and_thread, except: [ :new, :create ]
-  before_action :commontator_set_thread_variables, only: :show
-  before_action :commontator_set_new_comment, except: [ :new, :create, :show ]
+  before_action :commontator_set_thread_variables, only: [ :show, :update, :delete, :undelete ]
 
   # GET /comments/1
   def show

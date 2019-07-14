@@ -16,7 +16,7 @@ module Commontator::Controllers
   def commontator_set_new_comment
     return unless @commontator_thread.config.new_comment_style == :t
 
-    new_comment = Commontator::Comment.new(user: @commontator_user, thread: @commontator_thread)
+    new_comment = Commontator::Comment.new(creator: @commontator_user, thread: @commontator_thread)
     @commontator_new_comment = new_comment if new_comment.can_be_created_by?(@commontator_user)
   end
 
