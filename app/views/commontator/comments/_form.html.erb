@@ -26,7 +26,7 @@
 
   <% unless comment.parent.nil? %>
     <div class="replying">
-      <%= t('commontator.comment.replying',
+      <%= t('commontator.comment.status.replying',
             creator_name: Commontator.commontator_name(comment.parent.creator)) %>
     </div>
   <% end %>

@@ -91,7 +91,7 @@
   <div id="commontator-comment-<%= comment.id %>-will-paginate" class="will-paginate">
     <%= will_paginate nested_children,
                       renderer: Commontator::LinkRenderer,
-                      name: 'Replies:',
+                      name: t('commontator.comment.status.reply_pages'),
                       remote: true,
                       params: { controller: 'commontator/comments',
                                 action: 'show',

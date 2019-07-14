@@ -38,6 +38,7 @@ en:
         creator: Creator
         editor: Editor
         thread: Discussion
+        parent: Parent Comment
       commontator/subscription:
         subscriber: Subscriber
         thread: Discussion
@@ -81,7 +82,8 @@ en:
         created_at: Posted on %{created_at}.
         deleted_by: Comment deleted by %{deleter_name}.
         updated_at: Last modified by %{editor_name} on %{updated_at}.
-      replying: Replying to %{creator_name}
+        replying: Replying to %{creator_name}
+        reply_pages: "Reply pages:"
     email:
       comment_created:
         body: "%{creator_name} commented on %{commontable_name}:"
@@ -111,6 +113,7 @@ en:
         cannot_post: New comments cannot be posted at this time.
         closed: Comments (Closed by %{closer_name})
         open: Comments
+        pages: "Comment pages:"
   time:
     formats:
       commontator: "%b %d %Y at %I:%M%p %Z"

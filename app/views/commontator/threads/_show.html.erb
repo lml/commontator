@@ -91,7 +91,8 @@
 
     <div id="commontator-thread-<%= thread.id %>-will-paginate" class="will-paginate">
       <%=
-        name = 'Comments:' if [ :i, :b ].include?(thread.config.comment_reply_style)
+        name = t('commontator.thread.status.pages') \
+          if [ :i, :b ].include?(thread.config.comment_reply_style)
         will_paginate comments,
                       renderer: Commontator::LinkRenderer,
                       name: name,

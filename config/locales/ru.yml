@@ -7,6 +7,7 @@ ru:
         creator: Создал
         editor: Редактировал
         thread: Обсуждение
+        parent: Родительский Комментарий
       commontator/subscription:
         subscriber: Подписчик
         thread: Обсуждение
@@ -53,7 +54,8 @@ ru:
         created_at: Создан %{created_at}.
         deleted_by: Комментарий был удален %{deleter_name}.
         updated_at: Редактировал %{editor_name}, %{updated_at}.
-      replying: Отвечая %{creator_name}
+        replying: Отвечая %{creator_name}
+        reply_pages: "Страницы ответов:"
     email:
       comment_created:
         body: "%{creator_name} комментировал %{commontable_name}:"
@@ -83,6 +85,7 @@ ru:
         cannot_post: Новый комментарии нельзя разместить в данный момент.
         closed: Комментарии (Закрыты %{closer_name})
         open: Комментарии
+        pages: "Страницы комментариев:"
   time:
     formats:
       commontator: "%d %b %Y в %H:%M %Z"
