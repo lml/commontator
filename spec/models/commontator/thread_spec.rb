@@ -9,26 +9,145 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(Commontator::Thread.find(@thread.id).config).to eq Commontator
   end
 
-  it 'orders all comments' do
+  it 'filters comments' do
+    expect(@thread.config).to receive(:comment_filter).and_return(
+      Commontator::Comment.arel_table[:deleted_at].eq(nil)
+    )
     comment = Commontator::Comment.new
     comment.thread = @thread
     comment.creator = @user
     comment.body = 'Something'
     comment.save!
+    comment.delete_by @user
+
     comment2 = Commontator::Comment.new
     comment2.thread = @thread
     comment2.creator = @user
     comment2.body = 'Something else'
     comment2.save!
 
-    comments = @thread.comments
-    ordered_comments = @thread.ordered_comments(true)
+    comments = [ comment, comment2 ]
+    all_comments = @thread.filtered_comments(true)
+    expect(comments - all_comments).to be_empty
+    expect(all_comments - comments).to be_empty
 
-    comments.each { |c| expect(ordered_comments).to include(c) }
-    ordered_comments.each { |oc| expect(comments).to include(oc) }
+    filtered_comments = @thread.filtered_comments(false)
+    expect(comments - filtered_comments).to eq [ comment ]
+    expect(filtered_comments - comments).to be_empty
   end
 
-  it 'lists all subscribers' do
+  it 'orders comments' do
+    comment = Commontator::Comment.new
+    comment.thread = @thread
+    comment.creator = @user
+    comment.body = 'Something'
+    comment.save!
+
+    comment2 = Commontator::Comment.new
+    comment2.thread = @thread
+    comment2.creator = @user
+    comment2.body = 'Something else'
+    comment2.save!
+
+    comments = [ comment, comment2 ]
+    ordered_comments = @thread.ordered_comments(true)
+    expect(comments - ordered_comments).to be_empty
+    expect(ordered_comments - comments).to be_empty
+    expect(ordered_comments).to eq comments.sort_by(&:created_at)
+  end
+
+  it 'paginates comments' do
+    expect(@thread.config).to receive(:comments_per_page).twice.and_return([ 2 ])
+
+    comment = Commontator::Comment.new
+    comment.thread = @thread
+    comment.creator = @user
+    comment.body = 'Something'
+    comment.save!
+
+    comment2 = Commontator::Comment.new
+    comment2.thread = @thread
+    comment2.creator = @user
+    comment2.body = 'Something else'
+    comment2.save!
+
+    comment3 = Commontator::Comment.new
+    comment3.thread = @thread
+    comment3.creator = @user
+    comment3.body = 'Another thing'
+    comment3.save!
+
+    expect(@thread.paginated_comments(1, nil, true)).to eq [ comment, comment2 ]
+    expect(@thread.paginated_comments(2, nil, true)).to eq [ comment3 ]
+  end
+
+  [ :n, :q, :i, :b ].each do |comment_reply_style|
+    context "comment_reply_style #{comment_reply_style}" do
+      before do
+        expect(@thread.config).to(
+          receive(:comment_reply_style).at_least(:once).and_return(comment_reply_style)
+        )
+      end
+
+      it [ :n, :q ].include?(comment_reply_style) ?
+           'ignores comment parent_ids' : 'returns comments with a given parent_id' do
+        comment = Commontator::Comment.new
+        comment.thread = @thread
+        comment.creator = @user
+        comment.body = 'Something'
+        comment.save!
+
+        comment2 = Commontator::Comment.new
+        comment2.thread = @thread
+        comment2.creator = @user
+        comment2.body = 'Something else'
+        comment2.parent = comment
+        comment2.save!
+
+        comment3 = Commontator::Comment.new
+        comment3.thread = @thread
+        comment3.creator = @user
+        comment3.body = 'Another thing'
+        comment3.save!
+
+        expect(@thread.comments_with_parent_id(comment.id, true)).to eq(
+          [ :n, :q ].include?(comment_reply_style) ? [ comment, comment2, comment3 ] : [ comment2 ]
+        )
+      end
+
+      it "#{ [ :n, :q ].include?(comment_reply_style) ? 'does not nest' : 'nests' } comments" do
+        expect(@thread.config).to receive(:comments_per_page).at_least(:twice).and_return([ 2, 1 ])
+
+        comment = Commontator::Comment.new
+        comment.thread = @thread
+        comment.creator = @user
+        comment.body = 'Something'
+        comment.save!
+
+        comment2 = Commontator::Comment.new
+        comment2.thread = @thread
+        comment2.creator = @user
+        comment2.body = 'Something else'
+        comment2.parent = comment
+        comment2.save!
+
+        comment3 = Commontator::Comment.new
+        comment3.thread = @thread
+        comment3.creator = @user
+        comment3.body = 'Another thing'
+        comment3.parent = comment
+        comment3.save!
+
+        comments = @thread.paginated_comments(1, nil, true)
+        expect(@thread.nested_comments_for(@user, comments, true)).to eq(
+          [ :n, :q ].include?(comment_reply_style) ?
+            [ [ comment, [] ], [ comment2, [] ] ] : [ [ comment, [ [ comment2, [] ] ] ] ]
+        )
+      end
+    end
+  end
+
+  it 'allows users to subscribe to the thread' do
     @thread.subscribe(@user)
     @thread.subscribe(DummyUser.create)
 
@@ -48,6 +167,11 @@ RSpec.describe Commontator::Thread, type: :model do
     subscription = @thread.subscription_for(user2)
     expect(subscription.thread).to eq @thread
     expect(subscription.subscriber).to eq user2
+  end
+
+  it 'returns nil subscription for nil or false subscriber' do
+    expect(@thread.subscription_for(nil)).to eq nil
+    expect(@thread.subscription_for(false)).to eq nil
   end
 
   it 'knows if it is closed' do
@@ -84,7 +208,7 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(subscription.reload.unread_comments(false).count).to eq 0
   end
 
-  it 'clears comments' do
+  it 'can clear comments' do
     comment = Commontator::Comment.new
     comment.thread = @thread
     comment.creator = @user
@@ -149,10 +273,5 @@ RSpec.describe Commontator::Thread, type: :model do
     expect do
       Commontator::Comment.find(comment.id)
     end.to raise_exception(ActiveRecord::RecordNotFound)
-  end
-
-  it 'returns nil subscription for nil or false subscriber' do
-    expect(@thread.subscription_for(nil)).to eq nil
-    expect(@thread.subscription_for(false)).to eq nil
   end
 end

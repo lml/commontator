@@ -234,7 +234,7 @@ Commontator.configure do |config|
   # The array represents how many comments to load at each nesting level, with the
   # first number corresponding to the current level, the second number to the next level, etc
   # Note: large values WILL cause performance and memory issues with many nested comments
-  # The maximum number of comments loaded at once is for the default setting is:
+  # The maximum number of comments loaded at once for the default setting is:
   # 20 + 20*5 + 20*5*2 == 320
   # Default: [ 20, 5, 2 ]
   config.comments_per_page = [ 20, 5, 2 ]

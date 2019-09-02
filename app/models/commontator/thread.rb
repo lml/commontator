@@ -55,7 +55,7 @@ class Commontator::Thread < ActiveRecord::Base
     [ :i, :b ].include?(config.comment_reply_style) ? oc.where(parent_id: parent_id) : oc
   end
 
-  def paginated_comments(page = 1, parent_id, show_all)
+  def paginated_comments(page, parent_id, show_all)
     cp = comments_with_parent_id(parent_id, show_all)
 
     cp.paginate(page: page, per_page: config.comments_per_page[0])
