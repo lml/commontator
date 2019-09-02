@@ -21,56 +21,178 @@ RSpec.describe Commontator::CommentsController, type: :controller do
     end
 
     context 'GET #new' do
-      it 'works' do
-        get :new, params: { thread_id: @thread.id }
-        expect(response).to redirect_to(@commontable_path)
-        expect(assigns(:comment).errors).to be_empty
+      context 'unnested comments' do
+        let(:params) { { thread_id: @thread.id } }
 
-        @user.can_read = false
-        @user.can_edit = true
-        get :new, params: { thread_id: @thread.id }
-        expect(response).to redirect_to(@commontable_path)
-        expect(assigns(:comment).errors).to be_empty
+        it 'initializes a new comment for the new comment form' do
+          get :new, params: params
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:comment).errors).to be_empty
+          expect(assigns(:comment).parent).to be_nil
+          expect(assigns(:comment).body).to be_nil
 
-        @user.can_edit = false
-        @user.is_admin = true
-        get :new, params: { thread_id: @thread.id }
-        expect(response).to redirect_to(@commontable_path)
-        expect(assigns(:comment).errors).to be_empty
+          @user.can_read = false
+          @user.can_edit = true
+          get :new, params: params
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:comment).errors).to be_empty
+          expect(assigns(:comment).parent).to be_nil
+          expect(assigns(:comment).body).to be_nil
+
+          @user.can_edit = false
+          @user.is_admin = true
+          get :new, params: params
+          expect(response).to redirect_to(@commontable_path)
+          expect(assigns(:comment).errors).to be_empty
+          expect(assigns(:comment).parent).to be_nil
+          expect(assigns(:comment).body).to be_nil
+        end
+      end
+
+      context 'nested comments' do
+        let(:params) { { thread_id: @thread.id, comment: { parent_id: @comment.id } } }
+
+        [ :n, :q, :i, :b ].each do |comment_reply_style|
+          context "comment_reply_style #{comment_reply_style}" do
+            before do
+              expect_any_instance_of(Commontator::CommontableConfig).to(
+                receive(:comment_reply_style).exactly(3).times.and_return(comment_reply_style)
+              )
+            end
+
+            it "initializes a new comment and sets its parent#{
+              ' and body' if [ :q, :b ].include? comment_reply_style
+            }" do
+              get :new, params: params
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).parent).to eq @comment
+              if [ :q, :b ].include? comment_reply_style
+                expect(assigns(:comment).body).to eq "<blockquote><span class=\"author\">#{
+                  Commontator.commontator_name(@comment.creator)
+                }</span>\n#{@comment.body}\n</blockquote>\n"
+              else
+                expect(assigns(:comment).body).to be_nil
+              end
+
+              @user.can_read = false
+              @user.can_edit = true
+              get :new, params: params
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).parent).to eq @comment
+              if [ :q, :b ].include? comment_reply_style
+                expect(assigns(:comment).body).to eq "<blockquote><span class=\"author\">#{
+                  Commontator.commontator_name(@comment.creator)
+                }</span>\n#{@comment.body}\n</blockquote>\n"
+              else
+                expect(assigns(:comment).body).to be_nil
+              end
+
+              @user.can_edit = false
+              @user.is_admin = true
+              get :new, params: params
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).parent).to eq @comment
+              if [ :q, :b ].include? comment_reply_style
+                expect(assigns(:comment).body).to eq "<blockquote><span class=\"author\">#{
+                  Commontator.commontator_name(@comment.creator)
+                }</span>\n#{@comment.body}\n</blockquote>\n"
+              else
+                expect(assigns(:comment).body).to be_nil
+              end
+            end
+          end
+        end
       end
     end
 
     context 'POST #create' do
       context 'thread open' do
         context 'not double posting' do
-          it 'works' do
-            post :create, params: { thread_id: @thread.id, comment: { body: 'Something else' } }
-            expect(response).to redirect_to(@commontable_path)
-            expect(assigns(:comment).errors).to be_empty
-            expect(assigns(:comment).body).to eq 'Something else'
-            expect(assigns(:comment).creator).to eq @user
-            expect(assigns(:comment).editor).to be_nil
-            expect(assigns(:comment).thread).to eq @thread
+          context 'unnested comment' do
+            let(:params) { ->(body) { { thread_id: @thread.id, comment: { body: body } } } }
 
-            @user.can_read = false
-            @user.can_edit = true
-            post :create, params: { thread_id: @thread.id, comment: { body: 'Another thing' } }
-            expect(response).to redirect_to(@commontable_path)
-            expect(assigns(:comment).errors).to be_empty
-            expect(assigns(:comment).body).to eq 'Another thing'
-            expect(assigns(:comment).creator).to eq @user
-            expect(assigns(:comment).editor).to be_nil
-            expect(assigns(:comment).thread).to eq @thread
+            it 'creates a new comment' do
+              body = 'Something else'
+              post :create, params: params.call(body)
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).body).to eq body
+              expect(assigns(:comment).creator).to eq @user
+              expect(assigns(:comment).editor).to be_nil
+              expect(assigns(:comment).thread).to eq @thread
+              expect(assigns(:comment).parent).to be_nil
 
-            @user.can_edit = false
-            @user.is_admin = true
-            post :create, params: { thread_id: @thread.id, comment: { body: 'And this too' } }
-            expect(response).to redirect_to(@commontable_path)
-            expect(assigns(:comment).errors).to be_empty
-            expect(assigns(:comment).body).to eq 'And this too'
-            expect(assigns(:comment).creator).to eq @user
-            expect(assigns(:comment).editor).to be_nil
-            expect(assigns(:comment).thread).to eq @thread
+              @user.can_read = false
+              @user.can_edit = true
+              body = 'Another thing'
+              post :create, params: params.call(body)
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).body).to eq body
+              expect(assigns(:comment).creator).to eq @user
+              expect(assigns(:comment).editor).to be_nil
+              expect(assigns(:comment).thread).to eq @thread
+              expect(assigns(:comment).parent).to be_nil
+
+              @user.can_edit = false
+              @user.is_admin = true
+              body = 'And this too'
+              post :create, params: params.call(body)
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).body).to eq body
+              expect(assigns(:comment).creator).to eq @user
+              expect(assigns(:comment).editor).to be_nil
+              expect(assigns(:comment).thread).to eq @thread
+              expect(assigns(:comment).parent).to be_nil
+            end
+          end
+
+          context 'nested comment' do
+            let(:params) do
+              ->(body) do
+                { thread_id: @thread.id, comment: { parent_id: @comment.id, body: body } }
+              end
+            end
+
+            it 'creates a new comment and sets its parent' do
+              body = 'Something else'
+              post :create, params: params.call(body)
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).body).to eq body
+              expect(assigns(:comment).creator).to eq @user
+              expect(assigns(:comment).editor).to be_nil
+              expect(assigns(:comment).thread).to eq @thread
+              expect(assigns(:comment).parent).to eq @comment
+
+              @user.can_read = false
+              @user.can_edit = true
+              body = 'Another thing'
+              post :create, params: params.call(body)
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).body).to eq body
+              expect(assigns(:comment).creator).to eq @user
+              expect(assigns(:comment).editor).to be_nil
+              expect(assigns(:comment).thread).to eq @thread
+              expect(assigns(:comment).parent).to eq @comment
+
+              @user.can_edit = false
+              @user.is_admin = true
+              body = 'And this too'
+              post :create, params: params.call(body)
+              expect(response).to redirect_to(@commontable_path)
+              expect(assigns(:comment).errors).to be_empty
+              expect(assigns(:comment).body).to eq body
+              expect(assigns(:comment).creator).to eq @user
+              expect(assigns(:comment).editor).to be_nil
+              expect(assigns(:comment).thread).to eq @thread
+              expect(assigns(:comment).parent).to eq @comment
+            end
           end
 
           context 'without subscribers' do
