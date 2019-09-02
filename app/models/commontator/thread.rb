@@ -90,10 +90,10 @@ class Commontator::Thread < ActiveRecord::Base
     if [ :i, :b ].include? config.comment_reply_style
       all_parent_ids = comments.map(&:id)
       (config.comments_per_page[1..-1] + [ 0 ]).each_with_index do |per_page, index|
-        ordered_comments(show_all).where(parent_id: all_parent_ids)
-                                  .group(:parent_id)
-                                  .count
-                                  .each do |parent_id, count|
+        filtered_comments(show_all).where(parent_id: all_parent_ids)
+                                   .group(:parent_id)
+                                   .count
+                                   .each do |parent_id, count|
           count_by_parent_id[parent_id] = count
           per_page_by_parent_id[parent_id] = per_page
         end
@@ -103,10 +103,12 @@ class Commontator::Thread < ActiveRecord::Base
         children = all_parent_ids.empty? ? [] : Commontator::Comment.find_by_sql(
           all_parent_ids.map do |parent_id|
             Commontator::Comment.select(Arel.star).from(
-              Arel::Nodes::Grouping.new(
-                Arel::Nodes::SqlLiteral.new(
-                  ordered_comments(show_all).where(parent_id: parent_id).limit(per_page).to_sql
-                )
+              Arel::Nodes::TableAlias.new(
+                Arel::Nodes::Grouping.new(
+                  Arel::Nodes::SqlLiteral.new(
+                    ordered_comments(show_all).where(parent_id: parent_id).limit(per_page).to_sql
+                  )
+                ), :commontator_comments
               )
             ).to_sql
           end.reduce { |memo, sql| memo.nil? ? sql : "#{memo} UNION ALL #{sql}" }
