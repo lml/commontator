@@ -32,21 +32,25 @@ class Commontator::Thread < ActiveRecord::Base
   def ordered_comments(show_all)
     fc = filtered_comments(show_all)
     cc = Commontator::Comment.arel_table
+
+    # ID is used as a tie-breaker because MySQL lacks sub-second timestamp resolution
     case config.comment_order.to_sym
     when :l
-      fc.order(cc[:created_at].desc)
+      fc.order(cc[:created_at].desc, cc[:id].desc)
     when :ve
       fc.order(
         Arel::Nodes::Descending.new(cc[:cached_votes_up] - cc[:cached_votes_down]),
-        cc[:created_at].asc
+        cc[:created_at].asc,
+        cc[:id].asc
       )
     when :vl
       fc.order(
         Arel::Nodes::Descending.new(cc[:cached_votes_up] - cc[:cached_votes_down]),
-        cc[:created_at].desc
+        cc[:created_at].desc,
+        cc[:id].desc
       )
     else
-      fc.order(cc[:created_at].asc)
+      fc.order(cc[:created_at].asc, cc[:id].asc)
     end
   end
 
