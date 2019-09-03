@@ -38,9 +38,15 @@ class Commontator::Thread < ActiveRecord::Base
     when :e
       vc.order(cc[:created_at].asc)
     when :ve
-      vc.order((cc[:cached_votes_down] - cc[:cached_votes_up]).asc, cc[:created_at].asc)
+      vc.order(
+        Arel::Nodes::Descending.new(cc[:cached_votes_up] - cc[:cached_votes_down]),
+        cc[:created_at].asc
+      )
     when :vl
-      vc.order((cc[:cached_votes_down] - cc[:cached_votes_up]).asc, cc[:created_at].desc)
+      vc.order(
+        Arel::Nodes::Descending.new(cc[:cached_votes_up] - cc[:cached_votes_down]),
+        cc[:created_at].desc
+      )
     else
       vc
     end
