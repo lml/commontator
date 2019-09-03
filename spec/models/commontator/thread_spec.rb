@@ -36,24 +36,44 @@ RSpec.describe Commontator::Thread, type: :model do
     expect(filtered_comments - comments).to be_empty
   end
 
-  it 'orders comments' do
-    comment = Commontator::Comment.new
-    comment.thread = @thread
-    comment.creator = @user
-    comment.body = 'Something'
-    comment.save!
+  [ :e, :l, :ve, :vl ].each do |comment_order|
+    context "comment_order #{comment_order}" do
+      before { expect(@thread.config).to receive(:comment_order).and_return(comment_order) }
 
-    comment2 = Commontator::Comment.new
-    comment2.thread = @thread
-    comment2.creator = @user
-    comment2.body = 'Something else'
-    comment2.save!
+      it 'orders comments' do
+        comment = Commontator::Comment.new
+        comment.thread = @thread
+        comment.creator = @user
+        comment.body = 'Something'
+        comment.save!
+        comment.downvote_from @user
 
-    comments = [ comment, comment2 ]
-    ordered_comments = @thread.ordered_comments(true)
-    expect(comments - ordered_comments).to be_empty
-    expect(ordered_comments - comments).to be_empty
-    expect(ordered_comments).to eq comments.sort_by(&:created_at)
+        comment2 = Commontator::Comment.new
+        comment2.thread = @thread
+        comment2.creator = @user
+        comment2.body = 'Something else'
+        comment2.save!
+        comment2.upvote_from @user
+
+        comment3 = Commontator::Comment.new
+        comment3.thread = @thread
+        comment3.creator = @user
+        comment3.body = 'Another thing'
+        comment3.save!
+        comment3.upvote_from @user
+
+        expect(@thread.ordered_comments(true)).to eq case comment_order
+        when :e
+          [ comment, comment2, comment3 ]
+        when :l
+          [ comment3, comment2, comment ]
+        when :ve
+          [ comment2, comment3, comment ]
+        when :vl
+          [ comment3, comment2, comment ]
+        end
+      end
+    end
   end
 
   it 'paginates comments' do
