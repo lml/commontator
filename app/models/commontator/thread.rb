@@ -30,25 +30,23 @@ class Commontator::Thread < ActiveRecord::Base
   end
 
   def ordered_comments(show_all)
-    vc = filtered_comments(show_all)
+    fc = filtered_comments(show_all)
     cc = Commontator::Comment.arel_table
     case config.comment_order.to_sym
     when :l
-      vc.order(cc[:created_at].desc)
-    when :e
-      vc.order(cc[:created_at].asc)
+      fc.order(cc[:created_at].desc)
     when :ve
-      vc.order(
+      fc.order(
         Arel::Nodes::Descending.new(cc[:cached_votes_up] - cc[:cached_votes_down]),
         cc[:created_at].asc
       )
     when :vl
-      vc.order(
+      fc.order(
         Arel::Nodes::Descending.new(cc[:cached_votes_up] - cc[:cached_votes_down]),
         cc[:created_at].desc
       )
     else
-      vc
+      fc.order(cc[:created_at].asc)
     end
   end
 
