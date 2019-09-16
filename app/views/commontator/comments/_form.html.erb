@@ -37,7 +37,8 @@
   <div class="field">
     <%=
       form.text_area :body, rows: '7', id: new_record ?
-        "commontator-thread-#{@commontator_thread.id}-new-comment-body" :
+        comment.parent.nil? ? "commontator-thread-#{@commontator_thread.id}-new-comment-body" :
+                              "commontator-comment-#{comment.parent.id}-reply" :
         "commontator-comment-#{comment.id}-edit-body"
     %>
     <%= javascript_tag('Commontator.initMentions();') if config.mentions_enabled %>
@@ -48,6 +49,7 @@
     <%=
       form.submit(
         t('commontator.comment.actions.cancel'), name: 'cancel'
-      ) unless new_record && config.new_comment_style == :t %>
+      ) unless config.new_comment_style == :t && new_record && comment.parent.nil?
+    %>
   </div>
 <% end %>

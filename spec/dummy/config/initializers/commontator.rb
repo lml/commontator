@@ -25,6 +25,10 @@ Commontator.configure do |config|
 
   config.comment_voting = :ld
 
+  config.comment_order = :e
+
+  config.new_comment_style = :l
+
   config.comment_reply_style = :b
 
   config.comments_per_page = [ 5, 3, 2 ]
