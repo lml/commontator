@@ -1,9 +1,12 @@
 <%
-  # Views that use this partial must provide the following variables:
+  # Views that use this partial must provide the following variable:
   # comment
   #
+
+  new_record = comment.new_record?
+
   # Optionally, they can also supply the following variables:
-  thread ||= nil
+  thread ||= new_record ? comment.thread : nil
   no_remote ||= false
 %>
 
@@ -11,7 +14,7 @@
 
 <% if comment.errors.any? %>
   <div class="error-explanation">
-    <h3><%= t "commontator.comment.errors.#{comment.id.blank? ? 'create' : 'update'}" %></h3>
+    <h3><%= t "commontator.comment.errors.#{new_record ? 'create' : 'update'}" %></h3>
 
     <ul>
       <% comment.errors.full_messages.each do |msg| %>
@@ -33,7 +36,7 @@
 
   <div class="field">
     <%=
-      form.text_area :body, rows: '7', id: comment.id.blank? ?
+      form.text_area :body, rows: '7', id: new_record ?
         "commontator-thread-#{@commontator_thread.id}-new-comment-body" :
         "commontator-comment-#{comment.id}-edit-body"
     %>
@@ -41,7 +44,10 @@
   </div>
 
   <div class="submit">
-    <%= form.submit t("commontator.comment.actions.#{comment.id.blank? ? 'create' : 'update'}") %>
-    <%= form.submit t('commontator.comment.actions.cancel'), name: 'cancel' %>
+    <%= form.submit t("commontator.comment.actions.#{new_record ? 'create' : 'update'}") %>
+    <%=
+      form.submit(
+        t('commontator.comment.actions.cancel'), name: 'cancel'
+      ) unless new_record && config.new_comment_style == :t %>
   </div>
 <% end %>
