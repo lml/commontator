@@ -1,7 +1,13 @@
-<% if @comment.nil? || !@comment.persisted? %>
-  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment").hide();
+<% if @comment.nil? || @comment.new_record? %>
+  <%
+    id = @comment.nil? || @comment.parent.nil? ?
+      "commontator-thread-#{@commontator_thread.id}-new-comment" :
+      "commontator-comment-#{@comment.parent.id}-reply"
+  %>
 
-  $("#commontator-thread-<%= @commontator_thread.id %>-new-comment-link").fadeIn();
+  $("#<%= id %>").hide();
+
+  $("#<%= id %>-link").fadeIn();
 <% else %>
   $("#commontator-comment-<%= @comment.id %>-body").html("<%= escape_javascript(
     render partial: 'body', locals: { comment: @comment }

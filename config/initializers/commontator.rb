@@ -210,9 +210,7 @@ Commontator.configure do |config|
   # How to display the "new comment" form
   # Valid options:
   #   :t (always present in the thread's page)
-  #   :l (link to the form; opens in the same page using JS)
-  # Not yet implemented:
-  #   :n (link to the form; opens in a new window)
+  #   :l (link to the form, which appears in the same location the new comment will appear)
   # Default: :l
   config.new_comment_style = :l
 

@@ -1,9 +1,15 @@
-$("#commontator-thread-<%= @commontator_thread.id %>-new-comment").html("<%= escape_javascript(
+<%
+  id = @comment.parent.nil? ? "commontator-thread-#{@commontator_thread.id}-new-comment" :
+                              "commontator-comment-#{@comment.parent.id}-reply"
+%>
+
+var commontatorForm = $("#<%= id %>").html("<%= escape_javascript(
   render partial: 'form', locals: { comment: @comment, thread: @commontator_thread }
-) %>").fadeIn()[0].scrollIntoView();
+) %>").hide().fadeIn();
+$('html, body').animate({ scrollTop: commontatorForm.offset().top - window.innerHeight/2 }, 'fast');
 
-$("#commontator-thread-<%= @commontator_thread.id %>-new-comment-link").hide();
+$("#<%= id %>-link").hide();
 
-$('#commontator-thread-<%= @commontator_thread.id %>-new-comment-body').focus();
+$('#<%= id %>-body').focus();
 
 <%= javascript_proc %>

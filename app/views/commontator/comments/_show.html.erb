@@ -62,7 +62,7 @@
 
 <div id="commontator-comment-<%= comment.id %>-section-bottom" class="section bottom">
   <% unless comment.is_deleted? %>
-    <span id="commontator-comment-<%= comment.id %>-reply" class="reply">
+    <span id="commontator-comment-<%= comment.id %>-reply-link" class="reply">
       <%=
         link_to(
           t('commontator.comment.actions.reply'),
@@ -83,8 +83,16 @@
 </div>
 
 <div id="commontator-comment-<%= comment.id %>-children" class="children">
+  <% if thread.config.comment_order == :l %>
+    <div id="commontator-comment-<%= comment.id %>-reply" class="reply"></div>
+  <% end %>
+
   <%= render partial: 'commontator/comments/list',
              locals: { user: user, nested_comments: nested_children } %>
+
+  <% if thread.config.comment_order != :l %>
+    <div id="commontator-comment-<%= comment.id %>-reply" class="reply"></div>
+  <% end %>
 </div>
 
 <div id="commontator-comment-<%= comment.id %>-pagination" class="pagination">
