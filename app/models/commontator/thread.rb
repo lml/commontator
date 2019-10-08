@@ -60,7 +60,17 @@ class Commontator::Thread < ActiveRecord::Base
 
   def comments_with_parent_id(parent_id, show_all)
     oc = ordered_comments(show_all)
-    [ :i, :b ].include?(config.comment_reply_style) ? oc.where(parent_id: parent_id) : oc
+
+    if [ :i, :b ].include?(config.comment_reply_style)
+      # Filter comments by parent_id so we display nested comments
+      oc.where(parent_id: parent_id)
+    elsif parent_id.nil?
+      # Parent is the thread itself and nesting is disabled, so include all comments
+      oc
+    else
+      # Parent is some comment and nesting is disabled, so return nothing
+      oc.none
+    end
   end
 
   def paginated_comments(page, parent_id, show_all)

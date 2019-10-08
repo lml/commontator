@@ -130,8 +130,13 @@ RSpec.describe Commontator::Thread, type: :model do
         comment3.body = 'Another thing'
         comment3.save!
 
+        expect(@thread.comments_with_parent_id(nil, true)).to eq(
+          [ :n, :q ].include?(comment_reply_style) ? [ comment, comment2, comment3 ] :
+                                                     [ comment, comment3 ]
+        )
+
         expect(@thread.comments_with_parent_id(comment.id, true)).to eq(
-          [ :n, :q ].include?(comment_reply_style) ? [ comment, comment2, comment3 ] : [ comment2 ]
+          [ :n, :q ].include?(comment_reply_style) ? [] : [ comment2 ]
         )
       end
 
