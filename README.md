@@ -5,7 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/lml/commontator/badges/gpa.svg)](https://codeclimate.com/github/lml/commontator)
 [![Code Coverage](https://codeclimate.com/github/lml/commontator/badges/coverage.svg)](https://codeclimate.com/github/lml/commontator)
 
-Commontator is a Rails engine for comments. It is compatible with Rails 5.
+Commontator is a Rails engine for comments. It is compatible with Rails 5+.
 Being an engine means it is fully functional as soon as you install and
 configure the gem, providing models, views and controllers of its own.
 At the same time, almost anything about it can be configured or customized to suit your needs.
@@ -22,7 +22,7 @@ Follow the steps below to install Commontator:
   gem 'commontator'
   ```
 
-  You will also need jquery-ujs and a sass compiler, which can be either be installed through
+  You will also need jquery and a sass compiler, which can be either be installed through
   the webpacker gem and yarn/npm/bower or through the jquery-rails and sass[c]-rails gems:
 
   ```rb
@@ -81,8 +81,15 @@ Follow the steps below to install Commontator:
 
 5. Javascripts
 
-  Make sure your application.js requires jquery and jquery-ujs:
+  Make sure your application.js requires jquery and rails-ujs or jquery-ujs:
 
+  Rails 5.1+:
+  ```js
+  //= require jquery
+  //= require rails-ujs
+  ```
+
+  Rails 5.0:
   ```js
   //= require jquery
   // If jquery-ujs was installed through jquery-rails
