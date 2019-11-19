@@ -14,7 +14,7 @@ gemspec
 gem 'byebug'
 
 # Reduces boot times through caching; required in spec/dummy/config/boot.rb
-gem 'bootsnap', '~> 1.4.0', require: false
+gem 'bootsnap', require: false
 
 # Database adapters
 gem 'sqlite3', require: false
