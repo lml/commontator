@@ -19,7 +19,7 @@
     <% end %>
 
     <div id="commontator-thread-<%= thread.id %>-new-comment" class="new-comment<%=
-    @commontator_new_comment.nil? ? ' hidden' : '' %>">
+    @commontator_new_comment.nil? ? ' commontator-hidden' : '' %>">
       <% unless @commontator_new_comment.nil? %>
         <%=
           render partial: 'commontator/comments/form', locals: {

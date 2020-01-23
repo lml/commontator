@@ -11,7 +11,7 @@
   nested_comments = thread.nested_comments_for(user, comments, show_all)
 %>
 
-<div id="commontator-thread-<%= thread.id %>-show" class="show hidden">
+<div id="commontator-thread-<%= thread.id %>-show" class="show commontator-hidden">
   <%= link_to t('commontator.thread.actions.show'),
               '#',
               id: "commontator-thread-#{thread.id}-show-link" %>
@@ -20,7 +20,7 @@
 <div id="commontator-thread-<%= thread.id %>-content" class="content">
   <div id="commontator-thread-<%= thread.id %>-header" class="header">
     <span id="commontator-thread-<%= thread.id %>-actions" class="actions">
-      <span id="commontator-thread-<%= thread.id %>-hide" class="hide hidden">
+      <span id="commontator-thread-<%= thread.id %>-hide" class="hide commontator-hidden">
         <%= link_to t('commontator.thread.actions.hide'),
                     '#',
                     id: "commontator-thread-#{thread.id}-hide-link" %>
