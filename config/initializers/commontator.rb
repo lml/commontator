@@ -254,10 +254,10 @@ Commontator.configure do |config|
   # Returns: the address emails are sent "from" (String)
   # Important: If using subscriptions, change this to at least match your domain name
   # Default: ->(thread) do
-  #   "no-reply@#{Rails.application.class.parent.to_s.downcase}.com"
+  #   "no-reply@#{Rails.application.class.module_parent.to_s.downcase}.com"
   # end
   config.email_from_proc = ->(thread) do
-    "no-reply@#{Rails.application.class.parent.to_s.downcase}.com"
+    "no-reply@#{Rails.application.class.module_parent.to_s.downcase}.com"
   end
 
   # commontable_name_proc
