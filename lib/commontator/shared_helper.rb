@@ -57,5 +57,7 @@ module Commontator::SharedHelper
   end
 end
 
-ActionController::Base.send :include, Commontator::SharedHelper
-ActionController::Base.helper Commontator::SharedHelper
+ActiveSupport.on_load(:action_controller) do
+  ActionController::Base.send :include, Commontator::SharedHelper
+  ActionController::Base.helper Commontator::SharedHelper
+end

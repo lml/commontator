@@ -31,4 +31,6 @@ module Commontator::Controllers
   end
 end
 
-ActionController::Base.send :include, Commontator::Controllers
+ActiveSupport.on_load(:action_controller) do
+  ActionController::Base.send :include, Commontator::Controllers
+end
