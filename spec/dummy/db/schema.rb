@@ -2,11 +2,11 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 13) do
     t.datetime "deleted_at"
     t.integer "cached_votes_up", default: 0
     t.integer "cached_votes_down", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "parent_id"
     t.index ["cached_votes_down"], name: "index_commontator_comments_on_cached_votes_down"
     t.index ["cached_votes_up"], name: "index_commontator_comments_on_cached_votes_up"
@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(version: 13) do
     t.integer "thread_id", null: false
     t.string "subscriber_type", null: false
     t.integer "subscriber_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["subscriber_id", "subscriber_type", "thread_id"], name: "index_commontator_subscriptions_on_s_id_and_s_type_and_t_id", unique: true
     t.index ["thread_id"], name: "index_commontator_subscriptions_on_thread_id"
   end
@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(version: 13) do
     t.string "closer_type"
     t.integer "closer_id"
     t.datetime "closed_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["closer_type", "closer_id"], name: "index_commontator_threads_on_closer_type_and_closer_id"
     t.index ["commontable_type", "commontable_id"], name: "index_commontator_threads_on_c_id_and_c_type", unique: true
   end
@@ -86,4 +86,7 @@ ActiveRecord::Schema.define(version: 13) do
     t.index ["voter_type", "voter_id"], name: "index_votes_on_voter_type_and_voter_id"
   end
 
+  add_foreign_key "commontator_comments", "commontator_comments", column: "parent_id", on_update: :restrict, on_delete: :cascade
+  add_foreign_key "commontator_comments", "commontator_threads", column: "thread_id", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "commontator_subscriptions", "commontator_threads", column: "thread_id", on_update: :cascade, on_delete: :cascade
 end

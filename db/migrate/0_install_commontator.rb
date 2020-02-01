@@ -1,4 +1,4 @@
-class InstallCommontator < ActiveRecord::Migration[5.2]
+class InstallCommontator < ActiveRecord::Migration[6.0]
   def change
     create_table :commontator_threads do |t|
       t.references :commontable,
@@ -8,7 +8,7 @@ class InstallCommontator < ActiveRecord::Migration[5.2]
 
       t.datetime :closed_at
 
-      t.timestamps null: false
+      t.timestamps
     end
 
     create_table :commontator_comments do |t|
@@ -24,7 +24,7 @@ class InstallCommontator < ActiveRecord::Migration[5.2]
       t.integer :cached_votes_up, default: 0, index: true
       t.integer :cached_votes_down, default: 0, index: true
 
-      t.timestamps null: false
+      t.timestamps
     end
 
     add_index :commontator_comments, [ :creator_id, :creator_type, :thread_id ],
@@ -37,7 +37,7 @@ class InstallCommontator < ActiveRecord::Migration[5.2]
       }
       t.references :subscriber, polymorphic: true, null: false, index: false
 
-      t.timestamps null: false
+      t.timestamps
     end
 
     add_index :commontator_subscriptions, [ :subscriber_id, :subscriber_type, :thread_id ],
