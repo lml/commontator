@@ -21,9 +21,10 @@ module Commontator::ActsAsCommontable
           as: :commontable, class_name: 'Commontator::Thread'
         )
 
-        validates :commontator_thread, presence: true
-
         prepend Commontator::BuildThread
+
+        # Support creating acts_as_commontable records without a commontator_thread when migrating
+        validates :commontator_thread, presence: true, if: -> { Commontator::Thread.table_exists? }
 
         self.is_commontable = true
       end
@@ -33,4 +34,6 @@ module Commontator::ActsAsCommontable
   end
 end
 
-ActiveRecord::Base.send :include, Commontator::ActsAsCommontable
+ActiveSupport.on_load :active_record do
+  include Commontator::ActsAsCommontable
+end

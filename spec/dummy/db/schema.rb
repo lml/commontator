@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 13) do
+ActiveRecord::Schema.define(version: 11) do
 
   create_table "commontator_comments", force: :cascade do |t|
     t.integer "thread_id", null: false
