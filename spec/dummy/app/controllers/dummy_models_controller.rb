@@ -13,6 +13,6 @@ class DummyModelsController < ApplicationController
   protected
 
   def get_dummy
-    @dummy_model = DummyModel.find(params[:id])
+    @dummy_model = DummyModel.find_by(id: params[:id]) || DummyModel.first
   end
 end
