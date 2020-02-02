@@ -11,6 +11,6 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery_ujs
+//= require rails-ujs
 //= require commontator/application
 //= require_tree .

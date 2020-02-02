@@ -79,7 +79,9 @@ Follow the steps below to install Commontator:
 
   You can change the mount path if you would like a different one.
 
-5. Javascripts
+### Assets
+
+1. Javascripts
 
   Make sure your application.js requires jquery and rails-ujs or jquery-ujs:
 
@@ -104,7 +106,7 @@ Follow the steps below to install Commontator:
   //= require commontator/application
   ```
 
-6. Stylesheets
+2. Stylesheets
 
   In order to display comment threads properly, you must
   require Commontator's application.scss in your `application.[s]css`:
@@ -112,6 +114,18 @@ Follow the steps below to install Commontator:
   ```css
   *= require commontator/application
   ```
+
+#### Sprockets 4+
+
+  You must require Commontator's manifest.js in your app's manifest.js for images to work properly:
+
+  ```js
+  //= link commontator/manifest.js
+  ```
+
+  You also need to either add the necessary link tag commands to your layout to load
+  commontator/application.js and commontator/application.css or require them in your app's
+  application.js and application.css like in Sprockets 3.
 
 ## Usage
 
