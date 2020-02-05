@@ -31,6 +31,6 @@ module Commontator::Controllers
   end
 end
 
-ActiveSupport.on_load :action_controller do
+ActiveSupport.on_load :action_controller_base do
   include Commontator::Controllers
 end
