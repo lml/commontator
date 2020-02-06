@@ -33,4 +33,6 @@ module Commontator::ActsAsCommontator
   end
 end
 
-ActiveRecord::Base.send :include, Commontator::ActsAsCommontator
+ActiveSupport.on_load :active_record do
+  include Commontator::ActsAsCommontator
+end

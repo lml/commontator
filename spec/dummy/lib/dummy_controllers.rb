@@ -7,4 +7,6 @@ module DummyControllers
   end
 end
 
-ActionController::Base.send :include, DummyControllers
+ActiveSupport.on_load :action_controller do
+  include DummyControllers
+end
