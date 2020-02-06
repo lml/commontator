@@ -58,6 +58,6 @@ module Commontator::SharedHelper
 end
 
 ActiveSupport.on_load :action_controller do
-  include Commontator::SharedHelper
-  helper Commontator::SharedHelper
+  ActionController::Base.send :include, Commontator::SharedHelper
+  ActionController::Base.helper Commontator::SharedHelper
 end
