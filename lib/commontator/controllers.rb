@@ -1,10 +1,6 @@
 require_relative 'shared_helper'
 
 module Commontator::Controllers
-  def self.included(base)
-    base.helper Commontator::SharedHelper
-  end
-
   def commontator_set_thread_variables
     return if @commontator_thread.nil? || !@commontator_thread.can_be_read_by?(@commontator_user)
 
@@ -31,6 +27,6 @@ module Commontator::Controllers
   end
 end
 
-ActiveSupport.on_load :action_controller_base do
+ActiveSupport.on_load :action_controller do
   include Commontator::Controllers
 end
