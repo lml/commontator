@@ -29,8 +29,6 @@ module Commontator::ActsAsCommontable
         self.is_commontable = true
       end
     end
-
-    alias_method :acts_as_commentable, :acts_as_commontable
   end
 end
 
