@@ -17,7 +17,7 @@ module Commontator::ActsAsCommontable
         cattr_accessor :commontable_config
         self.commontable_config = Commontator::CommontableConfig.new(options)
 
-        has_one :commontator_thread, association_options.merge(
+        has_one :commontator_thread, **association_options.merge(
           as: :commontable, class_name: 'Commontator::Thread'
         )
 
