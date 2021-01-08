@@ -16,10 +16,10 @@ module Commontator::ActsAsCommontator
         cattr_accessor :commontator_config
         self.commontator_config = Commontator::CommontatorConfig.new(options)
 
-        has_many :commontator_comments, association_options.merge(
+        has_many :commontator_comments, **association_options.merge(
           as: :creator, class_name: 'Commontator::Comment'
         )
-        has_many :commontator_subscriptions, association_options.merge(
+        has_many :commontator_subscriptions, **association_options.merge(
           as: :subscriber, class_name: 'Commontator::Subscription'
         )
 
