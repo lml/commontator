@@ -42,7 +42,7 @@
             filter_class = 'show-all'
           end
           is_closed = thread.is_closed?
-          close_string = is_closed ? 'reopen' : 'close'
+          close_string = is_closed ? :reopen : :close
         %>
 
         <% if thread.is_filtered? %>
