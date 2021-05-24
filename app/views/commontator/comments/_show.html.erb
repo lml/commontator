@@ -34,7 +34,7 @@
 
     <% if comment.can_be_deleted_by?(user) %>
       <% is_deleted = comment.is_deleted? %>
-      <% del_string = is_deleted ? 'undelete' : 'delete' %>
+      <% del_string = is_deleted ? :undelete : :delete %>
       <%= link_to t("commontator.comment.actions.#{del_string}"),
                   commontator.polymorphic_path([del_string, comment]),
                   data: is_deleted ? {} : { confirm: t('commontator.comment.actions.confirm_delete') },
