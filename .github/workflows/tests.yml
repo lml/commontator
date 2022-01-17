@@ -28,6 +28,8 @@ jobs:
     strategy:
       matrix:
         include:
+          - RUBY_VERSION: 3.1
+            RAILS_VERSION: 7.0.1
           - RUBY_VERSION: 2.7
             RAILS_VERSION: 6.1.4.4
     env:
