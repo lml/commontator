@@ -8,7 +8,7 @@ class Commontator::Thread < ActiveRecord::Base
   validates :commontable, presence: true, unless: :is_closed?
   validates :commontable_id, uniqueness: { scope: :commontable_type, allow_nil: true }
 
-  RAILS_7_PRELOADER = ActiveRecord::Associations::Preloader.method(:new).arity == -1
+  RAILS_7_PRELOADER = Rails::VERSION::MAJOR >= 7
 
   def config
     @config ||= commontable.try(:commontable_config) || Commontator
