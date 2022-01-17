@@ -8,7 +8,7 @@ RSpec.describe Commontator::SubscriptionsController, type: :controller do
   context 'authorized' do
     before do
       @user.can_read = true
-      controller.current_user = @user
+      Thread.current[:user] = @user
     end
 
     context 'PUT #subscribe' do
@@ -71,7 +71,7 @@ RSpec.describe Commontator::SubscriptionsController, type: :controller do
         expect(@thread.subscription_for(nil)).to be_nil
         expect(@thread.subscription_for(@user)).to be_nil
 
-        controller.current_user = @user
+        Thread.current[:user] = @user
         put :subscribe, params: { id: @thread.id }
         expect(response).to have_http_status(:forbidden)
         expect(@thread.subscription_for(@user)).to be_nil
@@ -92,7 +92,7 @@ RSpec.describe Commontator::SubscriptionsController, type: :controller do
         expect(@thread.subscription_for(nil)).to be_nil
         expect(@thread.subscription_for(@user)).not_to be_nil
 
-        controller.current_user = @user
+        Thread.current[:user] = @user
         put :unsubscribe, params: { id: @thread.id }
         expect(response).to have_http_status(:forbidden)
         expect(@thread.subscription_for(@user)).not_to be_nil

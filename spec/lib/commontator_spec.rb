@@ -12,8 +12,9 @@ RSpec.describe Commontator, type: :lib do
   end
 
   it 'is configurable' do
-    l1 = ->(controller) { controller.current_user }
-    l2 = ->(controller) { controller.current_user }
+    l1 = ->(controller) { Thread.current[:user] }
+    l2 = ->(controller) { Thread.current[:user] }
+    expect(l1).not_to eq l2
     Commontator.configure do |config|
       config.current_user_proc = l1
     end
