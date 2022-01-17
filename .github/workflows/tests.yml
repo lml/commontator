@@ -29,29 +29,16 @@ jobs:
       matrix:
         include:
           - RUBY_VERSION: 2.7
-            RAILS_VERSION: 5.2.6
-          - RUBY_VERSION: 2.7
             RAILS_VERSION: 6.1.4.4
+    env:
+      RAILS_VERSION: ${{ matrix.RAILS_VERSION }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.RUBY_VERSION }}
-      - uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: >-
-            ${{ runner.os }}-${{ matrix.RUBY_VERSION }}-${{ matrix.RAILS_VERSION
-            }}-gems-${{ hashFiles('commontator.gemspec', 'Gemfile') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.RAILS_VERSION }}-gems-
-      - name: Install gems
-        env:
-          RAILS_VERSION: ${{ matrix.RAILS_VERSION }}
-        run: |
-          bundle install
-          bundle exec rake --trace db:create db:schema:load db:seed
+          bundler-cache: true
+      - name: Setup database
+        run: bundle exec rake --trace db:create db:schema:load db:seed
       - name: Run tests
-        env:
-          RAILS_VERSION: ${{ matrix.RAILS_VERSION }}
         run: bundle exec rake spec
