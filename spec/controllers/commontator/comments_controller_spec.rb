@@ -17,7 +17,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
   context 'authorized' do
     before do
       @user.can_read = true
-      controller.current_user = @user
+      Thread.current[:user] = @user
     end
 
     context 'GET #new' do
@@ -350,7 +350,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         expect(assigns(:comment).editor).to eq @user
 
         user2 = DummyUser.create
-        controller.current_user = user2
+        Thread.current[:user] = user2
         comment2 = Commontator::Comment.new
         comment2.thread = @thread
         comment2.creator = @user
@@ -385,7 +385,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
         expect(assigns(:comment).is_deleted?).to eq false
 
         user2 = DummyUser.create
-        controller.current_user = user2
+        Thread.current[:user] = user2
         comment2 = Commontator::Comment.new
         comment2.thread = @thread
         comment2.creator = @user
@@ -413,7 +413,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
       it 'works' do
         user2 = DummyUser.create
         user2.can_read = true
-        controller.current_user = user2
+        Thread.current[:user] = user2
 
         put :upvote, params: { id: @comment.id }
         expect(response).to redirect_to(@commontable_path)
@@ -438,7 +438,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
       it 'works' do
         user2 = DummyUser.create
         user2.can_read = true
-        controller.current_user = user2
+        Thread.current[:user] = user2
 
         put :downvote, params: { id: @comment.id }
         expect(response).to redirect_to(@commontable_path)
@@ -463,7 +463,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
       it 'works' do
         user2 = DummyUser.create
         user2.can_read = true
-        controller.current_user = user2
+        Thread.current[:user] = user2
 
         expect(@comment.upvote_from(user2)).to eq true
         put :unvote, params: { id: @comment.id }
@@ -487,7 +487,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
 
   { anonymous: nil, unauthorized: @user }.each do |ctx, user|
     context ctx.to_s do
-      before { controller.current_user = user }
+      before { Thread.current[:user] = user }
 
       context 'GET #new' do
         it 'returns 403 Forbidden' do
@@ -508,7 +508,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           get :edit, params: { id: @comment.id }
           expect(response).to have_http_status(:forbidden)
 
-          controller.current_user = @user
+          Thread.current[:user] = @user
           get :edit, params: { id: @comment.id }
           expect(response).to have_http_status(:forbidden)
 
@@ -516,14 +516,14 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           user2.can_read = true
           user2.can_edit = true
           user2.is_admin = true
-          controller.current_user = user2
+          Thread.current[:user] = user2
           get :edit, params: { id: @comment.id }
           expect(response).to have_http_status(:forbidden)
 
           @user.can_read = true
           @user.can_edit = true
           @user.is_admin = true
-          controller.current_user = @user
+          Thread.current[:user] = @user
           comment2 = Commontator::Comment.new
           comment2.thread = @thread
           comment2.creator = @user
@@ -542,7 +542,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           expect(@comment.body).to eq 'Something'
           expect(@comment.editor).to be_nil
 
-          controller.current_user = @user
+          Thread.current[:user] = @user
           put :update, params: { id: @comment.id, comment: { body: 'Something else' } }
           expect(response).to have_http_status(:forbidden)
           @comment.reload
@@ -553,7 +553,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           user2.can_read = true
           user2.can_edit = true
           user2.is_admin = true
-          controller.current_user = user2
+          Thread.current[:user] = user2
           put :update, params: { id: @comment.id, comment: { body: 'Something else' } }
           expect(response).to have_http_status(:forbidden)
           @comment.reload
@@ -563,7 +563,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           @user.can_read = true
           @user.can_edit = true
           @user.is_admin = true
-          controller.current_user = @user
+          Thread.current[:user] = @user
           comment2 = Commontator::Comment.new
           comment2.thread = @thread
           comment2.creator = @user
@@ -584,7 +584,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           @comment.reload
           expect(@comment.is_deleted?).to eq false
 
-          controller.current_user = @user
+          Thread.current[:user] = @user
 
           put :delete, params: { id: @comment.id }
           expect(response).to have_http_status(:forbidden)
@@ -618,7 +618,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
           @comment.reload
           expect(@comment.is_deleted?).to eq true
 
-          controller.current_user = @user
+          Thread.current[:user] = @user
 
           put :undelete, params: { id: @comment.id }
           expect(response).to have_http_status(:forbidden)
@@ -664,7 +664,7 @@ RSpec.describe Commontator::CommentsController, type: :controller do
 
         @user.can_read = true
 
-        controller.current_user = user
+        Thread.current[:user] = user
       end
 
       context 'PUT #upvote' do

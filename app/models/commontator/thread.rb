@@ -8,6 +8,8 @@ class Commontator::Thread < ActiveRecord::Base
   validates :commontable, presence: true, unless: :is_closed?
   validates :commontable_id, uniqueness: { scope: :commontable_type, allow_nil: true }
 
+  RAILS_7_PRELOADER = ActiveRecord::Associations::Preloader.method(:new).arity == -1
+
   def config
     @config ||= commontable.try(:commontable_config) || Commontator
   end
@@ -147,9 +149,17 @@ class Commontator::Thread < ActiveRecord::Base
     ).tap do |nested_comments|
       next unless is_votable?
 
-      ActiveRecord::Associations::Preloader.new.preload(
-        nested_comments.flatten, :votes_for, ActsAsVotable::Vote.where(voter: user)
-      )
+      if RAILS_7_PRELOADER
+        ActiveRecord::Associations::Preloader.new(
+          records: nested_comments.flatten,
+          associations: :votes_for,
+          scope: ActsAsVotable::Vote.where(voter: user)
+        ).call
+      else
+        ActiveRecord::Associations::Preloader.new.preload(
+          nested_comments.flatten, :votes_for, ActsAsVotable::Vote.where(voter: user)
+        )
+      end
     end
   end
 

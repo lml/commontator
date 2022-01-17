@@ -21,7 +21,7 @@ RSpec.describe Commontator::SharedHelper, type: :lib do
 
   it 'renders a commontator thread' do
     @user.can_read = true
-    controller.current_user = @user
+    Thread.current[:user] = @user
 
     thread_link = controller.view_context.commontator_thread(DummyModel.create)
     expect(thread_link).not_to be_blank

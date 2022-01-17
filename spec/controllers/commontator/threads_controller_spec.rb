@@ -8,7 +8,7 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
   context 'authorized' do
     before do
       @user.can_read = true
-      controller.current_user = @user
+      Thread.current[:user] = @user
     end
 
     context 'GET #show' do
@@ -186,7 +186,7 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         get :show, params: { id: @thread.id }
         expect(response).to have_http_status(:forbidden)
 
-        controller.current_user = @user
+        Thread.current[:user] = @user
         get :show, params: { id: @thread.id }
         expect(response).to have_http_status(:forbidden)
       end
@@ -199,7 +199,7 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         @thread.reload
         expect(@thread.is_closed?).to eq false
 
-        controller.current_user = @user
+        Thread.current[:user] = @user
         put :close, params: { id: @thread.id }
         expect(response).to have_http_status(:forbidden)
         @thread.reload
@@ -227,7 +227,7 @@ RSpec.describe Commontator::ThreadsController, type: :controller do
         @thread.reload
         expect(@thread.is_closed?).to eq true
 
-        controller.current_user = @user
+        Thread.current[:user] = @user
         put :reopen, params: { id: @thread.id }
         expect(response).to have_http_status(:forbidden)
         @thread.reload

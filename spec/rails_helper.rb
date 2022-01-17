@@ -62,6 +62,7 @@ end
 
 def setup_controller_spec
   setup_model_spec
+  Thread.current[:user] = nil
   @commontable_path = Rails.application.routes.url_helpers.dummy_model_path(@commontable)
 end
 

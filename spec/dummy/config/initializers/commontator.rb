@@ -3,7 +3,7 @@ Commontator.configure do |config|
   config.javascript_proc = ->(view) { '// Some javascript' }
 
   config.current_user_proc = ->(context) do
-    user = context.current_user
+    user = Thread.current[:user]
     return user unless user.nil? && Rails.env.development?
 
     DummyUser.order(:created_at).last.tap do |user|
