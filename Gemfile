@@ -13,6 +13,9 @@ gemspec
 # To use debugger
 gem 'byebug'
 
+# Specify the Rails version for testing
+gem *[ 'rails', ENV['RAILS_VERSION'] ].compact
+
 # Reduces boot times through caching; required in spec/dummy/config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 

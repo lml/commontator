@@ -1,0 +1,44 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+jobs:
+  tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ci_test
+          POSTGRES_PASSWORD: postgres
+    strategy:
+      matrix:
+        include:
+          - RUBY_VERSION: 2.7
+            RAILS_VERSION: 6.1.4.4
+    env:
+      RAILS_VERSION: ${{ matrix.RAILS_VERSION }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.RUBY_VERSION }}
+          bundler-cache: true
+      - name: Setup database
+        run: bundle exec rake --trace db:create db:schema:load db:seed
+      - name: Run tests
+        run: bundle exec rake spec

@@ -1,7 +1,7 @@
 # Commontator
 
 [![Gem Version](https://badge.fury.io/rb/commontator.svg)](https://badge.fury.io/rb/commontator)
-[![Build Status](https://travis-ci.org/lml/commontator.svg?branch=master)](https://travis-ci.org/lml/commontator)
+[![Tests](https://github.com/lml/commontator/workflows/Tests/badge.svg)](https://github.com/lml/commontator/actions?query=workflow:Tests)
 [![Code Climate](https://codeclimate.com/github/lml/commontator/badges/gpa.svg)](https://codeclimate.com/github/lml/commontator)
 [![Code Coverage](https://codeclimate.com/github/lml/commontator/badges/coverage.svg)](https://codeclimate.com/github/lml/commontator)
 

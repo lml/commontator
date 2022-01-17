@@ -2,8 +2,8 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 11) do
   end
 
   create_table "commontator_subscriptions", force: :cascade do |t|
-    t.integer "thread_id", null: false
+    t.bigint "thread_id", null: false
     t.string "subscriber_type", null: false
-    t.integer "subscriber_id", null: false
+    t.bigint "subscriber_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["subscriber_id", "subscriber_type", "thread_id"], name: "index_commontator_subscriptions_on_s_id_and_s_type_and_t_id", unique: true
@@ -45,9 +45,9 @@ ActiveRecord::Schema.define(version: 11) do
 
   create_table "commontator_threads", force: :cascade do |t|
     t.string "commontable_type"
-    t.integer "commontable_id"
+    t.bigint "commontable_id"
     t.string "closer_type"
-    t.integer "closer_id"
+    t.bigint "closer_id"
     t.datetime "closed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -81,9 +81,9 @@ ActiveRecord::Schema.define(version: 11) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope"
-    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id"
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable"
     t.index ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
-    t.index ["voter_type", "voter_id"], name: "index_votes_on_voter_type_and_voter_id"
+    t.index ["voter_type", "voter_id"], name: "index_votes_on_voter"
   end
 
   add_foreign_key "commontator_comments", "commontator_comments", column: "parent_id", on_update: :restrict, on_delete: :cascade
