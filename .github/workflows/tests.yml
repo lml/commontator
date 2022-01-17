@@ -1,0 +1,57 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+jobs:
+  tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ci_test
+          POSTGRES_PASSWORD: postgres
+    strategy:
+      matrix:
+        include:
+          - RUBY_VERSION: 2.7
+            RAILS_VERSION: 5.2.6
+          - RUBY_VERSION: 2.7
+            RAILS_VERSION: 6.1.4.4
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.RUBY_VERSION }}
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: >-
+            ${{ runner.os }}-${{ matrix.RUBY_VERSION }}-${{ matrix.RAILS_VERSION
+            }}-gems-${{ hashFiles('commontator.gemspec', 'Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.RAILS_VERSION }}-gems-
+      - name: Install gems
+        env:
+          RAILS_VERSION: ${{ matrix.RAILS_VERSION }}
+        run: |
+          bundle install
+          bundle exec rake --trace db:create db:schema:load db:seed
+      - name: Run tests
+        env:
+          RAILS_VERSION: ${{ matrix.RAILS_VERSION }}
+        run: bundle exec rake spec
