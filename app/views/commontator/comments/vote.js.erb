@@ -1,5 +1,5 @@
-$("#commontator-comment-<%= @comment.id %>-votes").html("<%= escape_javascript(
+document.querySelector("#commontator-comment-<%= @comment.id %>-votes").innerHTML = "<%= escape_javascript(
   render partial: 'votes', locals: { comment: @comment, user: @commontator_user }
-) %>");
+) %>";
 
 <%= javascript_proc %>

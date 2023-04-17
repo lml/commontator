@@ -21,15 +21,6 @@ Follow the steps below to install Commontator:
   ```rb
   gem 'commontator'
   ```
-
-  You will also need jquery and a sass compiler, which can be either be installed through
-  the webpacker gem and yarn/npm/bower or through the jquery-rails and sass[c]-rails gems:
-
-  ```rb
-  gem 'jquery-rails'
-  gem 'sassc-rails'
-  ```
-
   Then execute:
 
   ```sh
@@ -82,23 +73,6 @@ Follow the steps below to install Commontator:
 ### Assets
 
 1. Javascripts
-
-  Make sure your application.js requires jquery and rails-ujs or jquery-ujs:
-
-  Rails 5.1+:
-  ```js
-  //= require jquery
-  //= require rails-ujs
-  ```
-
-  Rails 5.0:
-  ```js
-  //= require jquery
-  // If jquery-ujs was installed through jquery-rails
-  //= require jquery_ujs
-  // If jquery-ujs was installed through webpacker and yarn/npm/bower
-  //= require jquery-ujs
-  ```
 
   If using Commontator's mentions functionality, also require Commontator's application.js:
 

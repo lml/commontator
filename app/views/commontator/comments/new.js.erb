@@ -1,15 +1,30 @@
 <%
-  id = @comment.parent.nil? ? "commontator-thread-#{@commontator_thread.id}-new-comment" :
-                              "commontator-comment-#{@comment.parent.id}-reply"
+  id = @comment.parent.nil? ? "commontator-thread-" + @commontator_thread.id.to_s + "-new-comment" :
+                              "commontator-comment-" + @comment.parent.id.to_s + "-reply"
 %>
 
-var commontatorForm = $("#<%= id %>").html("<%= escape_javascript(
+var commontatorForm = document.querySelector("#<%= id %>");
+commontatorForm.innerHTML = "<%= escape_javascript(
   render partial: 'form', locals: { comment: @comment, thread: @commontator_thread }
-) %>").hide().fadeIn();
-$('html, body').animate({ scrollTop: commontatorForm.offset().top - window.innerHeight/2 }, 'fast');
+) %>";
+commontatorForm.style.display = "none";
+commontatorForm.style.opacity = "0";
+commontatorForm.style.transition = "opacity 0.2s linear";
 
-$("#<%= id %>-link").hide();
+var commontatorFormLink = document.querySelector("#<%= id %>-link");
+commontatorFormLink.style.display = "none";
 
-$('#<%= id %>-body').focus();
+var commontatorFormBody = document.querySelector("#<%= id %>-body");
+commontatorFormBody.focus();
 
-<%= javascript_proc %>
+var scrollAmount = commontatorForm.offsetTop - window.innerHeight/2;
+var scrollInterval = setInterval(function() {
+  if (window.pageYOffset <= scrollAmount) {
+    window.scrollTo(0, window.pageYOffset + 10);
+  } else {
+    clearInterval(scrollInterval);
+    commontatorForm.style.display = "block";
+    commontatorForm.style.opacity = "1";
+    <%= javascript_proc %>
+  }
+}, 5);

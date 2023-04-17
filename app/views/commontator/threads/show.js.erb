@@ -1,12 +1,24 @@
-<%=
-  render partial: 'show', locals: {
-    user: @commontator_user,
-    thread: @commontator_thread,
-    page: @commontator_page,
-    show_all: @commontator_show_all
-  }
+<%= render partial: 'show', locals: {
+     user: @commontator_user,
+     thread: @commontator_thread,
+     page: @commontator_page,
+     show_all: @commontator_show_all
+   }
 %>
 
-$("#commontator-thread-<%= @commontator_thread.id %>-comment-list").hide().fadeIn();
+document.querySelector("#commontator-thread-<%= @commontator_thread.id %>-comment-list")
+  .style.display = "none";
+document.querySelector("#commontator-thread-<%= @commontator_thread.id %>-comment-list")
+  .style.opacity = 0;
+document.querySelector("#commontator-thread-<%= @commontator_thread.id %>-comment-list")
+  .style.transition = "opacity 0.3s ease-in-out";
+document.querySelector("#commontator-thread-<%= @commontator_thread.id %>-comment-list")
+  .style.transitionDelay = "0.3s";
 
-<%= javascript_proc %>
+// use requestAnimationFrame to trigger a reflow
+requestAnimationFrame(() => {
+  document.querySelector("#commontator-thread-<%= @commontator_thread.id %>-comment-list")
+    .style.display = "";
+  document.querySelector("#commontator-thread-<%= @commontator_thread.id %>-comment-list")
+    .style.opacity = 1;
+});
