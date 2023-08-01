@@ -7,7 +7,7 @@ namespace :commontator do
     desc "Copy initializers from commontator to application"
     task :initializers do
       Dir.glob(File.expand_path('../../config/initializers/*.rb', __dir__)) do |file|
-        if File.exists?(File.expand_path(File.basename(file), 'config/initializers'))
+        if File.exist?(File.expand_path(File.basename(file), 'config/initializers'))
           print "NOTE: Initializer #{File.basename(file)} from commontator has been skipped. Initializer with the same name already exists.\n"
         else
           cp file, 'config/initializers', verbose: false
