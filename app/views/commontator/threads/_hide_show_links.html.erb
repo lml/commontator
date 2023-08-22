@@ -2,7 +2,7 @@
   Views that use this partial must supply the following variables:
   thread
 %>
-
+<script>
 $("#commontator-thread-<%= thread.id %>-hide-link").click(function() {
   $("#commontator-thread-<%= thread.id %>-content").hide();
 
@@ -22,3 +22,4 @@ $("#commontator-thread-<%= thread.id %>-show-link").click(function() {
 });
 
 $("#commontator-thread-<%= thread.id %>-hide").show();
+</script>
