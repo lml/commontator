@@ -1,4 +1,5 @@
 class Commontator::CommentsController < Commontator::ApplicationController
+  skip_before_action :ensure_user, only: :show
   before_action :set_thread, only: [ :new, :create ]
   before_action :set_comment_and_thread, except: [ :new, :create ]
   before_action :commontator_set_thread_variables, only: [ :show, :update, :delete, :undelete ]
