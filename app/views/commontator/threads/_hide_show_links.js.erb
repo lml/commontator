@@ -10,6 +10,7 @@ $("#commontator-thread-<%= thread.id %>-hide-link").click(function() {
   $('html, body').animate(
     { scrollTop: commontatorLink.offset().top - window.innerHeight/2 }, 'fast'
   );
+  return false;
 });
 
 $("#commontator-thread-<%= thread.id %>-show-link").click(function() {
@@ -19,6 +20,7 @@ $("#commontator-thread-<%= thread.id %>-show-link").click(function() {
   );
 
   $("#commontator-thread-<%= thread.id %>-show").hide();
+  return false;
 });
 
 $("#commontator-thread-<%= thread.id %>-hide").show();
